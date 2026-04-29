@@ -1,7 +1,10 @@
 # coding=utf-8
 from skybluetech_scripts.tooldelta.define import Item
 from skybluetech_scripts.tooldelta.ui import UBaseCtrl
-from skybluetech_scripts.tooldelta.api.client import GetItemHoverName
+from skybluetech_scripts.tooldelta.api.client import (
+    GetItemFormattedHoverText,
+    GetItemHoverName,
+)
 from skybluetech_scripts.tooldelta.extensions.allitems_getter import GetItemsByTag
 from ....common.mini_jei.core.define import CategoryType
 from .render_utils import ItemDisplayer, CreateDescBoard
@@ -39,7 +42,7 @@ class FluidDisplayer(object):
             self.fluid_id,
             self.fluid_id,
             "§d流体类型： §f"
-            + (GetItemHoverName(self.fluid_id) or self.fluid_id)
+            + (GetItemFormattedHoverText(self.fluid_id) or self.fluid_id)
             + "\n"
             + "§a体积： §f"
             + FormatFluidVolume(self.volume),
@@ -85,7 +88,7 @@ class InputDisplayer(object):
 
     def onBtnReleased(self, params):
         current_disp_item_id = self.get_current_carousel_item()
-        fmt = GetItemHoverName(current_disp_item_id) or current_disp_item_id
+        fmt = GetItemFormattedHoverText(current_disp_item_id) or current_disp_item_id
         if self.tag is not None:
             fmt += "\n\n§8接受标签: " + self.tag
         x, y = self.ctrl.GetRootPos()
@@ -129,7 +132,7 @@ class MultiItemsDisplayer(object):
 
     def onBtnReleased(self, params):
         current_disp_item = self.get_current_carousel_item()
-        fmt = GetItemHoverName(current_disp_item.id) or current_disp_item.id
+        fmt = GetItemFormattedHoverText(current_disp_item.id) or current_disp_item.id
         x, y = self.ctrl.GetRootPos()
         sizex, sizey = self.ctrl.GetSize()
         CreateDescBoard(

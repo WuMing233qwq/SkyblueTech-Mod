@@ -2,7 +2,10 @@
 import time
 from skybluetech_scripts.tooldelta.define import Item
 from skybluetech_scripts.tooldelta.ui import UBaseCtrl
-from skybluetech_scripts.tooldelta.api.client.item import GetItemHoverName
+from skybluetech_scripts.tooldelta.api.client.item import (
+    GetItemFormattedHoverText,
+    GetItemHoverName,
+)
 from ....common.mini_jei.core.define import CategoryType, RecipeBase
 
 
@@ -40,7 +43,7 @@ class ItemDisplayer(object):
             self.prob_label.SetText("%.1f%%%%" % (self.prob * 100))
 
     def onBtnReleased(self, _):
-        fmt = GetItemHoverName(self.item.id) or self.item.id
+        fmt = GetItemFormattedHoverText(self.item.id) or self.item.id
         if self.prob != 1.0:
             fmt += "\n§e产出概率： %.1f%%%%" % (self.prob * 100)
         if self.tag is not None:

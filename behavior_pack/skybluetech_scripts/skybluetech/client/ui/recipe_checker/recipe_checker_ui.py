@@ -12,7 +12,10 @@ from skybluetech_scripts.tooldelta.events.client import (
     ScreenSizeChangedClientEvent,
 )
 from skybluetech_scripts.tooldelta.api.common import ExecLater
-from skybluetech_scripts.tooldelta.api.client import GetItemHoverName, GetScreenSize
+from skybluetech_scripts.tooldelta.api.client import (
+    GetItemFormattedHoverText,
+    GetScreenSize,
+)
 from skybluetech_scripts.skybluetech.common.mini_jei import CategoryType, RecipeBase
 from skybluetech_scripts.skybluetech.client.mini_jei import RecipeRenderer
 from .favourite_items import GetFavourites, favourite_items_idauxs
@@ -256,7 +259,7 @@ class RecipeCheckerUI(ToolDeltaScreen):
                 CategoryType.ITEM,
                 selected_item_id,
                 selected_item_id,
-                GetItemHoverName(selected_item_id),
+                GetItemFormattedHoverText(selected_item_id),
             )
 
     @Binder.binding_collection(
@@ -297,5 +300,5 @@ class RecipeCheckerUI(ToolDeltaScreen):
             category,
             item_id,
             display_item_id,
-            GetItemHoverName(display_item_id),
+            GetItemFormattedHoverText(display_item_id),
         )
