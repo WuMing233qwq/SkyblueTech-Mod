@@ -43,6 +43,12 @@ main_pages = PageGroup(
                     contents.machinery.machinery_toc,
                 ),
                 MainTOCPageSection(
+                    "minecraft:hopper",
+                    0,
+                    "物流",
+                    contents.transmitters.transmitters_toc,
+                ),
+                MainTOCPageSection(
                     id_enum.REDSTONEFLUX_CORE,
                     0,
                     "能源",

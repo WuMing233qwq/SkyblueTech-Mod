@@ -6,4 +6,5 @@ from . import (
     machinery,
     noob_tutorials,
     mini_jei,
+    transmitters,
 )

@@ -19,6 +19,16 @@ def CheckRecipe(item_id, category=CategoryType.ITEM):
     return PushRecipeCheckerUI(recipes)
 
 
+def CheckRecipes(item_ids, category=CategoryType.ITEM):
+    # type: (list[str], str) -> RecipeCheckerUI | None
+    recipes = [
+        rcp for item_id in item_ids for rcp in GetRecipesByOutput(category, item_id)
+    ]
+    if not recipes:
+        return None
+    return PushRecipeCheckerUI(recipes)
+
+
 def CheckUsage(item_id, category=CategoryType.ITEM):
     # type: (str, str) -> RecipeCheckerUI | None
     recipes = GetRecipesByInput(category, item_id)

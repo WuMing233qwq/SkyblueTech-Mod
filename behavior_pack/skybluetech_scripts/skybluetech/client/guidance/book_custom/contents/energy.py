@@ -28,15 +28,43 @@ energy_transmit = PageGroup(
         ),
         TextPage(
             "",
-            '即使机器是并联入网的， 线缆也<text color="§4" t="不会">给每个机器均匀供能， 而是先给其中一个机器充满能量后再向下一个机器供能。 你可以使用<style color="§5"><link text="传输设置扳手" id="a"><item id=%s><style color="R">在线缆与机器连接的末端处设置线缆供电的<text color="§2" t="优先级">。'
+            '即使机器是并联入网的， 线缆也<text color="§4" t="不会">给每个机器均匀供能， 而是先给其中一个机器充满能量后再向下一个机器供能。 你可以使用<style color="§5"><link text="传输设置扳手" id="a"><item id=%s><style color="R">在线缆与机器连接的末端处设置线缆供电的<text color="§2" t="优先级">。\n优先级高的机器会更先被充能； 优先级高的发电机则会优先被用于供能。'
             % id_enum.TRANSMITTER_SETTINGS_WRENCH,
             hyperlink_cbs={
                 "a": lambda _: CheckRecipe(id_enum.TRANSMITTER_SETTINGS_WRENCH)
             },
         ),
         TextPage(
-            "",
-            "如果对用电器设置优先级， 则会改变其在电网中的供电优先程度， 优先级高的机器会更先被供能； 优先级高的发电机则会优先被用于供能。",
+            "配方查询 （裸线缆）",
+            '<item id="{copper}"><link id="copper" text="铜线缆">\n<item id="{tin}"><link id="tin" text="锡线缆">\n<item id="{silver}"><link id="silver" text="银线缆">\n<item id="{superconduct}"><link id="superconduct" text="超导线缆">'.format(
+                copper=id_enum.Wire.COPPER,
+                tin=id_enum.Wire.TIN,
+                silver=id_enum.Wire.SILVER,
+                superconduct=id_enum.Wire.SUPER_CONDUCT,
+            ),
+            hyperlink_cbs={
+                "copper": lambda _: CheckRecipe(id_enum.Wire.COPPER),
+                "tin": lambda _: CheckRecipe(id_enum.Wire.TIN),
+                "silver": lambda _: CheckRecipe(id_enum.Wire.SILVER),
+                "superconduct": lambda _: CheckRecipe(id_enum.Wire.SUPER_CONDUCT),
+            },
+        ),
+        TextPage(
+            "配方查询 （绝缘线缆）",
+            '<item id="{copper}"><link id="copper" text="绝缘铜线缆">\n<item id="{tin}"><link id="tin" text="绝缘锡线缆">\n<item id="{silver}"><link id="silver" text="绝缘银线缆">\n<item id="{superconduct}"><link id="superconduct" text="绝缘超导线缆">'.format(
+                copper=id_enum.Wire.COPPER_INSULATED,
+                tin=id_enum.Wire.TIN_INSULATED,
+                silver=id_enum.Wire.SILVER_INSULATED,
+                superconduct=id_enum.Wire.SUPER_CONDUCT_INSULATED,
+            ),
+            hyperlink_cbs={
+                "copper": lambda _: CheckRecipe(id_enum.Wire.COPPER_INSULATED),
+                "tin": lambda _: CheckRecipe(id_enum.Wire.TIN_INSULATED),
+                "silver": lambda _: CheckRecipe(id_enum.Wire.SILVER_INSULATED),
+                "superconduct": lambda _: CheckRecipe(
+                    id_enum.Wire.SUPER_CONDUCT_INSULATED
+                ),
+            },
         ),
     ],
 )

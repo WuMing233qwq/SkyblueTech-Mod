@@ -7,7 +7,7 @@ from ...define import (
     PageGroup,
 )
 
-from . import day_one, into_machinery
+from . import advanced_tools, day_one, into_machinery
 
 noob_tutorial_toc = PageGroup(
     "noob_tutorials",
@@ -20,6 +20,12 @@ noob_tutorial_toc = PageGroup(
                     0,
                     "第一台机器",
                     into_machinery.into_machinery,
+                ),
+                TOCPageSection(
+                    id_enum.ALLOY_FURNACE,
+                    0,
+                    "合金和工具",
+                    advanced_tools.advanced_tools,
                 ),
             ],
         ),

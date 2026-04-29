@@ -3,6 +3,7 @@ from skybluetech_scripts.skybluetech.common.define import id_enum
 from skybluetech_scripts.skybluetech.common.machinery_def.bedrock_lava_drill import (
     STRUCTURE_PALETTE,
 )
+from skybluetech_scripts.skybluetech.client.ui.recipe_checker import CheckRecipe
 from ...define import (
     TextPage,
     MachineryWorkstationRecipePage,
@@ -19,7 +20,12 @@ bedrock_lava_drill = PageGroup(
         ),
         TextPage(
             "",
-            '基岩熔岩钻需要先钻破顶层基岩才能把泵送管道送至深层熔岩层， 这意味着它在开始工作前至少需要安装一个<text color="§c" t="耐热钻头">到钻头槽位。\n\n钻头钻开顶层基岩层需要一定时间， <text color="§n" t="消耗一定量耐久">。 一旦其钻开了基岩层， 钻头的耐久就会被<text color="§2" t="停止消耗">， 基岩熔岩钻即开始泵出深层熔岩。',
+            '基岩熔岩钻需要先钻破顶层基岩才能把泵送管道送至深层熔岩层， 这意味着它在开始工作前至少需要安装一个<item id="{drill}"><style color="§c"><link id="drill" text="耐热钻头"><style color="R">到钻头槽位。\n\n钻头钻开顶层基岩层需要一定时间， <text color="§n" t="消耗一定量耐久">。 一旦其钻开了基岩层， 钻头的耐久就会被<text color="§2" t="停止消耗">， 基岩熔岩钻即开始泵出深层熔岩。'.format(
+                drill=id_enum.DRILL_TOP_ULTRAHEATINUM
+            ),
+            hyperlink_cbs={
+                "drill": lambda _: CheckRecipe(id_enum.DRILL_TOP_ULTRAHEATINUM)
+            },
         ),
         TextPage(
             "",

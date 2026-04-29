@@ -109,6 +109,20 @@ class Wrench:
     INVAR = "skybluetech:wrench_invar"
 
 
+class MetalTools:
+    BRONZE_AXE = "skybluetech:bronze_axe"
+    BRONZE_PICKAXE = "skybluetech:bronze_pickaxe"
+    BRONZE_SHOVEL = "skybluetech:bronze_shovel"
+    BRONZE_HOE = "skybluetech:bronze_hoe"
+    BRONZE_SWORD = "skybluetech:bronze_sword"
+
+    INVAR_AXE = "skybluetech:invar_axe"
+    INVAR_PICKAXE = "skybluetech:invar_pickaxe"
+    INVAR_SHOVEL = "skybluetech:invar_shovel"
+    INVAR_HOE = "skybluetech:invar_hoe"
+    INVAR_SWORD = "skybluetech:invar_sword"
+
+
 class Pincer:
     # 新增物品后需在 machinery_workstation 中同步添加
     IRON = "skybluetech:pincer_iron"
