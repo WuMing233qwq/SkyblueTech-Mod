@@ -10,17 +10,17 @@ from skybluetech_scripts.skybluetech.common.mini_jei.machinery.hydroponic_bed im
 )
 from skybluetech_scripts.skybluetech.common.define.id_enum import machinery
 from ...ui.recipe_checker.render_utils import ItemDisplayer
-from .define import MachineRecipeRenderer
+from ..core import RecipeRenderer
 
 
-class HydroponicBedRecipeRenderer(MachineRecipeRenderer):
+class HydroponicBedRecipeRenderer(RecipeRenderer):
     render_progress = False
     recipe_icon_id = machinery.HYDROPONIC_BED
     render_ui_def_name = "RecipeCheckerLib.hydroponic_bed_recipes"
 
     def __init__(self, recipe):
         # type: (HydroponicBedRecipe) -> None
-        MachineRecipeRenderer.__init__(self, recipe)
+        RecipeRenderer.__init__(self, recipe)
         self.recipe = recipe
         self.crop_renderer = None
         self.output_renderers = []
@@ -28,7 +28,6 @@ class HydroponicBedRecipeRenderer(MachineRecipeRenderer):
 
     def RenderInit(self, panel):
         # type: (UBaseCtrl) -> None
-        MachineRecipeRenderer.RenderInit(self, panel)
         idx = 1
         self._last_stage = 0
         self.crop_renderer = panel["crop_disp"].asNeteasePaperDoll()

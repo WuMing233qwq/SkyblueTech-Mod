@@ -18,7 +18,7 @@ class GasBurningGeneratorRecipeRenderer(GeneratorRecipeRenderer):
 
     def RenderInit(self, panel):
         # type: (UBaseCtrl) -> None
-        GasBurningGeneratorRecipeRenderer.RenderInit(self, panel)
+        GeneratorRecipeRenderer.RenderInit(self, panel)
         panel["garbage_gas_tip"].SetVisible(self.recipe.output_gas_id is None)
 
 
