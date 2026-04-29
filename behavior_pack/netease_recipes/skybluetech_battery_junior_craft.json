@@ -1,0 +1,39 @@
+{
+    "format_version": "1.20.10",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "skybluetech:battery_junior_craft"
+        },
+        "key": {
+            "A": {
+                "data": 0,
+                "item": "skybluetech:tin_plate"
+            },
+            "B": {
+                "data": 0,
+                "item": "skybluetech:deactivation_redstone"
+            },
+            "C": {
+                "data": 0,
+                "item": "skybluetech:wire_insulated_tin"
+            },
+            "D": {
+                "data": 0,
+                "item": "skybluetech:copper_plate"
+            }
+        },
+        "pattern": [
+            " C ",
+            "ABA",
+            " D "
+        ],
+        "result": {
+            "count": 1,
+            "data": 0,
+            "item": "skybluetech:battery_junior"
+        },
+        "tags": [
+            "crafting_table"
+        ]
+    }
+}
