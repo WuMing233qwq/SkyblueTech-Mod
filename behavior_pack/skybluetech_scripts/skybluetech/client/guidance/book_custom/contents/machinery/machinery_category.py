@@ -285,7 +285,7 @@ machinery_misc_toc = PageGroup(
                 TOCPageSection(
                     id_enum.DEEPSLATE_LAVA_VIBRATOR,
                     0,
-                    "深层熔岩谐振探测器",
+                    "深层熔岩谐振勘探器",
                     machinery_misc.deepslate_lava_vibrator,
                 ),
                 TOCPageSection(
