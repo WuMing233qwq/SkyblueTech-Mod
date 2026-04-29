@@ -130,7 +130,7 @@ class GuidanceUI(ToolDeltaScreen):
         if pages is self.current_page_group:
             return
         self.current_page_group = pages
-        self.page_index = int(index / 2)
+        self.page_index = int(index // 2 * 2)
         self.render_page()
 
     @classmethod
