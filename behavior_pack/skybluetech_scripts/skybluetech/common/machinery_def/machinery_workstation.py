@@ -13,13 +13,15 @@ recipes = RecipesCollection(
     # alloy furnace
     MRecipe(
         {
-            0: Input("minecraft:copper_ingot"),
-            1: Input(id_enum.HEAT_EXCHANGER),
-            2: Input("minecraft:copper_ingot"),
+            0: Input(tag_enum.PlateTag.COPPER, is_tag=True),
+            1: Input("minecraft:blast_furnace"),
+            2: Input(tag_enum.PlateTag.COPPER, is_tag=True),
             3: Input("minecraft:nether_brick"),
             4: Input(id_enum.MACHINERY_FRAME),
             5: Input("minecraft:nether_brick"),
+            6: Input("minecraft:redstone"),
             7: Input(id_enum.ControlCircuit.BASIC),
+            8: Input("minecraft:redstone"),
         },
         id_enum.ALLOY_FURNACE,
         MRecipe.LEVEL_IRON,
@@ -172,6 +174,24 @@ recipes = RecipesCollection(
         MRecipe.LEVEL_IRON,
         MRecipe.LEVEL_IRON,
         8,
+    ),
+    # deepslate lava vibrator
+    MRecipe(
+        {
+            0: Input(tag_enum.PlateTag.STEEL, is_tag=True),
+            1: Input(tag_enum.StickTag.INVAR, is_tag=True),
+            2: Input(tag_enum.PlateTag.STEEL, is_tag=True),
+            3: Input("minecraft:iron_bars"),
+            4: Input("minecraft:heavy_core"),
+            5: Input("minecraft:iron_bars"),
+            6: Input(tag_enum.PlateTag.STEEL, is_tag=True),
+            7: Input(id_enum.REDSTONEFLUX_CORE),
+            8: Input(tag_enum.PlateTag.STEEL, is_tag=True),
+        },
+        id_enum.DEEPSLATE_LAVA_VIBRATOR,
+        MRecipe.LEVEL_INVAR,
+        MRecipe.LEVEL_INVAR,
+        24,
     ),
     # digger
     MRecipe(
