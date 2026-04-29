@@ -3,7 +3,7 @@ from skybluetech_scripts.tooldelta.define.item import Item
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
 from ...common.define import flags
 from ...common.define.id_enum.machinery import THERMAL_GENERATOR as MACHINE_ID
-from ...common.machinery_def.thermal_generator import TICK_POWER
+from ...common.machinery_def.thermal_generator import TICK_POWER, FUEL_SECONDS_MAP
 from ...common.ui_sync.machinery.thermal_generator import ThermalGeneratorUISync
 from .basic import (
     BaseGenerator,
@@ -48,9 +48,8 @@ class ThermalGenerator(BaseGenerator, ItemContainer, GUIControl, WorkRenderer):
 
     def IsValidInput(self, slot, item):
         # type: (int, Item) -> bool
-        return not (
-            item.GetBasicInfo().fuelDuration <= 0
-            or item.newItemName == "minecraft:lava_bucket"
+        return item.newItemName != "minecraft:lava_bucket" and (
+            item.id in FUEL_SECONDS_MAP or item.GetBasicInfo().fuelDuration > 0
         )
 
     def OnSync(self):
@@ -84,7 +83,10 @@ class ThermalGenerator(BaseGenerator, ItemContainer, GUIControl, WorkRenderer):
             self.SetDeactiveFlag(flags.DEACTIVE_FLAG_NO_INPUT)
             self.is_burning = False
             return False
-        burnTime = mainSlotItem.GetBasicInfo().fuelDuration
+        burnTime = (
+            FUEL_SECONDS_MAP.get(mainSlotItem.id)
+            or mainSlotItem.GetBasicInfo().fuelDuration
+        )
         self.burn_seconds_left = burnTime
         self.max_burn_seconds = burnTime
         mainSlotItem.count -= 1
