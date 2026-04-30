@@ -28,6 +28,9 @@
         "skybluetech:bronze_ingot": {
             "textures": "textures/items/ingots/bronze_ingot"
         },
+        "skybluetech:bronze_mining_hammer": {
+            "textures": "textures/items/metal_tools/bronze_mining_hammer"
+        },
         "skybluetech:bronze_pickaxe": {
             "textures": "textures/items/metal_tools/bronze_pickaxe"
         },
@@ -153,6 +156,9 @@
         },
         "skybluetech:invar_ingot": {
             "textures": "textures/items/ingots/invar_ingot"
+        },
+        "skybluetech:invar_mining_hammer": {
+            "textures": "textures/items/metal_tools/invar_mining_hammer"
         },
         "skybluetech:invar_pickaxe": {
             "textures": "textures/items/metal_tools/invar_pickaxe"

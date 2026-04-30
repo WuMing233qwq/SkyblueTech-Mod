@@ -324,3 +324,5 @@ item.skybluetech:invar_pickaxe.name=殷钢镐
 item.skybluetech:invar_shovel.name=殷钢锹
 item.skybluetech:invar_sword.name=殷钢剑
 tile.skybluetech:ultraheatinum_block.name=耐热块
+item.skybluetech:invar_mining_hammer.name=殷钢矿锤
+item.skybluetech:bronze_mining_hammer.name=青铜矿锤
