@@ -109,10 +109,12 @@ class Processor(ProcessorBase, UpgradeControl):
             self.SetDeactiveFlag(flags.DEACTIVE_FLAG_NO_RECIPE)
             self.current_recipe = None
             self.ResetProgress()
-        elif not recipe.equals(self.current_recipe):
-            self.start_next(recipe)
-        elif self.HasDeactiveFlag(flags.DEACTIVE_FLAG_OUTPUT_FULL):
-            self.start_next(recipe)
+        else:
+            self.UnsetDeactiveFlag(flags.DEACTIVE_FLAG_NO_RECIPE)
+            if not recipe.equals(self.current_recipe):
+                self.start_next(recipe)
+            elif self.HasDeactiveFlag(flags.DEACTIVE_FLAG_OUTPUT_FULL):
+                self.start_next(recipe)
 
     def run_once(self):
         "进行一次配方产出"
@@ -133,6 +135,8 @@ class Processor(ProcessorBase, UpgradeControl):
                 self.SetDeactiveFlag(flags.DEACTIVE_FLAG_NO_RECIPE)
                 self.current_recipe = None
                 return
+            else:
+                self.UnsetDeactiveFlag(flags.DEACTIVE_FLAG_NO_RECIPE)
         else:
             recipe = _recipe
         if not isinstance(recipe, MachineRecipe):
@@ -145,11 +149,11 @@ class Processor(ProcessorBase, UpgradeControl):
         self.ResetProgress()
         if not self.can_output(recipe):
             self.SetDeactiveFlag(flags.DEACTIVE_FLAG_OUTPUT_FULL)
-            return
+        else:
+            self.UnsetDeactiveFlag(flags.DEACTIVE_FLAG_OUTPUT_FULL)
         self.SetPower(recipe.power_cost)
         if not self.PowerEnough():
             return
-        self.ResetDeactiveFlags()
         self.CallSync()
 
     def finish_recipe(self, recipe):
