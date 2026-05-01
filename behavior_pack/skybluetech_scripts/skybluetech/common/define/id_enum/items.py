@@ -115,12 +115,14 @@ class MetalTools:
     BRONZE_SHOVEL = "skybluetech:bronze_shovel"
     BRONZE_HOE = "skybluetech:bronze_hoe"
     BRONZE_SWORD = "skybluetech:bronze_sword"
+    BRONZE_MINING_HAMMER = "skybluetech:bronze_mining_hammer"
 
     INVAR_AXE = "skybluetech:invar_axe"
     INVAR_PICKAXE = "skybluetech:invar_pickaxe"
     INVAR_SHOVEL = "skybluetech:invar_shovel"
     INVAR_HOE = "skybluetech:invar_hoe"
     INVAR_SWORD = "skybluetech:invar_sword"
+    INVAR_MINING_HAMMER = "skybluetech:invar_mining_hammer"
 
 
 class Pincer:
