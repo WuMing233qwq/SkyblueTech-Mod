@@ -1,0 +1,56 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.skybluetech.transmit_belt",
+				"texture_width": 16,
+				"texture_height": 16,
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 1.5,
+				"visible_bounds_offset": [0, 0.25, 0]
+			},
+			"bones": [
+				{
+					"name": "root",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-8, 0, -8], "size": [16, 1, 16], "uv": [-21, -14]}
+					]
+				},
+				{
+					"name": "straight",
+					"parent": "root",
+					"pivot": [7, 0, 0],
+					"cubes": [
+						{"origin": [7, 1, -8], "size": [1, 2, 16], "uv": [-13, -14]},
+						{"origin": [-8, 1, -8], "size": [1, 2, 16], "uv": [-13, -14]}
+					]
+				},
+				{
+					"name": "corner",
+					"parent": "root",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [7, 1, -8], "size": [1, 2, 1], "uv": [2, 1]},
+						{"origin": [-8, 1, -8], "size": [1, 2, 16], "uv": [-13, -14]},
+						{
+							"origin": [0, 1, -1],
+							"size": [1, 2, 15],
+							"pivot": [0, 0, 7],
+							"rotation": [0, -90, 0],
+							"uv": {
+								"north": {"uv": [3, 2], "uv_size": [1, 2]},
+								"east": {"uv": [0, 2], "uv_size": [15, 2]},
+								"south": {"uv": [15, 2], "uv_size": [1, 2]},
+								"west": {"uv": [1, 2], "uv_size": [15, 2]},
+								"up": {"uv": [5, 16], "uv_size": [-1, -15]},
+								"down": {"uv": [6, 15], "uv_size": [-1, -15]}
+							}
+						}
+					]
+				}
+			]
+		}
+	]
+}
