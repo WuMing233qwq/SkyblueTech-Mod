@@ -1,5 +1,6 @@
 .mcs
 .vscode
+.wip
 .*.json
 .*.txt
 
