@@ -7,24 +7,23 @@ class TeslaPlantSettingsUpload(CustomC2SEvent):
 
     def __init__(
         self,
-        dim,
-        x,
-        y,
-        z,
-        working_range,
-        do_enable,
-        do_attack_monster,
-        do_attack_player,
+        dim,  # type: int
+        x,  # type: int
+        y,  # type: int
+        z,  # type: int
+        work_range,  # type: int
+        do_attack_monster,  # type: bool
+        do_sttack_mob,  # type: bool
+        do_attack_player,  # type: bool
         player_id="",
     ):
-        # type: (int, int, int, int, int, bool, bool, bool, str) -> None
         self.dim = dim
         self.x = x
         self.y = y
         self.z = z
-        self.working_range = working_range
-        self.do_enable = do_enable
+        self.work_range = work_range
         self.do_attack_monster = do_attack_monster
+        self.do_attack_mob = do_sttack_mob
         self.do_attack_player = do_attack_player
         self.player_id = player_id
 
@@ -34,9 +33,9 @@ class TeslaPlantSettingsUpload(CustomC2SEvent):
             "x": self.x,
             "y": self.y,
             "z": self.z,
-            "working_range": self.working_range,
-            "do_enable": self.do_enable,
+            "work_range": self.work_range,
             "do_attack_monster": self.do_attack_monster,
+            "do_attack_mob": self.do_attack_mob,
             "do_attack_player": self.do_attack_player,
         }
 
@@ -48,8 +47,8 @@ class TeslaPlantSettingsUpload(CustomC2SEvent):
             data["y"],
             data["z"],
             data["working_range"],
-            data["do_enable"],
             data["do_attack_monster"],
+            data["do_attack_mob"],
             data["do_attack_player"],
             data["__id__"],
         )
@@ -64,19 +63,18 @@ class TeslaPlantSettingsUpdate(CustomS2CEvent):
         x,
         y,
         z,
-        working_range,
-        do_enable,
-        do_attack_monster,
-        do_attack_player,
+        work_range,  # type: int
+        do_attack_monster,  # type: bool
+        do_sttack_mob,  # type: bool
+        do_attack_player,  # type: bool
     ):
-        # type: (int, int, int, int, int, bool, bool, bool) -> None
         self.dim = dim
         self.x = x
         self.y = y
         self.z = z
-        self.working_range = working_range
-        self.do_enable = do_enable
+        self.work_range = work_range
         self.do_attack_monster = do_attack_monster
+        self.do_sttack_mob = do_sttack_mob
         self.do_attack_player = do_attack_player
 
     def marshal(self):
@@ -85,9 +83,9 @@ class TeslaPlantSettingsUpdate(CustomS2CEvent):
             "x": self.x,
             "y": self.y,
             "z": self.z,
-            "working_range": self.working_range,
-            "do_enable": self.do_enable,
+            "work_range": self.work_range,
             "do_attack_monster": self.do_attack_monster,
+            "do_attack_mob": self.do_sttack_mob,
             "do_attack_player": self.do_attack_player,
         }
 
@@ -98,9 +96,9 @@ class TeslaPlantSettingsUpdate(CustomS2CEvent):
             data["x"],
             data["y"],
             data["z"],
-            data["working_range"],
-            data["do_enable"],
+            data["work_range"],
             data["do_attack_monster"],
+            data["do_attack_mob"],
             data["do_attack_player"],
         )
 
@@ -108,13 +106,13 @@ class TeslaPlantSettingsUpdate(CustomS2CEvent):
 class TeslaPlantAttack(CustomS2CEvent):
     name = "st:TsPA"
 
-    def __init__(self, dim, x, y, z, to_entity_id):
+    def __init__(self, dim, x, y, z, to_entity_ids):
         # type: (int, int, int, int, str) -> None
         self.dim = dim
         self.x = x
         self.y = y
         self.z = z
-        self.entity_id = to_entity_id
+        self.entity_ids = to_entity_ids
 
     def marshal(self):
         return {
@@ -122,9 +120,9 @@ class TeslaPlantAttack(CustomS2CEvent):
             "x": self.x,
             "y": self.y,
             "z": self.z,
-            "eid": self.entity_id,
+            "eids": self.entity_ids,
         }
 
     @classmethod
     def unmarshal(cls, data):
-        return cls(data["dim"], data["x"], data["y"], data["z"], data["eid"])
+        return cls(data["dim"], data["x"], data["y"], data["z"], data["eids"])
