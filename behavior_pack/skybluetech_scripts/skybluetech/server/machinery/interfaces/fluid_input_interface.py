@@ -5,7 +5,7 @@ from ..basic import FluidContainer, GUIControl, RegisterMachine
 from .base_interface import BaseInterface
 
 if 0:
-    from typing import Callable
+    import typing
 
 
 @RegisterMachine
@@ -28,7 +28,7 @@ class FluidInputInterface(BaseInterface, FluidContainer, GUIControl):
         self.sync.MarkedAsChanged()
 
     def SetOnFluidSlotUpdateCallback(self, callback):
-        # type: (Callable[[], None]) -> None
+        # type: (typing.Callable[[], None]) -> None
         self.on_fluid_slot_update_cb_ref = ref_method(callback)
 
     def OnFluidSlotUpdate(self):

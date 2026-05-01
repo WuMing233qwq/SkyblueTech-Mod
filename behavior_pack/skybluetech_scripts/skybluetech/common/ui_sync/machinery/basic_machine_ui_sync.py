@@ -10,7 +10,7 @@ from skybluetech_scripts.tooldelta.extensions.ui_sync import (
 
 # TYPE_CHECKING
 if 0:
-    from typing import Self
+    import typing
     from ....server.machinery.basic.base_machine import BaseMachine
     from ....server.machinery.basic.multi_fluid_container import MultiFluidContainer
 # TYPE_CHECKING END
@@ -19,12 +19,12 @@ if 0:
 class MachineUISync(S2CSync):
     @classmethod
     def NewServer(cls, m):
-        # type: (BaseMachine) -> Self
+        # type: (BaseMachine) -> typing.Self
         return cls(S2C_SERVER, "%s_%d_%d_%d_%d" % (cls.__name__, m.dim, m.x, m.y, m.z))
 
     @classmethod
     def NewClient(cls, dim, x, y, z):
-        # type: (int, int, int, int) -> Self
+        # type: (int, int, int, int) -> typing.Self
         return cls(S2C_CLIENT, "%s_%d_%d_%d_%d" % (cls.__name__, dim, x, y, z))
 
     def FastSync(self, player_id):

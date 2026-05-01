@@ -36,10 +36,10 @@ from .base_machine import BaseMachine, GUIControl
 
 
 if 0:
-    from typing import TypeVar, Any
+    import typing
     from .base_machine import BaseMachine
 
-    MT = TypeVar("MT", bound=BaseMachine)
+    MT = typing.TypeVar("MT", bound=BaseMachine)
     BLOCK_PAT_INDEX = int
     POS_SET = set[tuple[int, int, int]]
 
@@ -190,7 +190,7 @@ class DetectArea(object):
         self.flush_status()
 
     def _update_functional_blocks(self, palette, co_x, co_y, co_z):
-        # type: (Any, int, int, int) -> None
+        # type: (typing.Any, int, int, int) -> None
         self.functional_block_poses = {
             block_id: [
                 (

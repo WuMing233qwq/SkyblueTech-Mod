@@ -3,16 +3,16 @@ from skybluetech_scripts.tooldelta.events.server import ActorAcquiredItemServerE
 from ...common.define import chapter_ids
 
 if 0:
-    from typing import Callable
+    import typing
 
-callbacks = {}  # type: dict[str, list[Callable[[str, int], str | None]]]
+callbacks = {}  # type: dict[str, list[typing.Callable[[str, int], str | None]]]
 
 
 def RegisterCallback(
     item_id,  # type: str
 ):
     def wrapper(func):
-        # type: (Callable[[str, int], str | None]) -> None
+        # type: (typing.Callable[[str, int], str | None]) -> None
         callbacks.setdefault(item_id, []).append(func)
 
     return wrapper

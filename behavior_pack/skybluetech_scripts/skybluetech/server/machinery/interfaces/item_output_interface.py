@@ -4,7 +4,7 @@ from ..basic import ItemContainer, RegisterMachine
 from .base_interface import BaseInterface
 
 if 0:
-    from typing import Callable
+    import typing
 
 
 @RegisterMachine
@@ -18,7 +18,7 @@ class ItemOutputInterface(BaseInterface, ItemContainer):
         ItemContainer.__init__(self, dim, x, y, z, block_entity_data)
 
     def SetOnSlotUpdateCallback(self, callback):
-        # type: (Callable[[int], None]) -> None
+        # type: (typing.Callable[[int], None]) -> None
         self.on_slot_update_cb_ref = ref_method(callback)
 
     def OnSlotUpdate(self, slot_pos):

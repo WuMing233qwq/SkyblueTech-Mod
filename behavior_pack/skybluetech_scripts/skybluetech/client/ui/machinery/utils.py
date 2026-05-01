@@ -7,10 +7,10 @@ from ....common.ui_sync.machinery.basic_machine_ui_sync import FluidSlotSync
 
 # TYPE_CHECKING
 if 0:
-    from typing import Callable, TypeVar
+    import typing
 
-    T = TypeVar("T")
-    BtnCb = Callable[[], T]
+    T = typing.TypeVar("T")
+    BtnCb = typing.Callable[[], T]
 # TYPE_CHECKING END
 
 INFINITY = float("inf")
@@ -131,7 +131,7 @@ def UpdateFluidDisplay(ui, fluid_id, fluid_volume, max_volume):
 
 
 def InitFluidDisplay(ctrl, data_cb):
-    # type: (UBaseCtrl, BtnCb[tuple[str | None, float, float]]) -> Callable[[], None]
+    # type: (UBaseCtrl, BtnCb[tuple[str | None, float, float]]) -> typing.Callable[[], None]
     btn = ctrl["data_btn"].asButton()
     screen_vars = ctrl._root._vars
     current_ctrl = [None]  # type: list[UBaseCtrl | None]
@@ -202,7 +202,7 @@ def InitFluidDisplay(ctrl, data_cb):
 
 
 def InitFluidsDisplay(ui, fluid_slots, index):
-    # type: (UBaseCtrl, list[FluidSlotSync], int) -> Callable[[], None]
+    # type: (UBaseCtrl, list[FluidSlotSync], int) -> typing.Callable[[], None]
     def get_data():
         if len(fluid_slots) == 0:
             fluid_id = "加载中.."

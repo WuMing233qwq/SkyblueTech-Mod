@@ -25,9 +25,9 @@ from .gui_ctrl import GUIControl
 
 # TYPE_CHECKING
 if 0:
-    from typing import TypeVar
+    import typing
 
-    MT = TypeVar("MT", bound=BaseMachine)
+    MT = typing.TypeVar("MT", bound=BaseMachine)
 # TYPE_CHECKING END
 
 

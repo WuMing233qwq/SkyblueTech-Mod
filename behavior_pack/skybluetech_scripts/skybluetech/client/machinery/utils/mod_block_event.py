@@ -7,14 +7,18 @@ from skybluetech_scripts.tooldelta.events.client import (
 
 # TYPE CHECKING
 if 0:
-    from typing import Callable, TypeVar
+    import typing
 
-    CT = TypeVar("CT", bound=Callable[[ModBlockEntityLoadedClientEvent], None])
-    RT = TypeVar("RT", bound=Callable[[ModBlockEntityRemoveClientEvent], None])
+    CT = typing.TypeVar(
+        "CT", bound=typing.Callable[[ModBlockEntityLoadedClientEvent], None]
+    )
+    RT = typing.TypeVar(
+        "RT", bound=typing.Callable[[ModBlockEntityRemoveClientEvent], None]
+    )
 # TYPE CHECKING END
 
-mod_block_loaded_cbs = {}  # type: dict[str, list[Callable[[ModBlockEntityLoadedClientEvent], None]]]
-mod_block_removed_cbs = {}  # type: dict[str, list[Callable[[ModBlockEntityRemoveClientEvent], None]]]
+mod_block_loaded_cbs = {}  # type: dict[str, list[typing.Callable[[ModBlockEntityLoadedClientEvent], None]]]
+mod_block_removed_cbs = {}  # type: dict[str, list[typing.Callable[[ModBlockEntityRemoveClientEvent], None]]]
 
 
 def asModBlockLoadedListener(

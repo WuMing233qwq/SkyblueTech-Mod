@@ -28,7 +28,7 @@ from .register import item_pre_use_cbs, item_pre_use_on_block_cbs, tool_items
 
 # TYPE_CHECKING
 if 0:
-    from typing import Callable
+    import typing
 # TYPE_CHECKING END
 
 ContainerType = serverApi.GetMinecraftEnum().ContainerType

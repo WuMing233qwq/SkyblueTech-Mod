@@ -1,10 +1,7 @@
 # coding=utf-8
 
 from skybluetech_scripts.tooldelta.define.item import Item
-from skybluetech_scripts.tooldelta.events.server import (
-    BlockRemoveServerEvent,
-    ContainerItemChangedServerEvent,
-)
+from skybluetech_scripts.tooldelta.events.server import BlockRemoveServerEvent
 from skybluetech_scripts.tooldelta.api.server import (
     BlockHasTag,
     GetBlockName,
@@ -23,7 +20,7 @@ from .define import CableNetwork, CableAccessPoint
 
 # TYPE_CHECKING
 if 0:
-    from typing import Iterable
+    import typing
 
     PosData = tuple[int, int, int]  # x y z
     PosDataWithFacing = tuple[int, int, int, int]  # x y z facing
@@ -139,7 +136,7 @@ def PushItemToOrigContainer(dim, xyz, item, container_size):
 
 
 def GetContainerSlotsCanInput(dim, pos, cacher):
-    # type: (int, tuple[int, int, int], dict[tuple[int, int, int], Iterable[int]]) -> Iterable[int]
+    # type: (int, tuple[int, int, int], dict[tuple[int, int, int], typing.Iterable[int]]) -> typing.Iterable[int]
     cached = cacher.get(pos)
     if cached is not None:
         return cached
@@ -156,7 +153,7 @@ def GetContainerSlotsCanInput(dim, pos, cacher):
 
 
 def GetContainerSlotsCanOutput(dim, pos, cacher):
-    # type: (int, tuple[int, int, int], dict[tuple[int, int, int], Iterable[int]]) -> Iterable[int]
+    # type: (int, tuple[int, int, int], dict[tuple[int, int, int], typing.Iterable[int]]) -> typing.Iterable[int]
     cached = cacher.get(pos)
     if cached is not None:
         return cached
@@ -203,10 +200,10 @@ def onNetworkTick(network):
     tick_capacity = network.transfer_speed
     cached_block_entity_datas = {}  # type: dict[tuple[int, int, int], dict]
     cached_block_names = {}  # type: dict[tuple[int, int, int], str]
-    cached_input_slot_poses = {}  # type: dict[tuple[int, int, int], Iterable[int]]
+    cached_input_slot_poses = {}  # type: dict[tuple[int, int, int], typing.Iterable[int]]
     cached_input_slotitems = {}  # type: dict[tuple[int, int, int], dict[int, Item | None]]
     input_slotitem_changed = {}  # type: dict[tuple[int, int, int], set[int]]
-    cached_output_slot_poses = {}  # type: dict[tuple[int, int, int], Iterable[int]]
+    cached_output_slot_poses = {}  # type: dict[tuple[int, int, int], typing.Iterable[int]]
     cached_output_slotitems = {}  # type: dict[tuple[int, int, int], dict[int, Item | None]]
     output_slotitem_changed = {}  # type: dict[tuple[int, int, int], set[int]]
     inputs = network.get_input_access_points()
@@ -216,7 +213,7 @@ def onNetworkTick(network):
         dim,  # type: int
         xyz,  # type: tuple[int, int, int]
     ):
-        # type: (...) -> Iterable[int]
+        # type: (...) -> typing.Iterable[int]
         cache = cached_input_slot_poses.get(xyz)
         if cache is not None:
             return cache
@@ -231,7 +228,7 @@ def onNetworkTick(network):
         dim,  # type: int
         xyz,  # type: tuple[int, int, int]
     ):
-        # type: (...) -> Iterable[int]
+        # type: (...) -> typing.Iterable[int]
         cache = cached_output_slot_poses.get(xyz)
         if cache is not None:
             return cache

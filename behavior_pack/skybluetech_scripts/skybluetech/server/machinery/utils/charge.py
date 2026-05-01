@@ -6,7 +6,7 @@ from skybluetech_scripts.tooldelta.utils import nbt
 from .lore import GetLorePos, SetLoreAtPos
 
 if 0:
-    from typing import Callable
+    import typing
 
 K_STORE_RF = "store_rf"
 K_STORE_RF_MAX = "store_rf_max"
@@ -15,7 +15,7 @@ K_MAX_OUTPUT_POWER = "max_output_power"
 K_CHARGE_COST = "st:cost_rf"
 
 
-update_charge_callbacks = {}  # type: dict[str, Callable[[Item, int], None]]
+update_charge_callbacks = {}  # type: dict[str, typing.Callable[[Item, int], None]]
 
 
 def UpdateCharge(item, store_rf):
@@ -90,7 +90,7 @@ def ChargeEnough(item_userdata):
 
 
 def SetUpdateChargeCallback(item_id, callback):
-    # type: (str, Callable[[Item, int], None]) -> None
+    # type: (str, typing.Callable[[Item, int], None]) -> None
     update_charge_callbacks[item_id] = callback
 
 

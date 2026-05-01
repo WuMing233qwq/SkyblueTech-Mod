@@ -6,7 +6,7 @@ from skybluetech_scripts.tooldelta.api.server import (
 )
 
 if 0:
-    from typing import Callable
+    import typing
 
 K_RUNNING_QUESTS = "st:running_quests"
 K_FINISHED_QUESTS = "st:finished_quests"
@@ -23,14 +23,14 @@ class Quest(object):
 
     def SetPrevQuests(
         self,
-        quests_getter,  # type: Callable[[], list[Quest]]
+        quests_getter,  # type: typing.Callable[[], list[Quest]]
     ):
         self.prev_quests = quests_getter()
         return self
 
     def SetNextQuests(
         self,
-        quests_getter,  # type: Callable[[], list[Quest]]
+        quests_getter,  # type: typing.Callable[[], list[Quest]]
     ):
         self.next_quests = quests_getter()
         return self

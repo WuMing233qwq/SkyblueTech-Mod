@@ -14,11 +14,11 @@ from ...machinery.utils.charge import ChargeEnough, SetUpdateChargeCallback
 
 # TYPE_CHECKING
 if 0:
-    from typing import Callable
+    import typing
 # TYPE_CHECKING END
 
-item_pre_use_cbs = {}  # type: dict[str, Callable[[ServerItemTryUseEvent]]]
-item_pre_use_on_block_cbs = {}  # type: dict[str, Callable[[ServerItemUseOnEvent]]]
+item_pre_use_cbs = {}  # type: dict[str, typing.Callable[[ServerItemTryUseEvent]]]
+item_pre_use_on_block_cbs = {}  # type: dict[str, typing.Callable[[ServerItemUseOnEvent]]]
 tool_items = set()  # type: set[str]
 orig_tier_speed = {}  # type: dict[str, float]
 orig_attack_damage = {}  # type: dict[str, int]
@@ -31,13 +31,13 @@ def RegisterTool(item_id):
 
 
 def RegisterItemPreUseCallback(item_id, callback):
-    # type: (str, Callable[[ServerItemTryUseEvent]]) -> None
+    # type: (str, typing.Callable[[ServerItemTryUseEvent]]) -> None
     "注册物品的预使用回调。"
     item_pre_use_cbs[item_id] = callback
 
 
 def RegisterItemPreUseOnBlockCallback(item_id, callback):
-    # type: (str, Callable[[ServerItemUseOnEvent]]) -> None
+    # type: (str, typing.Callable[[ServerItemUseOnEvent]]) -> None
     "注册物品对方块的预使用回调。"
     item_pre_use_on_block_cbs[item_id] = callback
 
