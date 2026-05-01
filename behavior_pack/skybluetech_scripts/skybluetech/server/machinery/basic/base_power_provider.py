@@ -5,20 +5,6 @@ from ....common.define.facing import OPPOSITE_FACING
 from .base_machine import BaseMachine
 
 
-def requireWireModule():
-    global GetContainerNode, pool
-    if requireWireModule.has_cache:
-        return
-    from ...transmitters.wire.logic import logic_module
-    from .. import pool
-
-    GetContainerNode = logic_module.GetContainerNode
-    requireWireModule.has_cache = True
-
-
-requireWireModule.has_cache = False
-
-
 class BasePowerProvider(BaseMachine):
     """
     能量提供类机器的基类。
@@ -47,7 +33,8 @@ class BasePowerProvider(BaseMachine):
 
     def _output_nearby(self, output_rf):
         # type: (int) -> tuple[bool, int]
-        requireWireModule()
+        from .. import pool
+
         ok = False
         for machine, facing in pool.GetNearbyMachines(
             self.dim, self.x, self.y, self.z, self._power_output_faces

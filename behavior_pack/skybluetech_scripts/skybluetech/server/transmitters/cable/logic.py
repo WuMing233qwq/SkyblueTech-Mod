@@ -22,8 +22,8 @@ from .define import CableNetwork, CableAccessPoint
 if 0:
     import typing
 
-    PosData = tuple[int, int, int]  # x y z
-    PosDataWithFacing = tuple[int, int, int, int]  # x y z facing
+    PosData = typing.Tuple[int, int, int]  # x y z
+    PosDataWithFacing = typing.Tuple[int, int, int, int]  # x y z facing
 # TYPE_CHECKING END
 
 # 调节这个设置为 True 可以使管道一次性发送完所有物品

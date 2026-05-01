@@ -30,8 +30,8 @@ from ..base.define import (
 if 0:
     import typing
 
-    PosData = tuple[int, int, int]  # x y z
-    PosDataWithFacing = tuple[int, int, int, int]  # x y z facing
+    PosData = typing.Tuple[int, int, int]  # x y z
+    PosDataWithFacing = typing.Tuple[int, int, int, int]  # x y z facing
 # TYPE_CHECKING END
 
 _NT = TypeVar("_NT", bound=BaseNetwork)

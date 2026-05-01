@@ -230,17 +230,3 @@ class RFRepeaterPlant(BaseMachine, GUIControl, ItemContainer):
     def mode(self, value):
         # type: (int) -> None
         self.bdata[NodeData.K_MODE] = value
-
-
-def requireWireModule():
-    global GetContainerNode, pool
-    if requireWireModule.has_cache:
-        return
-    from ...transmitters.wire.logic import logic_module
-    from .. import pool
-
-    GetContainerNode = logic_module.GetContainerNode
-    requireWireModule.has_cache = True
-
-
-requireWireModule.has_cache = False

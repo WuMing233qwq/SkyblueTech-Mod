@@ -6,7 +6,9 @@ from skybluetech_scripts.tooldelta.extensions.typing import Generic, TypeVar
 
 # TYPE_CHECKING
 if 0:
-    PosData = tuple[int, int, int, int]
+    import typing
+
+    PosData = typing.Tuple[int, int, int, int]
 # TYPE_CHECKING END
 
 _APT = TypeVar("_APT", bound="BaseAccessPoint")
