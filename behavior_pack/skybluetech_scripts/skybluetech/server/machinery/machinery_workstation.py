@@ -28,6 +28,7 @@ class MachineryWorkstation(BaseMachine, GUIControl, ItemContainer):
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
         self.sync = MachineryWorkstationUISync.NewServer(self).Activate()
+        self.current_recipe = None
         self.load_recipe(init=True)
         self.CallSync()
 
