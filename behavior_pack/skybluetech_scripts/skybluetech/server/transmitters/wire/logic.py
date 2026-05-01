@@ -15,7 +15,9 @@ from .define import WireNetwork, WireAccessPoint, TRANSFER_SPEED_MAPPING
 
 # TYPE_CHECKING
 if 0:
-    PosData = tuple[int, int, int]  # x y z
+    import typing
+
+    PosData = typing.Tuple[int, int, int]  # x y z
 # TYPE_CHECKING END
 
 

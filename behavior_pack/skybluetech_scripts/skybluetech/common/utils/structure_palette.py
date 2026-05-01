@@ -3,7 +3,7 @@ if 0:
     import typing
 
     BLOCK_PAT_INDEX = int
-    POS_SET = typing.Set[tuple[int, int, int]]
+    POS_SET = typing.Set[typing.Tuple[int, int, int]]
 
 
 class StructureBlockPalette(object):
