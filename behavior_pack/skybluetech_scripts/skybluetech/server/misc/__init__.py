@@ -1,1 +1,7 @@
-from . import crafting_template, famicom, piston_denier, resin_collector
+from . import (
+    crafting_template,
+    famicom,
+    initial_supplies,
+    piston_denier,
+    resin_collector,
+)
