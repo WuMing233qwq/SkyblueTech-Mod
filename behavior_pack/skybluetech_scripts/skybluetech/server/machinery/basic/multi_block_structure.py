@@ -41,7 +41,7 @@ if 0:
 
     MT = typing.TypeVar("MT", bound=BaseMachine)
     BLOCK_PAT_INDEX = int
-    POS_SET = set[tuple[int, int, int]]
+    POS_SET = typing.Set[tuple[int, int, int]]
 
 DEBUG = False
 

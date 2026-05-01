@@ -1,9 +1,9 @@
 # coding=utf-8
 if 0:
-    from typing import Any
+    import typing
 
     BLOCK_PAT_INDEX = int
-    POS_SET = set[tuple[int, int, int]]
+    POS_SET = typing.Set[tuple[int, int, int]]
 
 
 class StructureBlockPalette(object):
@@ -42,7 +42,7 @@ class StructureBlockPalette(object):
         # self.all_poses = set(j for i in posblock_data.values() for j in i)
 
     def compare(self, block_palette, dim, co_x, co_y, co_z, cx, cy, cz):
-        # type: (Any, int, int, int, int, int, int, int) -> bool
+        # type: (typing.Any, int, int, int, int, int, int, int) -> bool
         """
         比较方块调色板内容是否与此调色板匹配。
 
@@ -69,7 +69,7 @@ class StructureBlockPalette(object):
         return True
 
     def get_lacked_blocks(self, block_palette):
-        # type: (Any) -> dict[str, int] | None
+        # type: (typing.Any) -> dict[str, int] | None
         for block_id, count in self.require_blocks_count.items():
             if block_palette.GetBlockCountInBlockPalette(block_id) < count:
                 return {
