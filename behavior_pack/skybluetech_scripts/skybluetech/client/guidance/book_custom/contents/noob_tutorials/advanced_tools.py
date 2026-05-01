@@ -25,11 +25,12 @@ advanced_tools = PageGroup(
         ),
         TextPage(
             "",
-            '你可以用<item id="{bronze_ingot}">青铜锭和<item id="{invar_ingot}">殷钢锭来合成比铁工具更趁手的<item id="{bronze_pickaxe}"><link id="bronze_tools" text="青铜工具">和<item id="{invar_pickaxe}"><link id="invar_tools" text="殷钢工具">， 它们相比铁质工具具更耐用、 更灵活， 杀伤力也更高。'.format(
+            '你可以用<item id="{bronze_ingot}">青铜锭和<item id="{invar_ingot}">殷钢锭来合成比铁工具更趁手的<item id="{bronze_pickaxe}"><link id="bronze_tools" text="青铜工具">和<item id="{invar_pickaxe}"><link id="invar_tools" text="殷钢工具">， 它们相比铁质工具具更耐用、 更灵活， 杀伤力也更高。\n\n你也可以尝试做把<item id="{mining_hammer}"><link id="mining_hammers" text="金属矿锤">来提升自己的挖矿体验： 矿锤能挖掘 3x3 范围的方块！'.format(
                 bronze_ingot=id_enum.Ingots.BRONZE,
                 invar_ingot=id_enum.Ingots.INVAR,
                 bronze_pickaxe=id_enum.MetalTools.BRONZE_PICKAXE,
                 invar_pickaxe=id_enum.MetalTools.INVAR_PICKAXE,
+                mining_hammer=id_enum.MetalTools.INVAR_MINING_HAMMER,
             ),
             hyperlink_cbs={
                 "bronze_tools": lambda _: CheckRecipes([
@@ -45,6 +46,10 @@ advanced_tools = PageGroup(
                     id_enum.MetalTools.INVAR_SHOVEL,
                     id_enum.MetalTools.INVAR_SWORD,
                     id_enum.MetalTools.INVAR_HOE,
+                ]),
+                "mining_hammers": lambda _: CheckRecipes([
+                    id_enum.MetalTools.BRONZE_MINING_HAMMER,
+                    id_enum.MetalTools.INVAR_MINING_HAMMER,
                 ]),
             },
         ),
