@@ -1,0 +1,42 @@
+{
+    "format_version": "1.20.10",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "skybluetech:control_circuit_advanced_craft"
+        },
+        "key": {
+            "A": {
+                "data": 0,
+                "item": "skybluetech:control_circuit_basic"
+            },
+            "B": {
+                "data": 0,
+                "item": "skybluetech:gold_plate"
+            },
+            "C": {
+                "data": 0,
+                "item": "skybluetech:silver_plate"
+            },
+            "D": {
+                "data": 0,
+                "item": "skybluetech:copper_stick"
+            }
+        },
+        "pattern": [
+            "DBD",
+            "CAC",
+            "DBD"
+        ],
+        "result": {
+            "count": 1,
+            "data": 0,
+            "item": "skybluetech:control_circuit_advanced"
+        },
+        "tags": [
+            "crafting_table"
+        ],
+        "unlock": {
+            "context": "AlwaysUnlocked"
+        }
+    }
+}
