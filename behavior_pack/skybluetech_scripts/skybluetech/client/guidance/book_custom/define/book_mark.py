@@ -3,6 +3,8 @@ import time
 from skybluetech_scripts.tooldelta.api.client import GetConfigData, SetConfigData
 from .page_group import PageGroup, GetPageGroup
 
+CFG_KEY = "skybluetech:guidance_bookmarks"
+
 
 class BookMark(object):
     def __init__(self, page_group, page_index, create_time):
@@ -63,9 +65,9 @@ class BookMarkMgr(object):
 
 def _get_bookmarks():
     # type: () -> dict[str, int]
-    return GetConfigData("st:bookmarks") or {}
+    return GetConfigData(CFG_KEY) or {}
 
 
 def _set_bookmarks(bookmarks):
     # type: (dict[str, int]) -> None
-    SetConfigData("st:bookmarks", bookmarks)
+    SetConfigData(CFG_KEY, bookmarks)
