@@ -1,5 +1,6 @@
 # coding=utf-8
 from skybluetech_scripts.skybluetech.common.define import id_enum
+from skybluetech_scripts.skybluetech.client.ui.recipe_checker import CheckRecipes
 from ...define import (
     TextPage,
     MachineryWorkstationRecipePage,
@@ -72,8 +73,9 @@ wind_generator = PageGroup(
         ),
         TextPage(
             "",
-            '风力发电机需要使用<text color="§9" t="扇叶">进行工作。 工作时会消耗扇叶<item id="%s"><text color="§2" t="耐久度">。 不同的扇叶会提供不同的<text color="§3" t="输出功率">和耐久度。'
-            % id_enum.Paddle.IRON,
+            '风力发电机需要使用<item id="{paddle}"><style color="§9"><link id="paddle" text="扇叶"><style color="R">进行工作。 工作时会消耗扇叶<text color="§2" t="耐久度">。 不同的扇叶会提供不同的<text color="§3" t="输出功率">和耐久度。'
+            .format(paddle=id_enum.Paddle.IRON),
+            hyperlink_cbs={"paddle": lambda _:CheckRecipes([id_enum.Paddle.IRON,])}
         ),
         MachineryWorkstationRecipePage(id_enum.WIND_GENERATOR),
     ],

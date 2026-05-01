@@ -1,5 +1,6 @@
 # coding=utf-8
 from skybluetech_scripts.skybluetech.common.define import id_enum
+from skybluetech_scripts.skybluetech.client.ui.recipe_checker import CheckRecipes
 from skybluetech_scripts.skybluetech.client.guidance.book_custom.define import (
     TextPage,
     MainTOCPage,
@@ -14,7 +15,7 @@ general_intro_pages = PageGroup(
     [
         TextPage(
             "引言",
-            '蔚蓝科技是一款<text color="§9" t="科技模组">， 加入了多种多样的机器<item id="{macerator}">、 发电机<item id="{solar_panel}">、 工具等物品。 你可以使用机器和物流系统搭建全自动物品生产的工业流水线， 也可以制造使用红石能的装备来提升你的采集和挖掘能力！'.format(
+            '蔚蓝科技是一款<text color="§9" t="科技模组">， 加入了多种多样的机器<item id="{macerator}">、 发电机<item id="{solar_panel}">、 工具等物品。 你可以使用机器和物流系统搭建全自动物品生产的工业流水线， 也可以制造使用红石能的装备来提升你的采集和挖掘能力！\n\n<text color="§c" t="《蔚蓝科技》目前处于一测状态， 所有内容和配方不保证为最终形态。 遇到任何问题都请加入玩家群进行反馈。 一些没有配方的物品也将于日后更新。">'.format(
                 macerator=id_enum.MACERATOR, solar_panel=id_enum.SOLAR_PANEL
             ),
         ),
@@ -45,7 +46,10 @@ fluid_intro = PageGroup(
     [
         TextPage(
             "流体",
-            '气体和液体统称为流体， 需要使用<text color="§9" t="流体管道">进行传输。\n<text color="§9" t="流体储罐">可存储液体或气体。\n手持<text color="§2" t="空桶">点击存储了流体的机器可将其中的流体进行装桶； 反之可向其装填流体。',
+            '气体和液体统称为流体， 需要使用<text color="§9" t="流体管道">进行传输。\n<style color="§9"><link id="fluid_container" text="流体储罐"><style color="R">可存储液体或气体。\n手持<text color="§2" t="空桶">点击存储了流体的机器可将其中的流体进行装桶； 反之可向其装填流体。',
+            hyperlink_cbs={
+                "fluid_container": lambda _: CheckRecipes(list(id_enum.Tank.all()))
+            },
         )
     ],
 )

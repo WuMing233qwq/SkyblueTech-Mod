@@ -7,7 +7,7 @@ from ...define import (
     PageGroup,
 )
 
-from . import advanced_tools, day_one, into_machinery
+from . import advanced_tools, day_one, into_machinery, page_todo
 
 noob_tutorial_toc = PageGroup(
     "noob_tutorials",
@@ -27,6 +27,7 @@ noob_tutorial_toc = PageGroup(
                     "合金和工具",
                     advanced_tools.advanced_tools,
                 ),
+                TOCPageSection("minecraft:barrier", 0, "未完待续", page_todo.page_todo),
             ],
         ),
     ],
