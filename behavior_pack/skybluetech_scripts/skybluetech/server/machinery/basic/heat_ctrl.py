@@ -1,26 +1,24 @@
 # coding=utf-8
 from .base_machine import BaseMachine
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
-from ....common.define.fluids.fluid_c import fluid_c_values
+from ....common.define.facing import FACING_DXYZ, OPPOSITE_FACING
 
-K_KELVIN = "kelvin"
+K_HEAT_VALUE = "heat_value"
 ENV_TEMPERATURE = 300.0
-S = 0.01
-D = 0.001
-TICK_TIME = 20
-DIFF_THRESOLD = 1e-3
-SELF_M = 10
 
 
 class HeatCtrl(BaseMachine):
     """
     热机机器类, 表示产热或吸热的机器。
+    具有属性:
+        - 热值(R/W): 本机当前的热量值
+        - 开尔文值(R): 本机当前的开尔文温度值
 
     需要: `__init__`
 
     类属性:
-        heat_loss (float): 热量流失值, 默认为 1.0
-        original_heat_c (float): 原始比热容, 默认为 4000.0
+        spread_heat (bool): 是否扩散热量, 默认为 False
+        max_heat_value (float): 本机最大热值, 默认为 600.0
 
     覆写:
         `OnLoad`
@@ -28,98 +26,101 @@ class HeatCtrl(BaseMachine):
         `Dump`
     """
 
-    heat_loss = 1
-    "热量散失值, 越大表示散热越快。"
-    original_heat_c = 4000
-    "原始比热容"
-    # auto_share_heat = True
-    # "是否自动传递热量"
+    heat_power = 0
+    "产热功率, 正值代表高于环境温度, 负值代表低于环境温度"
+    spread_heat = False
+    "是否扩散热量"
+    max_heat_value = 600
+    "本机最大热值"
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        self.heat_c = self.original_heat_c
+        self._heat_value = block_entity_data[K_HEAT_VALUE] or 0
+        self.t = 0
+        self.one_div_a = self.max_heat_value**2  # **3
+        self.neighbor_heaters = [None] * len(FACING_DXYZ)  # type: list[HeatCtrl | None]
+        self._update_neighbor_heaters()
 
+    @SuperExecutorMeta.execute_super
     def OnTicking(self):
-        self._heat_loss()
+        if self.t % 5 == 0:
+            self.t = 0
+            self._heat_ctrl_work_once()
 
-    def ShareHeat(self, other):
-        # type: (HeatCtrl) -> bool
-        """
-        分享、传递热量给给定的机器， 机器必须继承 `HeatCtrl` 类。
+    def SetOutputHeatPower(self, power):
+        # type: (float) -> None
+        self.heat_power = power
 
-        Args:
-            other (HeatCtrl): 对应机器
+    def _heat_ctrl_work_once(self):
+        self._update_heat_value()
+        if self.spread_heat:
+            self.share_heat()
 
-        Returns:
-            bool: 是否进行了传热, 如果温度差异过小则不会传热
-        """
-        diff = abs(self.kelvin - other.kelvin)
-        if diff <= DIFF_THRESOLD:
-            return False
-        R_self = D / self.heat_c
-        R_other = D / other.heat_c
-        heat_flux = diff / (R_self + R_other) * S
-        dQ = heat_flux / TICK_TIME
-        if self.kelvin > other.kelvin:
-            self.kelvin -= dQ / self.heat_c
-            other.kelvin += dQ / other.heat_c
+    def _update_neighbor_heaters(self):
+        from ..pool import GetMachineStrict
+
+        for face, (dx, dy, dz) in enumerate(FACING_DXYZ):
+            m = GetMachineStrict(self.dim, self.x + dx, self.y + dy, self.z + dz)
+            if isinstance(m, HeatCtrl):
+                self.neighbor_heaters[face] = m
+                m.set_neighbor_heater(OPPOSITE_FACING[face], self)
+
+    def set_neighbor_heater(self, face, m):
+        # type: (int, HeatCtrl) -> None
+        self.neighbor_heaters[face] = m
+
+    def _update_heat_value(self):
+        if self.IsActive():
+            new_heat_value = self.heat_value + self.heat_power
         else:
-            self.kelvin += dQ / self.heat_c
-            other.kelvin -= dQ / other.heat_c
-        return True
+            new_heat_value = self.heat_value
+        self.heat_value = new_heat_value - self.calcuate_heat_loss(new_heat_value)
 
-    def _heat_loss(self):
-        k = self.kelvin
-        if k > ENV_TEMPERATURE:
-            self.kelvin = max(
-                ENV_TEMPERATURE,
-                k - (k**4 - ENV_TEMPERATURE**4) * self.heat_loss * 1e-10,
-            )
-        # print "val", (self.kelvin**4 - ENV_TEMPERATURE**4) * self.heat_loss * 1e-10
+    def calcuate_heat_loss(self, heat_value):
+        # type: (float) -> float
+        chk = heat_value / self.one_div_a
+        if chk > 1 if chk > 0 else chk < -1:
+            return heat_value
+        val = heat_value**3 / self.one_div_a
+        return min(val, heat_value) if val > 0 else max(val, heat_value)
 
-    def InputFluidAndUpdateHeat(self, fluid_id, prev_fluid_volume, new_fluid_volume):
-        # type: (str, float, float) -> None
-        """
-        当机器接受了具有比热容的流体时调用。
-        会更新此机器温度。
+    def share_heat(self):
+        heaters = [
+            h
+            for h in self.neighbor_heaters
+            if h is not None and h.heat_value < self.heat_value
+        ]
+        if not heaters:
+            return
 
-        Args:
-            fluid_id (str): 流体类型
-            new_volume (float): 当前此流体的体积
-        """
-        add_fluid_volume = new_fluid_volume - prev_fluid_volume
-        orig_q = self.kelvin * self.heat_c * (prev_fluid_volume + SELF_M)
-        self.FlushCValueByFluid(fluid_id, add_fluid_volume, new_fluid_volume)
-        self.kelvin = (
-            (orig_q + fluid_c_values[fluid_id] * ENV_TEMPERATURE * add_fluid_volume)
-            / self.heat_c
-            / (new_fluid_volume + SELF_M)
-        )
-        # print "fluid_c:", fluid_c_values[fluid_id], "my_c:", self.heat_c, "k:", self.kelvin
+        m = self.heat_value
+        ratio = 0.4
 
-    def FlushCValueByFluid(self, fluid_id, add_volume, new_volume):
-        # type: (str | None, float, float) -> None
-        """
-        根据所给流体类型和体积更新此机器的比热容。
+        heats = [h.heat_value for h in heaters]
+        demands = [ratio * (m - h) for h in heats]
+        D = sum(demands)
+        if D <= 0:
+            return
 
-        Args:
-            fluid_id (str): 流体种类
-            fluid_volume (float): 添加的此流体的体积
-        """
-        if fluid_id is None or new_volume == 0:
-            self.heat_c = self.original_heat_c
-        else:
-            fluid_c = fluid_c_values[fluid_id]
-            self.heat_c = self.original_heat_c * (
-                float(SELF_M) / (new_volume + SELF_M)
-            ) + fluid_c * (float(new_volume) / (new_volume + SELF_M))
+        s = min(1.0, m / D)
+
+        total = 0.0
+        for i, heater in enumerate(heaters):
+            actual = demands[i] * s
+            heater.heat_value = heater.heat_value + actual
+            total += actual
+        self.heat_value = self.heat_value - total
+
+    @property
+    def heat_value(self):
+        # type: () -> float
+        return self._heat_value
+
+    @heat_value.setter
+    def heat_value(self, value):
+        self._heat_value = value
+        self.bdata[K_HEAT_VALUE] = value
 
     @property
     def kelvin(self):
-        # type: () -> float
-        return self.bdata[K_KELVIN] or ENV_TEMPERATURE
-
-    @kelvin.setter
-    def kelvin(self, value):
-        # type: (float) -> None
-        self.bdata[K_KELVIN] = value
+        return self.heat_value + ENV_TEMPERATURE

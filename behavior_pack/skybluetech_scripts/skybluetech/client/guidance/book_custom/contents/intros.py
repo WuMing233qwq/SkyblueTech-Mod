@@ -15,13 +15,13 @@ general_intro_pages = PageGroup(
     [
         TextPage(
             "引言",
-            '蔚蓝科技是一款<text color="§9" t="科技模组">， 加入了多种多样的机器<item id="{macerator}">、 发电机<item id="{solar_panel}">、 工具等物品。 你可以使用机器和物流系统搭建全自动物品生产的工业流水线， 也可以制造使用红石能的装备来提升你的采集和挖掘能力！\n\n<text color="§c" t="《蔚蓝科技》目前处于一测状态， 所有内容和配方不保证为最终形态。 遇到任何问题都请加入玩家群进行反馈。 一些没有配方的物品也将于日后更新。">'.format(
+            '蔚蓝科技是一款<text color="§9" t="科技模组">， 加入了多种多样的机器<item id="{macerator}">、 发电机<item id="{solar_panel}">、 工具等物品。 你可以使用机器和物流系统搭建全自动物品生产的工业流水线， 也可以制造使用红石能的装备来提升你的采集和挖掘能力！'.format(
                 macerator=id_enum.MACERATOR, solar_panel=id_enum.SOLAR_PANEL
             ),
         ),
         TextPage(
             "",
-            '本手册内包含 《蔚蓝科技》 的<text color="§9" t="主要玩法教学">； <text color="§d" t="附属模组">或部分<text color="§2" t="联动模组">的玩法和教程也可以一并直接在手册内查看。',
+            '本手册内包含 《蔚蓝科技》 的<text color="§9" t="主要玩法教学">； <text color="§d" t="附属模组">或部分<text color="§2" t="联动模组">的玩法和教程也可以一并直接在手册内查看。\n\n<text color="§c" t="《蔚蓝科技》目前处于一测状态， 所有内容和配方不保证为最终形态。 遇到任何问题都请加入玩家群进行反馈。 一些没有配方的物品也将于日后更新。">',
         ),
     ],
 )

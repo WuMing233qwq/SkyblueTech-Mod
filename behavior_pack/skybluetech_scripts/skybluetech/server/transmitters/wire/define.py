@@ -34,9 +34,9 @@ def rf_to_damage(rf):
 
 
 class WireNetwork(BaseNetwork["WireAccessPoint"]):
-    def __init__(self, dim, group_inputs, group_outputs, nodes, transfer_speed=0):
+    def __init__(self, dim, group_inputs, group_outputs, nodes, transmitter_id):
         super(WireNetwork, self).__init__(
-            dim, group_inputs, group_outputs, nodes, transfer_speed
+            dim, group_inputs, group_outputs, nodes, transmitter_id
         )
         self.entities_hit_wire = {}  # type: dict[str, tuple[int, int, int]]
 

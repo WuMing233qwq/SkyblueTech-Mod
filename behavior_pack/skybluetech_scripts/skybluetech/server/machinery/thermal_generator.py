@@ -64,7 +64,6 @@ class ThermalGenerator(BaseGenerator, ItemContainer, GUIControl, WorkRenderer):
     @SuperExecutorMeta.execute_super
     def OnSlotUpdate(self, slot_pos):
         # type: (int) -> None
-        self.UnsetDeactiveFlag(flags.DEACTIVE_FLAG_NO_INPUT, flush=False)
         self.next_burn()
 
     @SuperExecutorMeta.execute_super
@@ -87,12 +86,14 @@ class ThermalGenerator(BaseGenerator, ItemContainer, GUIControl, WorkRenderer):
             FUEL_SECONDS_MAP.get(mainSlotItem.id)
             or mainSlotItem.GetBasicInfo().fuelDuration
         )
+        if burnTime <= 0:
+            return
         self.burn_seconds_left = burnTime
         self.max_burn_seconds = burnTime
         mainSlotItem.count -= 1
         self.SetSlotItem(0, mainSlotItem)
         self.is_burning = True
-        self.ResetDeactiveFlags()
+        self.UnsetDeactiveFlag(flags.DEACTIVE_FLAG_NO_INPUT)
         self.SetOutputPower(TICK_POWER)
         return True
 

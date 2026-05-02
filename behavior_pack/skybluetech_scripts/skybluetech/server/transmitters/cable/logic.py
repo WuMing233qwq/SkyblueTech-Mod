@@ -292,10 +292,15 @@ def onNetworkTick(network):
                         continue
                 if input_pos == output_pos:
                     continue
+                
+                m = GetMachineStrict(network.dim, *input_pos)
 
                 break_flag2 = False
                 input_slotposes = _get_container_input_slots(network.dim, input_pos)
                 for input_slot in input_slotposes:
+                    if isinstance(m, ItemContainer):
+                        if not m.IsValidInput(input_slot, output_item):
+                            continue
                     input_item = _get_container_item(
                         network.dim, input_pos, input_slot, cached_input_slotitems
                     )

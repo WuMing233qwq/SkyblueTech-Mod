@@ -140,8 +140,12 @@
                     "$pressed_button_name": "%netease_editor_template_namespace.click",
                     "$pressed_texture": "textures/ui/red_button_pressed",
                     "$texture_layer": 2,
-                    "anchor_from": "top_right",
-                    "anchor_to": "top_right",
+                    "anchor_from": "bottom_middle",
+                    "anchor_to": "bottom_middle",
+                    "offset": [
+                        70.0,
+                        -48.0
+                    ],
                     "size": [
                         20.0,
                         20.0
@@ -230,7 +234,7 @@
                     "anchor_from": "bottom_middle",
                     "anchor_to": "bottom_middle",
                     "offset": [
-                        0.0,
+                        -20.0,
                         -48.0
                     ],
                     "size": [
