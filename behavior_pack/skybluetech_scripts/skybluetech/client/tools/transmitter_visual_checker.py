@@ -119,22 +119,26 @@ def displayModel(event):
                     (min_x + 0.4, min_y + 1, min_z + 0.4), (ddx, ddy, ddz), (0, 1, 1)
                 )
                 shapes.append(box)
+    text_map = {} # type: dict[tuple[int, int, int], list[tuple[str, tuple]]]
     for input_node in event.inputs:
-        x, y, z = input_node
-        text = draw_comp.AddTextShape(
-            (x + 0.5, y + 0.5, z + 0.5),
-            "用电器" if event.type == event.TYPE_WIRE else "输入",
-            (0, 1, 0),
-        )
-        shapes.append(text)
+        label = "用电器" if event.type == event.TYPE_WIRE else "输入"
+        text_map.setdefault(input_node, []).append((label, (0, 1, 0)))
     for output_node in event.outputs:
-        x, y, z = output_node
-        text = draw_comp.AddTextShape(
+        label = "能量源" if event.type == event.TYPE_WIRE else "抽取"
+        text_map.setdefault(output_node, []).append((label, (1, 0, 0)))
+    for coord, labels in text_map.items():
+        x, y, z = coord
+        if len(labels) == 1:
+            text, color = labels[0]
+            text = ("§a" if color == (0, 1, 0) else "§c") + text
+        else:
+            text = "\n".join(("§a" if c == (0, 1, 0) else "§c") + t for t, c in labels)
+        shape = draw_comp.AddTextShape(
             (x + 0.5, y + 0.5, z + 0.5),
-            "能量源" if event.type == event.TYPE_WIRE else "抽取",
-            (1, 0, 0),
+            text,
+            (1, 1, 1),
         )
-        shapes.append(text)
+        shapes.append(shape)
     g_shapes.append(shapes)
     removeAfter(shapes)
 
@@ -162,17 +166,13 @@ def displayMultiModel(event):
     shapes = []
     draw_comp = CF.CreateDrawing(GetLevelId())
     _DXYZ_FACING = ((1, 0, 0), (0, 1, 0), (0, 0, 1))
+    text_map = {}
     for inputs, outputs, nodes, network_type in event.reses:
         box_color = (random(), random(), random())
         all_nodes = set(nodes) | set(inputs + outputs)
         for nx, ny, nz in all_nodes:
             for dx, dy, dz in _DXYZ_FACING:
                 if (nx + dx, ny + dy, nz + dz) in all_nodes:
-                    # line = draw_comp.AddLineShape(
-                    #     (nx + 0.5, ny + 1, nz + 0.5),
-                    #     (nx + dx + 0.5, ny + dy + 1, nz + dz + 0.5),
-                    #     (0, 1, 1)
-                    # )
                     min_x = min(nx, nx + dx)
                     min_y = min(ny, ny + dy)
                     min_z = min(nz, nz + dz)
@@ -186,21 +186,25 @@ def displayMultiModel(event):
                     )
                     shapes.append(box)
         for input_node in inputs:
-            x, y, z = input_node
-            text = draw_comp.AddTextShape(
-                (x + 0.5, y + 0.3 + 0.2 * network_type, z + 0.5),
-                NETWORK_TYPE_ZHCN[network_type] + "： 输入",
-                (0, 1, 0),
-            )
-            shapes.append(text)
+            label = NETWORK_TYPE_ZHCN[network_type] + "： 输入"
+            text_map.setdefault(input_node, []).append((label, (0, 1, 0)))
         for output_node in outputs:
-            x, y, z = output_node
-            text = draw_comp.AddTextShape(
-                (x + 0.5, y + 0.3 + 0.2 * network_type, z + 0.5),
-                NETWORK_TYPE_ZHCN[network_type] + "： 抽取",
-                (1, 0, 0),
-            )
-            shapes.append(text)
+            label = NETWORK_TYPE_ZHCN[network_type] + "： 抽取"
+            text_map.setdefault(output_node, []).append((label, (1, 0, 0)))
+    for coord, labels in text_map.items():
+        x, y, z = coord
+        if len(labels) == 1:
+            text, color = labels[0]
+            text = ("§a" if color == (0, 1, 0) else "§c") + text
+        else:
+            text = "\n".join(("§a" if c == (0, 1, 0) else "§c") + t for t, c in labels)
+            color = (1, 1, 1)
+        shape = draw_comp.AddTextShape(
+            (x + 0.5, y + 0.5, z + 0.5),
+            text,
+            color,
+        )
+        shapes.append(shape)
     g_multi_shapes.append(shapes)
     removeMultiAfter(shapes)
 
