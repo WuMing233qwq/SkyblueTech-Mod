@@ -193,11 +193,19 @@ def displayMultiModel(event):
             text_map.setdefault(output_node, []).append((label, (1, 0, 0)))
     for coord, labels in text_map.items():
         x, y, z = coord
-        if len(labels) == 1:
-            text, color = labels[0]
+        # 去重：使用集合去除重复的标签
+        unique_labels = []
+        seen = set()
+        for label, color in labels:
+            key = (label, color)
+            if key not in seen:
+                seen.add(key)
+                unique_labels.append((label, color))
+        if len(unique_labels) == 1:
+            text, color = unique_labels[0]
             text = ("§a" if color == (0, 1, 0) else "§c") + text
         else:
-            text = "\n".join(("§a" if c == (0, 1, 0) else "§c") + t for t, c in labels)
+            text = "\n".join(("§a" if c == (0, 1, 0) else "§c") + t for t, c in unique_labels)
             color = (1, 1, 1)
         shape = draw_comp.AddTextShape(
             (x + 0.5, y + 0.5, z + 0.5),
