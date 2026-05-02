@@ -48,7 +48,7 @@ class ItemSplitter(GUIControl, UpgradeControl):
                 else:
                     continue
                 it = self.try_post_item_by_label(item)
-                if it is not None and it.id == item.id and it.count == it.count:
+                if it is not None and it.id == item.id and it.count == item.count:
                     continue
                 self.SetSlotItem(slot, it)
             if not has_item:
@@ -79,7 +79,6 @@ class ItemSplitter(GUIControl, UpgradeControl):
     def OnSlotUpdate(self, slot):
         if not self.InUpgradeSlot(slot):
             self._sending_items = True
-            print(self.x, self.y, self.z, "slot update", slot)
         else:
             UpgradeControl.OnSlotUpdate(self, slot)
             

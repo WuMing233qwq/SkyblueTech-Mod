@@ -109,29 +109,30 @@ def PushItemToOrigContainer(dim, xyz, item, container_size):
     for slot_pos in range(container_size):
         orig_item = GetContainerItem(dim, xyz, slot_pos, getUserData=True)
         if orig_item is None:
-            res = SetContainerItem(dim, xyz, slot_pos, item)
-            if res:
-                return None
-            else:
-                continue
-        elif not orig_item.CanMerge(item):
-            continue
-        sum_count = orig_item.count + item.count
-        max_stack = orig_item.GetBasicInfo().maxStackSize
-        if sum_count > max_stack:
+            max_stack = item.GetBasicInfo().maxStackSize
+            if item.count <= max_stack:
+                res = SetContainerItem(dim, xyz, slot_pos, item)
+                if res:
+                    return None
+                else:
+                    continue
             item_new = item.copy()
             item_new.count = max_stack
             res = SetContainerItem(dim, xyz, slot_pos, item_new)
             if not res:
                 continue
-            item.count = sum_count - max_stack
+            item.count -= max_stack
+        elif not orig_item.CanMerge(item) or orig_item.StackFull():
+            continue
         else:
-            item_new = item.copy()
-            item_new.count = sum_count
-            res = SetContainerItem(dim, xyz, slot_pos, item_new)
+            require_count = min(orig_item.GetBasicInfo().maxStackSize - orig_item.count, item.count)
+            orig_item.count += require_count
+            item.count -= require_count
+            res = SetContainerItem(dim, xyz, slot_pos, orig_item)
             if not res:
                 continue
-            return None
+            if item.count == 0:
+                return None
     return item
 
 
