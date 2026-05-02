@@ -35,7 +35,7 @@ class ItemSplitter(GUIControl, UpgradeControl):
     def __init__(self, dim, x, y, z, block_entity_data):
         self.sync = ItemSplitterUISync.NewServer(self).Activate()
         self._cached_recorded_settings = None
-        self._sending_items = False
+        self._sending_items = True
         self._ticking_t = 0
 
     def OnTicking(self):
@@ -79,6 +79,10 @@ class ItemSplitter(GUIControl, UpgradeControl):
     def OnSlotUpdate(self, slot):
         if not self.InUpgradeSlot(slot):
             self._sending_items = True
+            print(self.x, self.y, self.z, "slot update", slot)
+        else:
+            UpgradeControl.OnSlotUpdate(self, slot)
+            
 
     def try_post_item_by_label(self, item):
         # type: (Item) -> Item | None
