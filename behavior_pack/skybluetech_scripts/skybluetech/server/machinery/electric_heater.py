@@ -3,13 +3,11 @@ from skybluetech_scripts.tooldelta.api.common import Delay
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
 from ...common.define.id_enum.machinery import ELECTRIC_HEATER as MACHINE_ID
 from ...common.events.machinery.electric_heater import ElectricHeaterSubmitModifiesEvent
+from ...common.machinery_def.electric_heater import K_SET_POWER, K_KELVIN_LIMIT
 from ...common.ui_sync.machinery.electric_heater import ElectricHeaterUISync
 from .utils.action_commit import SafeGetMachine
 from .basic import HeatCtrl, GUIControl, PowerControl, RegisterMachine
-from .pool import GetMachineStrict
 
-K_SET_POWER = "set_power"
-K_KELVIN_LIMIT = "kelvin_limit"
 MAX_POWER = 1 << 32
 
 

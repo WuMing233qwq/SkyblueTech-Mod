@@ -1,9 +1,12 @@
 # coding=utf-8
 
+from skybluetech_scripts.tooldelta.api.client import GetBlockEntityData
 from skybluetech_scripts.tooldelta.ui import RegistToolDeltaScreen, Binder
+from skybluetech_scripts.tooldelta.utils.nbt import GetValueWithDefault
 from ....common.events.machinery.electric_heater import (
     ElectricHeaterSubmitModifiesEvent,
 )
+from ....common.machinery_def.electric_heater import K_SET_POWER, K_KELVIN_LIMIT
 from ....common.ui_sync.machinery.electric_heater import ElectricHeaterUISync
 from .define import MachinePanelUIProxy, MAIN_PATH
 from .utils import UpdatePowerBar
@@ -30,6 +33,12 @@ class ElectricHeaterUI(MachinePanelUIProxy):
         self.confirm_btn = (
             self.GetElement(CONFIRM_BTN_NODE).asButton().SetCallback(self.onSubmit)
         )
+        block_nbt = GetBlockEntityData(x, y, z)
+        if block_nbt is not None:
+            ex_data = block_nbt.get("exData")
+            if ex_data is not None:
+                self.power_input.SetText(str(GetValueWithDefault(ex_data, K_SET_POWER, 0)))
+                self.kevin_limit_input.SetText(str(GetValueWithDefault(ex_data, K_KELVIN_LIMIT, 300)))
 
     def WhenUpdated(self):
         if not self.inited:
