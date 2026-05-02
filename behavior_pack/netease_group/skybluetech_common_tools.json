@@ -9,11 +9,13 @@
                 "skybluetech:bronze_pickaxe",
                 "skybluetech:bronze_shovel",
                 "skybluetech:bronze_sword",
+                "skybluetech:bronze_mining_hammer",
                 "skybluetech:invar_axe",
                 "skybluetech:invar_hoe",
                 "skybluetech:invar_pickaxe",
                 "skybluetech:invar_shovel",
-                "skybluetech:invar_sword"
+                "skybluetech:invar_sword",
+                "skybluetech:invar_mining_hammer"
             ]
         }
     ]
