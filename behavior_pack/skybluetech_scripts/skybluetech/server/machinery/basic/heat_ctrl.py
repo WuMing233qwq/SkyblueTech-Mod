@@ -10,12 +10,15 @@ ENV_TEMPERATURE = 300.0
 class HeatCtrl(BaseMachine):
     """
     热机机器类, 表示产热或吸热的机器。
+    具有属性:
+        - 热值(R/W): 本机当前的热量值
+        - 开尔文值(R): 本机当前的开尔文温度值
 
     需要: `__init__`
 
     类属性:
-        heat_loss (float): 热量流失值, 默认为 1.0
-        original_heat_c (float): 原始比热容, 默认为 4000.0
+        spread_heat (bool): 是否扩散热量, 默认为 False
+        max_heat_value (float): 本机最大热值, 默认为 600.0
 
     覆写:
         `OnLoad`
@@ -28,30 +31,32 @@ class HeatCtrl(BaseMachine):
     spread_heat = False
     "是否扩散热量"
     max_heat_value = 600
-    "最大热值"
+    "本机最大热值"
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
         self._heat_value = block_entity_data[K_HEAT_VALUE] or 0
         self.t = 0
-        self.a = 1.0 / self.max_heat_value**3
+        self.one_div_a = self.max_heat_value**2  # **3
         self.neighbor_heaters = [None] * len(FACING_DXYZ)  # type: list[HeatCtrl | None]
-        self.update_neighbor_heaters()
+        self._update_neighbor_heaters()
 
+    @SuperExecutorMeta.execute_super
     def OnTicking(self):
-        if self.t % 5 == 0 and self.IsActive():
+        if self.t % 5 == 0:
             self.t = 0
-            self.work_once()
+            self._heat_ctrl_work_once()
 
     def SetOutputHeatPower(self, power):
+        # type: (float) -> None
         self.heat_power = power
 
-    def work_once(self):
-        self.update_heat_value()
+    def _heat_ctrl_work_once(self):
+        self._update_heat_value()
         if self.spread_heat:
             self.share_heat()
 
-    def update_neighbor_heaters(self):
+    def _update_neighbor_heaters(self):
         from ..pool import GetMachineStrict
 
         for face, (dx, dy, dz) in enumerate(FACING_DXYZ):
@@ -64,13 +69,20 @@ class HeatCtrl(BaseMachine):
         # type: (int, HeatCtrl) -> None
         self.neighbor_heaters[face] = m
 
-    def update_heat_value(self):
-        new_heat_value = self.heat_value + self.heat_power
+    def _update_heat_value(self):
+        if self.IsActive():
+            new_heat_value = self.heat_value + self.heat_power
+        else:
+            new_heat_value = self.heat_value
         self.heat_value = new_heat_value - self.calcuate_heat_loss(new_heat_value)
 
     def calcuate_heat_loss(self, heat_value):
         # type: (float) -> float
-        return self.a * heat_value**4
+        chk = heat_value / self.one_div_a
+        if chk > 1 if chk > 0 else chk < -1:
+            return heat_value
+        val = heat_value**3 / self.one_div_a
+        return min(val, heat_value) if val > 0 else max(val, heat_value)
 
     def share_heat(self):
         heaters = [
@@ -82,26 +94,16 @@ class HeatCtrl(BaseMachine):
             return
 
         m = self.heat_value
-        ratio = 0.2
+        ratio = 0.4
 
-        # 快照
         heats = [h.heat_value for h in heaters]
-
-        # 理想需求
         demands = [ratio * (m - h) for h in heats]
         D = sum(demands)
         if D <= 0:
             return
 
-        # 安全缩放因子 s
-        s = 1.0
-        for h in heats:
-            denom = D + ratio * (m - h)
-            s = min(s, (m - h) / denom if denom > 0 else 0.0)
-        s = min(s, m / D)
-        s = max(s, 0.0)
+        s = min(1.0, m / D)
 
-        # 同步写入
         total = 0.0
         for i, heater in enumerate(heaters):
             actual = demands[i] * s
@@ -118,3 +120,7 @@ class HeatCtrl(BaseMachine):
     def heat_value(self, value):
         self._heat_value = value
         self.bdata[K_HEAT_VALUE] = value
+
+    @property
+    def kelvin(self):
+        return self.heat_value + ENV_TEMPERATURE

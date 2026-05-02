@@ -2,7 +2,7 @@
 
 from skybluetech_scripts.tooldelta.ui import RegistToolDeltaScreen, Binder
 from ....common.events.machinery.electric_heater import (
-    ElectricHeaterSetPowerEvent,
+    ElectricHeaterSubmitModifiesEvent,
 )
 from ....common.ui_sync.machinery.electric_heater import ElectricHeaterUISync
 from .define import MachinePanelUIProxy, MAIN_PATH
@@ -10,7 +10,8 @@ from .utils import UpdatePowerBar
 
 POWER_NODE = MAIN_PATH / "power_bar"
 DATABAR_TEXT_NODE = MAIN_PATH / "databar/text"
-INPUT_NODE = MAIN_PATH / "input"
+POWER_INPUT_NODE = MAIN_PATH / "power_input"
+KELVIN_LIMIT_INPUT_NODE = MAIN_PATH / "kelvin_limit_input"
 CONFIRM_BTN_NODE = MAIN_PATH / "confirm_btn"
 
 
@@ -22,9 +23,12 @@ class ElectricHeaterUI(MachinePanelUIProxy):
         self.sync.SetUpdateCallback(self.WhenUpdated)
         self.power_bar = self.GetElement(POWER_NODE)
         self.databar_text = self.GetElement(DATABAR_TEXT_NODE).asLabel()
-        self.input = self.GetElement(INPUT_NODE).asTextEditBox()
+        self.power_input = self.GetElement(POWER_INPUT_NODE).asTextEditBox()
+        self.kevin_limit_input = self.GetElement(
+            KELVIN_LIMIT_INPUT_NODE
+        ).asTextEditBox()
         self.confirm_btn = (
-            self.GetElement(CONFIRM_BTN_NODE).asButton().SetCallback(self.onSubmitPower)
+            self.GetElement(CONFIRM_BTN_NODE).asButton().SetCallback(self.onSubmit)
         )
 
     def WhenUpdated(self):
@@ -36,26 +40,49 @@ class ElectricHeaterUI(MachinePanelUIProxy):
             % (self.sync.power, self.sync.current_temperature)
         )
 
-    def onSubmitPower(self, _):
-        text = self.input.GetText()
-        if text == "":
+    def onSubmit(self, _):
+        power_str = self.power_input.GetText()
+        if power_str == "":
+            return
+        kelvin_limit_str = self.kevin_limit_input.GetText()
+        if kelvin_limit_str == "":
             return
         dim, x, y, z = self.pos
-        ElectricHeaterSetPowerEvent(dim, x, y, z, int(text)).send()
+        ElectricHeaterSubmitModifiesEvent(
+            dim, x, y, z, int(power_str), int(kelvin_limit_str)
+        ).send()
 
-    @Binder.binding(Binder.BF_EditFinished, "#electric_heater.input")
-    def onTextEdited(self, params):
+    @Binder.binding(Binder.BF_EditFinished, "#electric_heater.power")
+    def onPowerEdited(self, params):
         text = params["Text"]
         if text == "":
             return
         if "." in text:
             try:
                 val = int(float(text))
-                self.input.SetText(str(val))
+                self.power_input.SetText(str(val))
             except ValueError:
-                self.input.SetText("")
+                self.power_input.SetText("")
         else:
             try:
                 int(text)
             except ValueError:
-                self.input.SetText("")
+                self.power_input.SetText("")
+
+    @Binder.binding(Binder.BF_EditFinished, "#electric_heater.kelvin_limit")
+    def onKelvinLimitEdited(self, params):
+        text = params["Text"]
+        if text == "":
+            return
+        if "." in text:
+            try:
+                val = int(float(text))
+                self.kevin_limit_input.SetText(str(val))
+            except ValueError:
+                self.kevin_limit_input.SetText("")
+        else:
+            try:
+                if int(text) < 0 or int(text) > 1500:
+                    raise ValueError
+            except ValueError:
+                self.kevin_limit_input.SetText("")

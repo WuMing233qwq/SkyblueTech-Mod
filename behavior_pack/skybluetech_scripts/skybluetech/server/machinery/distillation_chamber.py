@@ -61,13 +61,6 @@ class DistillationChamber(HeatCtrl, MultiFluidContainer, GUIControl):
         # type: (int, str) -> bool
         return fluid_id in recipes_collection
 
-    def OnAddedFluid(self, slot, fluid_id, add_fluid_volume, is_final):
-        # type: (int, str, float, bool) -> None
-        if slot == 0:
-            cur_volume = self.fluids[0].volume
-            prev_volume = cur_volume - add_fluid_volume
-            self.InputFluidAndUpdateHeat(fluid_id, prev_volume, cur_volume)
-
     def work_once(self):
         in_fluid = self.fluids[0]
         out_fluid = self.fluids[1]
@@ -88,25 +81,30 @@ class DistillationChamber(HeatCtrl, MultiFluidContainer, GUIControl):
                     break
         else:
             rcp = rcps[self.locked_recipe_idx]
-            if self.kelvin > rcp.min_temperature and self.kelvin < rcp.max_temperature:
+            if self.kelvin > rcp.min_temperature:
                 self.work_with_recipe(rcp, in_fluid, out_fluid)
 
     def work_with_recipe(self, rcp, in_fluid, out_fluid):
         # type: (DistillationChamberRecipe, FluidSlot, FluidSlot) -> None
-        if self.kelvin < rcp.fit_temperature:
-            consume_rate = produce_rate = float(rcp.fit_temperature - self.kelvin) / (
-                rcp.fit_temperature - rcp.min_temperature
-            )
+        T = self.kelvin
+        T_min = rcp.min_temperature
+        T_fit = rcp.fit_temperature
+        T_max = rcp.max_temperature
+        if T <= T_min:
+            return
+        if T <= T_fit:
+            produce_rate = consume_rate = float(T - T_min) / (T_fit - T_min)
+        elif T <= T_max:
+            produce_rate = 1.0
+            consume_rate = float(T - T_min) / (T_fit - T_min)
         else:
-            consume_rate = 1
-            produce_rate = 1 - float(self.kelvin - rcp.fit_temperature) / (
-                rcp.max_temperature - rcp.fit_temperature
-            )
+            produce_rate = 1.0
+            consume_rate = float(T_max - T_min) / (T_fit - T_min)
         consume = rcp.consume * consume_rate
         produce = rcp.produce * produce_rate
         if in_fluid.volume >= consume:
-            # TODO: 即使剩余量不足单次产量也按比例进行产出
             if out_fluid.max_volume - out_fluid.volume >= produce:
                 in_fluid.volume -= consume
                 self.output_rate = produce_rate
                 self.OutputFluid(rcp.produce_matter, produce, 1, True)
+                self.heat_value -= produce
