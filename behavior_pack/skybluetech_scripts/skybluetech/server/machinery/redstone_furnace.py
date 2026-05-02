@@ -96,8 +96,6 @@ class RedstoneFurnace(GUIControl, UpgradeControl, WorkRenderer):
     @SuperExecutorMeta.execute_super
     def OnSlotUpdate(self, slot_pos):
         # type: (int) -> None
-        if slot_pos == 1:
-            return
         input_item = self.GetSlotItem(0)
         if input_item is None:
             self.SetDeactiveFlag(flags.DEACTIVE_FLAG_NO_INPUT)
