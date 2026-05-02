@@ -21,7 +21,7 @@ from .basic import GUIControl, UpgradeControl, RegisterMachine
 K_RECORD_LABELS = "record_settings"
 K_SETTINGS_LIMIT = "settings_limit"
 
-DEFAULT_SETTINGS_LIMIT = 3
+DEFAULT_SETTINGS_LIMIT = 6
 
 
 @RegisterMachine
