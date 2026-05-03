@@ -12,6 +12,7 @@ from skybluetech_scripts.tooldelta.api.server import (
     SetCommand,
 )
 from skybluetech_scripts.tooldelta.events.server import DestroyBlockEvent
+from skybluetech_scripts.tooldelta.api.common import Delay
 from ...common.tools_def.mining_hammer import MINING_HAMMERS
 
 DIGGING_LEVEL_MAPPING = {
@@ -55,6 +56,27 @@ def can_dig_same(block_id1, block_id2):
         block_id2, block_basic_info2
     )
     return res
+
+@Delay(0)
+def chain_mine(player_id, dimension_id, block_full_name, poses):
+    # type: (str, int, str, list[tuple[int, int, int]]) -> None
+    mhitem = GetPlayerMainhandItem(player_id)
+    if mhitem is None or mhitem.id not in MINING_HAMMERS or mhitem.durability is None:
+        return
+    last_index = len(poses) - 1
+    try:
+        for i, pos in enumerate(poses):
+            block_id = GetBlockName(dimension_id, pos)
+            if block_id is None:
+                continue
+            if not can_dig_same(block_full_name, block_id):
+                continue
+            player_digging_poses.setdefault(player_id, set()).add(pos)
+            PlayerDestroyBlock(
+                player_id, pos, particle=True, send_inv_update=i == last_index
+            )
+    finally:
+        player_digging_poses.pop(player_id, None)
 
 
 @DestroyBlockEvent.Listen()
@@ -100,30 +122,6 @@ def onDestroyBlock(event):
         ]
     else:
         return
-    last_index = len(poses) - 1
-    try:
-        for i, pos in enumerate(poses):
-            block_id = GetBlockName(event.dimensionId, pos)
-            if block_id is None:
-                continue
-            if not can_dig_same(event.fullName, block_id):
-                continue
-            player_digging_poses.setdefault(event.playerId, set()).add(pos)
-            PlayerDestroyBlock(
-                event.playerId, pos, particle=True, send_inv_update=i == last_index
-            )
-            if GetPlayerGameType(event.playerId) != GameType.Creative:
-                mhitem.durability -= 1
-                if (
-                    mhitem is None
-                    or mhitem.durability is None
-                    or mhitem.durability <= 0
-                ):
-                    SetCommand("playsound random.break", event.playerId)
-                    break
-        if mhitem is None or mhitem.durability is None or mhitem.durability <= 0:
-            SpawnItemToPlayerCarried(event.playerId, Item("minecraft:air"))
-        else:
-            SpawnItemToPlayerCarried(event.playerId, mhitem)
-    finally:
-        player_digging_poses.pop(event.playerId, None)
+    chain_mine(event.playerId, event.dimensionId, event.fullName, poses)
+
+
