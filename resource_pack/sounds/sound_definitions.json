@@ -1,7 +1,5 @@
 {
-    "dy_load_list": [
-
-    ],
+    "dy_load_list": [],
     "format_version": "1.14.0",
     "sound_definitions": {
         "music.skybluetech.famicom_1": {
@@ -33,6 +31,51 @@
                     "load_on_low_memory": true,
                     "name": "sounds/music/skybluetech/famicom_3",
                     "stream": true,
+                    "volume": 1
+                }
+            ]
+        },
+        "note.bit125": {
+            "category": "record",
+            "sounds": [
+                {
+                    "name": "sounds/samples/skybluetech/bit_125",
+                    "volume": 1
+                }
+            ]
+        },
+        "note.bit25": {
+            "category": "record",
+            "sounds": [
+                {
+                    "name": "sounds/samples/skybluetech/bit_25",
+                    "volume": 1
+                }
+            ]
+        },
+        "note.bit50": {
+            "category": "record",
+            "sounds": [
+                {
+                    "name": "sounds/samples/skybluetech/bit_50",
+                    "volume": 1
+                }
+            ]
+        },
+        "note.bit_noise": {
+            "category": "record",
+            "sounds": [
+                {
+                    "name": "sounds/samples/skybluetech/bit_noise",
+                    "volume": 1
+                }
+            ]
+        },
+        "note.bit_noise2": {
+            "category": "record",
+            "sounds": [
+                {
+                    "name": "sounds/samples/skybluetech/bit_noise2",
                     "volume": 1
                 }
             ]
