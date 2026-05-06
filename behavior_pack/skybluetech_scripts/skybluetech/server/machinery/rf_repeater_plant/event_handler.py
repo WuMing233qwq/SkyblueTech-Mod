@@ -28,24 +28,39 @@ def onEstablishConn(event):
         return
     dim = GetPlayerDimensionId(event.player_id)
     start_m = GetMachineStrict(dim, event.x, event.y, event.z)
-    if not isinstance(start_m, RFRepeaterPlant) or not start_m.is_base_block:
+    if not isinstance(start_m, RFRepeaterPlant):
         RFRepeaterPlantBuildResponse(
-            RFRepeaterPlantBuildResponse.STATUS_INVALID_START
+            RFRepeaterPlantBuildResponse.STATUS_INVALID_START, sub_status_code=0
+        ).send(event.player_id)
+        return
+    elif not start_m.is_base_block:
+        RFRepeaterPlantBuildResponse(
+            RFRepeaterPlantBuildResponse.STATUS_INVALID_START, sub_status_code=1
         ).send(event.player_id)
         return
     end_m = GetMachineStrict(dim, event.to_x, event.to_y, event.to_z)
-    if not isinstance(end_m, RFRepeaterPlant) or not end_m.is_base_block:
+    if not isinstance(end_m, RFRepeaterPlant):
         RFRepeaterPlantBuildResponse(
-            RFRepeaterPlantBuildResponse.STATUS_INVALID_END
+            RFRepeaterPlantBuildResponse.STATUS_INVALID_END, sub_status_code=0
+        ).send(event.player_id)
+        return
+    elif not end_m.is_base_block:
+        RFRepeaterPlantBuildResponse(
+            RFRepeaterPlantBuildResponse.STATUS_INVALID_END, sub_status_code=1
         ).send(event.player_id)
         return
     start_pos = (event.x, event.y, event.z)
     end_pos = (event.to_x, event.to_y, event.to_z)
     start_nearby_nodes = start_m.get_nearconn_plants()
     end_nearby_nodes = end_m.get_nearconn_plants()
-    if start_nearby_nodes is None or end_nearby_nodes is None:
+    if start_nearby_nodes is None:
         RFRepeaterPlantBuildResponse(
-            RFRepeaterPlantBuildResponse.STATUS_INTERNAL_ERROR
+            RFRepeaterPlantBuildResponse.STATUS_INTERNAL_ERROR, sub_status_code=0
+        ).send(event.player_id)
+        return
+    elif end_nearby_nodes is None:
+        RFRepeaterPlantBuildResponse(
+            RFRepeaterPlantBuildResponse.STATUS_INTERNAL_ERROR, sub_status_code=1
         ).send(event.player_id)
         return
     elif start_pos in end_nearby_nodes or end_pos in start_nearby_nodes:
@@ -70,10 +85,11 @@ def onEstablishConn(event):
             event.player_id
         )
         return
-    res = build_connection(dim, start_pos, end_pos)
+    res, sub_stat_code = build_connection(dim, start_pos, end_pos)
     if not res:
         RFRepeaterPlantBuildResponse(
-            RFRepeaterPlantBuildResponse.STATUS_INTERNAL_ERROR2
+            RFRepeaterPlantBuildResponse.STATUS_INTERNAL_ERROR2,
+            sub_status_code=sub_stat_code,
         ).send(event.player_id)
         return
     RFRepeaterPlantBuildResponse(RFRepeaterPlantBuildResponse.STATUS_SUCC).send(

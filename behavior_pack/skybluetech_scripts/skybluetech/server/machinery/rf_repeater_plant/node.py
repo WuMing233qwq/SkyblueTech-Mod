@@ -193,10 +193,10 @@ def build_connection(
     networks_data = get_networks_data()
     node_1 = get_node(dim, node_pos1, nodes_data)
     if node_1 is None:
-        return False
+        return False, 0
     node_2 = get_node(dim, node_pos2, nodes_data)
     if node_2 is None:
-        return False
+        return False, 1
     # 移除原有网络数据, 因为要重新初始化网络
     _delete_network(networks_data, node_1.bound_network_uuid)
     _delete_network(networks_data, node_2.bound_network_uuid)
@@ -207,7 +207,7 @@ def build_connection(
     _init_network_from_one_node(dim, node_pos1, networks_data, nodes_data)
     save_networks_data(networks_data)
     save_nodes_data(nodes_data)
-    return True
+    return True, 0
 
 
 def change_node_mode(dim, x, y, z, new_mode):

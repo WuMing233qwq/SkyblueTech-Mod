@@ -163,7 +163,15 @@ class RFRepeaterPlantBuildUI(ToolDeltaScreen):
                     event.STATUS_INVALID_END: "无效终点",
                     event.STATUS_TOO_FAR: "距离过远",
                     event.STATUS_TOO_FAST: "连接过快",
-                }.get(event.status_code, "连接失败: %d" % event.status_code)
+                }.get(
+                    event.status_code,
+                    (
+                        "连接失败: %d" % event.status_code
+                        if event.sub_status_code == -1
+                        else "连接失败: %d::%d"
+                        % (event.status_code, event.sub_status_code)
+                    ),
+                )
             )
 
 

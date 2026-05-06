@@ -168,16 +168,17 @@ class RFRepeaterPlantBuildResponse(CustomS2CEvent):
     STATUS_INTERNAL_ERROR2 = 7
     STATUS_CANT_CONNECT_SELF = 8
 
-    def __init__(self, status_code):
-        # type: (int) -> None
+    def __init__(self, status_code, sub_status_code=-1):
+        # type: (int, int) -> None
         self.status_code = status_code
+        self.sub_status_code = sub_status_code
 
     def marshal(self):
-        return {"stat": self.status_code}
+        return {"stat": self.status_code, "substat": self.sub_status_code}
 
     @classmethod
     def unmarshal(cls, data):
-        return cls(data["stat"])
+        return cls(data["stat"], data["substat"])
 
 
 class RFRepeaterPlantBuildAddWire(CustomS2CEvent):
