@@ -1,7 +1,0 @@
-{
-    "title": "物流传输",
-    "sortnum": 10,
-    "icon": "textures/transmitters/item_transport_cable_steel_item",
-    "content": "本章将详细展示所有有关物流的概念、 传输设备和专用机器。",
-    "isLocked": false
-}
