@@ -38,12 +38,14 @@
                     "__type__": 3,
                     "__value__": 4
                 },
-                "st:upgraders": {
-
-                },
+                "st:upgraders": {},
                 "st:cost_rf": {
                     "__type__": 3,
                     "__value__": 320
+                },
+                "max_input_power": {
+                    "__type__": 4,
+                    "__value__": 1000
                 },
                 "store_rf": {
                     "__type__": 4,
