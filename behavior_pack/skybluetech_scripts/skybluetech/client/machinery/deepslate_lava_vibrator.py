@@ -33,6 +33,9 @@ class DeepslateVibratorText(object):
         self.bound_x = bound_x
         self.bound_y = bound_y
         self.bound_z = bound_z
+        self._last_predict_progress = None
+        self._last_storage_predicted = None
+        self._last_store_rf = None
         self.shape = CF.CreateDrawing(GetLevelId()).AddTextShape(
             (
                 self.bound_x + 0.5,
@@ -53,6 +56,15 @@ class DeepslateVibratorText(object):
             ex_data, K_DEEPSLATE_LAVA_PREDICTED, 0
         )
         store_rf = nbt.GetValueWithDefault(ex_data, K_STORE_RF, 0)
+        if (
+            predict_progress == self._last_predict_progress
+            and storage_predicted == self._last_storage_predicted
+            and store_rf == self._last_store_rf
+        ):
+            return
+        self._last_predict_progress = predict_progress
+        self._last_storage_predicted = storage_predicted
+        self._last_store_rf = store_rf
         progress_color = (
             "c"
             if predict_progress < 0.4
