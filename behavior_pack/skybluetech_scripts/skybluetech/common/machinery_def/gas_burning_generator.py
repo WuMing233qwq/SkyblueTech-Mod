@@ -8,5 +8,5 @@ from ..mini_jei.machinery.gas_burning_generator import (
 
 recipes = RecipesCollection(
     GAS_BURNING_GENERATOR,
-    GasBurningGeneratorRecipe(METHANE, 8, 160),
+    GasBurningGeneratorRecipe(METHANE, 4, 160),
 )  # type: RecipesCollection[GeneratorRecipe]
