@@ -126,12 +126,13 @@ class DetectArea(object):
             )
         if not self.chunks_not_loaded:
             ExecLater(0, self.flush_status)
-        if not server_inited:
-            for block_id in palette.palette_data.values():
-                if isinstance(block_id, str):
-                    block_removed_listen_pool.add(block_id)
-                else:
-                    block_removed_listen_pool.update(block_id)
+        for block_id in palette.palette_data.values():
+            if isinstance(block_id, str):
+                block_removed_listen_pool.add(block_id)
+            else:
+                block_removed_listen_pool.update(block_id)
+        if server_inited:
+            AddBlocksToBlockRemoveListener(block_removed_listen_pool)
 
     def is_inside(self, x, y, z):
         return (
