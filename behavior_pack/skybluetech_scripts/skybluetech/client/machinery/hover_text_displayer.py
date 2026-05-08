@@ -3,12 +3,17 @@ from skybluetech_scripts.tooldelta.events.client import (
     ModBlockEntityLoadedClientEvent,
     ModBlockEntityRemoveClientEvent,
 )
-from skybluetech_scripts.tooldelta.api.client import CreateShapeFactory
-from skybluetech_scripts.tooldelta.utils.py_comp import py2_unicode
+from skybluetech_scripts.tooldelta.api.client import (
+    CreateShapeFactory,
+    GetBlockEntityData,
+)
+from skybluetech_scripts.tooldelta.utils import nbt
 from ...common.define.id_enum.machinery import HOVER_TEXT_DISPLAYER as MACHINE_ID
 from ...common.events.machinery.hover_text_displayer import (
     HoverTextDisplayerContentUpdate,
 )
+from ...common.machinery_def.base_machine import K_DEACTIVE_FLAGS
+from ...common.machinery_def.hover_text_displayer import K_TEXT
 from ...common.utils.block_sync import BlockSync
 from .utils.mod_block_event import asModBlockLoadedListener, asModBlockRemovedListener
 
@@ -43,12 +48,24 @@ def update_text(pos, text):
         shape.SetText(text)
 
 
+def init_text(pos):
+    # type: (tuple[int, int, int]) -> None
+    add_text(pos)
+    block_nbt = GetBlockEntityData(*pos)
+    if block_nbt is None:
+        return
+    text = nbt.GetValueWithDefault(block_nbt["exData"], K_TEXT, None)
+    deactive_flags = nbt.GetValueWithDefault(block_nbt["exData"], K_DEACTIVE_FLAGS, 0)
+    if deactive_flags == 0 and text is not None:
+        update_text(pos, text)
+
+
 @asModBlockLoadedListener(MACHINE_ID)
 def onModBlockLoaded(event):
     # type: (ModBlockEntityLoadedClientEvent) -> None
     pos = (event.posX, event.posY, event.posZ)
     if pos not in shapes:
-        add_text(pos)
+        init_text(pos)
 
 
 @asModBlockRemovedListener(MACHINE_ID)
