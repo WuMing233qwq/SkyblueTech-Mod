@@ -13,7 +13,7 @@ last_save_time = 0
 
 K_LAVA_SOURCES = "st:lava_sources"
 MAX_LAVA_STORAGE = 6400000
-MAX_DRILL_SECONDS = 10
+MAX_DRILL_SECONDS = 300
 
 cached_lava_sources = {}  # type: dict[tuple[int, int], int]
 
