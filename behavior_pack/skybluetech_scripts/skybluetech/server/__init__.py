@@ -1,1 +1,1 @@
-from . import commands, machinery, misc, tools, transmitters, world_loot
+from . import commands, machinery, misc, player, tools, transmitters, world_loot

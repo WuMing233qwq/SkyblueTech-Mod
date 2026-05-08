@@ -3,13 +3,14 @@
     "minecraft:item": {
         "components": {
             "minecraft:max_stack_size": 1,
+            "minecraft:max_damage": 100,
             "minecraft:tags": {
                 "tags": [
                     "skybluetech:battery"
                 ]
             },
             "netease:customtips": {
-                "value": "\n§7可作为便携储能的物品。\n§c充电速率： 100 RF/t\n§a放电速率： 100 RF/t\n§e● 便捷充能： 可用"
+                "value": "\n§7可作为便携储能的物品。\n§c充电速率： 100 RF/t\n§a放电速率： 100 RF/t\n§e便捷充能： 可用"
             },
             "netease:initial_user_data": {
                 "display": {
@@ -17,6 +18,10 @@
                         {
                             "__type__": 8,
                             "__value__": "§r§e⚡ §b已储能 §a0 / 100000 RF"
+                        },
+                        {
+                            "__type__": 8,
+                            "__value__": "§r§e◆ 便捷充能： §a启用"
                         }
                     ]
                 },
@@ -24,6 +29,10 @@
                     "charge": {
                         "__type__": 3,
                         "__value__": 0
+                    },
+                    "charge_inventory": {
+                        "__type__": 3,
+                        "__value__": 1
                     }
                 },
                 "max_input_power": {
@@ -43,6 +52,10 @@
                     "__value__": 100000
                 },
                 "can_charge_inventory": {
+                    "__type__": 1,
+                    "__value__": 1
+                },
+                "enable_charge": {
                     "__type__": 1,
                     "__value__": 1
                 }

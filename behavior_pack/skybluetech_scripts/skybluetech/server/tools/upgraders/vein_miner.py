@@ -6,7 +6,7 @@ from skybluetech_scripts.tooldelta.events.server import ServerPlayerTryDestroyBl
 from skybluetech_scripts.tooldelta.api.server import GetBlockName
 from skybluetech_scripts.tooldelta.utils.nbt import GetValueWithDefault
 from ....common.define.id_enum import ObjectUpgraders
-from ...machinery.utils.charge import GetCharge, GetChargeCost
+from ...machinery.utils.charge import GetCharge, GetPowerCost
 from .register import RegisterBlockDestroyCallback
 from .utils import GetUpgraderLevel
 
@@ -51,7 +51,7 @@ def onVeinMine(event, item, item_ud, upgrader_ud):
         return
     setting_max_vein_blocks = GetValueWithDefault(upgrader_ud, "st:max_chain", 64)
     charge, _ = GetCharge(item_ud)
-    charge_cost = GetChargeCost(item_ud)
+    charge_cost = GetPowerCost(item_ud)
     max_vein_blocks = min(setting_max_vein_blocks, charge // charge_cost)
     blocks = bfsVeinMiner(
         event.dimensionId, event.x, event.y, event.z, event.fullName, max_vein_blocks

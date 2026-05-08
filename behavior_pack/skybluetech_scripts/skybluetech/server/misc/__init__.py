@@ -1,4 +1,5 @@
 from . import (
+    battery,
     crafting_template,
     famicom,
     initial_supplies,

@@ -19,7 +19,7 @@ from skybluetech_scripts.tooldelta.api.server import (
 )
 from ...machinery.utils.charge import (
     GetCharge,
-    GetChargeCost,
+    GetPowerCost,
     ChargeEnough,
     UpdateCharge,
     SetUpdateChargeCallback,
@@ -89,7 +89,7 @@ def onItemDurabilityChanged(event):
     if ud is None:
         return
     cur_charge, max_charge = GetCharge(ud)
-    power_cost = GetChargeCost(ud)
+    power_cost = GetPowerCost(ud)
     if cur_charge - power_cost >= 0:
         cur_charge -= power_cost
     else:
