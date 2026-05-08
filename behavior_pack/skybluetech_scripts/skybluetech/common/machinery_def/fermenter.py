@@ -1,19 +1,20 @@
 # coding=utf-8
 from ..utils.structure_palette import GenerateSimpleStructureTemplate
+from ...common.define.id_enum.multi_block_structure import Fermenter
 
-IO_ENERGY = "skybluetech:fermenter_io_energy"
-IO_FLUID1 = "skybluetech:fermenter_io_fluid1"
-IO_FLUID2 = "skybluetech:fermenter_io_fluid2"
-IO_GAS = "skybluetech:fermenter_io_gas"
-IO_ITEM = "skybluetech:fermenter_io_item1"
-MUDBRICK = "minecraft:mud_bricks"
-GLASS = "minecraft:glass"
+
 STRUCTURE_PATTERN_MAPPING = {
-    "M": MUDBRICK,
-    "m": [MUDBRICK, IO_GAS, IO_ENERGY, IO_ITEM],
-    "i": [MUDBRICK, IO_FLUID1, IO_FLUID2, IO_ENERGY, IO_ITEM],
-    "G": GLASS,
-    "g": [GLASS, MUDBRICK, IO_ENERGY],
+    "M": Fermenter.FRAME,
+    "m": [Fermenter.FRAME, Fermenter.IO_GAS, Fermenter.IO_ENERGY, Fermenter.IO_ITEM],
+    "i": [
+        Fermenter.FRAME,
+        Fermenter.IO_FLUID1,
+        Fermenter.IO_FLUID2,
+        Fermenter.IO_ENERGY,
+        Fermenter.IO_ITEM,
+    ],
+    "G": Fermenter.GLASS,
+    "g": [Fermenter.GLASS, Fermenter.FRAME, Fermenter.IO_ENERGY],
 }
 STRUCTURE_PATTERN = {
     0: [
@@ -33,11 +34,11 @@ STRUCTURE_PATTERN = {
     ],
 }
 STRUCTURE_REQUIRE_BLOCKS = {
-    IO_ENERGY: 1,
-    IO_ITEM: 1,
-    IO_FLUID1: 1,
-    IO_FLUID2: 1,
-    IO_GAS: 1,
+    Fermenter.IO_ENERGY: 1,
+    Fermenter.IO_ITEM: 1,
+    Fermenter.IO_FLUID1: 1,
+    Fermenter.IO_FLUID2: 1,
+    Fermenter.IO_GAS: 1,
 }
 STRUCTURE_PALETTE = GenerateSimpleStructureTemplate(
     STRUCTURE_PATTERN_MAPPING,
@@ -79,6 +80,7 @@ class FermenterRecipe:
         out_fluid_id,  # type: str
         out_fluid_rate,  # type: float
         volume_reduce_rate,  # type: float
+        max_hunger_portions,  # type: float
     ):
         """
         发酵池配方。
@@ -104,6 +106,7 @@ class FermenterRecipe:
             out_fluid_id (str): 产出的流体
             out_fluid_rate (float): 流体产出速度: 单次产出体积=产出速度x底物体积
             volume_reduce_rate (float): 生产消耗: 单次发酵液消耗体积=生产消耗x总体积
+            max_hunger_portions (float): 满速运行时饱食度上限可存储的营养物份数
         """
         self.color = color
         self.vitality_matter = vitality_matter
@@ -125,6 +128,7 @@ class FermenterRecipe:
         self.out_fluid_id = out_fluid_id
         self.out_fluid_rate = out_fluid_rate
         self.volume_reduce_rate = volume_reduce_rate
+        self.max_hunger_portions = max_hunger_portions
 
 
 spec_recipes = {
@@ -148,5 +152,6 @@ spec_recipes = {
         out_fluid_id="skybluetech:methane_mud",
         out_fluid_rate=0.005,
         volume_reduce_rate=0.02,
+        max_hunger_portions=128,
     )
 }

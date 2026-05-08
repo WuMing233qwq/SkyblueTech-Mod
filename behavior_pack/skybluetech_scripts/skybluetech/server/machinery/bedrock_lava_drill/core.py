@@ -59,10 +59,21 @@ class BedrockLavaDrill(GUIControl, MultiBlockStructure, UpgradeControl):
         self._rest_volume_predicted = None
         self._total_storage_volume = None
         self._power_changed = False
+        self._energy_in = None
+        self._fluid_out = None
 
     @SuperExecutorMeta.execute_super
     def OnUnload(self):
-        pass
+        self.clean()
+
+    def clean(self):
+        # type: () -> None
+        if self._energy_in is not None:
+            self._energy_in.UnsetMachineRef()
+            self._energy_in = None
+        if self._fluid_out is not None:
+            self._fluid_out.UnsetMachineRef()
+            self._fluid_out = None
 
     @SuperExecutorMeta.execute_super
     def OnPlaced(self, _):
@@ -106,9 +117,13 @@ class BedrockLavaDrill(GUIControl, MultiBlockStructure, UpgradeControl):
 
     def OnStructureChanged(self, structure_finished):
         if structure_finished:
-            self.get_energy_input_io().SetMachineRef(self)
-            self.get_fluid_output_io().SetMachineRef(self)
-            self.get_fluid_output_io().SetOnReducedFluidCallback(self.on_reduced_fluid)
+            self._energy_in = self.get_energy_input_io()
+            self._fluid_out = self.get_fluid_output_io()
+            self._energy_in.SetMachineRef(self)
+            self._fluid_out.SetMachineRef(self)
+            self._fluid_out.SetOnReducedFluidCallback(self.on_reduced_fluid)
+        else:
+            self.clean()
 
     def IsValidInput(self, slot, item):
         # type: (int, Item) -> bool

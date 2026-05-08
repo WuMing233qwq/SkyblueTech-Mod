@@ -59,6 +59,8 @@ class BatteryMatrix(GUIControl, ItemContainer, MultiBlockStructure, WorkRenderer
         self._sum_input = 0
         self._sum_output = 0
         self._sum_power_t = 0
+        self._energy_in = None
+        self._energy_out = None
 
     def OnTicking(self):
         active = self.IsActive() and self.StructureFinished()
@@ -108,8 +110,12 @@ class BatteryMatrix(GUIControl, ItemContainer, MultiBlockStructure, WorkRenderer
     def OnStructureChanged(self, ok):
         # type: (bool) -> None
         if ok:
-            self.get_energy_in_io().SetMachineRef(self)
-            self.get_energy_out_io().SetMachineRef(self)
+            self._energy_in = self.get_energy_in_io()
+            self._energy_out = self.get_energy_out_io()
+            self._energy_in.SetMachineRef(self)
+            self._energy_out.SetMachineRef(self)
+        else:
+            self.clean()
         self.CallSync()
 
     def IsValidInput(self, slot, item):
@@ -141,7 +147,16 @@ class BatteryMatrix(GUIControl, ItemContainer, MultiBlockStructure, WorkRenderer
     @SuperExecutorMeta.execute_super
     def OnUnload(self):
         # type: () -> None
-        pass
+        self.clean()
+
+    def clean(self):
+        # type: () -> None
+        if self._energy_in is not None:
+            self._energy_in.UnsetMachineRef()
+            self._energy_in = None
+        if self._energy_out is not None:
+            self._energy_out.UnsetMachineRef()
+            self._energy_out = None
 
     def push_batteries_to_core(self):
         if self.GetStructureDestroyFlag() != 0:

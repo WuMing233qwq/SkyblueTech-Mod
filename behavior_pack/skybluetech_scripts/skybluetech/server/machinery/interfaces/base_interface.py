@@ -19,3 +19,7 @@ class BaseInterface(BaseMachine):
     def SetMachineRef(self, machine):
         # type: (BaseMachine) -> None
         self.machine_ref = ref(machine)
+
+    def UnsetMachineRef(self):
+        # type: () -> None
+        self.machine_ref = None

@@ -7,11 +7,22 @@ from ...common.events.machinery.fermenter import (
     FermenterSeMaxVolumeEvent,
 )
 from ...common.define.id_enum.machinery import FERMENTER as MACHINE_ID
-from ...common.machinery_def.fermenter import *
+from ...common.define.id_enum.multi_block_structure import Fermenter as FERMENTER_IDENUM
+from ...common.machinery_def.fermenter import (
+    STRUCTURE_PALETTE,
+    POOL_MAX_VOLUME,
+    TEMPERATURE_MIN,
+    TEMPERATURE_MAX,
+    VITALITY_ADD_MAX,
+    HI_TEMPERATURE_VITALITY_REDUCE,
+    VITALITY_HUNGER_REDUCE_MAX,
+    THICKNESS_OVERFLOW_VITALITY_REDUCE,
+    spec_recipes,
+    FermenterRecipe,
+)
 from ...common.ui_sync.machinery.fermenter import FermenterUISync
 from .utils.action_commit import SafeGetMachine
 from .basic import (
-    BaseMachine,
     GUIControl,
     MultiBlockStructure,
     UpgradeControl,
@@ -37,11 +48,11 @@ K_CELL_HUNGER = "st:bacteria_hunger"
 K_INOCULATING_RECIPE = "st:inoculate_recipe"
 K_INOCULATE_TIME = "st:inoculate_time"
 
-EnergyInputInterface.AddExtraMachineId(IO_ENERGY)
-FluidInputInterface.AddExtraMachineId(IO_FLUID1)
-FluidOutputInterface.AddExtraMachineId(IO_FLUID2)
-FluidOutputInterface.AddExtraMachineId(IO_GAS)
-ItemInputInterface.AddExtraMachineId(IO_ITEM)
+EnergyInputInterface.AddExtraMachineId(FERMENTER_IDENUM.IO_ENERGY)
+FluidInputInterface.AddExtraMachineId(FERMENTER_IDENUM.IO_FLUID1)
+FluidOutputInterface.AddExtraMachineId(FERMENTER_IDENUM.IO_FLUID2)
+FluidOutputInterface.AddExtraMachineId(FERMENTER_IDENUM.IO_GAS)
+ItemInputInterface.AddExtraMachineId(FERMENTER_IDENUM.IO_ITEM)
 
 
 @RegisterMachine
@@ -59,22 +70,29 @@ class Fermenter(GUIControl, MultiBlockStructure, UpgradeControl, WorkRenderer):
     upgrade_slot_start = 2
     allow_upgrader_tags = set()
     functional_block_ids = {
-        IO_ENERGY,
-        IO_ITEM,
-        IO_FLUID1,
-        IO_FLUID2,
-        IO_GAS,
+        FERMENTER_IDENUM.IO_ENERGY,
+        FERMENTER_IDENUM.IO_ITEM,
+        FERMENTER_IDENUM.IO_FLUID1,
+        FERMENTER_IDENUM.IO_FLUID2,
+        FERMENTER_IDENUM.IO_GAS,
     }
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
         self.t = 0
         self.sync = FermenterUISync.NewServer(self).Activate()
+        self._energy_in = None
+        self._item_in = None
+        self._water_in = None
+        self._fluid_out = None
+        self._gas_out = None
 
     def OnTicking(self):
         self.t += 1
         if self.t >= self.work_ticks_delay:
             self.t = 0
+            if not self.StructureFinished():
+                return
             if self.IsActive():
                 if self.ProcessOnce():
                     self.workOnce()
@@ -90,13 +108,24 @@ class Fermenter(GUIControl, MultiBlockStructure, UpgradeControl, WorkRenderer):
     def OnStructureChanged(self, ok):
         # type: (bool) -> None
         if ok:
-            self.getEnergyInIO().SetMachineRef(self)
-            self.getItemInIO().SetOnSlotUpdateCallback(self.OnOtherSlotUpdate)
+            self._energy_in = self.getEnergyInIO()
+            self._item_in = self.getItemInIO()
+            self._water_in = self.getWaterInIO()
+            self._fluid_out = self.getFluidOutIO()
+            self._gas_out = self.getGasOutIO()
+            self._energy_in.SetMachineRef(self)
+            self._item_in.SetMachineRef(self)
+            self._water_in.SetMachineRef(self)
+            self._fluid_out.SetMachineRef(self)
+            self._gas_out.SetMachineRef(self)
+            self._item_in.SetOnSlotUpdateCallback(self.OnOtherSlotUpdate)
+        else:
+            self.clean()
         self.CallSync()
 
     @SuperExecutorMeta.execute_super
     def OnUnload(self):
-        pass
+        self.clean()
 
     def OnSync(self):
         self.sync.store_rf = self.store_rf
@@ -167,10 +196,19 @@ class Fermenter(GUIControl, MultiBlockStructure, UpgradeControl, WorkRenderer):
                             self.current_inoculate_time = 0.0
                             self.current_inoculating_recipe = recipe_id
                             break
+        elif slot_pos == 1:
+            if self.IsActive():
+                for i in range(5):
+                    self.OnOtherSlotUpdate(i)
 
     def OnOtherSlotUpdate(self, slot_pos):
         # type: (int) -> None
-        pass
+        item = self.getItemInIO().GetSlotItem(slot_pos)
+        if item is None:
+            return
+        if self.IsValidInput(1, item) and self.GetSlotItem(1) is None:
+            self.SetSlotItem(1, item)
+            self.getItemInIO().SetSlotItem(slot_pos, None)
 
     def IsValidInput(self, slot, item):
         # type: (int, Item) -> bool
@@ -195,6 +233,23 @@ class Fermenter(GUIControl, MultiBlockStructure, UpgradeControl, WorkRenderer):
     @SuperExecutorMeta.execute_super
     def SetDeactiveFlag(self, flag):
         pass
+
+    def clean(self):
+        if self._energy_in is not None:
+            self._energy_in.UnsetMachineRef()
+            self._energy_in = None
+        if self._item_in is not None:
+            self._item_in.UnsetMachineRef()
+            self._item_in = None
+        if self._water_in is not None:
+            self._water_in.UnsetMachineRef()
+            self._water_in = None
+        if self._fluid_out is not None:
+            self._fluid_out.UnsetMachineRef()
+            self._fluid_out = None
+        if self._gas_out is not None:
+            self._gas_out.UnsetMachineRef()
+            self._gas_out = None
 
     def setExpectedTemperature(self, temperature):
         # type: (float) -> None
@@ -244,32 +299,33 @@ class Fermenter(GUIControl, MultiBlockStructure, UpgradeControl, WorkRenderer):
             )
 
     def tryAddWater(self):
-        if (
-            self.getVolume() + 50 < self.expected_water_max_volume
-            and self.getWaterInIO().fluid_volume > 50
-        ):
-            self.getWaterInIO().fluid_volume -= 200
-            self.water_volume += 200
+        deficit = self.expected_water_max_volume - self.getVolume()
+        if deficit <= 0:
+            return
+        water_in = self.getWaterInIO()
+        if water_in.fluid_volume <= 0:
+            return
+        add_amount = min(deficit, water_in.fluid_volume)
+        water_in.fluid_volume -= add_amount
+        self.water_volume += add_amount
 
     def tryEat(self, recipe):
         # type: (FermenterRecipe) -> None
-        if self.bacteria_hunger < self.getMaxHunger(recipe):
-            maybe_food = self.GetSlotItem(1)
-            if maybe_food is None or maybe_food.id != recipe.nutrition_matter:
-                return
-            while self.bacteria_hunger < self.getMaxHunger(recipe):
-                if maybe_food.count <= 0:
-                    return
-                maybe_food.count -= 1
-                self.SetSlotItem(1, maybe_food)
-                self.bacteria_hunger = min(
-                    self.getMaxHunger(recipe),
-                    self.bacteria_hunger + float(recipe.nutrition_value),
-                )
-                self.mud_vitality = min(
-                    1, self.mud_vitality + recipe.nutrition_recover_vitality
-                )
-            self.SetSlotItem(1, maybe_food)
+        if self.bacteria_hunger >= self.getMaxHunger(recipe):
+            return
+        maybe_food = self.GetSlotItem(1)
+        if (
+            maybe_food is None
+            or maybe_food.count <= 0
+            or maybe_food.id != recipe.nutrition_matter
+        ):
+            return
+        maybe_food.count -= 1
+        self.SetSlotItem(1, maybe_food)
+        self.bacteria_hunger += float(recipe.nutrition_value)
+        self.mud_vitality = min(
+            1, self.mud_vitality + recipe.nutrition_recover_vitality
+        )
 
     def tryInoculate(self):
         # type: () -> None
@@ -290,16 +346,17 @@ class Fermenter(GUIControl, MultiBlockStructure, UpgradeControl, WorkRenderer):
     def tryGrow(self, recipe):
         # type: (FermenterRecipe) -> bool
         grow_speed = self.getGrowSpeed(recipe)
-        if self.getVolume() + grow_speed <= POOL_MAX_VOLUME:
-            if grow_speed > 0:
-                self.mud_volume += grow_speed
-            elif grow_speed < 0:
-                self.mud_volume = max(0, self.mud_volume + grow_speed)
-                if self.mud_volume <= 0:
-                    self.recipe_id = 0
-                    self.bacteria_hunger = 0
-                    self.mud_vitality = 0
-                    return True
+        if grow_speed > 0:
+            max_grow = POOL_MAX_VOLUME - self.getVolume()
+            if max_grow > 0:
+                self.mud_volume += min(grow_speed, max_grow)
+        elif grow_speed < 0:
+            self.mud_volume = max(0, self.mud_volume + grow_speed)
+            if self.mud_volume <= 0:
+                self.recipe_id = 0
+                self.bacteria_hunger = 0
+                self.mud_vitality = 0
+                return True
         return False
 
     def tryProduce(self, recipe):
@@ -338,16 +395,13 @@ class Fermenter(GUIControl, MultiBlockStructure, UpgradeControl, WorkRenderer):
                 - float(mud_temp - max_temp) * HI_TEMPERATURE_VITALITY_REDUCE,
             )
         elif mud_temp < min_temp:
-            self.mud_vitality = max(
-                0,
-                self.mud_vitality
-                - float(max_temp - mud_temp) * LO_TEMPERATURE_VITALITY_REDUCE,
-            )
-        elif mud_temp < fit_temp and self.bacteria_hunger > 0:
+            loss_rate = 0.20 + 0.02 * (min_temp - mud_temp)
+            self.mud_vitality = max(0, self.mud_vitality * (1 - loss_rate))
+        elif mud_temp <= fit_temp and self.bacteria_hunger > 0:
+            hunger_ratio = min(1.0, self.bacteria_hunger / self.getMaxHunger(recipe))
             self.mud_vitality = min(
                 1,
-                self.mud_vitality
-                + VITALITY_ADD_MAX * (self.bacteria_hunger / self.getMaxHunger(recipe)),
+                self.mud_vitality + VITALITY_ADD_MAX * hunger_ratio,
             )
         if self.bacteria_hunger < 0:
             self.mud_vitality = max(
@@ -372,7 +426,12 @@ class Fermenter(GUIControl, MultiBlockStructure, UpgradeControl, WorkRenderer):
 
     def getMaxHunger(self, recipe):
         # type: (FermenterRecipe) -> float
-        return recipe.nutrition_value * self.mud_volume
+        return (
+            recipe.max_hunger_portions
+            * recipe.nutrition_value
+            * self.mud_volume
+            / (POOL_MAX_VOLUME * 0.625)
+        )
 
     def getHungerReduceRate(self, recipe):
         # type: (FermenterRecipe) -> float
@@ -410,19 +469,19 @@ class Fermenter(GUIControl, MultiBlockStructure, UpgradeControl, WorkRenderer):
         return float(self.mud_volume) / (self.getVolume() or 1)
 
     def getItemInIO(self):
-        return self.GetMachine(ItemInputInterface, IO_ITEM)
+        return self.GetMachine(ItemInputInterface, FERMENTER_IDENUM.IO_ITEM)
 
     def getEnergyInIO(self):
-        return self.GetMachine(EnergyInputInterface, IO_ENERGY)
+        return self.GetMachine(EnergyInputInterface, FERMENTER_IDENUM.IO_ENERGY)
 
     def getWaterInIO(self):
-        return self.GetMachine(FluidInputInterface, IO_FLUID1)
+        return self.GetMachine(FluidInputInterface, FERMENTER_IDENUM.IO_FLUID1)
 
     def getFluidOutIO(self):
-        return self.GetMachine(FluidOutputInterface, IO_FLUID2)
+        return self.GetMachine(FluidOutputInterface, FERMENTER_IDENUM.IO_FLUID2)
 
     def getGasOutIO(self):
-        return self.GetMachine(FluidOutputInterface, IO_GAS)
+        return self.GetMachine(FluidOutputInterface, FERMENTER_IDENUM.IO_GAS)
 
     @property
     def mud_vitality(self):
