@@ -69,13 +69,18 @@ wind_generator = PageGroup(
     [
         TextPage(
             "风力发电机",
-            '风力发电机可使用<text color="§9" t="风能">进行发电。\n\n高处风能更强， 意味着将风力发电机放在高处可增大发电功率。\n\n若风力发电机的扇面前后被方块挡住， 其工作效率会下降。',
+            '风力发电机可使用<text color="§9" t="风能">进行发电。\n\n高处风能更强， 意味着将风力发电机放在高处可增大发电功率。 <text color="§c" t="注意">， 在低于 <text color="§6" t="40"> 格时风力发电机将完全无法接受风能。\n\n若风力发电机的扇面前后被方块挡住， 其工作效率会下降。',
         ),
         TextPage(
             "",
-            '风力发电机需要使用<item id="{paddle}"><style color="§9"><link id="paddle" text="扇叶"><style color="R">进行工作。 工作时会消耗扇叶<text color="§2" t="耐久度">。 不同的扇叶会提供不同的<text color="§3" t="输出功率">和耐久度。'
-            .format(paddle=id_enum.Paddle.IRON),
-            hyperlink_cbs={"paddle": lambda _:CheckRecipes([id_enum.Paddle.IRON,])}
+            '风力发电机需要使用<item id="{paddle}"><style color="§9"><link id="paddle" text="扇叶"><style color="R">进行工作。 工作时会消耗扇叶<text color="§2" t="耐久度">。 不同的扇叶会提供不同的<text color="§3" t="输出功率">和耐久度。'.format(
+                paddle=id_enum.Paddle.IRON
+            ),
+            hyperlink_cbs={
+                "paddle": lambda _: CheckRecipes([
+                    id_enum.Paddle.IRON,
+                ])
+            },
         ),
         MachineryWorkstationRecipePage(id_enum.WIND_GENERATOR),
     ],
