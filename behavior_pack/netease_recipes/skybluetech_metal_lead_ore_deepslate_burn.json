@@ -15,7 +15,8 @@
             "item": "skybluetech:lead_ingot"
         },
         "tags": [
-            "furnace"
+            "furnace",
+            "blast_furnace"
         ],
         "unlock": {
             "context": "AlwaysUnlocked"
