@@ -57,7 +57,7 @@
                 }
             },
             "netease:weapon": {
-                "attack_damage": 6,
+                "attack_damage": 7,
                 "enchantment": 0,
                 "level": 3,
                 "speed": 16,
