@@ -42,23 +42,28 @@ def onModBlockRemoved(event):
 
 
 def update_single_hydroponic_bed(x, y, z, model):
-    # type: (int, int, int, GeometryModel) -> None
+    # type: (int, int, int, GeometryModel) -> bool
     block_nbt = GetBlockEntityData(x, y, z) or {}
     ex_data = block_nbt.get("exData")
     if ex_data is None:
-        return
+        return False
     crop_block_id = GetValueWithDefault(ex_data, K_CROP_BLOCK_ID, None)
     grow_stage = GetValueWithDefault(ex_data, K_GROW_STAGE, 0)
     if crop_block_id == 2:
         crop_block_id = None
     if not crop_block_id:
-        model.SetBlockModel("minecraft:air", 0)
+        ok = model.SetBlockModel("minecraft:air", 0)
     else:
-        model.SetBlockModel(crop_block_id, grow_stage, (0.8, 0.8, 0.8))
+        ok = model.SetBlockModel(crop_block_id, grow_stage, (0.8, 0.8, 0.8))
+    return ok
 
 
 @ClientInitCallback()
 @Repeat(1)
 def onClientInit():
     for (x, y, z), model in loaded_models.items():
-        update_single_hydroponic_bed(x, y, z, model)
+        ok = update_single_hydroponic_bed(x, y, z, model)
+        if not ok:
+            model.Destroy()
+            del loaded_models[(x, y, z)]
+            break

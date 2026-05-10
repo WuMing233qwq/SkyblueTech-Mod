@@ -45,30 +45,35 @@ def onModBlockRemoved(event):
 
 
 def update_single_hydroponic_bed(x, y, z, model):
-    # type: (int, int, int, GeometryModel) -> None
+    # type: (int, int, int, GeometryModel) -> bool
     block_nbt = GetBlockEntityData(x, y, z) or {}
     ex_data = block_nbt.get("exData")
     if ex_data is None:
-        return
+        return False
     crop_block_id = GetValueWithDefault(ex_data, K_CROP_BLOCK_ID, None)
     grow_progress = GetValueWithDefault(ex_data, K_GROW_PROGRESS, 0)
     if crop_block_id == 2:
         crop_block_id = None
     if not crop_block_id:
-        model.SetBlockModel("minecraft:air", 0)
+        ok = model.SetBlockModel("minecraft:air", 0)
     else:
         scale = min(1, grow_progress + 0.1) * 0.6
         # TODO: BUG: 不显示甘蔗模型 (网易接口问题)
-        model.SetBlockModel(
+        ok = model.SetBlockModel(
             crop_block_id,
             0,
             (scale, scale, scale),
             (0, grow_progress * 0.25 - 0.35, 0),
         )
+    return ok
 
 
 @ClientInitCallback()
 @Repeat(1)
 def onClientInit():
     for (x, y, z), model in loaded_models.items():
-        update_single_hydroponic_bed(x, y, z, model)
+        ok = update_single_hydroponic_bed(x, y, z, model)
+        if not ok:
+            model.Destroy()
+            del loaded_models[(x, y, z)]
+            break
