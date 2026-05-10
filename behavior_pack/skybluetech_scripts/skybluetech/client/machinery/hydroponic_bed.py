@@ -24,6 +24,8 @@ loaded_models = {}  # type: dict[tuple[int, int, int], GeometryModel]
 @asModBlockLoadedListener(MACHINE_ID)
 def onModBlockLoaded(event):
     # type: (ModBlockEntityLoadedClientEvent) -> None
+    if (event.posX, event.posY, event.posZ) in loaded_models:
+        loaded_models.pop((event.posX, event.posY, event.posZ)).Destroy()
     loaded_models[(event.posX, event.posY, event.posZ)] = CreateBlankModel((
         event.posX,
         event.posY + 3.0 / 16 * 0.4,

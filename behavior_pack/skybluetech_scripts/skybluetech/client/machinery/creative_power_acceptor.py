@@ -27,6 +27,8 @@ def add_text(dim, pos, default_text=""):
     tx = x + 0.5
     ty = y + 1.1
     tz = z + 0.5
+    if (dim, pos) in texts:
+        texts.pop((dim, pos)).Remove()
     t = CF.CreateDrawing(GetLevelId()).AddTextShape((tx, ty, tz), default_text)
     texts[(dim, pos)] = t
 

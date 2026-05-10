@@ -30,6 +30,8 @@ def add_text(pos, default_text=""):
     tx = x + 0.5
     ty = y + 1.1
     tz = z + 0.5
+    if pos in shapes:
+        shapes.pop(pos).Remove()
     shape = CreateShapeFactory().AddTextShape((tx, ty, tz), default_text)
     shapes[pos] = shape
 

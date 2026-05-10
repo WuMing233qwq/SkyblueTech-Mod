@@ -38,7 +38,9 @@ def onModBlockEntityLoadedClientEvent(event):
     fluid_id, _, max_volume = getFluidDataFromBlock(blockEntityData)
     client_tank_datas[(x, y, z)] = (None, -1, max_volume)
     if fluid_id is not None:
-        loadModel(x, y, z)
+        loadModel(
+            x, y, z, prevent_duplicated=True
+        )  # 客户端实体在切换维度时不会卸载, 但是会重新加载
     if not FIRST_TANK_LOADED:
         Repeat(0.2)(updateClientTanksOnce)()
         FIRST_TANK_LOADED = True
@@ -51,6 +53,7 @@ def onModBlockEntityRemoveClientEvent(event):
     # type: (ModBlockEntityRemoveClientEvent) -> None
     if event.blockName not in Tank.all():
         return
+    print("Remove tank at", event.posX, event.posY, event.posZ)
     x = event.posX
     y = event.posY
     z = event.posZ
@@ -60,14 +63,16 @@ def onModBlockEntityRemoveClientEvent(event):
         client_tank_datas.pop((x, y, z))
 
 
-def loadModel(x, y, z):
-    # type: (int, int, int) -> FluidModel
+def loadModel(x, y, z, prevent_duplicated=False):
+    # type: (int, int, int, bool) -> FluidModel
     if (x, y, z) in client_models:
-        return client_models[(x, y, z)]
-    else:
-        model = FluidModel(x, y, z)
-        client_models[(x, y, z)] = model
-        return model
+        if not prevent_duplicated:
+            return client_models[(x, y, z)]
+        else:
+            client_models.pop((x, y, z)).Destroy()
+    model = FluidModel(x, y, z)
+    client_models[(x, y, z)] = model
+    return model
 
 
 def getFluidDataFromBlock(block_entity_data):
