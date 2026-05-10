@@ -1114,6 +1114,11 @@
     },
     "machinery_workstation_recipes": {
         "type": "panel",
+        "$arrow_img_anchor": "top_left",
+        "$arrow_img_offset": [
+            90.0,
+            60.0
+        ],
         "size": [
             180.0,
             80.0
@@ -1134,74 +1139,92 @@
             },
             {
                 "slot0@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
                     "offset": [
-                        -70,
-                        -20
+                        10,
+                        10
                     ]
                 }
             },
             {
                 "slot1@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
                     "layer": 1,
                     "offset": [
-                        -50,
-                        -20
+                        30,
+                        10
                     ]
                 }
             },
             {
                 "slot2@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
                     "offset": [
-                        -30,
-                        -20
+                        50,
+                        10
                     ]
                 }
             },
             {
                 "slot3@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
                     "offset": [
-                        -70,
-                        0
+                        10,
+                        30
                     ]
                 }
             },
             {
                 "slot4@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
                     "offset": [
-                        -50,
-                        0
+                        30,
+                        30
                     ]
                 }
             },
             {
                 "slot5@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
                     "offset": [
-                        -30,
-                        0
+                        50,
+                        30
                     ]
                 }
             },
             {
                 "slot6@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
                     "offset": [
-                        -70,
-                        20
+                        10,
+                        50
                     ]
                 }
             },
             {
                 "slot7@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
                     "offset": [
-                        -50,
-                        20
+                        30,
+                        50
                     ]
                 }
             },
             {
                 "slot8@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
                     "offset": [
-                        -30,
-                        20
+                        50,
+                        50
                     ]
                 }
             },
@@ -1216,10 +1239,13 @@
             {
                 "progress_img": {
                     "type": "image",
-                    "offset": [
-                        -2.0,
-                        20.0
+                    "$arrow_img_anchor|default": "center",
+                    "$arrow_img_offset|default": [
+                        0,
+                        0
                     ],
+                    "anchor_from": "$arrow_img_anchor",
+                    "offset": "$arrow_img_offset",
                     "size": [
                         30.0,
                         30.0

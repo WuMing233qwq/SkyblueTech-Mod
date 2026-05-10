@@ -26,13 +26,14 @@ class TextPage(BasePage):
         BasePage.RenderInit(self, ctrl)
         ctrl["title_label"].asLabel().SetText(self.title)
         async_load = False
+        content_ctrl = ctrl["text_scroll"].asScrollView().GetContent()["content"]
         if not async_load:
             RicherTextCtrl(
-                ctrl["content"], opts=RicherTextOpt(hyperlink_cbs=self.hyperlink_cbs)
+                content_ctrl, opts=RicherTextOpt(hyperlink_cbs=self.hyperlink_cbs)
             ).SetText(self.content)
         else:
             async_executor = RicherTextCtrl(
-                ctrl["content"], opts=RicherTextOpt(hyperlink_cbs=self.hyperlink_cbs)
+                content_ctrl, opts=RicherTextOpt(hyperlink_cbs=self.hyperlink_cbs)
             ).SetTextAsync(self.content)
 
             def run_async():

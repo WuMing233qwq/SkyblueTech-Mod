@@ -7,4 +7,5 @@ from . import (
     noob_tutorials,
     mini_jei,
     transmitters,
+    update_log,
 )

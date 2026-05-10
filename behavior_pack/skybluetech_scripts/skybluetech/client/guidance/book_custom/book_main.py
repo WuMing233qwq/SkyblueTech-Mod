@@ -54,6 +54,12 @@ main_pages = PageGroup(
                     "能源",
                     contents.energy.energy_toc,
                 ),
+                MainTOCPageSection(
+                    "minecraft:bell",
+                    0,
+                    "更新日志",
+                    contents.update_log.update_log_desc,
+                ),
             ],
         ),
     ],

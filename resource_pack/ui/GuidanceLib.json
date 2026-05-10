@@ -323,11 +323,19 @@
             },
             {
                 "recipe_renderer@RecipeCheckerLib.machinery_workstation_recipes": {
+                    "$arrow_img_offset": [
+                        84,
+                        60
+                    ],
                     "anchor_from": "top_middle",
                     "anchor_to": "top_middle",
                     "offset": [
                         0,
                         24
+                    ],
+                    "size": [
+                        150,
+                        80
                     ]
                 }
             },
@@ -337,14 +345,14 @@
                     "anchor_to": "top_middle",
                     "layer": 0,
                     "offset": [
-                        70,
+                        50,
                         74
                     ]
                 }
             },
             {
                 "text_content@richer_text.RicherTextPanel": {
-                    "$font_scale_factor": 1.4,
+                    "$font_scale_factor": 1.2,
                     "$text_color": [
                         0.2588,
                         0.2588,
@@ -383,13 +391,14 @@
                     ],
                     "size": [
                         "default",
-                        20.0
+                        16.0
                     ],
                     "color": [
                         0.2588235294117647,
                         0.2588235294117647,
                         0.2588235294117647
                     ],
+                    "font_scale_factor": 0.8,
                     "font_size": "large",
                     "font_type": "default",
                     "text": "目录",
@@ -402,7 +411,7 @@
                     "anchor_to": "top_middle",
                     "offset": [
                         0,
-                        20
+                        16
                     ],
                     "size": [
                         "100%+-20px",
@@ -417,10 +426,10 @@
                     "anchor_to": "top_middle",
                     "offset": [
                         0.0,
-                        26.0
+                        22.0
                     ],
                     "size": [
-                        "100%+-18px",
+                        "100%+-14px",
                         "default"
                     ],
                     "layer": 1,
@@ -449,8 +458,8 @@
     "main_toc_section": {
         "type": "panel",
         "size": [
-            56.0,
-            40.0
+            40.0,
+            34.0
         ],
         "layer": 1,
         "controls": [
@@ -461,8 +470,8 @@
                     "anchor_from": "top_middle",
                     "anchor_to": "top_middle",
                     "size": [
-                        25.0,
-                        25.0
+                        20.0,
+                        20.0
                     ],
                     "layer": 1,
                     "property_bag": {
@@ -473,11 +482,11 @@
             {
                 "label": {
                     "type": "label",
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
+                    "anchor_from": "bottom_middle",
+                    "anchor_to": "bottom_middle",
                     "offset": [
                         0.0,
-                        25.0
+                        -4.0
                     ],
                     "color": [
                         0.2588235294117647,
@@ -623,14 +632,14 @@
                     ],
                     "size": [
                         "default",
-                        16.0
+                        12.0
                     ],
                     "color": [
                         0.2588235294117647,
                         0.2588235294117647,
                         0.2588235294117647
                     ],
-                    "font_scale_factor": 1.600000000000001,
+                    "font_scale_factor": 1.2,
                     "font_type": "default",
                     "text": "多方块结构"
                 }
@@ -641,12 +650,12 @@
                     "anchor_from": "top_right",
                     "anchor_to": "top_right",
                     "offset": [
-                        -16.0,
+                        -12.0,
                         4.0
                     ],
                     "size": [
                         72.0,
-                        16.0
+                        12.0
                     ],
                     "alpha": 0.5,
                     "color": [
@@ -675,12 +684,12 @@
                         0.2588235294117647,
                         0.2588235294117647
                     ],
-                    "$label_font_scale_factor": 0.8,
-                    "$label_font_size": "large",
+                    "$label_font_scale_factor": 1.2,
+                    "$label_font_size": "normal",
                     "$label_layer": 3,
                     "$label_offset": [
-                        1.0,
-                        2.0
+                        0.0,
+                        0.0
                     ],
                     "$label_text": "+",
                     "$nine_slice_buttom": 0,
@@ -703,8 +712,8 @@
                         4.0
                     ],
                     "size": [
-                        16.0,
-                        16.0
+                        12.0,
+                        12.0
                     ],
                     "layer": 0,
                     "button_mappings": [],
@@ -730,7 +739,26 @@
                             "pressed@netease_editor_template_namespace.pressed": {}
                         },
                         {
-                            "button_label@netease_editor_template_namespace.button_label": {}
+                            "icon": {
+                                "type": "image",
+                                "size": [
+                                    "100%+-4px",
+                                    "100%+-4px"
+                                ],
+                                "layer": 3,
+                                "color": [
+                                    0.2588235294117647,
+                                    0.2588235294117647,
+                                    0.2588235294117647
+                                ],
+                                "nineslice_size": [
+                                    0.0,
+                                    0.0,
+                                    0.0,
+                                    0.0
+                                ],
+                                "texture": "textures/ui/add_icon"
+                            }
                         }
                     ]
                 }
@@ -741,12 +769,12 @@
                     "anchor_from": "top_right",
                     "anchor_to": "top_right",
                     "offset": [
-                        -16.0,
-                        5.0
+                        -12.0,
+                        4.0
                     ],
                     "size": [
                         72.0,
-                        13.0
+                        12.0
                     ],
                     "layer": 1,
                     "color": [
@@ -754,7 +782,7 @@
                         1.0,
                         1.0
                     ],
-                    "font_scale_factor": 1.4,
+                    "font_scale_factor": 1.2,
                     "font_type": "default",
                     "shadow": true,
                     "text": "预览全部",
@@ -773,12 +801,12 @@
                         0.2588235294117647,
                         0.2588235294117647
                     ],
-                    "$label_font_scale_factor": 0.7999999999999999,
-                    "$label_font_size": "large",
+                    "$label_font_scale_factor": 1.2,
+                    "$label_font_size": "normal",
                     "$label_layer": 3,
                     "$label_offset": [
-                        1.0,
-                        2.0
+                        0.0,
+                        0.0
                     ],
                     "$label_text": "-",
                     "$nine_slice_buttom": 0,
@@ -797,12 +825,12 @@
                     "anchor_from": "top_right",
                     "anchor_to": "top_right",
                     "offset": [
-                        -88.0,
+                        -84.0,
                         4.0
                     ],
                     "size": [
-                        16.0,
-                        16.0
+                        12.0,
+                        12.0
                     ],
                     "layer": 0,
                     "button_mappings": [],
@@ -828,7 +856,26 @@
                             "pressed@netease_editor_template_namespace.pressed": {}
                         },
                         {
-                            "button_label@netease_editor_template_namespace.button_label": {}
+                            "icon": {
+                                "type": "image",
+                                "size": [
+                                    "100%+-4px",
+                                    "100%+-4px"
+                                ],
+                                "layer": 3,
+                                "color": [
+                                    0.2588235294117647,
+                                    0.2588235294117647,
+                                    0.2588235294117647
+                                ],
+                                "nineslice_size": [
+                                    0.0,
+                                    0.0,
+                                    0.0,
+                                    0.0
+                                ],
+                                "texture": "textures/ui/sub_icon"
+                            }
                         }
                     ]
                 }
@@ -912,6 +959,10 @@
     },
     "text_page": {
         "type": "panel",
+        "offset": [
+            0.0,
+            -1.0
+        ],
         "layer": 1,
         "controls": [
             {
@@ -925,14 +976,14 @@
                     ],
                     "size": [
                         "default",
-                        20.0
+                        16.0
                     ],
                     "color": [
                         0.2588235294117647,
                         0.2588235294117647,
                         0.2588235294117647
                     ],
-                    "font_scale_factor": 0.9999999999999999,
+                    "font_scale_factor": 0.8,
                     "font_size": "large",
                     "font_type": "default",
                     "text": "标题内容",
@@ -945,7 +996,7 @@
                     "anchor_to": "top_middle",
                     "offset": [
                         0,
-                        20
+                        16
                     ],
                     "size": [
                         "100%+-20px",
@@ -954,31 +1005,94 @@
                 }
             },
             {
-                "_test_label": {
-                    "type": "label",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
+                "text_scroll@common.scrolling_panel": {
+                    "$background_nine_slice_buttom": 0,
+                    "$background_nine_slice_left": 0,
+                    "$background_nine_slice_right": 0,
+                    "$background_nine_slice_top": 0,
+                    "$background_nineslice_size": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "$box_nine_slice_buttom": 0,
+                    "$box_nine_slice_left": 0,
+                    "$box_nine_slice_right": 0,
+                    "$box_nine_slice_top": 0,
+                    "$box_nineslice_size": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "$is_background_nine_slice": false,
+                    "$is_box_nine_slice": false,
+                    "$is_track_nine_slice": false,
+                    "$scroll_background_image_control": "netease_editor_template_namespace.scroll_background_image",
+                    "$scroll_background_texture": "",
+                    "$scroll_bar_right_padding_size_touch|default": [
+                        0,
+                        0
+                    ],
+                    "$scroll_bar_right_padding_size|default": [
+                        0,
+                        0
+                    ],
+                    "$scroll_box_mouse_image_control": "netease_editor_template_namespace.scroll_box_image",
+                    "$scroll_box_texture": "textures/ui/newTouchScrollBox",
+                    "$scroll_box_touch_image_control": "netease_editor_template_namespace.scroll_box_image",
+                    "$scroll_track_image_control": "netease_editor_template_namespace.scroll_track_image",
+                    "$scroll_track_texture": "textures/ui/ScrollRail",
+                    "$scroll_view_port_offset|default": [
+                        0,
+                        0
+                    ],
+                    "$scrolling_content": "GuidanceLib.text_page_text_view",
+                    "$scrolling_pane_offset|default": [
+                        0,
+                        0
+                    ],
+                    "$show_background": false,
+                    "$show_background|default": false,
+                    "$track_nine_slice_buttom": 0,
+                    "$track_nine_slice_left": 0,
+                    "$track_nine_slice_right": 0,
+                    "$track_nine_slice_top": 0,
+                    "$track_nineslice_size": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "anchor_from": "bottom_middle",
+                    "anchor_to": "bottom_middle",
+                    "layer": 9,
                     "offset": [
-                        4.0,
-                        30.0
+                        0,
+                        -4
                     ],
                     "size": [
-                        "100%+-8px",
-                        "100%+-35px"
-                    ],
-                    "visible": false,
-                    "color": [
-                        0.2588235294117647,
-                        0.2588235294117647,
-                        0.2588235294117647
-                    ],
-                    "font_scale_factor": 1.5,
-                    "font_type": "default"
+                        "100%+-20px",
+                        "100%+-26px"
+                    ]
                 }
-            },
+            }
+        ]
+    },
+    "text_page_text_view": {
+        "type": "panel",
+        "anchor_from": "top_left",
+        "anchor_to": "top_left",
+        "size": [
+            "100%+0px",
+            "100%c+0px"
+        ],
+        "layer": 1,
+        "controls": [
             {
                 "content@richer_text.RicherTextPanel": {
-                    "$font_scale_factor": 1.5,
+                    "$font_scale_factor": 1.2,
                     "$font_type": "unicode",
                     "$text_color": [
                         0.2588,
@@ -989,11 +1103,11 @@
                     "anchor_to": "top_middle",
                     "offset": [
                         0,
-                        28
+                        0
                     ],
                     "size": [
-                        "100%+-24px",
-                        "100%+-34px"
+                        "100%+0px",
+                        0
                     ]
                 }
             }
@@ -1020,13 +1134,14 @@
                     ],
                     "size": [
                         "default",
-                        20.0
+                        16.0
                     ],
                     "color": [
                         0.2588235294117647,
                         0.2588235294117647,
                         0.2588235294117647
                     ],
+                    "font_scale_factor": 0.8,
                     "font_size": "large",
                     "font_type": "default",
                     "text": "目录",
@@ -1039,7 +1154,7 @@
                     "anchor_to": "top_middle",
                     "offset": [
                         0,
-                        20
+                        16
                     ],
                     "size": [
                         "100%+-20px",
@@ -1054,7 +1169,7 @@
                     "anchor_to": "top_middle",
                     "offset": [
                         0.0,
-                        26.0
+                        22.0
                     ],
                     "size": [
                         "100%+-24px",
@@ -1077,7 +1192,7 @@
         "anchor_to": "left_middle",
         "size": [
             "100%+0px",
-            24.0
+            16.0
         ],
         "layer": 1,
         "controls": [
@@ -1108,15 +1223,14 @@
                     ],
                     "size": [
                         "100%+-24px",
-                        15.0
+                        14.0
                     ],
                     "color": [
                         0.0,
                         0.0,
                         0.3137254901960784
                     ],
-                    "font_scale_factor": 0.8,
-                    "font_size": "large",
+                    "font_scale_factor": 1.4,
                     "font_type": "default",
                     "text": "章节名称"
                 }

@@ -2,8 +2,8 @@
     "book": {
         "type": "panel",
         "size": [
-            400.0,
-            220.0
+            320.0,
+            180.0
         ],
         "layer": 1,
         "controls": [
