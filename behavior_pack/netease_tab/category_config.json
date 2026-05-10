@@ -3,8 +3,7 @@
         {
             "icon": "textures/icon/icon",
             "labelText": "itemCategory.name.skybluetech",
-            "name": "skybluetech",
-            "sort_by_identifier": true
+            "name": "skybluetech"
         }
     ]
 }
