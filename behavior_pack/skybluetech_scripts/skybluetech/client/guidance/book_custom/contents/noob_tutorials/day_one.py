@@ -1,7 +1,7 @@
 # coding=utf-8
 from skybluetech_scripts.skybluetech.common.define import id_enum
 from skybluetech_scripts.skybluetech.client.ui.recipe_checker import (
-    CheckRecipe,
+    CheckRecipes,
     CheckUsage,
 )
 from ...define import (
@@ -19,7 +19,10 @@ day_one = PageGroup(
                 resin_collector=id_enum.RESIN_COLLECTOR, resin=id_enum.RESIN
             ),
             hyperlink_cbs={
-                "a": lambda _: CheckRecipe(id_enum.RESIN_COLLECTOR),
+                "a": lambda _: CheckRecipes([
+                    id_enum.RESIN_COLLECTOR,
+                    id_enum.RESIN_SPOON,
+                ]),
                 "b": lambda _: CheckUsage(id_enum.RESIN),
                 "test": lambda _: None,
             },
