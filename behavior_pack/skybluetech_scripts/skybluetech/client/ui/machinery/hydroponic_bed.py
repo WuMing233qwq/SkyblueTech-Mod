@@ -35,14 +35,14 @@ class HydroponicBedUI(MachinePanelUIProxy):
             return
         UpdatePowerBar(self.power_bar, self.sync.store_rf, self.sync.rf_max)
         if (
-            self.last_render_crop_id == self.sync.crop_id
+            self.last_render_crop_id == self.sync.crop_block_id
             and self.last_grow_stage == self.sync.grow_stage
         ):
             return
-        self.last_render_crop_id = self.sync.crop_id
+        self.last_render_crop_id = self.sync.crop_block_id
         self.last_grow_stage = self.sync.grow_stage
         pal = NewSingleBlockPalette(
-            self.sync.crop_id or "minecraft:air", self.sync.grow_stage
+            self.sync.crop_block_id or "minecraft:air", self.sync.grow_stage
         )
         geo_id = CombineBlockPaletteToGeometry(pal, "geometry.skybluetech_temp.crop_id")
         self.crop_disp.RenderBlockGeometryModel(
@@ -53,4 +53,4 @@ class HydroponicBedUI(MachinePanelUIProxy):
             init_rot_z=90,
             rotation_axis=(0, 1, 0),
         )
-        self.last_render_crop_id = self.sync.crop_id
+        self.last_render_crop_id = self.sync.crop_block_id

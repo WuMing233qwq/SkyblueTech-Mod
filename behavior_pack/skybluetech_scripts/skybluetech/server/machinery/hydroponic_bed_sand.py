@@ -2,23 +2,23 @@
 from skybluetech_scripts.tooldelta.define import Item
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
 from ...common.define import flags
-from ...common.define.id_enum.machinery import HYDROPONIC_BED as MACHINE_ID
-from ...common.machinery_def.hydroponic_bed import (
-    HydroponicBedRecipe,
+from ...common.define.id_enum.machinery import HYDROPONIC_BED_SAND as MACHINE_ID
+from ...common.machinery_def.hydroponic_bed_sand import (
+    HydroponicBedSandRecipe,
     recipes as Recipes,
     K_CROP_BLOCK_ID,
-    K_GROW_STAGE,
-    K_STAGE_GROW_TICKS,
+    K_GROW_PROGRESS,
     K_WATER_STORE,
     POWER_COST,
     WORK_TICK_DELAY,
     MAX_WATER_STORE,
     ONCE_WATER_COST,
 )
-from ...common.ui_sync.machinery.hydroponic_bed import HydroponicBedUISync
+from ...common.ui_sync.machinery.hydroponic_bed_sand import HydroponicBedSandUISync
 from .basic import (
     ItemContainer,
     GUIControl,
+    BaseSpeedControl,
     PowerControl,
     WorkRenderer,
     RegisterMachine,
@@ -27,14 +27,17 @@ from .pool import GetMachineStrict
 
 
 @RegisterMachine
-class HydroponicBed(ItemContainer, GUIControl, PowerControl, WorkRenderer):
+class HydroponicBedSand(
+    BaseSpeedControl, ItemContainer, GUIControl, PowerControl, WorkRenderer
+):
     block_name = MACHINE_ID
     input_slots = (0,)
     running_power = POWER_COST
+    original_speed = WORK_TICK_DELAY
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        self.sync = HydroponicBedUISync.NewServer(self).Activate()
+        self.sync = HydroponicBedSandUISync.NewServer(self).Activate()
         seed_item = self.GetSlotItem(0)
         self.crop_id = (
             seed_item.id
@@ -46,7 +49,6 @@ class HydroponicBed(ItemContainer, GUIControl, PowerControl, WorkRenderer):
             if self.crop_id is not None
             else None
         )
-        self.ticks = 0
         self.CallSync()
 
     @SuperExecutorMeta.execute_super
@@ -57,9 +59,7 @@ class HydroponicBed(ItemContainer, GUIControl, PowerControl, WorkRenderer):
     def OnTicking(self):
         # type: () -> None
         if self.IsActive():
-            self.ticks += 1
-            if self.ticks >= WORK_TICK_DELAY:
-                self.ticks = 0
+            if BaseSpeedControl.ProcessOnce(self):
                 if self.PowerEnough():
                     if not self.take_water():
                         return
@@ -71,7 +71,7 @@ class HydroponicBed(ItemContainer, GUIControl, PowerControl, WorkRenderer):
         # type: () -> None
         self.sync.store_rf = self.store_rf
         self.sync.rf_max = self.store_rf_max
-        self.sync.grow_stage = self.grow_stage
+        self.sync.grow_progress = self.grow_progress
         if self.crop_id is not None:
             self.sync.crop_block_id = Recipes.recipes_mapping[
                 self.crop_id
@@ -98,6 +98,7 @@ class HydroponicBed(ItemContainer, GUIControl, PowerControl, WorkRenderer):
             if self.crop_id is not None
             else None
         )
+        self.grow_progress = 0.0
         if self.crop_id is None:
             self.SetDeactiveFlag(flags.DEACTIVE_FLAG_NO_RECIPE)
         else:
@@ -110,16 +111,12 @@ class HydroponicBed(ItemContainer, GUIControl, PowerControl, WorkRenderer):
 
     def work_once(self):
         if self.crop_id is not None:
-            self.stage_grow_ticks += WORK_TICK_DELAY
-            if (
-                self.stage_grow_ticks
-                >= Recipes.recipes_mapping[self.crop_id].grow_stage_ticks
-            ):
-                self.grow_stage += 1
-                self.stage_grow_ticks = 0
-                if self.grow_stage + 1 >= Recipes.recipes_mapping[self.crop_id].stages:
-                    self.finish_once(Recipes.recipes_mapping[self.crop_id])
-                    self.grow_stage = 0
+            self.grow_progress += Recipes.recipes_mapping[
+                self.crop_id
+            ].once_grow_progress
+            if self.grow_progress >= 1.0:
+                self.finish_once(Recipes.recipes_mapping[self.crop_id])
+                self.grow_progress = 0.0
 
     def take_water(self):
         if self.water_store < MAX_WATER_STORE / 2:
@@ -139,39 +136,27 @@ class HydroponicBed(ItemContainer, GUIControl, PowerControl, WorkRenderer):
             return False
 
     def finish_once(self, recipe):
-        # type: (HydroponicBedRecipe) -> None
+        # type: (HydroponicBedSandRecipe) -> None
         from .hydroponic_base import HydroponicBase
 
-        out_seed_count = recipe.rand_seed_count() - 1
         m = GetMachineStrict(self.dim, self.x, self.y - 1, self.z)
         if isinstance(m, HydroponicBase):
-            m.OutputItem(Item(recipe.seed_item, count=out_seed_count))
-            for out_crop in recipe.rand_harvest_output():
-                m.OutputItem(Item(out_crop.id))
+            for out_crop in recipe.harvest_outputs:
+                m.OutputItem(Item(out_crop.id, count=int(out_crop.count)))
 
     def set_crop_block_id(self, value):
         # type: (str | None) -> None
         self.bdata[K_CROP_BLOCK_ID] = value
 
     @property
-    def grow_stage(self):
-        # type: () -> int
-        return self.bdata[K_GROW_STAGE] or 0
+    def grow_progress(self):
+        # type: () -> float
+        return self.bdata[K_GROW_PROGRESS] or 0.0
 
-    @grow_stage.setter
-    def grow_stage(self, value):
-        # type: (int) -> None
-        self.bdata[K_GROW_STAGE] = value
-
-    @property
-    def stage_grow_ticks(self):
-        # type: () -> int
-        return self.bdata[K_STAGE_GROW_TICKS] or 0
-
-    @stage_grow_ticks.setter
-    def stage_grow_ticks(self, value):
-        # type: (int) -> None
-        self.bdata[K_STAGE_GROW_TICKS] = value
+    @grow_progress.setter
+    def grow_progress(self, value):
+        # type: (float) -> None
+        self.bdata[K_GROW_PROGRESS] = value
 
     @property
     def water_store(self):

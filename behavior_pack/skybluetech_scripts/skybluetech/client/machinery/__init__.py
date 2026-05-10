@@ -5,6 +5,7 @@ from . import (
     digger,
     hover_text_displayer,
     hydroponic_bed,
+    hydroponic_bed_sand,
     rf_repeater_plant,
     wind_generator,
 )

@@ -443,6 +443,10 @@
         "client_entity": {},
         "sound": "iron"
     },
+    "skybluetech:hydroponic_bed_sand": {
+        "client_entity": {},
+        "sound": "iron"
+    },
     "skybluetech:invar_block": {
         "textures": "skybluetech:invar_block"
     },
@@ -749,8 +753,8 @@
         "textures": "skybluetech:tin_ore"
     },
     "skybluetech:ultraheatinum_block": {
-        "textures": "skybluetech:ultraheatinum_block",
-        "sound": "copper"
+        "sound": "copper",
+        "textures": "skybluetech:ultraheatinum_block"
     },
     "skybluetech:vegetable_oil": {
         "blockshape": "water",

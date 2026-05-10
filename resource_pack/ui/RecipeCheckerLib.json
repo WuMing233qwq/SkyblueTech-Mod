@@ -928,6 +928,143 @@
             }
         ]
     },
+    "hydroponic_bed_sand_recipes": {
+        "type": "panel",
+        "size": [
+            180.0,
+            80.0
+        ],
+        "layer": 1,
+        "clips_children": true,
+        "controls": [
+            {
+                "bg": {
+                    "type": "image",
+                    "nineslice_size": [
+                        2.0,
+                        2.0,
+                        2.0,
+                        2.0
+                    ],
+                    "texture": "textures/ui/rect_panel_bg"
+                }
+            },
+            {
+                "visualer": {
+                    "type": "panel",
+                    "anchor_from": "left_middle",
+                    "anchor_to": "left_middle",
+                    "offset": [
+                        10.0,
+                        0.0
+                    ],
+                    "size": [
+                        60.0,
+                        60.0
+                    ],
+                    "layer": 1,
+                    "controls": [
+                        {
+                            "crop_disp": {
+                                "type": "custom",
+                                "renderer": "netease_paper_doll_renderer",
+                                "anchor_from": "bottom_middle",
+                                "anchor_to": "bottom_middle",
+                                "offset": [
+                                    0.0,
+                                    -11.0
+                                ],
+                                "size": [
+                                    40.0,
+                                    40.0
+                                ],
+                                "enable_scissor_test": false,
+                                "rotation": "gesture_x",
+                                "screen_scale": 1.0
+                            }
+                        },
+                        {
+                            "mask_img": {
+                                "type": "image",
+                                "size": [
+                                    60.0,
+                                    60.0
+                                ],
+                                "clip_direction": "left",
+                                "clip_ratio": 0.0,
+                                "texture": "textures/models/hydroponic_bed_texture",
+                                "uv_size": [
+                                    16.0,
+                                    16.0
+                                ]
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "seed_item@SkybluePanelLib.item_displayer": {
+                    "offset": [
+                        32,
+                        -22
+                    ]
+                }
+            },
+            {
+                "seed_tip": {
+                    "type": "label",
+                    "offset": [
+                        4.0,
+                        -22.0
+                    ],
+                    "layer": 1,
+                    "color": [
+                        0.2588235294117647,
+                        0.2588235294117647,
+                        0.2588235294117647
+                    ],
+                    "font_scale_factor": 1.4,
+                    "font_type": "default",
+                    "text": "种子",
+                    "text_alignment": "center"
+                }
+            },
+            {
+                "output_tip": {
+                    "type": "label",
+                    "offset": [
+                        4.0,
+                        4.0
+                    ],
+                    "layer": 1,
+                    "color": [
+                        0.2588235294117647,
+                        0.2588235294117647,
+                        0.2588235294117647
+                    ],
+                    "font_scale_factor": 1.4,
+                    "font_type": "default",
+                    "text": "产出",
+                    "text_alignment": "center"
+                }
+            },
+            {
+                "outputs_stack": {
+                    "type": "stack_panel",
+                    "offset": [
+                        52.0,
+                        15.0
+                    ],
+                    "size": [
+                        60.0,
+                        40.0
+                    ],
+                    "layer": 1,
+                    "orientation": "horizontal"
+                }
+            }
+        ]
+    },
     "macerator_recipes": {
         "type": "panel",
         "size": [

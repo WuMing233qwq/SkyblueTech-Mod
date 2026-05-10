@@ -11,13 +11,13 @@
             "minecraft:material_instances": {
                 "*": {
                     "render_method": "blend",
-                    "texture": "skybluetech:hydroponic_bed"
+                    "texture": "skybluetech:hydroponic_bed_sand"
                 }
             },
             "netease:block_container": {
                 "container_size": 5,
                 "custom_description": "水培床",
-                "screen_name": "HydroponicBedUI.main",
+                "screen_name": "HydroponicBedSandUI.main",
                 "hopper": {
                     "input": true,
                     "output": false,
@@ -80,7 +80,7 @@
         "description": {
             "base_block": "netease_container",
             "category": "skybluetech",
-            "identifier": "skybluetech:hydroponic_bed",
+            "identifier": "skybluetech:hydroponic_bed_sand",
             "states": {
                 "skybluetech:active": [
                     false,

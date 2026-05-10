@@ -25,6 +25,7 @@ from .heavy_compressor import HeavyCompressor
 from .hover_text_displayer import HoverTextDisplayer
 from .hydroponic_base import HydroponicBase
 from .hydroponic_bed import HydroponicBed
+from .hydroponic_bed_sand import HydroponicBedSand
 from .item_splitter import ItemSplitter
 from .macerator import Macerator
 from .machinery_workstation import MachineryWorkstation

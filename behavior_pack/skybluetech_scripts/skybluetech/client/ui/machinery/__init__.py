@@ -23,6 +23,7 @@ from .heavy_compressor import HeavyCompressorUI
 from .hover_text_displayer import HoverTextDisplayerUI
 from .hydroponic_base import HydroponicBaseUI
 from .hydroponic_bed import HydroponicBedUI
+from .hydroponic_bed_sand import HydroponicBedSandUI
 from .item_splitter import ItemSplitterUI
 from .macerator import MaceratorUI
 from .machinery_workstation import MachineryWorkstationUI

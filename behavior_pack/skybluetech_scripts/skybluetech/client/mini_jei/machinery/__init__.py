@@ -5,5 +5,6 @@ from . import (
     freezer,
     gas_burning_generator,
     hydroponic_bed,
+    hydroponic_bed_sand,
     machinery_workstation,
 )

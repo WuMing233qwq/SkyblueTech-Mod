@@ -395,6 +395,23 @@ recipes = RecipesCollection(
         MRecipe.LEVEL_IRON,
         8,
     ),
+    # hydroponic bed sand
+    MRecipe(
+        {
+            0: Input("minecraft:glass_pane"),
+            1: Input("minecraft:lantern"),
+            2: Input("minecraft:glass_pane"),
+            3: Input("minecraft:glass_pane"),
+            5: Input("minecraft:glass_pane"),
+            6: Input(tag_enum.PlateTag.STEEL, is_tag=True),
+            7: Input(id_enum.DUST_BLOCK),
+            8: Input(tag_enum.PlateTag.STEEL, is_tag=True),
+        },
+        id_enum.HYDROPONIC_BED_SAND,
+        MRecipe.LEVEL_IRON,
+        MRecipe.LEVEL_IRON,
+        8,
+    ),
     # item splitter
     MRecipe(
         {

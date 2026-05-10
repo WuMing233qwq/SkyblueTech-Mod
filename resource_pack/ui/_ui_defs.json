@@ -29,6 +29,7 @@
         "ui/HeavyCompressorUI.json",
         "ui/HoverTextDisplayerUI.json",
         "ui/HydroponicBaseUI.json",
+        "ui/HydroponicBedSandUI.json",
         "ui/HydroponicBedUI.json",
         "ui/ItemInputInterfaceUI.json",
         "ui/ItemOutputInterfaceUI.json",

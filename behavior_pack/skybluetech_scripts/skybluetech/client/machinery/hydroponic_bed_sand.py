@@ -11,8 +11,11 @@ from skybluetech_scripts.tooldelta.extensions.singleblock_model_loader import (
     CreateBlankModel,
 )
 from skybluetech_scripts.tooldelta.utils.nbt import GetValueWithDefault
-from ...common.define.id_enum.machinery import HYDROPONIC_BED as MACHINE_ID
-from ...common.machinery_def.hydroponic_bed import K_CROP_BLOCK_ID, K_GROW_STAGE
+from ...common.define.id_enum.machinery import HYDROPONIC_BED_SAND as MACHINE_ID
+from ...common.machinery_def.hydroponic_bed_sand import (
+    K_CROP_BLOCK_ID,
+    K_GROW_PROGRESS,
+)
 from .utils.mod_block_event import (
     asModBlockLoadedListener,
     asModBlockRemovedListener,
@@ -46,13 +49,20 @@ def update_single_hydroponic_bed(x, y, z, model):
     if ex_data is None:
         return
     crop_block_id = GetValueWithDefault(ex_data, K_CROP_BLOCK_ID, None)
-    grow_stage = GetValueWithDefault(ex_data, K_GROW_STAGE, 0)
+    grow_progress = GetValueWithDefault(ex_data, K_GROW_PROGRESS, 0)
     if crop_block_id == 2:
         crop_block_id = None
     if not crop_block_id:
         model.SetBlockModel("minecraft:air", 0)
     else:
-        model.SetBlockModel(crop_block_id, grow_stage, (0.8, 0.8, 0.8))
+        scale = min(1, grow_progress + 0.1) * 0.6
+        # TODO: BUG: 不显示甘蔗模型 (网易接口问题)
+        model.SetBlockModel(
+            crop_block_id,
+            0,
+            (scale, scale, scale),
+            (0, grow_progress * 0.25 - 0.35, 0),
+        )
 
 
 @ClientInitCallback()

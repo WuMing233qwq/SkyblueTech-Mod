@@ -59,6 +59,3 @@ class HydroponicBedRecipe(MachineRecipe):
         for output in self.harvest_outputs:
             if output.prob >= random.random():
                 yield output
-
-
-c2k = lambda c: c + 273
