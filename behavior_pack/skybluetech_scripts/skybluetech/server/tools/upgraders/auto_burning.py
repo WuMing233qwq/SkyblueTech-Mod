@@ -14,7 +14,7 @@ from ...machinery.redstone_furnace import get_furnace_output_by_input
 from ...machinery.utils.charge import GetCharge, UpdateCharge
 from .register import RegisterDestroyBlockCallback
 
-BURN_POWER_SINGLE = TICK_POWER * 20 * 10
+BURN_POWER_SINGLE = TICK_POWER * 20
 
 
 def onAutoBurn(event, use_tool, item_ud, upgrader_ud):
