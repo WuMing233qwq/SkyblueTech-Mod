@@ -44,7 +44,7 @@ def update_text(text_shape, text):
 def get_power(x, y, z):
     b = GetBlockEntityData(x, y, z)
     if b is None:
-        return -2
+        return None
     return GetValueWithDefault(b["exData"], K_POWER, -1)
 
 
@@ -63,5 +63,10 @@ def onModBlockRemoved(event):
 @ClientInitCallback()
 @Repeat(1)
 def onRepeat1s():
-    for (dim, pos), text_shape in texts.items():
-        update_text(text_shape, "输入功率： §a%d RF/t" % get_power(*pos))
+    for (dim, pos), text_shape in texts.copy().items():
+        power = get_power(*pos)
+        if power is None:
+            del texts[(dim, pos)]
+            continue
+        else:
+            update_text(text_shape, "输入功率： §a%d RF/t" % power)
