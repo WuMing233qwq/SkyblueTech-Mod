@@ -1006,6 +1006,7 @@
             },
             {
                 "text_scroll@common.scrolling_panel": {
+                    "$allow_scrolling_even_when_content_fits|default": false,
                     "$background_nine_slice_buttom": 0,
                     "$background_nine_slice_left": 0,
                     "$background_nine_slice_right": 0,
@@ -1042,8 +1043,13 @@
                     "$scroll_box_mouse_image_control": "netease_editor_template_namespace.scroll_box_image",
                     "$scroll_box_texture": "textures/ui/newTouchScrollBox",
                     "$scroll_box_touch_image_control": "netease_editor_template_namespace.scroll_box_image",
+                    "$scroll_box_visible|default": false,
                     "$scroll_track_image_control": "netease_editor_template_namespace.scroll_track_image",
                     "$scroll_track_texture": "textures/ui/ScrollRail",
+                    "$scroll_view_control_size|default": [
+                        "100%+0px",
+                        "100%+0px"
+                    ],
                     "$scroll_view_port_offset|default": [
                         0,
                         0
