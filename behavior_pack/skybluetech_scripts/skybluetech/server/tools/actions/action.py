@@ -11,7 +11,6 @@ from skybluetech_scripts.tooldelta.events.server import (
 )
 from skybluetech_scripts.tooldelta.api.common import Delay
 from skybluetech_scripts.tooldelta.api.server import (
-    SetItemTierSpeed,
     GetPlayerMainhandItem,
     SpawnItemToPlayerCarried,
     SetOneTipMessage,
@@ -20,11 +19,10 @@ from skybluetech_scripts.tooldelta.api.server import (
 from ...machinery.utils.charge import (
     GetCharge,
     GetPowerCost,
-    ChargeEnough,
     UpdateCharge,
-    SetUpdateChargeCallback,
 )
 from .register import item_pre_use_cbs, item_pre_use_on_block_cbs, tool_items
+from .utils import MakeToolUseless
 
 # TYPE_CHECKING
 if 0:
@@ -92,15 +90,16 @@ def onItemDurabilityChanged(event):
     power_cost = GetPowerCost(ud)
     if cur_charge - power_cost >= 0:
         cur_charge -= power_cost
+        useless = False
     else:
-        res = SetItemTierSpeed(mainhand_item, 0)
-        if not res:
-            print("[ERROR] can't set item tier speed for " + mainhand_item.newItemName)
-        SetOneTipMessage(mPlayerId, "工具能量已耗尽， 无法继续挖掘方块")
-    durability = mainhand_item.durability
-    if durability is not None and event.canChange:
-        event.ModifyDurability(durability)
+        useless = True
+    # durability = mainhand_item.durability
+    # if durability is not None and event.canChange:
+    #     event.ModifyDurability(durability)
     UpdateCharge(mainhand_item, cur_charge)
+    if useless:
+        MakeToolUseless(mainhand_item)
+        SetOneTipMessage(mPlayerId, "工具能量已耗尽")
     SpawnItemToPlayerCarried(mPlayerId, mainhand_item)
 
 

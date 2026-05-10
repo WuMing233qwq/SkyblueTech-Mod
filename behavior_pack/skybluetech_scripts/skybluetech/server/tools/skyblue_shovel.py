@@ -1,10 +1,8 @@
 # coding=utf-8
 #
-from .actions.register import RegisterTool, SetOriginTierSpeed
+from .actions.register import RegisterTool
 
 ITEM_ID = "skybluetech:skyblue_shovel"
-TIER_SPEED = 6.0
 
 
 RegisterTool(ITEM_ID)
-SetOriginTierSpeed(ITEM_ID, TIER_SPEED)

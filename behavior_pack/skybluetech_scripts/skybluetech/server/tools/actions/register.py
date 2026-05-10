@@ -5,12 +5,8 @@ from skybluetech_scripts.tooldelta.events.server import (
     ServerItemTryUseEvent,
     ServerItemUseOnEvent,
 )
-from skybluetech_scripts.tooldelta.api.server.item import (
-    SetItemTierSpeed,
-    SetAttackDamage,
-)
-from skybluetech_scripts.tooldelta.utils.nbt import GetValueWithDefault
-from ...machinery.utils.charge import ChargeEnough, SetUpdateChargeCallback
+from ...machinery.utils.charge import SetUpdateChargeCallback
+from .utils import RecoverToolFromUseless
 
 # TYPE_CHECKING
 if 0:
@@ -29,6 +25,16 @@ def RegisterTool(item_id):
     "注册工具, 使得工具能在耐久变动缺乏能量后无法挖掘方块。"
     tool_items.add(item_id)
 
+    def on_charge(item, _):
+        # type: (Item, int) -> None
+        ud = item.userData
+        if ud is None:
+            return
+        if ud.get("st:useless"):
+            RecoverToolFromUseless(item)
+
+    SetUpdateChargeCallback(item_id, on_charge)
+
 
 def RegisterItemPreUseCallback(item_id, callback):
     # type: (str, typing.Callable[[ServerItemTryUseEvent]]) -> None
@@ -40,35 +46,3 @@ def RegisterItemPreUseOnBlockCallback(item_id, callback):
     # type: (str, typing.Callable[[ServerItemUseOnEvent]]) -> None
     "注册物品对方块的预使用回调。"
     item_pre_use_on_block_cbs[item_id] = callback
-
-
-def SetOriginTierSpeed(item_id, tier_speed):
-    # type: (str, float) -> None
-    "设置工具的原始 TierSpeed 值。"
-
-    def regfunc(item, charge):
-        # type: (Item, int) -> None
-        ud = item.userData
-        if ud is None:
-            return
-        if ChargeEnough(ud) and GetValueWithDefault(ud, "ModTierSpeed", 0.0) == 0.0:
-            SetItemTierSpeed(item, tier_speed)
-
-    orig_tier_speed[item_id] = tier_speed
-    SetUpdateChargeCallback(item_id, regfunc)
-
-
-def SetOriginAttackDamage(item_id, attack_damage):
-    # type: (str, int) -> None
-    "设置工具的原始 AttackDamage 值。"
-
-    def regfunc(item, charge):
-        # type: (Item, int) -> None
-        ud = item.userData
-        if ud is None:
-            return
-        if ChargeEnough(ud) and GetValueWithDefault(ud, "ModAttackDamage", 0.0) == 0.0:
-            SetAttackDamage(item, attack_damage)
-
-    orig_attack_damage[item_id] = attack_damage
-    SetUpdateChargeCallback(item_id, regfunc)
