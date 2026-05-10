@@ -1,0 +1,21 @@
+{
+    "description": "commands.skybluetech.block_geometry_test.description",
+    "format_version": "0.0.1",
+    "name": "skybluetech:block_geometry_test",
+    "permission_level": "game_directors",
+    "requires_cheats": true,
+    "args": [
+        {
+            "name": "start",
+            "type": "pos"
+        },
+        {
+            "name": "end",
+            "type": "pos"
+        },
+        {
+            "name": "display_pos",
+            "type": "pos"
+        }
+    ]
+}
