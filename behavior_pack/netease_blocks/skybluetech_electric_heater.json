@@ -28,6 +28,9 @@
             "netease:neighborchanged_sendto_script": {
                 "value": true
             },
+            "minecraft:destructible_by_mining": {
+                "seconds_to_destroy": 3.0
+            },
             "netease:tier": {
                 "destroy_special": true,
                 "digger": "pickaxe",

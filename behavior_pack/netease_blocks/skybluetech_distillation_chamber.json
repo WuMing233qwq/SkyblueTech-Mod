@@ -5,6 +5,9 @@
             "minecraft:geometry": {
                 "identifier": "geometry.skybluetech.distillation_chamber"
             },
+            "minecraft:destructible_by_mining": {
+                "seconds_to_destroy": 2.5
+            },
             "minecraft:material_instances": {
                 "*": {
                     "render_method": "blend",
