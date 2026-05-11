@@ -1,24 +1,12 @@
 # coding=utf-8
-import time
 from skybluetech_scripts.tooldelta.define import Item
-from skybluetech_scripts.tooldelta.api.client import (
-    PlayCustomMusic,
-    StopCustomMusicById,
-    GetLocalPlayerId,
-)
 from skybluetech_scripts.tooldelta.api.server import (
     GetPlayersInDim,
     GetPos,
     GetBlockEntityData,
     SpawnDroppedItem,
-    SetOnePopupNotice,
     UpdateBlockStates,
     SpawnItemToPlayerCarried,
-)
-from skybluetech_scripts.tooldelta.events.basic import CustomS2CEvent
-from skybluetech_scripts.tooldelta.events.client import (
-    ClientBlockUseEvent,
-    ModBlockEntityRemoveClientEvent,
 )
 from skybluetech_scripts.tooldelta.events.server import (
     ServerItemUseOnEvent,
@@ -27,6 +15,7 @@ from skybluetech_scripts.tooldelta.events.server import (
 )
 from skybluetech_scripts.tooldelta.events.notify import NotifyToClients
 from ...common.define.id_enum.blocks import FAMICOM
+from ...common.events.misc.famicom import FamicomPlaySoundEvent
 
 MUSIC_MAPPING = {
     "skybluetech:famicom_cartidge_1": "music.skybluetech.famicom_1",
@@ -39,40 +28,6 @@ STATE_MAPPING = {
     "skybluetech:famicom_cartidge_3": 3,
 }
 K_CARTIDGE_TYPE_STATE = "skybluetech:fc_rom_type"
-
-
-class FamicomPlaySoundEvent(CustomS2CEvent):
-    name = "st:FCPlaysound"
-
-    def __init__(self, dim=0, x=0, y=0, z=0, sound_name="", stop=False):
-        # type: (int, float, float, float, str, bool) -> None
-        self.dim = dim
-        self.x = x
-        self.y = y
-        self.z = z
-        self.sound_name = sound_name
-        self.stop = stop
-
-    def marshal(self):
-        return {
-            "dim": self.dim,
-            "x": self.x,
-            "y": self.y,
-            "z": self.z,
-            "sound_name": self.sound_name,
-            "stop": self.stop,
-        }
-
-    @classmethod
-    def unmarshal(cls, data):
-        return cls(
-            dim=data["dim"],
-            x=data["x"],
-            y=data["y"],
-            z=data["z"],
-            sound_name=data["sound_name"],
-            stop=data["stop"],
-        )
 
 
 @ServerBlockUseEvent.Listen()
@@ -147,33 +102,6 @@ def removeCartidge(dim, x, y, z, cartidge):
     )
 
 
-client_music_ids = {}  # type: dict[str, str]
-
-
-@FamicomPlaySoundEvent.Listen()
-def onFamicomPlaySoundEvent(event):
-    # type: (FamicomPlaySoundEvent) -> None
-    if event.stop:
-        audio_id = client_music_ids.pop(event.sound_name, None)
-        if audio_id is not None:
-            StopCustomMusicById(audio_id, 0)
-    else:
-        audio_id = PlayCustomMusic(
-            event.sound_name,
-            (event.x, event.y, event.z),
-            1,
-            1,
-            True,
-            None,
-        )
-        if isinstance(audio_id, str):
-            client_music_ids[event.sound_name] = audio_id
-        else:
-            SetOnePopupNotice(
-                GetLocalPlayerId(), "§c无法播放 FC 音乐: {}".format(audio_id)
-            )
-
-
 @BlockRemoveServerEvent.Listen()
 def onBlockRemoved(event):
     # type: (BlockRemoveServerEvent) -> None
@@ -188,19 +116,3 @@ def onBlockRemoved(event):
     cartidge = bdata["st:cartidge"]
     if cartidge is not None:
         removeCartidge(event.dimension, x, y, z, cartidge)
-
-
-last_used_time = 0
-
-
-@ClientBlockUseEvent.Listen()
-def onClientBlockUseEvent(event):
-    # type: (ClientBlockUseEvent) -> None
-    global last_used_time
-    if event.blockName != FAMICOM:
-        return
-    nowtime = time.time()
-    if nowtime - last_used_time < 0.5:
-        event.cancel()
-        return
-    last_used_time = nowtime
