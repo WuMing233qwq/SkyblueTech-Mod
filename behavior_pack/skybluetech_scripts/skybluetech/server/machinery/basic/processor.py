@@ -85,7 +85,7 @@ class Processor(ProcessorBase, UpgradeControl):
         # type: (int, str, float, bool) -> None
         if not is_final or not isinstance(self, MultiFluidContainer):
             return
-        if slot in self.fluid_output_slots and self.HasDeactiveFlag(
+        if slot in self.fluid_input_slots and self.HasDeactiveFlag(
             flags.DEACTIVE_FLAG_NO_RECIPE
         ):
             self.recheck_recipe()
