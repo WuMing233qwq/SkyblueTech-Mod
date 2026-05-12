@@ -6,15 +6,12 @@
         },
         "key": {
             "A": {
-                "data": 0,
                 "item": "skybluetech:silver_plate"
             },
             "B": {
-                "data": 0,
                 "item": "skybluetech:invar_stick"
             },
             "C": {
-                "data": 0,
                 "item": "skybluetech:copper_stick"
             }
         },

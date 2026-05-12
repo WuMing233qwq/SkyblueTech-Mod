@@ -6,15 +6,12 @@
         },
         "key": {
             "A": {
-                "data": 0,
                 "item": "skybluetech:tin_plate"
             },
             "B": {
-                "data": 0,
                 "item": "skybluetech:copper_stick"
             },
             "C": {
-                "data": 0,
                 "item": "minecraft:iron_nugget"
             }
         },

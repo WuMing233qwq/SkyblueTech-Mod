@@ -6,19 +6,15 @@
         },
         "key": {
             "A": {
-                "data": 0,
                 "item": "skybluetech:electric_motor"
             },
             "B": {
-                "data": 0,
                 "item": "skybluetech:pipe_bronze"
             },
             "C": {
-                "data": 0,
                 "item": "skybluetech:fan_blade"
             },
             "D": {
-                "data": 0,
                 "item": "skybluetech:tin_plate"
             }
         },

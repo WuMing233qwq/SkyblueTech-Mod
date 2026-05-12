@@ -6,19 +6,15 @@
         },
         "key": {
             "C": {
-                "data": 0,
                 "item": "minecraft:glass_pane"
             },
             "E": {
-                "data": 0,
                 "item": "skybluetech:low_purity_silicon_panel"
             },
             "F": {
-                "data": 0,
                 "item": "skybluetech:tin_plate"
             },
             "I": {
-                "data": 0,
                 "item": "minecraft:lapis_lazuli"
             }
         },

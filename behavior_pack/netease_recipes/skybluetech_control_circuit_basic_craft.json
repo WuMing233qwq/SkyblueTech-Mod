@@ -6,19 +6,15 @@
         },
         "key": {
             "A": {
-                "data": 0,
                 "item": "skybluetech:rough_rubber"
             },
             "B": {
-                "data": 0,
                 "item": "skybluetech:tin_plate"
             },
             "C": {
-                "data": 0,
                 "item": "minecraft:redstone"
             },
             "D": {
-                "data": 0,
                 "item": "skybluetech:circuit_base_plate"
             }
         },

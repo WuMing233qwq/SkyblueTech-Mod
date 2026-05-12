@@ -6,19 +6,15 @@
         },
         "key": {
             "A": {
-                "data": 0,
                 "item": "skybluetech:control_circuit_basic"
             },
             "B": {
-                "data": 0,
                 "item": "skybluetech:gold_plate"
             },
             "C": {
-                "data": 0,
                 "item": "skybluetech:silver_plate"
             },
             "D": {
-                "data": 0,
                 "item": "skybluetech:copper_stick"
             }
         },

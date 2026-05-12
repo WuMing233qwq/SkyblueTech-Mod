@@ -6,19 +6,15 @@
         },
         "key": {
             "A": {
-                "data": 0,
                 "item": "skybluetech:tin_plate"
             },
             "B": {
-                "data": 0,
                 "item": "skybluetech:deactivation_redstone"
             },
             "C": {
-                "data": 0,
                 "item": "skybluetech:wire_insulated_tin"
             },
             "D": {
-                "data": 0,
                 "item": "skybluetech:copper_plate"
             }
         },

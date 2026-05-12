@@ -6,11 +6,9 @@
         },
         "key": {
             "C": {
-                "data": 0,
                 "item": "skybluetech:light_skyblue_ingot"
             },
             "E": {
-                "data": 0,
                 "item": "skybluetech:tin_plate"
             }
         },

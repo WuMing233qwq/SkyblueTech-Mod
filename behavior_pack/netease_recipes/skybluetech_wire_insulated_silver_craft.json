@@ -6,11 +6,9 @@
         },
         "ingredients": [
             {
-                "data": 0,
                 "item": "skybluetech:wire_silver"
             },
             {
-                "data": 0,
                 "item": "skybluetech:rough_rubber"
             }
         ],

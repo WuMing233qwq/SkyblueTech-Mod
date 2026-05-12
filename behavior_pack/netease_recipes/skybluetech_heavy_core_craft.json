@@ -6,15 +6,12 @@
         },
         "key": {
             "A": {
-                "data": 0,
                 "item": "minecraft:diamond_block"
             },
             "B": {
-                "data": 0,
                 "item": "skybluetech:lead_plate"
             },
             "C": {
-                "data": 0,
                 "item": "skybluetech:invar_plate"
             }
         },
