@@ -15,7 +15,8 @@
             "item": "skybluetech:silver_ingot"
         },
         "tags": [
-            "furnace"
+            "furnace",
+            "blast_furnace"
         ]
     }
 }

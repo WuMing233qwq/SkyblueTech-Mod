@@ -2,20 +2,21 @@
     "format_version": "1.20.10",
     "minecraft:recipe_furnace": {
         "description": {
-            "identifier": "skybluetech:invar_dust_burn"
+            "identifier": "skybluetech:gold_dust_burn"
         },
         "input": {
             "count": 1,
             "data": 0,
-            "item": "skybluetech:invar_dust"
+            "item": "skybluetech:gold_dust"
         },
         "output": {
             "count": 1,
             "data": 0,
-            "item": "skybluetech:invar_ingot"
+            "item": "minecraft:gold_ingot"
         },
         "tags": [
-            "furnace"
+            "furnace",
+            "blast_furnace"
         ]
     }
 }
