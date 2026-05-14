@@ -61,7 +61,7 @@ class ItemContainer(object):
             item (Item | None): 设置的物品, 如果为 None 则设置槽位为空
 
         Returns:
-            _type_: _description_
+            bool: 是否成功设置物品
         """
         return SetContainerItem(
             self.dim, self.xyz, slot_pos, item or Item("minecraft:air", count=0)

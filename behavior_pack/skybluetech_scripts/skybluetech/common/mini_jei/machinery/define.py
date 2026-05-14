@@ -19,6 +19,15 @@ class MachineRecipeBase(Recipe):
         Recipe.__init__(self, inputs, outputs)
         self.tick_duration = tick_duration
 
+    def GetMachineInputs(self):
+        return self.inputs
+
+    def GetMachineOutputs(self):
+        return self.outputs
+
+    def GetTickDuration(self):
+        return self.tick_duration
+
 
 class MachineRecipe(MachineRecipeBase):
     def __init__(self, inputs, outputs, power_cost, tick_duration):

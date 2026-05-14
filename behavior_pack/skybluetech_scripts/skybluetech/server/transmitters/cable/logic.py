@@ -125,7 +125,9 @@ def PushItemToOrigContainer(dim, xyz, item, container_size):
         elif not orig_item.CanMerge(item) or orig_item.StackFull():
             continue
         else:
-            require_count = min(orig_item.GetBasicInfo().maxStackSize - orig_item.count, item.count)
+            require_count = min(
+                orig_item.GetBasicInfo().maxStackSize - orig_item.count, item.count
+            )
             orig_item.count += require_count
             item.count -= require_count
             res = SetContainerItem(dim, xyz, slot_pos, orig_item)
@@ -178,24 +180,6 @@ def onMachineryPlacedLater(dim, x, y, z):
 MISSING = type("_MISSING", (), {})()
 
 
-def _get_container_item(
-    dim,  # type: int
-    xyz,  # type: tuple[int, int, int]
-    slot,  # type: int
-    slotitem_cacher,  # type: dict[tuple[int, int, int], dict[int, Item | None]]
-):
-    # type: (...) -> Item | None
-    cache = slotitem_cacher.get(xyz, {}).get(slot, MISSING)
-    if cache is None or isinstance(cache, Item):
-        return cache
-    slotitem_cacher.setdefault((xyz), {})[slot] = res = GetContainerItem(
-        dim, xyz, slot, getUserData=True
-    )
-    if res is None or res.count <= 0:
-        return None
-    return res
-
-
 def onNetworkTick(network):
     # type: (CableNetwork) -> None
     tick_capacity = network.transfer_speed
@@ -210,65 +194,32 @@ def onNetworkTick(network):
     inputs = network.get_input_access_points()
     outputs = network.get_output_access_points()
 
-    def _get_container_input_slots(
-        dim,  # type: int
-        xyz,  # type: tuple[int, int, int]
-    ):
-        # type: (...) -> typing.Iterable[int]
-        cache = cached_input_slot_poses.get(xyz)
-        if cache is not None:
-            return cache
-        m = GetMachineStrict(dim, *xyz)
-        if isinstance(m, ItemContainer):
-            cached_input_slot_poses[xyz] = res = m.input_slots
-        else:
-            cached_input_slot_poses[xyz] = res = py2_xrange(GetContainerSize(xyz, dim))
-        return res
-
-    def _get_container_output_slots(
-        dim,  # type: int
-        xyz,  # type: tuple[int, int, int]
-    ):
-        # type: (...) -> typing.Iterable[int]
-        cache = cached_output_slot_poses.get(xyz)
-        if cache is not None:
-            return cache
-        m = GetMachineStrict(dim, *xyz)
-        if isinstance(m, ItemContainer):
-            cached_output_slot_poses[xyz] = res = m.output_slots
-        else:
-            cached_output_slot_poses[xyz] = res = py2_xrange(GetContainerSize(xyz, dim))
-        return res
-
-    def _get_block_entity_data(dim, xyz):
-        # type: (int, tuple[int, int, int]) -> dict
-        res = cached_block_entity_datas.get(xyz)
-        if res is None:
-            res = cached_block_entity_datas[xyz] = (
-                GetBlockEntityDataDict(dim, xyz) or {}
-            )
-        return res
-
-    def _get_block_name(dim, xyz):
-        # type: (int, tuple[int, int, int]) -> str | None
-        res = cached_block_names.get(xyz)
-        if res is None:
-            res = cached_block_names[xyz] = GetBlockName(dim, xyz) or ""
-        return res
-
     # TODO: 性能优化
 
     break_flag1 = False
     for output_ap in outputs:
         output_pos = output_ap.target_pos
-        output_slotposes = _get_container_output_slots(network.dim, output_pos)
+        output_slotposes = _get_container_output_slots(
+            network.dim, output_pos, cached_output_slot_poses
+        )
 
-        if _get_block_name(network.dim, output_pos) == "minecraft:chest":
+        if (
+            _get_block_name(network.dim, output_pos, cached_block_names)
+            == "minecraft:chest"
+        ):
             pair_x = GetValueWithDefault(
-                _get_block_entity_data(network.dim, output_pos), "pairx", None
+                _get_block_entity_data(
+                    network.dim, output_pos, cached_block_entity_datas
+                ),
+                "pairx",
+                None,
             )
             pair_z = GetValueWithDefault(
-                _get_block_entity_data(network.dim, output_pos), "pairz", None
+                _get_block_entity_data(
+                    network.dim, output_pos, cached_block_entity_datas
+                ),
+                "pairz",
+                None,
             )
         else:
             pair_x = pair_z = None
@@ -287,17 +238,22 @@ def onNetworkTick(network):
             for input_ap in inputs:
                 input_pos = input_ap.target_pos
 
-                if _get_block_name(network.dim, input_pos) == "minecraft:chest":
+                if (
+                    _get_block_name(network.dim, input_pos, cached_block_names)
+                    == "minecraft:chest"
+                ):
                     x, _, z = input_pos
                     if pair_x == x and pair_z == z:
                         continue
                 if input_pos == output_pos:
                     continue
-                
+
                 m = GetMachineStrict(network.dim, *input_pos)
 
                 break_flag2 = False
-                input_slotposes = _get_container_input_slots(network.dim, input_pos)
+                input_slotposes = _get_container_input_slots(
+                    network.dim, input_pos, cached_input_slot_poses
+                )
                 for input_slot in input_slotposes:
                     if isinstance(m, ItemContainer):
                         if not m.IsValidInput(input_slot, output_item):
@@ -360,6 +316,74 @@ def onNetworkTick(network):
                 SetContainerItem(network.dim, pos, slot, item)
 
     # print input_slotitem_changed, output_slotitem_changed
+
+
+def _get_container_item(
+    dim,  # type: int
+    xyz,  # type: tuple[int, int, int]
+    slot,  # type: int
+    slotitem_cacher,  # type: dict[tuple[int, int, int], dict[int, Item | None]]
+):
+    # type: (...) -> Item | None
+    cache = slotitem_cacher.get(xyz, {}).get(slot, MISSING)
+    if cache is None or isinstance(cache, Item):
+        return cache
+    slotitem_cacher.setdefault((xyz), {})[slot] = res = GetContainerItem(
+        dim, xyz, slot, getUserData=True
+    )
+    if res is None or res.count <= 0:
+        return None
+    return res
+
+
+def _get_container_input_slots(
+    dim,  # type: int
+    xyz,  # type: tuple[int, int, int]
+    cached_input_slot_poses,  # type: dict[tuple[int, int, int], typing.Iterable[int]]
+):
+    # type: (...) -> typing.Iterable[int]
+    cache = cached_input_slot_poses.get(xyz)
+    if cache is not None:
+        return cache
+    m = GetMachineStrict(dim, *xyz)
+    if isinstance(m, ItemContainer):
+        cached_input_slot_poses[xyz] = res = m.input_slots
+    else:
+        cached_input_slot_poses[xyz] = res = py2_xrange(GetContainerSize(xyz, dim))
+    return res
+
+
+def _get_container_output_slots(
+    dim,  # type: int
+    xyz,  # type: tuple[int, int, int]
+    cached_output_slot_poses,  # type: dict[tuple[int, int, int], typing.Iterable[int]]
+):
+    # type: (...) -> typing.Iterable[int]
+    cache = cached_output_slot_poses.get(xyz)
+    if cache is not None:
+        return cache
+    m = GetMachineStrict(dim, *xyz)
+    if isinstance(m, ItemContainer):
+        cached_output_slot_poses[xyz] = res = m.output_slots
+    else:
+        cached_output_slot_poses[xyz] = res = py2_xrange(GetContainerSize(xyz, dim))
+    return res
+
+
+def _get_block_entity_data(dim, xyz, cached_block_entity_datas):
+    # type: (int, tuple[int, int, int], dict[tuple[int, int, int], dict]) -> dict
+    res = cached_block_entity_datas.get(xyz)
+    if res is None:
+        res = cached_block_entity_datas[xyz] = GetBlockEntityDataDict(dim, xyz) or {}
+    return res
+
+
+def _get_block_name(dim, xyz, cached_block_names):
+    # type: (int, tuple[int, int, int], dict[tuple[int, int, int], str]) -> str | None
+    res = cached_block_names.get(xyz)
+    if res is None:
+        res = cached_block_names[xyz] = GetBlockName(dim, xyz) or ""
+    return res
 
 
 logic_module = LogicModule(
