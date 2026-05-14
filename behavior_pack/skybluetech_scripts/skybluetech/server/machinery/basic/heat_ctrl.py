@@ -21,9 +21,7 @@ class HeatCtrl(BaseMachine):
         max_heat_value (float): 本机最大热值, 默认为 600.0
 
     覆写:
-        `OnLoad`
         `OnTicking`
-        `Dump`
     """
 
     heat_power = 0
