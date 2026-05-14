@@ -21,6 +21,8 @@ METHANE = "skybluetech:methane"
 class Molten(SimpleEnum):
     EARTH = "skybluetech:molten_earth"
     IMPURITY = "skybluetech:molten_impurity"
+    ROSIN = "skybluetech:molten_rosin"
+
     COPPER = "skybluetech:molten_copper"
     IRON = "skybluetech:molten_iron"
     GOLD = "skybluetech:molten_gold"

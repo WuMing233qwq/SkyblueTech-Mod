@@ -8,6 +8,7 @@
         "ui/ChargerUI.json",
         "ui/CompressorUI.json",
         "ui/CraftingTemplateSettingsUI.json",
+        "ui/CyroHeatMeltingChamberUI.json",
         "ui/DiggerUI.json",
         "ui/DistillationChamberUI.json",
         "ui/DistillatorUI.json",

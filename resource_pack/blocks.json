@@ -797,5 +797,37 @@
     },
     "skybluetech:wire_tin": {
         "sound": "cloth"
+    },
+    "skybluetech:molten_rosin": {
+        "blockshape": "water",
+        "textures": {
+            "down": "skybluetech:basic_water_static",
+            "side": "skybluetech:basic_water_flowing",
+            "up": "skybluetech:basic_water_static"
+        }
+    },
+    "skybluetech:flowing_molten_rosin": {
+        "blockshape": "water",
+        "textures": {
+            "down": "skybluetech:basic_water_static",
+            "side": "skybluetech:basic_water_flowing",
+            "up": "skybluetech:basic_water_flowing"
+        }
+    },
+    "skybluetech:liquid_soldering_tin": {
+        "blockshape": "water",
+        "textures": {
+            "down": "skybluetech:basic_water_static",
+            "side": "skybluetech:basic_water_flowing",
+            "up": "skybluetech:basic_water_static"
+        }
+    },
+    "skybluetech:flowing_liquid_soldering_tin": {
+        "blockshape": "water",
+        "textures": {
+            "down": "skybluetech:basic_water_static",
+            "side": "skybluetech:basic_water_flowing",
+            "up": "skybluetech:basic_water_flowing"
+        }
     }
 }

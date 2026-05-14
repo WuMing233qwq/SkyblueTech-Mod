@@ -1,0 +1,234 @@
+{
+    "cyro_heat_melting_chamber_ui": {
+        "type": "panel",
+        "controls": [
+            {
+                "flying_item_renderer@common.flying_item_renderer": {
+                    "layer": 11,
+                    "size": [
+                        0,
+                        0
+                    ]
+                }
+            },
+            {
+                "container_gamepad_helpers@common.container_gamepad_helpers": {
+                    "layer": 3,
+                    "max_size": [
+                        0,
+                        0
+                    ]
+                }
+            },
+            {
+                "selected_item_details_factory@common.selected_item_details_factory": {
+                    "layer": 1,
+                    "max_size": [
+                        0,
+                        0
+                    ]
+                }
+            },
+            {
+                "item_lock_notification_factory@common.item_lock_notification_factory": {
+                    "max_size": [
+                        0,
+                        0
+                    ]
+                }
+            },
+            {
+                "root_panel@common.root_panel": {
+                    "controls": [
+                        {
+                            "bg@common.dialog_background_opaque": {
+                                "controls": [
+                                    {
+                                        "inventory_selected_icon_button@common.inventory_selected_icon_button": {}
+                                    },
+                                    {
+                                        "gamepad_cursor_button@common.gamepad_cursor_button": {
+                                            "visible": true
+                                        }
+                                    },
+                                    {
+                                        "machine_label": {
+                                            "type": "label",
+                                            "anchor_from": "top_middle",
+                                            "anchor_to": "top_middle",
+                                            "offset": [
+                                                0.0,
+                                                4.0
+                                            ],
+                                            "font_scale_factor": 1.4,
+                                            "font_type": "default",
+                                            "shadow": true,
+                                            "text": "低温加热仓",
+                                            "text_alignment": "center"
+                                        }
+                                    },
+                                    {
+                                        "close@common.close_button": {}
+                                    },
+                                    {
+                                        "main": {
+                                            "type": "panel",
+                                            "controls": [
+                                                {
+                                                    "fluid_display@SkybluePanelLib.FluidDisplay": {
+                                                        "$text_size": "small",
+                                                        "$text_visible": false,
+                                                        "$text_y_offset": [
+                                                            0,
+                                                            "2%+0px"
+                                                        ],
+                                                        "layer": 6,
+                                                        "offset": [
+                                                            14,
+                                                            -36
+                                                        ],
+                                                        "size": [
+                                                            38,
+                                                            60
+                                                        ]
+                                                    }
+                                                },
+                                                {
+                                                    "input_slot": {
+                                                        "type": "stack_panel",
+                                                        "offset": [
+                                                            -54.0,
+                                                            -40.0
+                                                        ],
+                                                        "size": [
+                                                            "100%cm",
+                                                            "100%cm"
+                                                        ],
+                                                        "collection_name": "netease_container",
+                                                        "controls": [
+                                                            {
+                                                                "slot@netease_container.custom_grid_item": {
+                                                                    "collection_index": 0
+                                                                }
+                                                            }
+                                                        ]
+                                                    }
+                                                },
+                                                {
+                                                    "progress@SkybluePanelLib.ProgressBar": {
+                                                        "$mask_image": "textures/ui/arrow_mask_lava",
+                                                        "offset": [
+                                                            -24,
+                                                            -40
+                                                        ],
+                                                        "size": [
+                                                            36,
+                                                            20
+                                                        ]
+                                                    }
+                                                },
+                                                {
+                                                    "recipe_check_btn@SkybluePanelLib.recipe_check_btn": {
+                                                        "offset": [
+                                                            64,
+                                                            -16
+                                                        ]
+                                                    }
+                                                },
+                                                {
+                                                    "right_board": {
+                                                        "type": "image",
+                                                        "offset": [
+                                                            63.0,
+                                                            -38.0
+                                                        ],
+                                                        "size": [
+                                                            42,
+                                                            78
+                                                        ],
+                                                        "layer": 1,
+                                                        "keep_ratio": false,
+                                                        "nineslice_size": [
+                                                            4.0,
+                                                            4.0,
+                                                            4.0,
+                                                            4.0
+                                                        ],
+                                                        "texture": "textures/ui/panel_bg",
+                                                        "controls": [
+                                                            {
+                                                                "tip_0": {
+                                                                    "type": "label",
+                                                                    "anchor_from": "top_middle",
+                                                                    "anchor_to": "top_middle",
+                                                                    "offset": [
+                                                                        0.0,
+                                                                        4.0
+                                                                    ],
+                                                                    "layer": 4,
+                                                                    "color": [
+                                                                        0.2588235294117647,
+                                                                        0.2588235294117647,
+                                                                        0.2588235294117647
+                                                                    ],
+                                                                    "font_type": "default",
+                                                                    "text": "蒸馏仓温"
+                                                                }
+                                                            },
+                                                            {
+                                                                "temp_disp": {
+                                                                    "type": "label",
+                                                                    "anchor_from": "top_middle",
+                                                                    "anchor_to": "top_middle",
+                                                                    "offset": [
+                                                                        0.0,
+                                                                        15.0
+                                                                    ],
+                                                                    "size": [
+                                                                        "100%+-8px",
+                                                                        "default"
+                                                                    ],
+                                                                    "layer": 4,
+                                                                    "color": [
+                                                                        1.0,
+                                                                        0.0,
+                                                                        0.0
+                                                                    ],
+                                                                    "font_type": "default",
+                                                                    "text": "300 K",
+                                                                    "text_alignment": "center"
+                                                                }
+                                                            }
+                                                        ]
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "backpack@SkybluePanelLib.player_backpack": {
+                                            "offset": [
+                                                0,
+                                                46
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "layer": 0
+                            }
+                        }
+                    ],
+                    "layer": 0,
+                    "size": [
+                        180,
+                        200
+                    ]
+                }
+            }
+        ]
+    },
+    "main@common.inventory_screen_common": {
+        "$screen_content": "CyroHeatMeltingChamberUI.cyro_heat_melting_chamber_ui"
+    },
+    "namespace": "CyroHeatMeltingChamberUI"
+}

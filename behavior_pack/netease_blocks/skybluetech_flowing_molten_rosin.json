@@ -1,0 +1,23 @@
+{
+    "format_version": "1.10.0",
+    "minecraft:block": {
+        "components": {
+            "netease:liquid": {
+                "liquid_color": [
+                    0,
+                    0,
+                    0,
+                    255
+                ],
+                "spread_delay": 5,
+                "spread_fire": false,
+                "spread_range": 10
+            }
+        },
+        "description": {
+            "base_block": "flowing_liquid",
+            "category": "none",
+            "identifier": "skybluetech:molten_rosin"
+        }
+    }
+}
