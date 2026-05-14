@@ -35,7 +35,7 @@ class FluidContainer(object):
 
     fluid_io_mode = (2, 2, 2, 2, 2, 2)  # type: tuple[int, int, int, int, int, int]
     max_fluid_volume = 1000
-    fluid_io_fix_mode = 1
+    # fluid_io_fix_mode = 1
     allow_player_use_bucket_interact = True
     allow_player_use_bucket_push = True
     allow_player_use_bucket_pull = True
@@ -43,12 +43,12 @@ class FluidContainer(object):
     def __init__(self, dim, x, y, z, block_entity_data):
         self.dim = dim
         self.xyz = (x, y, z)
-        if self.fluid_io_fix_mode == 1:
-            self.fluid_io_mode = FixIOModeByCardinalFacing(
-                dim, x, y, z, self.fluid_io_mode
-            )
-        elif self.fluid_io_fix_mode == 2:
-            self.fluid_io_mode = FixIOModeByDirection(dim, x, y, z, self.fluid_io_mode)
+        # if self.fluid_io_fix_mode == 1:
+        #     self.fluid_io_mode = FixIOModeByCardinalFacing(
+        #         dim, x, y, z, self.fluid_io_mode
+        #     )
+        # elif self.fluid_io_fix_mode == 2:
+        #     self.fluid_io_mode = FixIOModeByDirection(dim, x, y, z, self.fluid_io_mode)
         self.bdata = block_entity_data
         self.bdata[K_MAX_VOLUME] = self.max_fluid_volume  # TODO: 改到 OnPlaced
         self._cached_fluid_id = self.bdata[K_FLUID_ID]
@@ -56,6 +56,16 @@ class FluidContainer(object):
 
     def AddFluid(self, fluid_id, fluid_volume):
         # type: (str, float) -> tuple[bool, float]
+        """
+        添加流体。
+
+        Args:
+            fluid_id (str): 流体类型
+            fluid_volume (float): 流体容量
+
+        Returns:
+            tuple[bool, float]: 是否添加成功, 添加的流体容量
+        """
         my_fluid_id = self.fluid_id
         if my_fluid_id is None:
             self.fluid_id = fluid_id
@@ -81,6 +91,16 @@ class FluidContainer(object):
 
     def OutputFluid(self, fluid_id, fluid_volume):
         # type: (str, float) -> tuple[bool, float]
+        """
+        产出流体。
+
+        Args:
+            fluid_id (str): 流体类型
+            fluid_volume (float): 流体容量
+
+        Returns:
+            tuple[bool, float]: 是否产出成功, 产出的流体容量
+        """
         # 暂时直接调用 AddFluid
         return self.AddFluid(fluid_id, fluid_volume)
 
@@ -98,37 +118,6 @@ class FluidContainer(object):
         return self.fluid_id is None or (
             fluid_id == self.fluid_id and self.fluid_volume < self.max_fluid_volume
         )
-
-    # def RequireFluid(self, req_fluid_id, req_fluid_volume, strict_volume=False):
-    #     # type: (str | None, float | None, bool) -> tuple[bool, str, float]
-    #     # 返回: 获取是否成功, 获取到的流体 ID, 获取到的流体容量
-    #     fid = self.fluid_id
-    #     v = self.fluid_volume
-    #     if req_fluid_id is None or req_fluid_id == fid:
-    #         if fid is None:
-    #             return False, "", 0.0
-    #         if req_fluid_volume is None:
-    #             self.fluid_id = None
-    #             self.fluid_volume = 0.0
-    #             self.onReducedFluid(fid, v)
-    #             return True, fid, v
-    #         else:
-    #             if req_fluid_volume <= v:
-    #                 self.fluid_volume = v - req_fluid_volume
-    #                 if self.fluid_volume <= 0:
-    #                     self.fluid_id = None
-    #                 self.onReducedFluid(fid, v)
-    #                 return True, fid, v
-    #             elif not strict_volume:
-    #                 self.fluid_volume = v - req_fluid_volume
-    #                 if self.fluid_volume <= 0:
-    #                     self.fluid_id = None
-    #                 self.onReducedFluid(fid, req_fluid_volume)
-    #                 return True, fid, req_fluid_volume
-    #             else:
-    #                 return False, "", 0.0
-    #     else:
-    #         return False, "", 0.0
 
     def OnFluidSlotUpdate(self):
         "流体内容更新时调用。"
