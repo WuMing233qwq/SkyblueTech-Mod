@@ -8,7 +8,7 @@ from skybluetech_scripts.tooldelta.extensions.recipe_obj import (
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
 from ...common.define import flags
 from ...common.define.id_enum.machinery import SPLITTER as MACHINE_ID
-from ...common.ui_sync.machinery.splitter import SplitterUISync
+from ...common.machinery_def.splitter import STORE_RF_MAX
 from .basic import (
     BaseMachine,
     ItemContainer,
@@ -25,7 +25,8 @@ cant_split_recipes = set()  # type: set[str]
 @RegisterMachine
 class Splitter(GUIControl, ItemContainer, SPControl, WorkRenderer):
     block_name = MACHINE_ID
-    store_rf_max = 8800
+    store_rf_max = STORE_RF_MAX
+    dump_progress_to_block_entity_data = True
     origin_process_ticks = 20 * 8
     running_power = 30
     input_slots = (0,)
@@ -33,7 +34,6 @@ class Splitter(GUIControl, ItemContainer, SPControl, WorkRenderer):
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        self.sync = SplitterUISync.NewServer(self).Activate()
         self.TryStartNext()
 
     @SuperExecutorMeta.execute_super
@@ -42,9 +42,8 @@ class Splitter(GUIControl, ItemContainer, SPControl, WorkRenderer):
             if self.ProcessOnce():
                 self.run_once()
                 self.TryStartNext()
-                self.CallSync()
+
             else:
-                self.CallSync()
                 break
 
     def TryStartNext(self):
@@ -122,12 +121,6 @@ class Splitter(GUIControl, ItemContainer, SPControl, WorkRenderer):
             and output_slot_item.count + 9
             <= output_slot_item.GetBasicInfo().maxStackSize
         )
-
-    def OnSync(self):
-        self.sync.storage_rf = self.store_rf
-        self.sync.rf_max = self.store_rf_max
-        self.sync.progress_relative = self.GetProcessProgress()
-        self.sync.MarkedAsChanged()
 
     def IsValidInput(self, slot, item):
         # type: (int, Item) -> bool

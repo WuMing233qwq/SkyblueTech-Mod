@@ -1,9 +1,11 @@
 # coding=utf-8
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
-from ....common.define.flags import DEACTIVE_FLAG_POWER_LACK
+from skybluetech_scripts.skybluetech.common.define.flags import DEACTIVE_FLAG_POWER_LACK
+from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
+    K_TICKS_LEFT,
+    K_PROGRESS,
+)
 from .base_machine import BaseMachine
-
-K_TICKS_LEFT = "ticks_left"
 
 
 class BaseSpeedControl(BaseMachine):
@@ -17,6 +19,7 @@ class BaseSpeedControl(BaseMachine):
     """
 
     origin_process_ticks = 20
+    dump_progress_to_block_entity_data = False
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
@@ -85,3 +88,5 @@ class BaseSpeedControl(BaseMachine):
     def ticks_left(self, value):
         # type: (float) -> None
         self._cached_ticks_left = self.bdata[K_TICKS_LEFT] = value
+        if self.dump_progress_to_block_entity_data:
+            self.bdata[K_PROGRESS] = self.GetProcessProgress()

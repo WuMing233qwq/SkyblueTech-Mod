@@ -1,7 +1,10 @@
 # coding=utf-8
 
+STORE_RF_MAX = 14400
 TICK_POWER = 50
 
+K_BURN_SEC_LEFT = "st:burn_sec_left"
+K_MAX_BURN_SEC = "st:max_burn_secs"
 
 # copied from SiliconMod
 # thanks to @MI4C

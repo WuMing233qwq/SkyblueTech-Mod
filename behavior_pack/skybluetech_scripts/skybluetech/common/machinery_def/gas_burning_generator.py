@@ -6,6 +6,11 @@ from ..mini_jei.machinery.gas_burning_generator import (
     GasBurningGeneratorRecipe,
 )
 
+MAX_INPUT_GAS_VOLUME = 2000
+MAX_OUTPUT_GAS_VOLUME = 2000
+STORE_RF_MAX = 28800
+
+
 recipes = RecipesCollection(
     GAS_BURNING_GENERATOR,
     GasBurningGeneratorRecipe(METHANE, 4, 160),

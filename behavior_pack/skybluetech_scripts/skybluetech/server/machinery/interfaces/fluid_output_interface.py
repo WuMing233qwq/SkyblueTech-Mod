@@ -1,6 +1,5 @@
 # coding=utf-8
 from skybluetech_scripts.tooldelta.extensions.method_weakref import ref_method
-from ....common.ui_sync.machinery.fluid_interface import FluidInterfaceUISync
 from ..basic import FluidContainer, GUIControl, RegisterMachine
 from .base_interface import BaseInterface
 
@@ -17,16 +16,10 @@ class FluidOutputInterface(BaseInterface, FluidContainer, GUIControl):
     def __init__(self, dim, x, y, z, block_entity_data):
         BaseInterface.__init__(self, dim, x, y, z, block_entity_data)
         FluidContainer.__init__(self, dim, x, y, z, block_entity_data)
-        self.sync = FluidInterfaceUISync.NewServer(self).Activate()
+        GUIControl.__init__(self, dim, x, y, z, block_entity_data)
         self.on_fluid_slot_update_cb_ref = None
         self.on_added_fluid_cb_ref = None
         self.on_reduced_fluid_cb_ref = None
-
-    def OnSync(self):
-        self.sync.fluid_id = self.fluid_id
-        self.sync.fluid_volume = self.fluid_volume
-        self.sync.max_volume = self.max_fluid_volume
-        self.sync.MarkedAsChanged()
 
     def SetOnFluidSlotUpdateCallback(self, callback):
         # type: (typing.Callable[[], None]) -> None

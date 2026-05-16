@@ -1,7 +1,7 @@
 # coding=utf-8
 from skybluetech_scripts.tooldelta.define.item import Item
-from skybluetech_scripts.tooldelta.api.server.item import ItemExists
-from skybluetech_scripts.tooldelta.api.server.player import (
+from skybluetech_scripts.tooldelta.api.server import (
+    ItemExists,
     GetPlayerMainhandItem,
     SpawnItemToPlayerCarried,
     GiveItem,
@@ -9,61 +9,9 @@ from skybluetech_scripts.tooldelta.api.server.player import (
     SetInventorySlotItemCount,
 )
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
-from ....common.define.global_config import BUCKET_VOLUME
+from skybluetech_scripts.skybluetech.common.define.global_config import BUCKET_VOLUME
+from skybluetech_scripts.skybluetech.common.machinery_def.basic import FluidSlotServer
 from .gui_ctrl import GUIControl
-from .utils import FixIOModeByCardinalFacing, FixIOModeByDirection
-
-K_FLUID_ID = "fluid_id"
-K_FLUID_VOLUME = "fluid_vol"
-
-
-class FluidSlot(object):
-    def __init__(
-        self,
-        block_entity_data,
-        index,  # type: int
-        max_volume,  # type: float
-    ):
-        self.bdata = block_entity_data
-        self.index = index
-        self.max_volume = max_volume
-        self.k_id = K_FLUID_ID + str(index)
-        self.k_vol = K_FLUID_VOLUME + str(index)
-        self._cached_fluid_id = block_entity_data[self.k_id]
-        self._cached_volume = block_entity_data[self.k_vol] or 0.0
-
-    @property
-    def fluid_id(self):
-        # type: () -> str | None
-        return self._cached_fluid_id
-
-    @fluid_id.setter
-    def fluid_id(self, value):
-        # type: (str | None) -> None
-        self._cached_fluid_id = self.bdata[self.k_id] = value
-
-    @property
-    def volume(self):
-        # type: () -> float
-        return self._cached_volume
-
-    @volume.setter
-    def volume(self, value):
-        # type: (float) -> None
-        self._cached_volume = self.bdata[self.k_vol] = value
-
-    def isFull(self):
-        return self.volume >= self.max_volume
-
-    def canMerge(self, fluid_id):
-        # type： (str | None) -> bool
-        if self.isFull():
-            return False
-        fid = self.fluid_id
-        if fid is None or self.volume == 0 or fluid_id == fid:
-            return True
-        else:
-            return False
 
 
 class MultiFluidContainer(object):
@@ -76,7 +24,6 @@ class MultiFluidContainer(object):
         fluid_output_slots (set[int]): 可输出的流体槽位
         fluid_slot_max_volumes (tuple[int, ...]): 每个流体槽最多可存储流体容量
         allow_player_use_bucket (bool): 是否允许玩家直接使用桶与机器进行交互
-        fluid_io_fix_mode (int): 使用 1 时调用 FixIOModeByCardinalFacing; 使用 2 时调用 FixIOModeByDirection; 其他则不适用修复
         allow_player_use_bucket_interact (bool): 是否允许玩家直接使用桶交互
         allow_player_use_bucket_push (bool): 是否允许玩家直接使用桶装填流体
         allow_player_use_bucket_pull (bool): 是否允许玩家直接使用桶取出流体
@@ -88,7 +35,6 @@ class MultiFluidContainer(object):
     fluid_input_slots = set()  # type: set[int]
     fluid_output_slots = set()  # type: set[int]
     fluid_slot_max_volumes = (4000, 4000)  # type: tuple[int, ...]
-    fluid_io_fix_mode = 1
     allow_player_use_bucket_interact = True
     allow_player_use_bucket_push = True
     allow_player_use_bucket_pull = True
@@ -97,14 +43,8 @@ class MultiFluidContainer(object):
         self.dim = dim
         self.xyz = (x, y, z)
         self.bdata = block_entity_data
-        if self.fluid_io_fix_mode == 1:
-            self.fluid_io_mode = FixIOModeByCardinalFacing(
-                dim, x, y, z, self.fluid_io_mode
-            )
-        elif self.fluid_io_fix_mode == 2:
-            self.fluid_io_mode = FixIOModeByDirection(dim, x, y, z, self.fluid_io_mode)
         self.fluids = [
-            FluidSlot(self.bdata, i, mv)
+            FluidSlotServer(self.bdata, i, mv)
             for i, mv in enumerate(self.fluid_slot_max_volumes)
         ]
 
@@ -156,30 +96,6 @@ class MultiFluidContainer(object):
     def CanAddFluid(self, fluid_id):
         # type: (str) -> bool
         return any(self.fluids[s].canMerge(fluid_id) for s in self.fluid_input_slots)
-
-    # def RequireFluid(self, req_fluid_id, req_fluid_volume, strict_volume=False):
-    #     # type: (str | None, float | None, bool) -> tuple[bool, str, float]
-    #     "返回: 获取是否成功, 获取到的流体 ID, 获取到的流体容量"
-    #     fluids = [(i, self.fluids[i]) for i in self.fluid_output_slots]
-    #     last_slot = fluids[-1][0]
-    #     for slot, fluid in fluids:
-    #         if fluid.fluid_id is None:
-    #             continue
-    #         elif req_fluid_id is not None and fluid.fluid_id != req_fluid_id:
-    #             continue
-    #         fid = fluid.fluid_id
-    #         fvol = fluid.volume
-    #         if req_fluid_volume is None or req_fluid_volume >= fluid.volume:
-    #             # NOTE: 遇到第一个有效槽位就立即返回, 不考虑后续槽位
-    #             fluid.fluid_id = None
-    #             fluid.volume = 0.0
-    #             self.onReducedFluid(slot, fid, fvol, slot == last_slot)
-    #             return True, fid, fvol
-    #         else:
-    #             fluid.volume = fvol - req_fluid_volume
-    #             self.onReducedFluid(slot, fid, req_fluid_volume, slot == last_slot)
-    #             return True, fid, req_fluid_volume
-    #     return False, "", 0
 
     def ifPlayerInteractWithBucket(self, player_id, test=False):
         # type: (str, bool) -> bool

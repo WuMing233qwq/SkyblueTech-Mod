@@ -12,16 +12,19 @@ from skybluetech_scripts.tooldelta.events.notify import (
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
 from ...common.define import flags
 from ...common.define.id_enum.machinery import CHARGER as MACHINE_ID
-from ...common.machinery_def.charger import CHARGE_SPEED
+from ...common.machinery_def.charger import (
+    K_CHARGE_RF,
+    K_CHARGE_RF_MAX,
+    CHARGE_SPEED,
+    STORE_RF_MAX,
+)
 from ...common.events.machinery.charger import (
     ChargerItemModelUpdate,
     ChargeItemModelRequest,
 )
-from ...common.ui_sync.machinery.charger import ChargerUISync
 from .utils.charge import (
     GetCharge,
     ChargeItem,
-    UpdateCharge,
     GetIOPower,
 )
 from ...common.utils.block_sync import BlockSync
@@ -38,14 +41,13 @@ class Charger(GUIControl, UpgradeControl):
     input_slots = (0,)
     output_slots = (1,)
     upgrade_slot_start = 2
-    store_rf_max = 10000
+    store_rf_max = STORE_RF_MAX
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        self.sync = ChargerUISync.NewServer(self).Activate()
         self.stored_item = None
-        self.charge_rf = 0
-        self.charge_rf_max = 1
+        self._charge_rf = 0
+        self._charge_rf_max = 1
         self.t = 0
 
     @SuperExecutorMeta.execute_super
@@ -62,13 +64,6 @@ class Charger(GUIControl, UpgradeControl):
             if self.t >= 5:
                 self.t = 0
                 self.charge_once()
-            self.CallSync()
-
-    def OnSync(self):
-        self.sync.storage_rf = self.store_rf
-        self.sync.rf_max = self.store_rf_max
-        self.sync.progress_relative = self.charge_rf / self.charge_rf_max
-        self.sync.MarkedAsChanged()
 
     def IsValidInput(self, slot, item):
         # type: (int, Item) -> bool
@@ -137,6 +132,26 @@ class Charger(GUIControl, UpgradeControl):
                     self.SetSlotItem(0, None)
                 else:
                     self.SetDeactiveFlag(flags.DEACTIVE_FLAG_OUTPUT_FULL)
+
+    @property
+    def charge_rf(self):
+        # type: () -> int
+        return self._charge_rf
+
+    @charge_rf.setter
+    def charge_rf(self, value):
+        # type: (int) -> None
+        self.bdata[K_CHARGE_RF] = self._charge_rf = value
+
+    @property
+    def charge_rf_max(self):
+        # type: () -> int
+        return self._charge_rf_max
+
+    @charge_rf_max.setter
+    def charge_rf_max(self, value):
+        # type: (int) -> None
+        self.bdata[K_CHARGE_RF_MAX] = self._charge_rf_max = value
 
 
 @ChargeItemModelRequest.Listen()

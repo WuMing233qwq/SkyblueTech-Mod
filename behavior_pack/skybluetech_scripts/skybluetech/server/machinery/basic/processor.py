@@ -9,7 +9,7 @@ from .upgrade_control import UpgradeControl
 from .processor_base import ProcessorBase
 
 
-class Processor(ProcessorBase, UpgradeControl):
+class Processor(ProcessorBase):
     """
     配方处理器机器基类; 继承时需要把 Processor 放在最后以免 __init__ 顺序出问题
 

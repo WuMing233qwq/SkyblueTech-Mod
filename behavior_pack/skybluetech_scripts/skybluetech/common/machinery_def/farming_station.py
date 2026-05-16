@@ -1,5 +1,6 @@
 # coding=utf-8
-#
+
+STORE_RF_MAX = 16000
 
 COMMON_CROPS = {
     "minecraft:wheat",

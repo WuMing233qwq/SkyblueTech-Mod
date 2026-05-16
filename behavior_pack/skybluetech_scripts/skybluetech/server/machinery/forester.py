@@ -10,8 +10,7 @@ from skybluetech_scripts.tooldelta.api.server.entity import (
 )
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
 from ...common.define.id_enum.machinery import FORESTER as MACHINE_ID
-from ...common.machinery_def.forester import getSaplingId, isLog, isLeave
-from ...common.ui_sync.machinery.forester import ForesterUISync
+from ...common.machinery_def.forester import getSaplingId, isLog, isLeave, STORE_RF_MAX
 from .basic import (
     ItemContainer,
     GUIControl,
@@ -36,7 +35,7 @@ ALL_NEIGHBOUR_BLOCKS_ENUM = [
 @RegisterMachine
 class Forester(GUIControl, ItemContainer, SPControl):
     block_name = MACHINE_ID
-    store_rf_max = 16000
+    store_rf_max = STORE_RF_MAX
     running_power = 80
     origin_process_ticks = 20 * 5
     input_slots = ()
@@ -44,21 +43,13 @@ class Forester(GUIControl, ItemContainer, SPControl):
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        self.sync = ForesterUISync.NewServer(self).Activate()
-        self.CallSync()
+        pass
 
     def OnTicking(self):
         # 1t 内如果处理多次任务会导致卡顿
         # 直接忽略 1t 内任务的多次处理
         if self.ProcessOnce():
-            if self.run_once():
-                self.CallSync()
-
-    def OnSync(self):
-        self.sync.storage_rf = self.store_rf
-        self.sync.rf_max = self.store_rf_max
-        self.sync.progress_relative = self.GetProcessProgress()
-        self.sync.MarkedAsChanged()
+            self.run_once()
 
     def IsValidInput(self, slot, item):
         # type: (int, Item) -> bool

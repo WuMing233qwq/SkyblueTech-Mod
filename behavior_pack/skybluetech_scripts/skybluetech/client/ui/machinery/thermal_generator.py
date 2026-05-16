@@ -1,25 +1,33 @@
 # coding=utf-8
-
+from skybluetech_scripts.tooldelta.api.client import GetBlockEntityData
 from skybluetech_scripts.tooldelta.ui import RegistToolDeltaScreen
-from ....common.ui_sync.machinery.thermal_generator import ThermalGeneratorUISync
+from skybluetech_scripts.tooldelta.utils.nbt import GetValueWithDefault as GetValue
+from skybluetech_scripts.skybluetech.common.machinery_def.basic import K_STORE_RF
+from skybluetech_scripts.skybluetech.common.machinery_def.thermal_generator import (
+    STORE_RF_MAX,
+    K_BURN_SEC_LEFT,
+    K_MAX_BURN_SEC,
+)
 from .define import MachinePanelUIProxy, MAIN_PATH
 from .utils import UpdatePowerBar, UpdateFlame
 
-POWER_NODE = MAIN_PATH / "power_bar"
-FLAME_NODE = MAIN_PATH / "flame"
+POWER_PATH = MAIN_PATH / "power_bar"
+FLAME_PATH = MAIN_PATH / "flame"
 
 
 @RegistToolDeltaScreen("ThermalGeneratorUI.main", is_proxy=True)
 class ThermalGeneratorUI(MachinePanelUIProxy):
     def OnCreate(self):
-        dim, x, y, z = self.pos
-        self.sync = ThermalGeneratorUISync.NewClient(dim, x, y, z)  # type: ThermalGeneratorUISync
-        self.power_bar = self.GetElement(POWER_NODE)
-        self.flame = self.GetElement(FLAME_NODE)
-        self.sync.SetUpdateCallback(self.WhenUpdated)
+        self.power_bar = self.GetElement(POWER_PATH)
+        self.flame = self.GetElement(FLAME_PATH)
 
-    def WhenUpdated(self):
-        if not self.inited:
+    def OnTicking(self):
+        data = GetBlockEntityData(*self.pos[1:])
+        if data is None:
             return
-        UpdatePowerBar(self.power_bar, self.sync.storage_rf, self.sync.rf_max)
-        UpdateFlame(self.flame, self.sync.rest_burn_relative)
+        data = data["exData"]
+        store_rf = GetValue(data, K_STORE_RF, 0)
+        burn_seconds_left = GetValue(data, K_BURN_SEC_LEFT, 0)
+        max_burn_seconds = GetValue(data, K_MAX_BURN_SEC, 1)
+        UpdatePowerBar(self.power_bar, store_rf, STORE_RF_MAX)
+        UpdateFlame(self.flame, float(burn_seconds_left) / max_burn_seconds)

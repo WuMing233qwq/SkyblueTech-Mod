@@ -26,9 +26,9 @@ class FluidDisplayer(object):
         self.update()
 
     def update(self):
-        from ..machinery.utils import UpdateFluidDisplay
+        from ..machinery.utils import FluidDisplayer
 
-        UpdateFluidDisplay(self.ctrl, self.fluid_id, self.volume, self.max_volume)
+        FluidDisplayer(self.ctrl).update(self.fluid_id, self.volume, self.max_volume)
 
     def onBtnReleased(self, params):
         from ..machinery.utils import FormatFluidVolume

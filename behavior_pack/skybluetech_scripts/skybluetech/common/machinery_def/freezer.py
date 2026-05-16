@@ -1,6 +1,10 @@
 # coding=utf-8
 from ..mini_jei.machinery.freezer import FreezerRecipe, FreezerRecipesCollection
 
+K_MODE = "st:mode"
+
+STORE_RF_MAX = 8800
+MAX_FLUID_VOLUME = 10000
 
 recipes = FreezerRecipesCollection({
     0: FreezerRecipe(

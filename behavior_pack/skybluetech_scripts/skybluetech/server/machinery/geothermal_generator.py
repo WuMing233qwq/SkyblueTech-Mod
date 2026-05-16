@@ -7,15 +7,15 @@ from ...common.define.id_enum import GEO_THERMAL_GENERATOR as MACHINE_ID, Dusts
 from ...common.machinery_def.geothermal_generator import (
     WATER_ID,
     LAVA_ID,
+    K_BURN_TICKS_LEFT,
     ONCE_BURNING_TICKS,
     ONCE_LAVA_REDUCE_VOLUME,
     ONCE_WATER_REDUCE_VOLUME,
     ORIGIN_GENERATED_POWER,
     GENERATED_POWER_WITH_WATER,
-)
-from ...common.ui_sync.machinery.geothermal_generator import (
-    GeoThermalGeneratorUISync,
-    FluidSlotSync,
+    MAX_LAVA_VOLUME,
+    MAX_WATER_VOLUME,
+    STORE_RF_MAX,
 )
 from .basic import (
     BaseGenerator,
@@ -26,25 +26,22 @@ from .basic import (
     RegisterMachine,
 )
 
-K_BURN_TICKS_LEFT = "burn_ticks_left"
-
 
 @RegisterMachine
 class GeoThermalGenerator(
     BaseGenerator, GUIControl, ItemContainer, MultiFluidContainer, WorkRenderer
 ):
     block_name = MACHINE_ID
-    store_rf_max = 28800
+    store_rf_max = STORE_RF_MAX
     energy_io_mode = (1, 1, 1, 1, 1, 1)
     fluid_input_slots = {0, 1}
     fluid_io_fix_mode = 0
-    fluid_slot_max_volumes = (2000, 2000)
+    fluid_slot_max_volumes = (MAX_LAVA_VOLUME, MAX_WATER_VOLUME)
     output_slots = (0,)
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        self.sync = GeoThermalGeneratorUISync.NewServer(self).Activate()
-        self.CallSync()
+        pass
 
     @SuperExecutorMeta.execute_super
     def OnTicking(self):
@@ -54,7 +51,6 @@ class GeoThermalGenerator(
                 res = self.next_burn()
                 if not res:
                     self.SetDeactiveFlag(flags.DEACTIVE_FLAG_NO_INPUT)
-            self.CallSync()
 
     def IsValidFluidInput(self, slot, fluid_id):
         # type: (int, str) -> bool
@@ -62,13 +58,6 @@ class GeoThermalGenerator(
             0: LAVA_ID,
             1: WATER_ID,
         }.get(slot)
-
-    def OnSync(self):
-        self.sync.storage_rf = self.store_rf
-        self.sync.rf_max = self.store_rf_max
-        self.sync.progress = float(self.burn_ticks) / ONCE_BURNING_TICKS
-        self.sync.fluids = FluidSlotSync.ListFromMachine(self)
-        self.sync.MarkedAsChanged()
 
     @SuperExecutorMeta.execute_super
     def OnUnload(self):

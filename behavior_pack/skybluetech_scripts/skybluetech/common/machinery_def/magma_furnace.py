@@ -5,6 +5,8 @@ from ..define.tag_enum.items import RawTag, IngotTag
 from ..mini_jei.core import RecipesCollection
 from ..mini_jei.machinery.magma_furnace import MachineRecipe, MagmaFurnaceRecipe, sec
 
+STORE_RF_MAX = 8800
+MAX_FLUID_VOLUME = 4000
 
 recipes = RecipesCollection(
     MAGMA_CENTRIFUGE,

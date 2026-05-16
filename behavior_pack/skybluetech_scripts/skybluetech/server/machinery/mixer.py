@@ -1,15 +1,19 @@
 # coding=utf-8
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
 from ...common.define.id_enum.machinery import MIXER as MACHINE_ID
-from ...common.machinery_def.mixer import recipes as Recipes
-from ...common.ui_sync.machinery.mixer import MixerUISync
+from ...common.machinery_def.mixer import (
+    STORE_RF_MAX,
+    MAX_FLUID_VOLUME,
+    recipes as Recipes,
+)
 from .basic import MultiFluidContainer, Processor, RegisterMachine
 
 
 @RegisterMachine
 class Mixer(MultiFluidContainer, Processor):
     block_name = MACHINE_ID
-    store_rf_max = 8800
+    store_rf_max = STORE_RF_MAX
+    dump_progress_to_block_entity_data = True
     process_item = True
     process_fluid = True
     recipes = Recipes
@@ -17,11 +21,11 @@ class Mixer(MultiFluidContainer, Processor):
     output_slots = (1,)
     fluid_input_slots = {0}
     fluid_io_mode = (0, 0, 0, 0, 0, 0)
-    fluid_slot_max_volumes = (2000,)
+    fluid_slot_max_volumes = (MAX_FLUID_VOLUME,)
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        self.sync = MixerUISync.NewServer(self).Activate()
+        pass
 
     @SuperExecutorMeta.execute_super
     def OnAddedFluid(self, slot, fluid_id, fluid_volume, is_final):
@@ -30,12 +34,3 @@ class Mixer(MultiFluidContainer, Processor):
     @SuperExecutorMeta.execute_super
     def OnReducedFluid(self, slot, fluid_id, reduced_fluid_volume, is_final):
         pass
-
-    def OnSync(self):
-        self.sync.storage_rf = self.store_rf
-        self.sync.rf_max = self.store_rf_max
-        self.sync.progress_relative = self.GetProgressPercent()
-        self.sync.fluid_id = self.fluids[0].fluid_id
-        self.sync.fluid_volume = self.fluids[0].volume
-        self.sync.max_volume = self.fluids[0].max_volume
-        self.sync.MarkedAsChanged()

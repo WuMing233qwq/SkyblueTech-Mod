@@ -21,8 +21,12 @@ from ...common.events.machinery.digger import (
     DiggerUpdateCrack,
 )
 from ...common.define.id_enum.machinery import DIGGER as MACHINE_ID
+from ...common.machinery_def.digger import (
+    STORE_RF_MAX,
+    K_FRONT_BLOCK_ID,
+    K_FRONT_BLOCK_AUX,
+)
 from ...common.utils.block_sync import BlockSync
-from ...common.ui_sync.machinery.digger import DiggerUISync
 from .basic import (
     GUIControl,
     UpgradeControl,
@@ -37,9 +41,10 @@ block_sync = BlockSync(MACHINE_ID, side=BlockSync.SIDE_SERVER)
 @RegisterMachine
 class Digger(GUIControl, UpgradeControl, WorkRenderer):
     block_name = MACHINE_ID
+    dump_progress_to_block_entity_data = True
     input_slots = ()
     output_slots = (0,)
-    store_rf_max = 8800
+    store_rf_max = STORE_RF_MAX
     running_power = 40
     upgrade_slot_start = 1
     upgrade_slots = 4
@@ -53,10 +58,9 @@ class Digger(GUIControl, UpgradeControl, WorkRenderer):
         self.dx, self.dy, self.dz = GetOppositeDirFromFacing(
             GetBlockFacingDir(self.dim, (x, y, z))
         )
-        self.front_block, self.front_block_aux = GetBlockNameAndAux(
+        self._front_block, self._front_block_aux = GetBlockNameAndAux(
             self.dim, (x + self.dx, y + self.dy, z + self.dz)
         )  # block is None?
-        self.sync = DiggerUISync.NewServer(self).Activate()
         self.prev_crack_stage = 0
         # NOTE: 我们假设方块之后的朝向直到方块被销毁前都不会变化
 
@@ -75,15 +79,6 @@ class Digger(GUIControl, UpgradeControl, WorkRenderer):
                     self.prev_crack_stage = crack_stage
                     self.update_crack_frame_to_client()
                 break
-        self.CallSync()
-
-    def OnSync(self):
-        self.sync.storage_rf = self.store_rf
-        self.sync.rf_max = self.store_rf_max
-        self.sync.progress_relative = self.GetProcessProgress()
-        self.sync.block_id = self.front_block
-        self.sync.block_aux = self.front_block_aux
-        self.sync.MarkedAsChanged()
 
     def OnNeighborChanged(self, event):
         # type: (BlockNeighborChangedServerEvent) -> None
@@ -93,7 +88,6 @@ class Digger(GUIControl, UpgradeControl, WorkRenderer):
             and event.neighborPosZ - self.z == self.dz
         ):
             self.start_next((event.toBlockName, event.toAuxValue))
-            self.CallSync()
 
     @SuperExecutorMeta.execute_super
     def OnUnload(self):
@@ -168,6 +162,26 @@ class Digger(GUIControl, UpgradeControl, WorkRenderer):
             self.z + self.dz,
             self.prev_crack_stage,
         ).sendMulti(block_sync.get_players((self.dim, self.x, self.y, self.z)))
+
+    @property
+    def front_block(self):
+        # type: () -> str | None
+        return self._front_block
+
+    @front_block.setter
+    def front_block(self, value):
+        # type: (str | None) -> None
+        self.bdata[K_FRONT_BLOCK_ID] = self._front_block = value
+
+    @property
+    def front_block_aux(self):
+        # type: () -> int
+        return self._front_block_aux
+
+    @front_block_aux.setter
+    def front_block_aux(self, value):
+        # type: (int) -> None
+        self.bdata[K_FRONT_BLOCK_AUX] = self._front_block_aux = value
 
 
 def GetOppositeDirFromFacing(facing):

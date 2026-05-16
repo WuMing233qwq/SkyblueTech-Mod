@@ -8,7 +8,7 @@ from skybluetech_scripts.tooldelta.extensions.recipe_obj import (
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
 from ...common.define import flags
 from ...common.define.id_enum.machinery import HEAVY_COMPRESSOR as MACHINE_ID
-from ...common.ui_sync.machinery.heavy_compressor import HeavyCompressorUISync
+from ...common.machinery_def.heavy_compressor import STORE_RF_MAX
 from .basic import (
     BaseMachine,
     ItemContainer,
@@ -25,7 +25,8 @@ cant_compressed_recipes = set()  # type: set[str]
 @RegisterMachine
 class HeavyCompressor(GUIControl, ItemContainer, SPControl, WorkRenderer):
     block_name = MACHINE_ID
-    store_rf_max = 8800
+    store_rf_max = STORE_RF_MAX
+    dump_progress_to_block_entity_data = True
     origin_process_ticks = 20 * 5  # 8s
     running_power = 30
     input_slots = (0,)
@@ -35,13 +36,10 @@ class HeavyCompressor(GUIControl, ItemContainer, SPControl, WorkRenderer):
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        self.sync = HeavyCompressorUISync.NewServer(self).Activate()
-        self.CallSync()
         self.TryStartNext()
 
     def OnTicking(self):
         while self.IsActive():
-            self.CallSync()
             if self.ProcessOnce():
                 self.run_once()
                 self.TryStartNext()
@@ -95,12 +93,6 @@ class HeavyCompressor(GUIControl, ItemContainer, SPControl, WorkRenderer):
             output_slot_item.newItemName == expected_output_item_id
             and not output_slot_item.StackFull()
         )
-
-    def OnSync(self):
-        self.sync.storage_rf = self.store_rf
-        self.sync.rf_max = self.store_rf_max
-        self.sync.progress_relative = self.GetProcessProgress()
-        self.sync.MarkedAsChanged()
 
     def IsValidInput(self, slot, item):
         # type: (int, Item) -> bool

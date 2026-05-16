@@ -8,6 +8,9 @@ from ..mini_jei.machinery.machinery_workstation import (
     Input,
 )
 
+K_CRAFTING_PROGRESS = "st:crafting_progress"
+K_OUTPUT_ITEM_ID = "st:output_item_id"
+
 recipes = RecipesCollection(
     id_enum.MACHINERY_WORKSTATION,
     # alloy furnace

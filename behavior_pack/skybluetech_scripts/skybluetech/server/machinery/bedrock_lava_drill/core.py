@@ -2,20 +2,28 @@
 from skybluetech_scripts.tooldelta.define.item import Item
 from skybluetech_scripts.tooldelta.api.server.block import GetBlockName
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
-from ....common.define import flags
-from ....common.define.id_enum.machinery import (
+from skybluetech_scripts.skybluetech.common.define import flags
+from skybluetech_scripts.skybluetech.common.define.id_enum.machinery import (
     BEDROCK_LAVA_DRILL_CONTROLLER as MACHINE_ID,
 )
-from ....common.define.id_enum.fluids import DEEPSLATE_LAVA
-from ....common.machinery_def.bedrock_lava_drill import (
+from skybluetech_scripts.skybluetech.common.define.id_enum.fluids import DEEPSLATE_LAVA
+from skybluetech_scripts.skybluetech.common.machinery_def.bedrock_lava_drill import (
     STRUCTURE_PALETTE,
     STRUCTURE_REQUIRE_BLOCKS,
     IO_FLUID1,
     IO_ENERGY,
     DRILL_POWER,
     PUMP_POWER,
+    STORE_RF_MAX,
+    K_POS_OK,
+    K_DRILL_TIMES,
+    K_TOTAL_DRILL_TIMES,
+    K_DRILL_PROGRESS,
+    K_VOLUME_LEFT_PERCENT,
+    K_FLUID_ID,
+    K_FLUID_VOLUME,
+    K_MAX_FLUID_VOLUME,
 )
-from ....common.ui_sync.machinery.bedrock_lava_drill import BedrockLavaDrillUISync
 from ..basic import (
     GUIControl,
     MultiBlockStructure,
@@ -29,13 +37,6 @@ from .lava_storage import (
     get_available_lava_storage,
 )
 
-K_POS_OK = "st:pos_ok"
-K_DRILL_TIMES = "st:drill_times"
-K_DRILL_PROGRESS = "st:drill_progress"
-K_VOLUME_LEFT = "st:volume_left"
-K_TOTAL_PUMPED_VOLUME = "st:total_pumped_vol"
-K_READY = "st:ready"
-
 EnergyInputInterface.AddExtraMachineId(IO_ENERGY)
 FluidOutputInterface.AddExtraMachineId(IO_FLUID1)
 
@@ -43,7 +44,7 @@ FluidOutputInterface.AddExtraMachineId(IO_FLUID1)
 @RegisterMachine
 class BedrockLavaDrill(GUIControl, MultiBlockStructure, UpgradeControl):
     block_name = MACHINE_ID
-    store_rf_max = 16000
+    store_rf_max = STORE_RF_MAX
     pump_speed = 400
     origin_process_ticks = 10
     running_power = DRILL_POWER
@@ -52,7 +53,6 @@ class BedrockLavaDrill(GUIControl, MultiBlockStructure, UpgradeControl):
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        self.sync = BedrockLavaDrillUISync.NewServer(self).Activate()
         self._pos_ok = None
         self._current_drill_times = None
         self._total_drill_times = None
@@ -96,24 +96,19 @@ class BedrockLavaDrill(GUIControl, MultiBlockStructure, UpgradeControl):
                 self.CallSync()
 
     def OnSync(self):
-        self.sync.storage_rf = self.store_rf
-        self.sync.rf_max = self.store_rf_max
-        self.sync.structure_flag = self.GetStructureDestroyFlag()
-        self.sync.structure_lacked_blocks = self.GetStructureLackedBlocks()
         if self.StructureFinished():
-            self.sync.drill_progress = float(self.current_drill_times) / (
+            self.bdata[K_DRILL_PROGRESS] = float(self.current_drill_times) / (
                 self.total_drill_times or 1
             )
             if self.drill_finished():
-                self.sync.lava_storage_left = (
-                    float(self.rest_volume) / self.total_volume
+                self.bdata[K_VOLUME_LEFT_PERCENT] = (
+                    self.rest_volume * 1.0 / self.total_volume
                 )
             else:
-                self.sync.lava_storage_left = 0
-            self.sync.fluid_id = self.get_fluid_output_io().fluid_id
-            self.sync.fluid_volume = self.get_fluid_output_io().fluid_volume
-            self.sync.max_volume = self.get_fluid_output_io().max_fluid_volume
-        self.sync.MarkedAsChanged()
+                self.bdata[K_VOLUME_LEFT_PERCENT] = 0
+            self.bdata[K_FLUID_ID] = self.get_fluid_output_io().fluid_id
+            self.bdata[K_FLUID_VOLUME] = self.get_fluid_output_io().fluid_volume
+            self.bdata[K_MAX_FLUID_VOLUME] = self.get_fluid_output_io().max_fluid_volume
 
     def OnStructureChanged(self, structure_finished):
         if structure_finished:
@@ -172,6 +167,7 @@ class BedrockLavaDrill(GUIControl, MultiBlockStructure, UpgradeControl):
             s = Item("minecraft:air")
             self.SetDeactiveFlag(flags.DEACTIVE_FLAG_NO_RECIPE)
         self.SetSlotItem(0, s)
+        print("++++", self.current_drill_times)
         self.current_drill_times += 1
         if self.current_drill_times >= self.total_drill_times:
             self._power_changed = True
@@ -211,25 +207,25 @@ class BedrockLavaDrill(GUIControl, MultiBlockStructure, UpgradeControl):
     def total_drill_times(self):
         # type: () -> int
         if self._total_drill_times is None:
-            self._total_drill_times = self.bdata[K_DRILL_TIMES] or 1
+            self._total_drill_times = self.bdata[K_TOTAL_DRILL_TIMES] or 1
         return self._total_drill_times
 
     @total_drill_times.setter
     def total_drill_times(self, value):
         # type: (int) -> None
-        self.bdata[K_DRILL_TIMES] = self._total_drill_times = value
+        self.bdata[K_TOTAL_DRILL_TIMES] = self._total_drill_times = value
 
     @property
     def current_drill_times(self):
         # type: () -> int
         if self._current_drill_times is None:
-            self._current_drill_times = self.bdata[K_DRILL_PROGRESS] or 0
+            self._current_drill_times = self.bdata[K_DRILL_TIMES] or 0
         return self._current_drill_times
 
     @current_drill_times.setter
     def current_drill_times(self, value):
         # type: (int) -> None
-        self.bdata[K_DRILL_PROGRESS] = self._current_drill_times = value
+        self.bdata[K_DRILL_TIMES] = self._current_drill_times = value
 
     @property
     def rest_volume(self):

@@ -1,18 +1,23 @@
 # coding=utf-8
+from skybluetech_scripts.tooldelta.api.client import GetBlockEntityData
 from skybluetech_scripts.tooldelta.ui import RegistToolDeltaScreen, Binder
+from skybluetech_scripts.tooldelta.utils.nbt import GetValueWithDefault as GetValue
 from skybluetech_scripts.tooldelta.utils.py_comp import py2_unicode
 from ....common.define.ui_keys import HOVER_TEXT_DISPLAYER_UI
 from ....common.events.machinery.hover_text_displayer import (
     HoverTextDisplayerContentUpdate,
     HoverTextDisplayerContentUpload,
 )
-from ....common.ui_sync.machinery.hover_text_displayer import HoverTextDisplayerUISync
+from skybluetech_scripts.skybluetech.common.machinery_def.basic import K_STORE_RF
+from skybluetech_scripts.skybluetech.common.machinery_def.hover_text_displayer import (
+    STORE_RF_MAX,
+)
 from .define import MachinePanelUI, SCREEN_BASE_PATH
 from .utils import UpdatePowerBar
 
-EDIT_BOX_NODE = SCREEN_BASE_PATH / "edit_box"
-TIP_LABEL_NODE = SCREEN_BASE_PATH / "tip_label"
-POWER_BAR_NODE = SCREEN_BASE_PATH / "power_bar"
+EDIT_BOX_PATH = SCREEN_BASE_PATH / "edit_box"
+TIP_LABEL_PATH = SCREEN_BASE_PATH / "tip_label"
+POWER_BAR_PATH = SCREEN_BASE_PATH / "power_bar"
 
 
 @RegistToolDeltaScreen("HoverTextDisplayerUI.main", key=HOVER_TEXT_DISPLAYER_UI)
@@ -21,21 +26,22 @@ class HoverTextDisplayerUI(MachinePanelUI):
     allow_esc_exit = True
 
     def OnCreate(self):
-        self.sync = HoverTextDisplayerUISync.NewClient(self.dim, self.x, self.y, self.z)  # type: HoverTextDisplayerUISync
-        self.sync.SetUpdateCallback(self.WhenUpdated)
-        self.tip_label = self.GetElement(TIP_LABEL_NODE).asLabel()
-        self.edit_box = self.GetElement(EDIT_BOX_NODE).asTextEditBox()
-        self.power_bar = self.GetElement(POWER_BAR_NODE)
+        self.tip_label = self.GetElement(TIP_LABEL_PATH).asLabel()
+        self.edit_box = self.GetElement(EDIT_BOX_PATH).asTextEditBox()
+        self.power_bar = self.GetElement(POWER_BAR_PATH)
         self.onContentUpdate(
             HoverTextDisplayerContentUpdate.unmarshal(
                 self._init_params["st:init_content"]
             )
         )
 
-    def WhenUpdated(self):
-        if not self.inited:
+    def OnTicking(self):
+        data = GetBlockEntityData(self.x, self.y, self.z)
+        if data is None:
             return
-        UpdatePowerBar(self.power_bar, self.sync.storage_rf, self.sync.rf_max)
+        data = data["exData"]
+        store_rf = GetValue(data, K_STORE_RF, 0)
+        UpdatePowerBar(self.power_bar, store_rf, STORE_RF_MAX)
 
     @MachinePanelUI.Listen(HoverTextDisplayerContentUpdate)
     def onContentUpdate(self, event):

@@ -1,0 +1,3 @@
+# coding=utf-8
+FLUID_0_MAX_VOLUME = 1000
+FLUID_1_MAX_VOLUME = 1000

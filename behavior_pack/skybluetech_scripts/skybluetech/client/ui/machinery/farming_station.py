@@ -1,22 +1,26 @@
 # coding=utf-8
-#
+from skybluetech_scripts.tooldelta.api.client import GetBlockEntityData
 from skybluetech_scripts.tooldelta.ui import RegistToolDeltaScreen
-from ....common.ui_sync.machinery.farming_station import FarmingStationUISync
+from skybluetech_scripts.tooldelta.utils.nbt import GetValueWithDefault as GetValue
+from skybluetech_scripts.skybluetech.common.machinery_def.basic import K_STORE_RF
+from skybluetech_scripts.skybluetech.common.machinery_def.farming_station import (
+    STORE_RF_MAX,
+)
 from .define import MachinePanelUIProxy, MAIN_PATH
 from .utils import UpdatePowerBar
 
-POWER_NODE = MAIN_PATH / "power_bar"
+POWER_PATH = MAIN_PATH / "power_bar"
 
 
 @RegistToolDeltaScreen("FarmingStationUI.main", is_proxy=True)
 class FarmingStationUI(MachinePanelUIProxy):
     def OnCreate(self):
-        dim, x, y, z = self.pos
-        self.sync = FarmingStationUISync.NewClient(dim, x, y, z)  # type: FarmingStationUISync
-        self.sync.SetUpdateCallback(self.WhenUpdated)
-        self.power_bar = self.GetElement(POWER_NODE)
+        self.power_bar = self.GetElement(POWER_PATH)
 
-    def WhenUpdated(self):
-        if not self.inited:
+    def OnTicking(self):
+        data = GetBlockEntityData(*self.pos[1:])
+        if data is None:
             return
-        UpdatePowerBar(self.power_bar, self.sync.storage_rf, self.sync.rf_max)
+        data = data["exData"]
+        store_rf = GetValue(data, K_STORE_RF, 0)
+        UpdatePowerBar(self.power_bar, store_rf, STORE_RF_MAX)

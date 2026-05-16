@@ -5,7 +5,10 @@ from skybluetech_scripts.tooldelta.events.server.block import (
     ServerEntityTryPlaceBlockEvent,
 )
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
-from ....common.machinery_def.base_machine import K_STORE_RF, K_DEACTIVE_FLAGS
+from skybluetech_scripts.skybluetech.common.machinery_def.basic.base_machine import (
+    K_STORE_RF,
+    K_DEACTIVE_FLAGS,
+)
 from .gui_ctrl import GUIControl
 
 

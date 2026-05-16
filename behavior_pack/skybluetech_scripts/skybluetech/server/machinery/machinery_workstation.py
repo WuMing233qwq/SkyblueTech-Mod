@@ -9,10 +9,11 @@ from ...common.events.machinery.machinery_workstation import (
 from ...common.define.id_enum.machinery import MACHINERY_WORKSTATION as MACHINE_ID
 from ...common.machinery_def.machinery_workstation import (
     recipes as Recipes,
+    K_CRAFTING_PROGRESS,
+    K_OUTPUT_ITEM_ID,
     get_pincer_level,
     get_wrench_level,
 )
-from ...common.ui_sync.machinery.machinery_workstation import MachineryWorkstationUISync
 from .utils.action_commit import SafeGetMachine
 from .basic import BaseMachine, RegisterMachine, GUIControl, ItemContainer
 
@@ -27,7 +28,6 @@ class MachineryWorkstation(BaseMachine, GUIControl, ItemContainer):
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        self.sync = MachineryWorkstationUISync.NewServer(self).Activate()
         self.current_recipe = None
         self.load_recipe(init=True)
         self.CallSync()
@@ -37,15 +37,14 @@ class MachineryWorkstation(BaseMachine, GUIControl, ItemContainer):
         pass
 
     def OnSync(self):
-        self.sync.progress = (
+        self.bdata[K_CRAFTING_PROGRESS] = (
             float(self.craft_times) / self.current_recipe.craft_times
             if self.current_recipe
             else 0
         )
-        self.sync.output_item_id = (
+        self.bdata[K_OUTPUT_ITEM_ID] = (
             self.current_recipe.output_item_id if self.current_recipe else None
         )
-        self.sync.MarkedAsChanged()
 
     def OnSlotUpdate(self, slot_pos):
         # type: (int) -> None

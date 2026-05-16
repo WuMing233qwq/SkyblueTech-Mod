@@ -20,7 +20,6 @@ from ....common.define.id_enum.machinery import RF_REPEATER_PLANT as MACHINE_ID
 from ....common.define.facing import DXYZ_FACING, FACING_EN
 from ....common.define.ui_keys import RF_REPEATER_PLANT_UI
 from ....common.machinery_def.rf_repeater_plant import MODE_INPUT, MODE_OUTPUT
-from ....common.ui_sync.machinery.rf_repeater_plant import RFRepeaterPlantUISync
 from ....common.utils.block_sync import BlockSync
 from ...transmitters.wire.logic import isWire
 from ..basic import BaseMachine, GUIControl, ItemContainer, RegisterMachine
@@ -53,7 +52,6 @@ class RFRepeaterPlant(BaseMachine, GUIControl, ItemContainer):
     def __init__(self, dim, x, y, z, block_entity_data):
         BaseMachine.__init__(self, dim, x, y, z, block_entity_data)
         ItemContainer.__init__(self, dim, x, y, z, block_entity_data)
-        self.sync = RFRepeaterPlantUISync.NewServer(self).Activate()
         states = GetBlockStates(self.dim, (self.x, self.y, self.z))
         if states is None:
             raise ValueError("RFRepeaterPlant BlockState None")

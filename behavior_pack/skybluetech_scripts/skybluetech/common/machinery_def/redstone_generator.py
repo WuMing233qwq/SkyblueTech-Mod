@@ -6,6 +6,7 @@ from ..mini_jei.machinery.redstone_generator import (
     GeneratorRecipe,
 )
 
+STORE_RF_MAX = 14400
 
 recipes = RecipesCollection(
     REDSTONE_GENERATOR,

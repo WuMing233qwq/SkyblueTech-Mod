@@ -9,13 +9,10 @@ from ...common.events.machinery.fluid_splitter import (
 from skybluetech_scripts.tooldelta.api.common import ExecLater
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
 from ...common.define.id_enum.machinery import FLUID_SPLITTER as MACHINE_ID
+from ...common.machinery_def.fluid_splitter import MAX_FLUID_VOLUME
 from ..transmitters.pipe.logic import (
     logic_module as pipe_logic,
     PushFluidToFluidContainer,
-)
-from ...common.ui_sync.machinery.fluid_splitter import (
-    FluidSplitterUISync,
-    FluidSlotSync,
 )
 from .utils.action_commit import SafeGetMachine
 from .basic import MultiFluidContainer, GUIControl, UpgradeControl, RegisterMachine
@@ -32,13 +29,12 @@ class FluidSplitter(GUIControl, MultiFluidContainer, UpgradeControl):
     fluid_io_fix_mode = -1
     fluid_input_slots = {0}
     fluid_output_slots = set()
-    fluid_slot_max_volumes = (4000,)
+    fluid_slot_max_volumes = (MAX_FLUID_VOLUME,)
     upgrade_slot_start = 0
     allow_upgrader_tags = {"skybluetech:upgraders/generic_split"}
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        self.sync = FluidSplitterUISync.NewServer(self).Activate()
         self._cached_recorded_settings = None
         self._sending_fluid = True
         self._ticking_t = 0
@@ -46,7 +42,6 @@ class FluidSplitter(GUIControl, MultiFluidContainer, UpgradeControl):
     def OnTicking(self):
         if self._sending_fluid and self._ticking_t % 5 == 0:
             self.ready_try_post_fluid()
-            self.CallSync()
             all_empty = all(i.volume <= 0 for i in self.fluids)
             if all_empty:
                 self._sending_fluid = False
@@ -69,10 +64,6 @@ class FluidSplitter(GUIControl, MultiFluidContainer, UpgradeControl):
             if fluid.volume <= 0:
                 fluid.fluid_id = None
         return ok
-
-    def OnSync(self):
-        self.sync.fluids = FluidSlotSync.ListFromMachine(self)
-        self.sync.MarkedAsChanged()
 
     @SuperExecutorMeta.execute_super
     def OnClick(self, event, extra_datas=None):

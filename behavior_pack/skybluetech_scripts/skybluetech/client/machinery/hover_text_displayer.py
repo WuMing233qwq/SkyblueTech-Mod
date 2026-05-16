@@ -12,7 +12,7 @@ from ...common.define.id_enum.machinery import HOVER_TEXT_DISPLAYER as MACHINE_I
 from ...common.events.machinery.hover_text_displayer import (
     HoverTextDisplayerContentUpdate,
 )
-from ...common.machinery_def.base_machine import K_DEACTIVE_FLAGS
+from ...common.machinery_def.basic.base_machine import K_DEACTIVE_FLAGS
 from ...common.machinery_def.hover_text_displayer import K_TEXT
 from ...common.utils.block_sync import BlockSync
 from .utils.mod_block_event import asModBlockLoadedListener, asModBlockRemovedListener

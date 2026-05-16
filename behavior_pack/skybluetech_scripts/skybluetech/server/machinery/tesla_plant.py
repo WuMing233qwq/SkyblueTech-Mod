@@ -17,7 +17,6 @@ from ...common.events.machinery.tesla_plant import (
     TeslaPlantAttack,
 )
 from ...common.define.id_enum.machinery import TESLA_PLANT as MACHINE_ID
-from ...common.ui_sync.machinery.tesla_plant import TeslaPlantUISync
 from .basic import (
     BaseSpeedControl,
     GUIControl,
@@ -44,7 +43,6 @@ class TeslaPlant(GUIControl, UpgradeControl, WorkRenderer):
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        self.sync = TeslaPlantUISync.NewServer(self).Activate()
         self._cached_setting_do_attack_mob = None
         self._cached_setting_do_attack_player = None
         self._cached_setting_do_attack_monster = None
@@ -59,11 +57,6 @@ class TeslaPlant(GUIControl, UpgradeControl, WorkRenderer):
     @SuperExecutorMeta.execute_super
     def OnClick(self, event, extra_datas=None):
         pass
-
-    def OnSync(self):
-        self.sync.storage_rf = self.store_rf
-        self.sync.rf_max = self.store_rf_max
-        self.sync.MarkedAsChanged()
 
     @SuperExecutorMeta.execute_super
     def OnUnload(self):
@@ -109,7 +102,6 @@ class TeslaPlant(GUIControl, UpgradeControl, WorkRenderer):
         self.do_attack_player = do_attack_player
         self.do_attack_monster = do_attack_monster
         self.work_range = work_range
-        self.CallSync()
         TeslaPlantSettingsUpdate(
             self.dim,
             self.x,
@@ -119,7 +111,7 @@ class TeslaPlant(GUIControl, UpgradeControl, WorkRenderer):
             self.do_attack_monster,
             self.do_attack_mob,
             self.do_attack_player,
-        ).sendMulti(self.sync.GetPlayersInSync())
+        ).sendMulti(self.ui_sync.GetPlayersInSync())
 
     @property
     def do_attack_mob(self):

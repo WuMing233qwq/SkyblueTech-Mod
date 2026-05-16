@@ -1,32 +1,37 @@
 # coding=utf-8
 
 from skybluetech_scripts.tooldelta.define import Item
+from skybluetech_scripts.tooldelta.api.client import (
+    GetBlockEntityData,
+    GetItemHoverName,
+)
 from skybluetech_scripts.tooldelta.ui import Binder, RegistToolDeltaScreen
-from skybluetech_scripts.tooldelta.api.common import ExecLater
-from skybluetech_scripts.tooldelta.api.client.item import GetItemHoverName
-from ....common.events.machinery.assembler import (
+from skybluetech_scripts.tooldelta.utils.nbt import GetValueWithDefault as GetValue
+from skybluetech_scripts.skybluetech.common.events.machinery.assembler import (
     AssemblerActionRequest,
     AssemblerUpgradersUpdate,
     ACTION_PULL_UPGRADER,
     ACTION_PUSH_UPGRADER,
 )
-from ....common.ui_sync.machinery.assembler import AssemblerUISync
+from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
+    K_STORE_RF,
+)
+from skybluetech_scripts.skybluetech.common.machinery_def.assembler import (
+    RF_MAX,
+)
 from .define import MachinePanelUIProxy, MAIN_PATH
 from .utils import UpdatePowerBar
 
-POWER_NODE = MAIN_PATH / "power_bar"
-UPGRADERS_LIST_NODE = MAIN_PATH / "upgraders_view"
+POWER_PATH = MAIN_PATH / "power_bar"
+UPGRADERS_LIST_PATH = MAIN_PATH / "upgraders_view"
 
 
 @RegistToolDeltaScreen("AssemblerUI.main", is_proxy=True)
 class AssemblerUI(MachinePanelUIProxy):
     def OnCreate(self):
-        dim, x, y, z = self.pos
-        self.sync = AssemblerUISync.NewClient(dim, x, y, z)  # type: AssemblerUISync
-        self.sync.SetUpdateCallback(self.WhenUpdated)
-        self.power = self.GetElement(POWER_NODE)
+        self.power = self.GetElement(POWER_PATH)
         self.upgraders_grid = (
-            self.GetElement(UPGRADERS_LIST_NODE).asScrollView().GetContent().asGrid()
+            self.GetElement(UPGRADERS_LIST_PATH).asScrollView().GetContent().asGrid()
         )
         self[MAIN_PATH / "push_btn"].asButton().SetCallback(self.onPush)
 
@@ -41,10 +46,13 @@ class AssemblerUI(MachinePanelUIProxy):
         _, x, y, z = self.pos
         AssemblerActionRequest(x, y, z, ACTION_PUSH_UPGRADER, 0).send()
 
-    def WhenUpdated(self):
-        if not self.inited:
+    def OnTicking(self):
+        data = GetBlockEntityData(*self.pos[1:])
+        if data is None:
             return
-        UpdatePowerBar(self.power, self.sync.storage_rf, self.sync.rf_max)
+        data = data["exData"]
+        storage_rf = GetValue(data, K_STORE_RF, 0)
+        UpdatePowerBar(self.power, storage_rf, RF_MAX)
 
     @MachinePanelUIProxy.Listen(AssemblerUpgradersUpdate)
     def onListUpdate(self, event):

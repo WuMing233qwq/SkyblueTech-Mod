@@ -1,26 +1,27 @@
 # coding=utf-8
-from skybluetech_scripts.tooldelta.api.common import Delay
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
 from ...common.define.id_enum.machinery import ELECTRIC_HEATER as MACHINE_ID
 from ...common.events.machinery.electric_heater import ElectricHeaterSubmitModifiesEvent
-from ...common.machinery_def.electric_heater import K_SET_POWER, K_KELVIN_LIMIT
-from ...common.ui_sync.machinery.electric_heater import ElectricHeaterUISync
+from ...common.machinery_def.electric_heater import (
+    K_SET_POWER,
+    K_KELVIN_LIMIT,
+    STORE_RF_MAX,
+)
 from .utils.action_commit import SafeGetMachine
 from .basic import HeatCtrl, GUIControl, PowerControl, RegisterMachine
 
-MAX_POWER = 1 << 32
+MAX_POWER = STORE_RF_MAX
 
 
 @RegisterMachine
 class ElectricHeater(HeatCtrl, GUIControl, PowerControl):
     block_name = MACHINE_ID
-    store_rf_max = 64000
+    store_rf_max = STORE_RF_MAX
     max_heat_value = 500
     spread_heat = True
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        self.sync = ElectricHeaterUISync.NewServer(self).Activate()
         self._cached_running_power = self.bdata[K_SET_POWER] or 0
         self._update_heat_power()
         self.t = 0
@@ -33,16 +34,8 @@ class ElectricHeater(HeatCtrl, GUIControl, PowerControl):
                 if self.PowerEnough():
                     self.ReducePower()
                 self._update_heat_power()
-                self.CallSync()
             else:
                 self.SetOutputHeatPower(0)
-
-    def OnSync(self):
-        self.sync.rf_max = self.store_rf_max
-        self.sync.storage_rf = self.store_rf
-        self.sync.power = self.running_power
-        self.sync.current_temperature = self.kelvin
-        self.sync.MarkedAsChanged()
 
     @SuperExecutorMeta.execute_super
     def OnUnload(self):

@@ -1,3 +1,5 @@
+RF_MAX = 16000
+
 TAG_UPGRADER = "skybluetech:object_upgrader"
 TAG_CAN_UPGRADE = "skybluetech:assembler_available"
 K_UD_UPGRADERS = "st:upgraders"

@@ -7,6 +7,9 @@ from ..mini_jei.machinery.fluid_condenser import (
     recipe_molten2ingot,
 )
 
+STORE_RF_MAX = 8800
+MAX_FLUID_VOLUME = 1000
+
 
 recipes = RecipesCollection(
     FLUID_CONDENSER,

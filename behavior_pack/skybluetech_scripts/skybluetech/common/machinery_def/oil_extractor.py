@@ -3,6 +3,9 @@ from ..define.id_enum import OIL_EXTRACTOR, items, fluids
 from ..mini_jei.core import RecipesCollection
 from ..mini_jei.machinery.oil_extractor import MachineRecipe, OilExtractorRecipe
 
+STORE_RF_MAX = 8000
+MAX_FLUID_VOLUME = 1000
+
 
 recipes = RecipesCollection(
     OIL_EXTRACTOR,

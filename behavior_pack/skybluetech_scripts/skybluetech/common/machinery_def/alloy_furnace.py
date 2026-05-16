@@ -10,6 +10,7 @@ from ..mini_jei.machinery.alloy_furnace import (
     gen_preset_recipe,
 )
 
+RF_MAX = 8800
 
 DEFAULT_TICK_DURATION = 160
 DEFAULT_POWER = 80

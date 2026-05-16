@@ -11,24 +11,21 @@ from ....common.events.machinery.item_splitter import (
     ItemSplitterSettingsListUpdate,
     ItemSplitterSimpleAction,
 )
-from ....common.ui_sync.machinery.item_splitter import ItemSplitterUISync
 from ..misc.transmitter_settings_ui import rand_rgb_by_index, get_opposite_color
 from .define import MachinePanelUIProxy, MAIN_PATH
 
-SETTINGS_VIEW_NODE = MAIN_PATH / "settings_view"
-ADD_BTN_NODE = MAIN_PATH / "add_btn"
+SETTINGS_VIEW_PATH = MAIN_PATH / "settings_view"
+ADD_BTN_PATH = MAIN_PATH / "add_btn"
 
 
 @RegistToolDeltaScreen("ItemSplitterUI.main", is_proxy=True)
 class ItemSplitterUI(MachinePanelUIProxy):
     def OnCreate(self):
         dim, x, y, z = self.pos
-        self.sync = ItemSplitterUISync.NewClient(dim, x, y, z)  # type: ItemSplitterUISync
-        self.sync.SetUpdateCallback(self.WhenUpdated)
-        self.settings_view = self.GetElement(SETTINGS_VIEW_NODE).asScrollView()
+        self.settings_view = self.GetElement(SETTINGS_VIEW_PATH).asScrollView()
         self.settings_grid = self.settings_view.GetContent().asGrid()
         self.add_btn = (
-            self.GetElement(ADD_BTN_NODE).asButton().SetCallback(self.onAddSetting)
+            self.GetElement(ADD_BTN_PATH).asButton().SetCallback(self.onAddSetting)
         )
         self.label_selector_window = None
         self.item_selector_window = None
@@ -37,10 +34,6 @@ class ItemSplitterUI(MachinePanelUIProxy):
     def OnDestroy(self):
         self.closeLabelSelector()
         self.closeItemSelector()
-
-    def WhenUpdated(self):
-        if not self.inited:
-            return
 
     def onGridUpdated(self, lis):
         # type: (list[tuple[int, str]]) -> None
@@ -134,7 +127,7 @@ class ItemSplitterUI(MachinePanelUIProxy):
         # print params
         if params["ButtonState"] != 0:
             return
-        btn = self.GetElement(SETTINGS_VIEW_NODE / params["ButtonPath"])
+        btn = self.GetElement(SETTINGS_VIEW_PATH / params["ButtonPath"])
         btn_x, btn_y = btn.GetRootPos()
         idx = params["#collection_index"]
         self.selected_setting_index = idx
@@ -145,7 +138,7 @@ class ItemSplitterUI(MachinePanelUIProxy):
         # print params
         if params["ButtonState"] != 0:
             return
-        btn = self.GetElement(SETTINGS_VIEW_NODE / params["ButtonPath"])
+        btn = self.GetElement(SETTINGS_VIEW_PATH / params["ButtonPath"])
         btn_x, btn_y = btn.GetRootPos()
         idx = params["#collection_index"]
         self.selected_setting_index = idx

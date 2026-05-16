@@ -4,6 +4,8 @@ from ..define.id_enum.fluids import LUBRICANT
 from ..mini_jei.core import RecipesCollection
 from ..mini_jei.machinery.metal_press import MachineRecipe, MetalPressRecipe
 
+STORE_RF_MAX = 8800
+MAX_FLUID_VOLUME = 1000
 
 recipes = RecipesCollection(
     METAL_PRESS,

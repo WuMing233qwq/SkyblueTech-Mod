@@ -1,55 +1,60 @@
 # coding=utf-8
-
+from skybluetech_scripts.tooldelta.api.client import GetBlockEntityData
 from skybluetech_scripts.tooldelta.ui import RegistToolDeltaScreen
-from ....common.ui_sync.machinery.mini_miner import MiniMinerUISync
-from .define import MachinePanelUIProxy, MAIN_PATH
-from .utils import (
-    UpdatePowerBar,
-    InitFluidDisplay,
-    UpdateFluidDisplay,
+from skybluetech_scripts.tooldelta.utils.nbt import (
+    GetValueWithDefault as GetValue,
+    ValueOf,
+)
+from ....common.machinery_def.basic import (
+    K_FLUID_ID,
+    K_FLUID_VOLUME,
+    K_STORE_RF,
+)
+from ....common.machinery_def.mini_miner import (
+    WorkMode,
+    K_DIGGING_POS,
+    K_WORK_MODE,
+    STORE_RF_MAX,
+    MAX_FLUID_VOLUME,
+    VOLUME_COST_ONCE,
 )
 
-POWER_NODE = MAIN_PATH / "power_bar"
-FLUID_NODE = MAIN_PATH / "fluid_display"
-INFO_LABEL_NODE = MAIN_PATH / "panel_bg/info_label"
+from .define import MachinePanelUIProxy, MAIN_PATH
+from .utils import UpdatePowerBar, FluidDisplayer
+
+POWER_PATH = MAIN_PATH / "power_bar"
+FLUID_PATH = MAIN_PATH / "fluid_display"
+INFO_LABEL_PATH = MAIN_PATH / "panel_bg/info_label"
 
 
 @RegistToolDeltaScreen("MiniMinerUI.main", is_proxy=True)
 class MiniMinerUI(MachinePanelUIProxy):
     def OnCreate(self):
-        dim, x, y, z = self.pos
-        self.sync = MiniMinerUISync.NewClient(dim, x, y, z)  # type: MiniMinerUISync
-        self.sync.SetUpdateCallback(self.WhenUpdated)
-        self.info_label = self.GetElement(INFO_LABEL_NODE).asLabel()
-        self.power_bar = self.GetElement(POWER_NODE)
-        self.fluid_display = self.GetElement(FLUID_NODE)
-        self.update_cb = InitFluidDisplay(
-            self.fluid_display,
-            lambda: (
-                self.sync.fluid_id,
-                self.sync.fluid_volume,
-                self.sync.max_volume,
-            ),
-        )
+        self.info_label = self.GetElement(INFO_LABEL_PATH).asLabel()
+        self.power_bar = self.GetElement(POWER_PATH)
+        self.fluid_displayer = FluidDisplayer(self.GetElement(FLUID_PATH))
 
-    def WhenUpdated(self):
-        if not self.inited:
+    def OnTicking(self):
+        data = GetBlockEntityData(*self.pos[1:])
+        if data is None:
             return
-        self.update_cb()
-        UpdatePowerBar(self.power_bar, self.sync.storage_rf, self.sync.rf_max)
-        UpdateFluidDisplay(
-            self.fluid_display,
-            self.sync.fluid_id,
-            self.sync.fluid_volume,
-            self.sync.max_volume,
+        data = data["exData"]
+        fluid_id = GetValue(data, K_FLUID_ID, None)
+        fluid_volume = GetValue(data, K_FLUID_VOLUME, 0)
+        store_rf = GetValue(data, K_STORE_RF, 0)
+        work_mode = GetValue(data, K_WORK_MODE, 0)
+        digging_pos = GetValue(data, K_DIGGING_POS, [0, 0, 0])
+        self.fluid_displayer.update(fluid_id, fluid_volume, VOLUME_COST_ONCE)
+        UpdatePowerBar(self.power_bar, store_rf, STORE_RF_MAX)
+        self.fluid_displayer.update(
+            fluid_id,
+            fluid_volume,
+            MAX_FLUID_VOLUME,
         )
-        dx, dy, dz = self.sync.digging_pos
+        dx, dy, dz = digging_pos
+        dx = ValueOf(dx)
+        dy = ValueOf(dy)
+        dz = ValueOf(dz)
         self.info_label.SetText(
-            "正在挖掘： (%d, %d, %d)\n\n%s"
-            % (
-                dx,
-                dy,
-                dz,
-                self.sync.WorkMode.zh_cn(self.sync.work_mode),
-            )
+            "正在挖掘： (%d, %d, %d)\n\n%s" % (dx, dy, dz, WorkMode.zh_cn(work_mode))
         )

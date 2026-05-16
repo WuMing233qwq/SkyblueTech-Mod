@@ -9,12 +9,12 @@ from ...common.machinery_def.hydroponic_bed_sand import (
     K_CROP_BLOCK_ID,
     K_GROW_PROGRESS,
     K_WATER_STORE,
+    STORE_RF_MAX,
     POWER_COST,
     WORK_TICK_DELAY,
     MAX_WATER_STORE,
     ONCE_WATER_COST,
 )
-from ...common.ui_sync.machinery.hydroponic_bed_sand import HydroponicBedSandUISync
 from .basic import (
     ItemContainer,
     GUIControl,
@@ -31,13 +31,13 @@ class HydroponicBedSand(
     BaseSpeedControl, ItemContainer, GUIControl, PowerControl, WorkRenderer
 ):
     block_name = MACHINE_ID
+    store_rf_max = STORE_RF_MAX
     input_slots = (0,)
     running_power = POWER_COST
     original_speed = WORK_TICK_DELAY
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        self.sync = HydroponicBedSandUISync.NewServer(self).Activate()
         seed_item = self.GetSlotItem(0)
         self.crop_id = (
             seed_item.id
@@ -49,7 +49,6 @@ class HydroponicBedSand(
             if self.crop_id is not None
             else None
         )
-        self.CallSync()
 
     @SuperExecutorMeta.execute_super
     def OnUnload(self):
@@ -65,20 +64,6 @@ class HydroponicBedSand(
                         return
                     self.ReducePower()
                     self.work_once()
-                    self.CallSync()
-
-    def OnSync(self):
-        # type: () -> None
-        self.sync.store_rf = self.store_rf
-        self.sync.rf_max = self.store_rf_max
-        self.sync.grow_progress = self.grow_progress
-        if self.crop_id is not None:
-            self.sync.crop_block_id = Recipes.recipes_mapping[
-                self.crop_id
-            ].crop_block_id
-        else:
-            self.sync.crop_block_id = None
-        self.sync.MarkedAsChanged()
 
     def IsValidInput(self, slot, item):
         # type: (int, Item) -> bool
@@ -103,7 +88,6 @@ class HydroponicBedSand(
             self.SetDeactiveFlag(flags.DEACTIVE_FLAG_NO_RECIPE)
         else:
             self.UnsetDeactiveFlag(flags.DEACTIVE_FLAG_NO_RECIPE)
-        self.CallSync()
 
     @SuperExecutorMeta.execute_super
     def SetDeactiveFlag(self, flag):

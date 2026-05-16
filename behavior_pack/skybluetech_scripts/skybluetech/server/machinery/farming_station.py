@@ -16,8 +16,8 @@ from ...common.define.id_enum.machinery import FARMING_STATION as MACHINE_ID
 from ...common.machinery_def.farming_station import (
     isRipedCrop,
     isBlockCrop,
+    STORE_RF_MAX,
 )
-from ...common.ui_sync.machinery.farming_station import FarmingStationUISync
 from .basic import BaseMachine, ItemContainer, GUIControl, SPControl, RegisterMachine
 
 DX = 2
@@ -28,7 +28,8 @@ Y_OFFSET = 2
 @RegisterMachine
 class FarmingStation(GUIControl, ItemContainer, SPControl):
     block_name = MACHINE_ID
-    store_rf_max = 16000
+    dump_progress_to_block_entity_data = True
+    store_rf_max = STORE_RF_MAX
     running_power = 30
     origin_process_ticks = 20 * 5
     input_slots = ()
@@ -36,14 +37,13 @@ class FarmingStation(GUIControl, ItemContainer, SPControl):
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        self.sync = FarmingStationUISync.NewServer(self).Activate()
+        pass
 
     def OnTicking(self):
         # 1t 内如果处理多次任务会导致卡顿
         # 直接忽略 1t 内任务的多次处理
         if self.ProcessOnce():
-            if self.run_once():
-                self.CallSync()
+            self.run_once()
 
     def run_once(self):
         ok = self.collect_crops()
@@ -98,12 +98,6 @@ class FarmingStation(GUIControl, ItemContainer, SPControl):
             output_slot_item.newItemName == expected_output_item_id
             and not output_slot_item.StackFull()
         )
-
-    def OnSync(self):
-        self.sync.storage_rf = self.store_rf
-        self.sync.rf_max = self.store_rf_max
-        self.sync.progress_relative = self.GetProcessProgress()
-        self.sync.MarkedAsChanged()
 
     @SuperExecutorMeta.execute_super
     def OnUnload(self):

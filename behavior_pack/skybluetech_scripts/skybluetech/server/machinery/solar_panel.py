@@ -11,7 +11,11 @@ from skybluetech_scripts.tooldelta.api.server import (
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
 from ...common.define.id_enum.machinery import SOLAR_PANEL as MACHINE_ID
 from ...common.define.facing import DXYZ_FACING, FACING_EN
-from ...common.ui_sync.machinery.solar_panel import SolarPanelUISync
+from ...common.machinery_def.solar_panel import (
+    STORE_RF_MAX,
+    K_LIGHT_LEVEL,
+    K_OUTPUT_POWER,
+)
 from ..transmitters.wire.logic import isWire
 from .basic import BaseGenerator, ItemContainer, GUIControl, RegisterMachine
 
@@ -19,15 +23,14 @@ from .basic import BaseGenerator, ItemContainer, GUIControl, RegisterMachine
 @RegisterMachine
 class SolarPanel(BaseGenerator, ItemContainer, GUIControl):
     block_name = MACHINE_ID
-    store_rf_max = 14400
+    store_rf_max = STORE_RF_MAX
     energy_io_mode = (1, 1, 1, 1, 1, 1)
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        self.sync = SolarPanelUISync.NewServer(self).Activate()
         self.t = 0
-        self.power_output = 0
-        self.light_level = 0
+        self._power_output = 0
+        self._light_level = 0
 
     @SuperExecutorMeta.execute_super
     def OnTicking(self):
@@ -37,7 +40,6 @@ class SolarPanel(BaseGenerator, ItemContainer, GUIControl):
             self.update()
         if self.t % 5 == 0 and self.IsActive():
             self.GeneratePower(self.power_output * 5)
-            self.CallSync()
 
     @SuperExecutorMeta.execute_super
     def OnPlaced(self, _):
@@ -79,18 +81,30 @@ class SolarPanel(BaseGenerator, ItemContainer, GUIControl):
             self.power_output = round(self.light_level)
         else:
             self.power_output = 0
-        self.CallSync()
-
-    def OnSync(self):
-        self.sync.storage_rf = self.store_rf
-        self.sync.rf_max = self.store_rf_max
-        self.sync.light_level = self.light_level
-        self.sync.power = self.power_output
-        self.sync.MarkedAsChanged()
 
     @SuperExecutorMeta.execute_super
     def OnUnload(self):
         pass
+
+    @property
+    def light_level(self):
+        # type: () -> int
+        return self._light_level
+
+    @light_level.setter
+    def light_level(self, value):
+        # type: (int) -> None
+        self.bdata[K_LIGHT_LEVEL] = self._light_level = value
+
+    @property
+    def power_output(self):
+        # type: () -> int
+        return self._power_output
+
+    @power_output.setter
+    def power_output(self, value):
+        # type: (int) -> None
+        self.bdata[K_OUTPUT_POWER] = self._power_output = value
 
 
 def GetSkylightLevelClear(time):

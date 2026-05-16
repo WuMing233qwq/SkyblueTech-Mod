@@ -1,40 +1,36 @@
 # coding=utf-8
+from skybluetech_scripts.tooldelta.api.client import GetBlockEntityData
 from skybluetech_scripts.tooldelta.ui import RegistToolDeltaScreen
-from ....common.ui_sync.machinery.hydroponic_base import HydroponicBaseUISync
+from skybluetech_scripts.skybluetech.common.machinery_def.basic import FluidSlotClient
+from ....common.machinery_def.hydroponic_base import (
+    FLUID_0_MAX_VOLUME,
+    FLUID_1_MAX_VOLUME,
+)
 from .define import MachinePanelUIProxy, MAIN_PATH
-from .utils import InitFluidDisplay
+from .utils import FluidDisplayer
 
-FLUID_0_NODE = MAIN_PATH / "fluid0"
-FLUID_1_NODE = MAIN_PATH / "fluid1"
+FLUID_0_PATH = MAIN_PATH / "fluid0"
+FLUID_1_PATH = MAIN_PATH / "fluid1"
 
 
 @RegistToolDeltaScreen("HydroponicBaseUI.main", is_proxy=True)
 class HydroponicBaseUI(MachinePanelUIProxy):
     def OnCreate(self):
-        dim, x, y, z = self.pos
-        self.sync = HydroponicBaseUISync.NewClient(dim, x, y, z)  # type: HydroponicBaseUISync
-        self.sync.SetUpdateCallback(self.WhenUpdated)
-        self.fluid_0 = self.GetElement(FLUID_0_NODE)
-        self.fluid_1 = self.GetElement(FLUID_1_NODE)
-        self.fluid_0_updater = InitFluidDisplay(
-            self.fluid_0,
-            lambda: (
-                self.sync.fluid_1_type,
-                self.sync.fluid_1_volume,
-                self.sync.fluid_1_max_volume,
-            ),
-        )
-        self.fluid_1_updater = InitFluidDisplay(
-            self.fluid_1,
-            lambda: (
-                self.sync.fluid_2_type,
-                self.sync.fluid_2_volume,
-                self.sync.fluid_2_max_volume,
-            ),
-        )
+        self.fluid_0 = self.GetElement(FLUID_0_PATH)
+        self.fluid_1 = self.GetElement(FLUID_1_PATH)
+        self.fluid_0_displayer = FluidDisplayer(self.fluid_0)
+        self.fluid_1_displayer = FluidDisplayer(self.fluid_1)
 
-    def WhenUpdated(self):
-        if not self.inited:
+    def OnTicking(self):
+        data = GetBlockEntityData(*self.pos[1:])
+        if data is None:
             return
-        self.fluid_0_updater()
-        self.fluid_1_updater()
+        data = data["exData"]
+        fluid_0 = FluidSlotClient(data, 0)
+        fluid_1 = FluidSlotClient(data, 1)
+        self.fluid_0_displayer.update(
+            fluid_0.fluid_id, fluid_0.volume, FLUID_0_MAX_VOLUME
+        )
+        self.fluid_1_displayer.update(
+            fluid_1.fluid_id, fluid_1.volume, FLUID_1_MAX_VOLUME
+        )

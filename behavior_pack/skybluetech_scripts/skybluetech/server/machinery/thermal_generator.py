@@ -3,19 +3,21 @@ from skybluetech_scripts.tooldelta.define.item import Item
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
 from ...common.define import flags
 from ...common.define.id_enum.machinery import THERMAL_GENERATOR as MACHINE_ID
-from ...common.machinery_def.thermal_generator import TICK_POWER, FUEL_SECONDS_MAP
-from ...common.ui_sync.machinery.thermal_generator import ThermalGeneratorUISync
+from ...common.machinery_def.thermal_generator import (
+    TICK_POWER,
+    FUEL_SECONDS_MAP,
+    STORE_RF_MAX,
+    K_BURN_SEC_LEFT,
+    K_MAX_BURN_SEC,
+)
 from .basic import (
     BaseGenerator,
     ItemContainer,
     GUIControl,
-    UpgradeControl,
     WorkRenderer,
     RegisterMachine,
 )
 
-K_BURN_SEC_LEFT = "st:burn_sec_left"
-K_MAX_BURN_SEC = "st:max_burn_secs"
 
 SecondsPerTick = 0.05
 
@@ -23,13 +25,12 @@ SecondsPerTick = 0.05
 @RegisterMachine
 class ThermalGenerator(BaseGenerator, ItemContainer, GUIControl, WorkRenderer):
     block_name = MACHINE_ID
-    store_rf_max = 14400
+    store_rf_max = STORE_RF_MAX
     energy_io_mode = (1, 1, 1, 1, 1, 1)
     input_slots = (0,)
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        self.sync = ThermalGeneratorUISync.NewServer(self).Activate()
         self.is_burning = self.burn_seconds_left > 0
         self.SetOutputPower(0)
 
@@ -44,22 +45,12 @@ class ThermalGenerator(BaseGenerator, ItemContainer, GUIControl, WorkRenderer):
                 self.is_burning = self.next_burn()
                 return
             self.burn_seconds_left -= SecondsPerTick
-            self.CallSync()
 
     def IsValidInput(self, slot, item):
         # type: (int, Item) -> bool
         return item.newItemName != "minecraft:lava_bucket" and (
             item.id in FUEL_SECONDS_MAP or item.GetBasicInfo().fuelDuration > 0
         )
-
-    def OnSync(self):
-        self.sync.storage_rf = self.store_rf
-        self.sync.rf_max = self.store_rf_max
-        self.sync.power = TICK_POWER if self.burn_seconds_left > 0 else 0
-        self.sync.rest_burn_relative = (
-            float(self.burn_seconds_left) / self.max_burn_seconds
-        )
-        self.sync.MarkedAsChanged()
 
     @SuperExecutorMeta.execute_super
     def OnSlotUpdate(self, slot_pos):

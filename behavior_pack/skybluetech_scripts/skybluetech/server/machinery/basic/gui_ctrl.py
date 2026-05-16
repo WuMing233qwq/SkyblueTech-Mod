@@ -1,5 +1,5 @@
 # coding=utf-8
-#
+from skybluetech_scripts.tooldelta.extensions.ui_sync import S2CSync
 from skybluetech_scripts.tooldelta.events.server.block import ServerBlockUseEvent
 from skybluetech_scripts.tooldelta.events.server.ui import (
     PushUIRequest,
@@ -23,16 +23,16 @@ class GUIControl(object):
     """
     带有 GUI 的机器基类。
 
-    覆写: `OnClick`, `OnUnload`
+    覆写: `__init__`, `OnClick`, `OnUnload`
     """
 
     bound_ui = None  # type: str | None
     "绑定的 UI key, 如果为自定义容器, 此处设置为 None"
-    sync = S2CSync.NewServer()
-    "UI 同步器"
 
     def __init__(self, dim, x, y, z, block_entity_data):
-        pass
+        self.ui_sync = S2CSync.NewServer(
+            "machine_%d_%d_%d_%d" % (dim, x, y, z)
+        ).Activate()
 
     def OnClick(self, event, extra_datas=None):
         # type: (ServerBlockUseEvent, dict | None) -> None
@@ -40,7 +40,7 @@ class GUIControl(object):
         if not rate_limiter.record(event.playerId):
             return
         self.CallSync()
-        AddSyncPending(event.playerId, self.sync)
+        AddSyncPending(event.playerId, self.ui_sync)
         if self.bound_ui is not None:
             params = {
                 "st:dmpos": (event.dimensionId, event.x, event.y, event.z),
@@ -51,7 +51,7 @@ class GUIControl(object):
                 event.playerId,
                 PushUIRequest(
                     self.bound_ui,
-                    self.sync.sync_id,
+                    self.ui_sync.sync_id,
                     params,
                 ),
             )
@@ -59,9 +59,9 @@ class GUIControl(object):
     def OnUnload(self):
         "超类方法用于通知玩家关闭 GUI 和将同步项关闭。"
         if self.bound_ui is not None:
-            tIDs = GetAllPlayersInSync(self.sync.sync_id)
+            tIDs = GetAllPlayersInSync(self.ui_sync.sync_id)
             NotifyToClients(tIDs, ForceRemoveUIRequest(self.bound_ui))
-        self.sync.Deactivate()
+        self.ui_sync.Deactivate()
 
     def OnSync(self):
         # type: () -> None

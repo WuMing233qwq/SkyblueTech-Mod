@@ -25,10 +25,10 @@ from ....common.events.misc.crafting_template_settings import (
 )
 
 AIR_SLOT = 35
-CLOSE_BTN_NODE = SCREEN_BASE_PATH / "close_btn"
-GRID_NODE = SCREEN_BASE_PATH / "grid"
-OUT_ITEM_NODE = SCREEN_BASE_PATH / "out_item"
-LABEL_NODE = SCREEN_BASE_PATH / "databoard/label"
+CLOSE_BTN_PATH = SCREEN_BASE_PATH / "close_btn"
+GRID_PATH = SCREEN_BASE_PATH / "grid"
+OUT_ITEM_PATH = SCREEN_BASE_PATH / "out_item"
+LABEL_PATH = SCREEN_BASE_PATH / "databoard/label"
 
 
 @RegistToolDeltaScreen("CraftingTemplateSettingsUI.main")
@@ -45,13 +45,13 @@ class CraftingTemplateSettingsUI(ToolDeltaScreen):
         self.item_selector_window = None
         self.close_btn = (
             self
-            .GetElement(CLOSE_BTN_NODE)
+            .GetElement(CLOSE_BTN_PATH)
             .asButton()
             .SetCallback(lambda _: self.RemoveUI())
         )
-        self.grid = self.GetElement(GRID_NODE).asGrid()
-        self.out_item = self.GetElement(OUT_ITEM_NODE)
-        self.label = self.GetElement(LABEL_NODE).asLabel()
+        self.grid = self.GetElement(GRID_PATH).asGrid()
+        self.out_item = self.GetElement(OUT_ITEM_PATH)
+        self.label = self.GetElement(LABEL_PATH).asLabel()
         self.grid.ExecuteAfterUpdate(self.update_template_slots)
         self.update_crafting_recipe()
 

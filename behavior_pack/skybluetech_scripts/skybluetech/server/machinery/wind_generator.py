@@ -25,8 +25,13 @@ from ...common.events.machinery.wind_generator import (
     WindGeneratorStatesRequest,
     WindGeneratorStatesUpdate,
 )
-from ...common.machinery_def.wind_generator import get_paddle_output, item2paddle
-from ...common.ui_sync.machinery.wind_generator import WindGeneratorUISync
+from ...common.machinery_def.wind_generator import (
+    get_paddle_output,
+    item2paddle,
+    K_MCW,
+    K_OUTPUT_POWER,
+    STORE_RF_MAX,
+)
 from ...common.utils.block_sync import BlockSync
 from ..transmitters.wire.logic import isWire
 from .basic import BaseGenerator, ItemContainer, GUIControl, RegisterMachine
@@ -38,14 +43,13 @@ block_sync = BlockSync(MACHINE_ID, side=BlockSync.SIDE_SERVER)
 @RegisterMachine
 class WindGenerator(BaseGenerator, ItemContainer, GUIControl):
     block_name = MACHINE_ID
-    store_rf_max = 14400
+    store_rf_max = STORE_RF_MAX
     energy_io_mode = (1, 1, 1, 1, 1, 1)
     input_slots = (0,)
     output_slots = ()
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        self.sync = WindGeneratorUISync.NewServer(self).Activate()
         self.t = 0
         states = GetBlockStates(self.dim, (self.x, self.y, self.z))
         if states is None:
@@ -54,8 +58,8 @@ class WindGenerator(BaseGenerator, ItemContainer, GUIControl):
         self.layer = states["skybluetech:layer"]  # type: int
         self.is_base_block = self.layer == 0
         self.max_mcw = 0.0
-        self.actual_mcw = 0.0
-        self.power_output = 0
+        self._actual_mcw = 0.0
+        self._power_output = 0
         self.rot_speed = 0.0
         self._cached_paddle_type = None
         if not self.is_base_block:
@@ -77,8 +81,6 @@ class WindGenerator(BaseGenerator, ItemContainer, GUIControl):
         if self.t % 80 == 0:
             self.reduce_dura()
             self.update_power()
-        if self.t % 5 == 0 and self.IsActive():
-            self.CallSync()
 
     @classmethod
     def OnPrePlaced(cls, event):
@@ -142,16 +144,6 @@ class WindGenerator(BaseGenerator, ItemContainer, GUIControl):
             ).sendMulti(block_sync.get_players((self.dim, self.x, self.y, self.z))),
         )
 
-    def OnSync(self):
-        if not self.is_base_block:
-            self.sync.MarkedAsChanged()
-            return
-        self.sync.storage_rf = self.store_rf
-        self.sync.rf_max = self.store_rf_max
-        self.sync.mcw = self.actual_mcw
-        self.sync.power = self.power_output
-        self.sync.MarkedAsChanged()
-
     def OnDestroy(self):
         base_y = self.y - self.layer
         for i in range(3):
@@ -211,7 +203,6 @@ class WindGenerator(BaseGenerator, ItemContainer, GUIControl):
             self.rot_speed = float(self.actual_mcw) / 5120 + 0.01
         else:
             self.rot_speed = 0
-        self.CallSync()
         self.SetOutputPower(self.power_output)
 
     def get_actual_output_pc(self):
@@ -240,6 +231,26 @@ class WindGenerator(BaseGenerator, ItemContainer, GUIControl):
             else:
                 self._cached_paddle_type = item2paddle(slotitem.id)
         return self._cached_paddle_type
+
+    @property
+    def actual_mcw(self):
+        # type: () -> float
+        return self._actual_mcw
+
+    @actual_mcw.setter
+    def actual_mcw(self, value):
+        # type: (float) -> None
+        self.bdata[K_MCW] = self._actual_mcw = value
+
+    @property
+    def power_output(self):
+        # type: () -> int
+        return self._power_output
+
+    @power_output.setter
+    def power_output(self, value):
+        # type: (int) -> None
+        self.bdata[K_OUTPUT_POWER] = self._power_output = value
 
 
 @WindGeneratorStatesRequest.Listen()

@@ -2,6 +2,27 @@
 from ..utils.structure_palette import GenerateSimpleStructureTemplate
 from ...common.define.id_enum.multi_block_structure import Fermenter
 
+K_TEMPERATURE = "st:temp"
+K_EXPECTED_TEMPERTURE = "st:expected_temp"
+K_EXPECTED_WATER_MAX_VOLUME = "st:expected_max_volume"
+K_MUD_VOLUME = "st:mud_volume"
+K_WATER_VOLUME = "st:water_volume"
+K_MUD_THICKNESS = "st:mud_thickness"
+K_MUD_VITALITY = "st:mud_vitality"
+K_OUTPUT_GAS_ID = "st:output_gas_id"
+K_OUTPUT_GAS_VOLUME = "st:output_gas_volume"
+K_OUTPUT_GAS_MAX_VOLUME = "st:output_gas_max_volume"
+K_OUTPUT_FLUID_ID = "st:output_fluid_id"
+K_OUTPUT_FLUID_VOLUME = "st:output_fluid_volume"
+K_OUTPUT_FLUID_MAX_VOLUME = "st:output_max_fluid_max_volume"
+K_RECIPE = "st:recipe"
+K_GAS_PRODUCE_SPEED = "st:gas_produce_speed"
+K_FLUID_PRODUCE_SPEED = "st:fluid_produce_speed"
+K_CELL_HUNGER = "st:bacteria_hunger"
+K_INOCULATING_RECIPE = "st:inoculate_recipe"
+K_INOCULATE_TIME = "st:inoculate_time"
+K_TOTAL_VOLUME = "st:total_volume"
+
 
 STRUCTURE_PATTERN_MAPPING = {
     "M": Fermenter.FRAME,
@@ -47,6 +68,7 @@ STRUCTURE_PALETTE = GenerateSimpleStructureTemplate(
     require_blocks_count=STRUCTURE_REQUIRE_BLOCKS,
 )
 
+STORE_RF_MAX = 8800
 TEMPERATURE_MIN = 10
 TEMPERATURE_MAX = 50
 POOL_MAX_VOLUME = 16000

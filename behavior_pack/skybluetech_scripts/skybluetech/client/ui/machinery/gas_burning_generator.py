@@ -1,40 +1,54 @@
 # coding=utf-8
-
+from skybluetech_scripts.tooldelta.api.client import GetBlockEntityData
 from skybluetech_scripts.tooldelta.ui import RegistToolDeltaScreen
-from ....common.ui_sync.machinery.gas_burning_generator import GasBurningGeneratorUISync
+from skybluetech_scripts.tooldelta.utils.nbt import GetValueWithDefault as GetValue
+from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
+    K_STORE_RF,
+    FluidSlotClient,
+)
+from ....common.machinery_def.gas_burning_generator import (
+    recipes,
+    STORE_RF_MAX,
+    MAX_INPUT_GAS_VOLUME,
+    MAX_OUTPUT_GAS_VOLUME,
+)
 from .define import MachinePanelUIProxy, MAIN_PATH
-from .utils import UpdatePowerBar, UpdateFlame, InitFluidsDisplay
-
+from .utils import UpdatePowerBar, UpdateFlame, FluidDisplayer
 from ..recipe_checker import AsRecipeCheckerBtn
-from ....common.machinery_def.gas_burning_generator import recipes
 
-POWER_NODE = MAIN_PATH / "power_bar"
-GAS_INPUT_NODE = MAIN_PATH / "gas_input"
-GAS_OUTPUT_NODE = MAIN_PATH / "gas_output"
-FLAME_NODE = MAIN_PATH / "flame"
+POWER_PATH = MAIN_PATH / "power_bar"
+GAS_INPUT_PATH = MAIN_PATH / "gas_input"
+GAS_OUTPUT_PATH = MAIN_PATH / "gas_output"
+FLAME_PATH = MAIN_PATH / "flame"
 
 
 @RegistToolDeltaScreen("GasBurningGeneratorUI.main", is_proxy=True)
 class GasBurningGeneratorUI(MachinePanelUIProxy):
     def OnCreate(self):
-        dim, x, y, z = self.pos
-        self.sync = GasBurningGeneratorUISync.NewClient(dim, x, y, z)  # type: GasBurningGeneratorUISync
-        self.power_bar = self.GetElement(POWER_NODE)
-        self.gas_input = self.GetElement(GAS_INPUT_NODE)
-        self.gas_output = self.GetElement(GAS_OUTPUT_NODE)
-        self.flame = self.GetElement(FLAME_NODE)
-        self.sync.SetUpdateCallback(self.WhenUpdated)
-        self.fluid_updater1 = InitFluidsDisplay(self.gas_input, self.sync.fluids, 0)
-        self.fluid_updater2 = InitFluidsDisplay(self.gas_output, self.sync.fluids, 1)
+        self.power_bar = self.GetElement(POWER_PATH)
+        self.gas_input = self.GetElement(GAS_INPUT_PATH)
+        self.gas_output = self.GetElement(GAS_OUTPUT_PATH)
+        self.flame = self.GetElement(FLAME_PATH)
+        self.input_gas_displayer = FluidDisplayer(self.gas_input)
+        self.output_gas_displayer = FluidDisplayer(self.gas_output)
         AsRecipeCheckerBtn(
             self.GetElement(MAIN_PATH / "recipe_check_btn").asButton(),
             recipes,
         )
 
-    def WhenUpdated(self):
-        if not self.inited:
+    def OnTicking(self):
+        data = GetBlockEntityData(*self.pos[1:])
+        if data is None:
             return
-        UpdatePowerBar(self.power_bar, self.sync.storage_rf, self.sync.rf_max)
-        UpdateFlame(self.flame, self.sync.progress)
-        self.fluid_updater1()
-        self.fluid_updater2()
+        data = data["exData"]
+        store_rf = GetValue(data, K_STORE_RF, 0)
+        input_gas = FluidSlotClient(data, 0)
+        output_gas = FluidSlotClient(data, 1)
+        UpdatePowerBar(self.power_bar, store_rf, STORE_RF_MAX)
+        UpdateFlame(self.flame, input_gas.volume * 1.0 / MAX_INPUT_GAS_VOLUME)
+        self.input_gas_displayer.update(
+            input_gas.fluid_id, input_gas.volume, MAX_INPUT_GAS_VOLUME
+        )
+        self.output_gas_displayer.update(
+            output_gas.fluid_id, output_gas.volume, MAX_OUTPUT_GAS_VOLUME
+        )

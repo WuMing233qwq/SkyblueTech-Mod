@@ -1,32 +1,38 @@
 # coding=utf-8
-
+from skybluetech_scripts.tooldelta.api.client import GetBlockEntityData
 from skybluetech_scripts.tooldelta.ui import RegistToolDeltaScreen
-from ....common.ui_sync.machinery.compressor import CompressorUISync
+from skybluetech_scripts.tooldelta.utils.nbt import GetValueWithDefault as GetValue
+from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
+    K_STORE_RF,
+    K_PROGRESS,
+)
+from skybluetech_scripts.skybluetech.common.machinery_def.compressor import STORE_RF_MAX
 from .define import MachinePanelUIProxy, MAIN_PATH
 from .utils import UpdatePowerBar, UpdateGenericProgressL2R
 
 from ..recipe_checker import AsRecipeCheckerBtn
 from ....common.machinery_def.compressor import recipes
 
-POWER_NODE = MAIN_PATH / "power_bar"
-PRGS_NODE = MAIN_PATH / "progress"
+POWER_PATH = MAIN_PATH / "power_bar"
+PRGS_PATH = MAIN_PATH / "progress"
 
 
 @RegistToolDeltaScreen("CompressorUI.main", is_proxy=True)
 class CompressorUI(MachinePanelUIProxy):
     def OnCreate(self):
-        dim, x, y, z = self.pos
-        self.sync = CompressorUISync.NewClient(dim, x, y, z)  # type: CompressorUISync
-        self.sync.SetUpdateCallback(self.WhenUpdated)
-        self.power_bar = self.GetElement(POWER_NODE)
-        self.progress = self.GetElement(PRGS_NODE)
+        self.power_bar = self.GetElement(POWER_PATH)
+        self.progress = self.GetElement(PRGS_PATH)
         AsRecipeCheckerBtn(
             self.GetElement(MAIN_PATH / "recipe_check_btn").asButton(),
-            recipes,  # pyright: ignore[reportArgumentType]
+            recipes,
         )
 
-    def WhenUpdated(self):
-        if not self.inited:
+    def OnTicking(self):
+        data = GetBlockEntityData(*self.pos[1:])
+        if data is None:
             return
-        UpdatePowerBar(self.power_bar, self.sync.storage_rf, self.sync.rf_max)
-        UpdateGenericProgressL2R(self.progress, self.sync.progress_relative)
+        data = data["exData"]
+        store_rf = GetValue(data, K_STORE_RF, 0)
+        progress = GetValue(data, K_PROGRESS, 0)
+        UpdatePowerBar(self.power_bar, store_rf, STORE_RF_MAX)
+        UpdateGenericProgressL2R(self.progress, progress)

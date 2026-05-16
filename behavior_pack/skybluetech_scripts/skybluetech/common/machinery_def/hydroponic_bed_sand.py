@@ -12,6 +12,7 @@ POWER_COST = 4
 ONCE_WATER_COST = 5
 MAX_WATER_STORE = 1000
 WORK_TICK_DELAY = 20
+STORE_RF_MAX = 10000
 
 
 recipes = HydroponicBedSandRecipesCollection({

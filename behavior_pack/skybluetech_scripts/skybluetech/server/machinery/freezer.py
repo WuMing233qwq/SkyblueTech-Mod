@@ -3,32 +3,33 @@ from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecuto
 from ...common.events.machinery.freezer import FreezerModeChangedEvent
 from ...common.define.id_enum.machinery import FREEZER as MACHINE_ID
 from ...common.mini_jei.core import RecipesCollection
-from ...common.machinery_def.freezer import recipes as Recipes
-from ...common.ui_sync.machinery.freezer import FreezerUISync
+from ...common.machinery_def.freezer import (
+    recipes as Recipes,
+    STORE_RF_MAX,
+    MAX_FLUID_VOLUME,
+    K_MODE,
+)
 from .utils.action_commit import SafeGetMachine
 from .basic import MultiFluidContainer, Processor, RegisterMachine
-
-K_MODE = "mode"
 
 
 @RegisterMachine
 class Freezer(MultiFluidContainer, Processor):
     block_name = MACHINE_ID
-    store_rf_max = 8800
+    store_rf_max = STORE_RF_MAX
+    dump_progress_to_block_entity_data = True
     process_item = True
     process_fluid = True
     recipes = RecipesCollection(MACHINE_ID)
     output_slots = (0,)
     fluid_input_slots = {0}
     fluid_io_mode = (0, 0, 0, 0, 0, 0)
-    fluid_slot_max_volumes = (2000,)
+    fluid_slot_max_volumes = (MAX_FLUID_VOLUME,)
     upgrade_slot_start = 1
     upgrade_slots = 4
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        self.sync = FreezerUISync.NewServer(self).Activate()
-        self.CallSync()
         self.set_mode(self.recipe_mode)
 
     @SuperExecutorMeta.execute_super
@@ -39,23 +40,12 @@ class Freezer(MultiFluidContainer, Processor):
     def OnReducedFluid(self, slot, fluid_id, reduced_fluid_volume, is_final):
         pass
 
-    def OnSync(self):
-        self.sync.storage_rf = self.store_rf
-        self.sync.rf_max = self.store_rf_max
-        self.sync.progress_relative = self.GetProgressPercent()
-        self.sync.fluid_id = self.fluids[0].fluid_id
-        self.sync.fluid_volume = self.fluids[0].volume
-        self.sync.max_volume = self.fluids[0].max_volume
-        self.sync.freezer_mode = self.recipe_mode
-        self.sync.MarkedAsChanged()
-
     def set_mode(self, new_mode):
         # type: (int) -> None
         if new_mode >= len(Recipes):
             new_mode %= len(Recipes)
         self.recipes = RecipesCollection(MACHINE_ID, Recipes.recipes_mapping[new_mode])
         self.recipe_mode = new_mode
-        self.CallSync()
         self.start_next()
 
     @property
@@ -76,4 +66,3 @@ def onFreezerModeChanged(event):
     if not isinstance(machine, Freezer):
         return
     machine.set_mode(event.new_mode)
-    machine.sync.FastSync(event.player_id)

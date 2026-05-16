@@ -1,30 +1,30 @@
 # coding=utf-8
-
+from skybluetech_scripts.tooldelta.api.client import GetBlockEntityData
 from skybluetech_scripts.tooldelta.ui import RegistToolDeltaScreen
-from ....common.ui_sync.machinery.fluid_interface import FluidInterfaceUISync
+from skybluetech_scripts.tooldelta.utils.nbt import GetValueWithDefault as GetValue
+from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
+    K_FLUID_ID,
+    K_FLUID_VOLUME,
+    K_MAX_VOLUME,
+)
 from .define import MachinePanelUIProxy, MAIN_PATH
-from .utils import InitFluidDisplay
+from .utils import FluidDisplayer
 
-FLUID_NODE = MAIN_PATH / "fluid_display"
+FLUID_PATH = MAIN_PATH / "fluid_display"
 
 
 @RegistToolDeltaScreen("FluidOutputInterfaceUI.main", is_proxy=True)
 class FluidOutputInterfaceUI(MachinePanelUIProxy):
     def OnCreate(self):
-        dim, x, y, z = self.pos
-        self.sync = FluidInterfaceUISync.NewClient(dim, x, y, z)  # type: FluidInterfaceUISync
-        self.sync.SetUpdateCallback(self.WhenUpdated)
-        self.fluid_display = self.GetElement(FLUID_NODE)
-        self.fluid_updater = InitFluidDisplay(
-            self.fluid_display,
-            lambda: (
-                self.sync.fluid_id,
-                self.sync.fluid_volume,
-                self.sync.max_volume,
-            ),
-        )
+        self.fluid_display = self.GetElement(FLUID_PATH)
+        self.fluid_updater = FluidDisplayer(self.fluid_display)
 
-    def WhenUpdated(self):
-        if not self.inited:
+    def OnTicking(self):
+        data = GetBlockEntityData(*self.pos[1:])
+        if data is None:
             return
-        self.fluid_updater()
+        data = data["exData"]
+        fluid_id = GetValue(data, K_FLUID_ID, None)
+        fluid_volume = GetValue(data, K_FLUID_VOLUME, 0)
+        max_volume = GetValue(data, K_MAX_VOLUME, 0)
+        self.fluid_updater.update(fluid_id, fluid_volume, max_volume)

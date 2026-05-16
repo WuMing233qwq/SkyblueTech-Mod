@@ -5,7 +5,6 @@ from ...common.machinery_def.distillation_chamber import (
     recipes as Recipes,
     DistillationChamberRecipe,
 )
-from ...common.ui_sync.machinery.distillation_chamber import DistillationChamberUISync
 from .basic import (
     BaseMachine,
     HeatCtrl,
@@ -13,7 +12,12 @@ from .basic import (
     GUIControl,
     RegisterMachine,
 )
-from .basic.multi_fluid_container import FluidSlot
+from ...common.machinery_def.distillation_chamber import (
+    K_OUTPUT_RATE,
+    INPUT_MAX_VOLUME,
+    OUTPUT_MAX_VOLUME,
+)
+from .basic.multi_fluid_container import FluidSlotServer
 
 recipes_collection = {}  # type: dict[str, list[DistillationChamberRecipe]]
 for recipe in Recipes:
@@ -27,11 +31,10 @@ class DistillationChamber(HeatCtrl, MultiFluidContainer, GUIControl):
     fluid_io_fix_mode = 0
     fluid_input_slots = {0}
     fluid_output_slots = {1}
-    fluid_slot_max_volumes = (1500, 1000)
+    fluid_slot_max_volumes = (INPUT_MAX_VOLUME, OUTPUT_MAX_VOLUME)
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        self.sync = DistillationChamberUISync.NewServer(self).Activate()
         self.locked_recipe_idx = None
         self.output_rate = 0
 
@@ -47,15 +50,7 @@ class DistillationChamber(HeatCtrl, MultiFluidContainer, GUIControl):
 
     def OnSync(self):
         # type: () -> None
-        self.sync.current_temperature = self.kelvin
-        self.sync.output_rate = self.output_rate
-        self.sync.lower_fluid_id = self.fluids[0].fluid_id
-        self.sync.lower_fluid_volume = self.fluids[0].volume
-        self.sync.lower_fluid_max_volume = self.fluids[0].max_volume
-        self.sync.upper_fluid_id = self.fluids[1].fluid_id
-        self.sync.upper_fluid_volume = self.fluids[1].volume
-        self.sync.upper_fluid_max_volume = self.fluids[1].max_volume
-        self.sync.MarkedAsChanged()
+        self.bdata[K_OUTPUT_RATE] = self.output_rate
 
     def IsValidFluidInput(self, slot, fluid_id):
         # type: (int, str) -> bool
@@ -85,7 +80,7 @@ class DistillationChamber(HeatCtrl, MultiFluidContainer, GUIControl):
                 self.work_with_recipe(rcp, in_fluid, out_fluid)
 
     def work_with_recipe(self, rcp, in_fluid, out_fluid):
-        # type: (DistillationChamberRecipe, FluidSlot, FluidSlot) -> None
+        # type: (DistillationChamberRecipe, FluidSlotServer, FluidSlotServer) -> None
         T = self.kelvin
         T_min = rcp.min_temperature
         T_fit = rcp.fit_temperature

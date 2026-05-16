@@ -18,8 +18,13 @@ from ...common.machinery_def.battery_matrix import (
     STRUCTURE_REQUIRE_BLOCKS,
     IO_ENERGY_INPUT,
     IO_ENERGY_OUTPUT,
+    K_STORE_RF,
+    K_ENABLE_INPUT,
+    K_ENABLE_OUTPUT,
+    K_INPUT_POWER,
+    K_OUTPUT_POWER,
+    K_RF_MAX,
 )
-from ...common.ui_sync.machinery.battery_matrix import BatteryMatrixUISync
 from .basic import (
     BaseMachine,
     GUIControl,
@@ -31,10 +36,6 @@ from .basic import (
 from .utils.action_commit import SafeGetMachine
 from .interfaces import EnergyInputInterface, EnergyOutputInterface
 from .battery_matrix_core import BatteryMatrixCore
-
-K_STORE_RF = "store_rf"
-K_ENABLE_INPUT = "st:enable_input"
-K_ENABLE_OUTPUT = "st:enable_output"
 
 
 EnergyInputInterface.AddExtraMachineId(IO_ENERGY_INPUT)
@@ -52,7 +53,6 @@ class BatteryMatrix(GUIControl, ItemContainer, MultiBlockStructure, WorkRenderer
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        self.sync = BatteryMatrixUISync.NewServer(self).Activate()
         self._last_rf_provided = 0
         self._last_input = 0
         self._last_output = 0
@@ -66,7 +66,6 @@ class BatteryMatrix(GUIControl, ItemContainer, MultiBlockStructure, WorkRenderer
         active = self.IsActive() and self.StructureFinished()
         if active:
             self.get_core().core_tick()
-            self.CallSync()
         self._sum_power_t += 1
         if self._sum_power_t >= 20:
             self._sum_input = self._last_input
@@ -76,8 +75,9 @@ class BatteryMatrix(GUIControl, ItemContainer, MultiBlockStructure, WorkRenderer
             self._sum_power_t = 0
             if active:
                 self.get_core().gen_update_event().sendMulti(
-                    self.sync.GetPlayersInSync()
+                    self.ui_sync.GetPlayersInSync()
                 )
+            self.CallSync()
 
     @SuperExecutorMeta.execute_super
     def OnClick(self, event, extra_datas=None):
@@ -90,17 +90,15 @@ class BatteryMatrix(GUIControl, ItemContainer, MultiBlockStructure, WorkRenderer
         )
 
     def OnSync(self):
-        self.sync.structure_flag = self.GetStructureDestroyFlag()
-        self.sync.structure_lacked_blocks = self.GetStructureLackedBlocks()
-        self.sync.input_power = self._sum_input / 20
-        self.sync.output_power = self._sum_output / 20
-        if self.GetStructureDestroyFlag() == 0:
-            self.sync.storage_rf = self.get_core().calculate_core_store_rf()
-            self.sync.rf_max = self.get_core().calculate_core_store_rf_max()
+        if self.StructureFinished():
+            # long 数据无法直接写入 BlockEntityData
+            self.bdata[K_STORE_RF] = float(self.get_core().calculate_core_store_rf())
+            self.bdata[K_RF_MAX] = float(self.get_core().calculate_core_store_rf_max())
         else:
-            self.sync.storage_rf = 0
-            self.sync.rf_max = 1
-        self.sync.MarkedAsChanged()
+            self.bdata[K_STORE_RF] = 0.0
+            self.bdata[K_RF_MAX] = 1.0
+        self.bdata[K_INPUT_POWER] = self._sum_input * 1.0 / 20
+        self.bdata[K_OUTPUT_POWER] = self._sum_output * 1.0 / 20
 
     @SuperExecutorMeta.execute_super
     def OnSlotUpdate(self, slot_pos):
@@ -173,7 +171,7 @@ class BatteryMatrix(GUIControl, ItemContainer, MultiBlockStructure, WorkRenderer
                 break
         core.update_core_data()
         self.CallSync()
-        core.gen_update_event().sendMulti(self.sync.GetPlayersInSync())
+        core.gen_update_event().sendMulti(self.ui_sync.GetPlayersInSync())
 
     def pop_battery_from_core(self, index):
         # type: (int) -> None
@@ -195,7 +193,7 @@ class BatteryMatrix(GUIControl, ItemContainer, MultiBlockStructure, WorkRenderer
             SpawnDroppedItem(self.dim, (self.x, self.y, self.z), res)
         core.update_core_data()
         self.CallSync()
-        core.gen_update_event().sendMulti(self.sync.GetPlayersInSync())
+        core.gen_update_event().sendMulti(self.ui_sync.GetPlayersInSync())
 
     def provide_energy(self, max_rf=None):
         # type: (int | None) -> int

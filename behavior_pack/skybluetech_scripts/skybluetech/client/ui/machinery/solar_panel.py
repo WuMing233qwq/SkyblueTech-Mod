@@ -1,31 +1,39 @@
 # coding=utf-8
-
+from skybluetech_scripts.tooldelta.api.client import GetBlockEntityData
 from skybluetech_scripts.tooldelta.ui import RegistToolDeltaScreen
-from ....common.ui_sync.machinery.solar_panel import SolarPanelUISync
+from skybluetech_scripts.tooldelta.utils.nbt import GetValueWithDefault as GetValue
+from skybluetech_scripts.skybluetech.common.machinery_def.basic import K_STORE_RF
+from ....common.machinery_def.solar_panel import (
+    K_LIGHT_LEVEL,
+    K_OUTPUT_POWER,
+    STORE_RF_MAX,
+)
 from .define import MachinePanelUIProxy, MAIN_PATH
 from .utils import UpdatePowerBar, UpdateGenericProgressT2B
 
-POWER_NODE = MAIN_PATH / "power_bar"
-SUN_NODE = MAIN_PATH / "progress"
-TEXT_NODE = MAIN_PATH / "text"
+POWER_PATH = MAIN_PATH / "power_bar"
+SUN_PATH = MAIN_PATH / "progress"
+TEXT_PATH = MAIN_PATH / "text"
 
 
 @RegistToolDeltaScreen("SolarPanelUI.main", is_proxy=True)
 class SolarPanelUI(MachinePanelUIProxy):
     def OnCreate(self):
-        dim, x, y, z = self.pos
-        self.sync = SolarPanelUISync.NewClient(dim, x, y, z)  # type: SolarPanelUISync
-        self.power_bar = self.GetElement(POWER_NODE)
-        self.sun = self.GetElement(SUN_NODE)
-        self.text = self.GetElement(TEXT_NODE).asLabel()
-        self.sync.SetUpdateCallback(self.WhenUpdated)
+        self.power_bar = self.GetElement(POWER_PATH)
+        self.sun = self.GetElement(SUN_PATH)
+        self.text = self.GetElement(TEXT_PATH).asLabel()
 
-    def WhenUpdated(self):
-        if not self.inited:
+    def OnTicking(self):
+        data = GetBlockEntityData(*self.pos[1:])
+        if data is None:
             return
-        UpdatePowerBar(self.power_bar, self.sync.storage_rf, self.sync.rf_max)
-        UpdateGenericProgressT2B(self.sun, float(self.sync.light_level) / 15)
+        data = data["exData"]
+        store_rf = GetValue(data, K_STORE_RF, 0)
+        light_level = GetValue(data, K_LIGHT_LEVEL, 0)
+        output_power = GetValue(data, K_OUTPUT_POWER, 0)
+        UpdatePowerBar(self.power_bar, store_rf, STORE_RF_MAX)
+        UpdateGenericProgressT2B(self.sun, float(light_level) / 15)
         self.text.SetText(
             "太阳光强度: %d MCLux\n电池板输出功率: %d RF/t"
-            % (self.sync.light_level, self.sync.power)
+            % (light_level, output_power)
         )

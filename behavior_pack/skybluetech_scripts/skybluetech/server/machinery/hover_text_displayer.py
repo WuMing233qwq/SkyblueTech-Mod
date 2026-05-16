@@ -7,8 +7,7 @@ from ...common.events.machinery.hover_text_displayer import (
     HoverTextDisplayerContentUpdate,
     HoverTextDisplayerContentUpload,
 )
-from ...common.machinery_def.hover_text_displayer import K_TEXT
-from ...common.ui_sync.machinery.hover_text_displayer import HoverTextDisplayerUISync
+from ...common.machinery_def.hover_text_displayer import K_TEXT, STORE_RF_MAX
 from ...common.utils.block_sync import BlockSync
 from .utils.action_commit import SafeGetMachine
 from .basic import (
@@ -25,7 +24,7 @@ block_sync = BlockSync(MACHINE_ID, side=BlockSync.SIDE_SERVER)
 class HoverTextDisplayer(BaseClicker, GUIControl, PowerControl):
     block_name = MACHINE_ID
     bound_ui = HOVER_TEXT_DISPLAYER_UI
-    store_rf_max = 2000
+    store_rf_max = STORE_RF_MAX
     running_power = 1
 
     @SuperExecutorMeta.execute_super
@@ -33,8 +32,6 @@ class HoverTextDisplayer(BaseClicker, GUIControl, PowerControl):
         self.set_text()
         self.can_display = self.PowerEnough()
         self._last_can_display = self.can_display
-        self.sync = HoverTextDisplayerUISync.NewServer(self).Activate()
-        self.CallSync()
 
     def OnClick(self, event, extra_datas=None):
         GUIControl.OnClick(
@@ -50,13 +47,7 @@ class HoverTextDisplayer(BaseClicker, GUIControl, PowerControl):
     def OnTicking(self):
         if self.PowerEnough():
             self.ReducePower()
-            self.CallSync()
         self.update_display_stat()
-
-    def OnSync(self):
-        self.sync.storage_rf = self.store_rf
-        self.sync.rf_max = self.store_rf_max
-        self.sync.MarkedAsChanged()
 
     @SuperExecutorMeta.execute_super
     def OnUnload(self):

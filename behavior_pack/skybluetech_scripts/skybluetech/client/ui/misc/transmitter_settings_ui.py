@@ -13,12 +13,12 @@ from ....common.events.misc.transmitter_settings import (
     TransmitterSetPriority,
 )
 
-INDEX_GRID_NODE = SCREEN_BASE_PATH / "network_label_selector_stack"
-CLOSE_BTN_NODE = SCREEN_BASE_PATH / "close_btn"
-MAIN_LABEL_NODE = SCREEN_BASE_PATH / "main_label"
-PRIOR_EDITOR_NODE = SCREEN_BASE_PATH / "prior_editor"
-PRIOR_SUB_BTN_NODE = SCREEN_BASE_PATH / "prior_sub_btn"
-PRIOR_ADD_BTN_NODE = SCREEN_BASE_PATH / "prior_add_btn"
+INDEX_GRID_PATH = SCREEN_BASE_PATH / "network_label_selector_stack"
+CLOSE_BTN_PATH = SCREEN_BASE_PATH / "close_btn"
+MAIN_LABEL_PATH = SCREEN_BASE_PATH / "main_label"
+PRIOR_EDITOR_PATH = SCREEN_BASE_PATH / "prior_editor"
+PRIOR_SUB_BTN_PATH = SCREEN_BASE_PATH / "prior_sub_btn"
+PRIOR_ADD_BTN_PATH = SCREEN_BASE_PATH / "prior_add_btn"
 
 
 def rand_rgb_by_index(index):
@@ -54,17 +54,17 @@ class TransmitterSettingsUI(ToolDeltaScreen):
         self.ap_side = params["side"]
 
     def OnCreate(self):
-        self.stack = self.GetElement(INDEX_GRID_NODE)
+        self.stack = self.GetElement(INDEX_GRID_PATH)
         self.close_btn = (
-            self.GetElement(CLOSE_BTN_NODE).asButton().SetCallback(self.onClose)
+            self.GetElement(CLOSE_BTN_PATH).asButton().SetCallback(self.onClose)
         )
-        self.main_label = self.GetElement(MAIN_LABEL_NODE)
-        self.prior_editor = self.GetElement(PRIOR_EDITOR_NODE).asTextEditBox()
+        self.main_label = self.GetElement(MAIN_LABEL_PATH)
+        self.prior_editor = self.GetElement(PRIOR_EDITOR_PATH).asTextEditBox()
         self.prior_add_btn = (
-            self.GetElement(PRIOR_ADD_BTN_NODE).asButton().SetCallback(self.onAddPrior)
+            self.GetElement(PRIOR_ADD_BTN_PATH).asButton().SetCallback(self.onAddPrior)
         )
         self.prior_sub_btn = (
-            self.GetElement(PRIOR_SUB_BTN_NODE).asButton().SetCallback(self.onSubPrior)
+            self.GetElement(PRIOR_SUB_BTN_PATH).asButton().SetCallback(self.onSubPrior)
         )
         self.updateIndexBox(self.main_label, self.label_value)
         self.updateStack()

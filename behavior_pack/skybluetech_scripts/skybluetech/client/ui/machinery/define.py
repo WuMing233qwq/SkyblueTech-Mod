@@ -1,5 +1,4 @@
 # coding=utf-8
-#
 from mod.client.extraClientApi import GetMinecraftEnum
 from skybluetech_scripts.tooldelta.api.client.player import GetPlayerDimensionId
 from skybluetech_scripts.tooldelta.api.common import ExecLater
@@ -19,31 +18,35 @@ MAIN_PATH = SCREEN_BASE_PATH / "root_panel/bg/main"
 class UIOpen(CustomC2SEvent):
     name = "skybluetech:UIOpen"
 
-    def __init__(self, ui_key):
-        # type: (str) -> None
+    def __init__(self, ui_key, sync_id):
+        # type: (str, str) -> None
         self.ui_key = ui_key
+        self.sync_id = sync_id
 
     def unmarshal(self, data):
         # type: (dict) -> None
         self.ui_key = data["uiKey"]
+        self.sync_id = data["syncId"]
 
     def marshal(self):
-        return {"uiKey": self.ui_key}
+        return {"uiKey": self.ui_key, "syncId": self.sync_id}
 
 
 class UIClose(CustomC2SEvent):
     name = "skybluetech:UIClose"
 
-    def __init__(self, ui_key):
-        # type: (str) -> None
+    def __init__(self, ui_key, sync_id):
+        # type: (str, str) -> None
         self.ui_key = ui_key
+        self.sync_id = sync_id
 
     def unmarshal(self, data):
         # type: (dict) -> None
         self.ui_key = data["uiKey"]
+        self.sync_id = data["syncId"]
 
     def marshal(self):
-        return {"uiKey": self.ui_key}
+        return {"uiKey": self.ui_key, "syncId": self.sync_id}
 
 
 class MachinePanelUI(ToolDeltaScreen):
@@ -53,8 +56,9 @@ class MachinePanelUI(ToolDeltaScreen):
     def __init__(self, namespace, name, param):
         ToolDeltaScreen.__init__(self, namespace, name, param)
         self.inited = False
-        self.sync = None  # type: S2CSync | None
         self.dim, self.x, self.y, self.z = self.get_bound_pos()
+        sync_id = "machine_%d_%d_%d_%d" % (self.dim, self.x, self.y, self.z)
+        self.ui_sync = S2CSync.NewClient(sync_id).Activate()
 
     def get_bound_pos(self):
         # type: () -> tuple[int, int, int, int]
@@ -64,14 +68,10 @@ class MachinePanelUI(ToolDeltaScreen):
         ToolDeltaScreen._on_create(self)
         self[self.EXIT_BTN_PATH].asButton().SetCallback(self.OnExit)
         self.inited = True
-        if self.sync:
-            self.sync.Activate()
 
     def _on_destroy(self):
-        """超类方法, 告诉服务端 UI 关闭。"""
         ToolDeltaScreen._on_destroy(self)
-        if self.sync:
-            self.sync.Deactivate()
+        self.ui_sync.Deactivate()
 
     def OnExit(self, params):
         self._exitLater()
@@ -90,22 +90,21 @@ class MachinePanelUIProxy(ToolDeltaScreen):
     def __init__(self, screenName, screenNode):
         global GPlayerId, GPos
         ToolDeltaScreen.__init__(self, screenName, screenNode)
-        self.sync = None  # type: S2CSync | None
         if GPos is None:
             raise RuntimeError("Player do not click machine but create UI")
         self.pid = GPlayerId
         self.pos = GPos
+        sync_id = "machine_%d_%d_%d_%d" % GPos
+        self.ui_sync = S2CSync.NewClient(sync_id)
 
     def _on_create(self):
         ToolDeltaScreen._on_create(self)
+        self.ui_sync.Activate()
         self.inited = True
-        if self.sync:
-            self.sync.Activate()
 
     def _on_destroy(self):
         ToolDeltaScreen._on_destroy(self)
-        if self.sync:
-            self.sync.Deactivate()
+        self.ui_sync.Deactivate()
 
     def OnExit(self):
         self._exitLater()

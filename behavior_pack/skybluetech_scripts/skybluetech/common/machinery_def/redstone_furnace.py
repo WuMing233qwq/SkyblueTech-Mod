@@ -1,1 +1,3 @@
+# coding=utf-8
 TICK_POWER = 50
+STORE_RF_MAX = 8800

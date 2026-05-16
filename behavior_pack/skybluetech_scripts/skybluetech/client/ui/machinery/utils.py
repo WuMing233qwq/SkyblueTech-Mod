@@ -1,9 +1,11 @@
 from skybluetech_scripts.tooldelta.define import UICtrlPosData
 from skybluetech_scripts.tooldelta.ui.elem_comp import UBaseCtrl, UImage
 from skybluetech_scripts.tooldelta.api.client.item import GetItemHoverName
-from ....common.define.fluids import texture as fluid_texture
-from ....common.define.fluids.gas_enum import IsGas
-from ....common.ui_sync.machinery.basic_machine_ui_sync import FluidSlotSync
+from skybluetech_scripts.skybluetech.common.define.fluids import (
+    texture as fluid_texture,
+)
+from skybluetech_scripts.skybluetech.common.define.fluids.gas_enum import IsGas
+from skybluetech_scripts.skybluetech.common.machinery_def.basic import FluidSlotClient
 
 # TYPE_CHECKING
 if 0:
@@ -94,134 +96,6 @@ def UpdateGenericProgressB2T(ui, percent):
     ui["mask"].asImage().SetSpriteClipRatio("fromBottomToTop", 1 - percent)
 
 
-def UpdateFluidDisplay(ui, fluid_id, fluid_volume, max_volume):
-    # type: (UBaseCtrl, str | None, float, float) -> None
-    fluid_img = ui["fluid/img"].asImage()
-    volume_disp = ui["text"].asLabel()
-    if fluid_id is None:
-        fluid_img.SetFullSize("y", UICtrlPosData("parent", relative_value=0))
-    else:
-        texture, color = fluid_texture.getBaseTexture(fluid_id)
-        texture_path = texture
-        fluid_img.SetSprite(texture_path)
-        if color is not None:
-            r, g, b = color
-            color = (float(r) / 255, float(g) / 255, float(b) / 255)
-            fluid_img.SetSpriteColor(color)
-        else:
-            fluid_img.SetSpriteColor((1, 1, 1))
-    if fluid_volume == INFINITY:
-        prgs = 1
-    elif max_volume == INFINITY:
-        prgs = 0
-    else:
-        prgs = float(fluid_volume) / max_volume
-    volume_disp.SetText(
-        "%s / %s" % (FormatFluidVolume(fluid_volume), FormatFluidVolume(max_volume))
-    )
-    if fluid_id is not None and IsGas(fluid_id):
-        fluid_img.SetAnchorFrom("top_middle")
-        fluid_img.SetAnchorTo("top_middle")
-        fluid_img.SetFullSize("y", UICtrlPosData("parent", relative_value=min(2, prgs)))
-    else:
-        fluid_img.SetAnchorFrom("bottom_middle")
-        fluid_img.SetAnchorTo("bottom_middle")
-        fluid_img.SetFullPos("y", UICtrlPosData("none", relative_value=0))
-        fluid_img.SetFullSize("y", UICtrlPosData("parent", relative_value=min(2, prgs)))
-
-
-def InitFluidDisplay(ctrl, data_cb):
-    # type: (UBaseCtrl, BtnCb[tuple[str | None, float, float]]) -> typing.Callable[[], None]
-    btn = ctrl["data_btn"].asButton()
-    screen_vars = ctrl._root._vars
-    current_ctrl = [None]  # type: list[UBaseCtrl | None]
-
-    def get_last_ui_board():
-        # type: () -> UBaseCtrl | None
-        return screen_vars.get("disp_board")
-
-    def _updateHook():
-        elem = get_last_ui_board()
-        fluid_id, fluid_vol, max_vol = data_cb()
-        UpdateFluidDisplay(ctrl, fluid_id, fluid_vol, max_vol)
-        if elem is None or elem is not current_ctrl[0]:
-            return
-        (elem / "image/label").asLabel().SetText(
-            "§d流体类型： §f"
-            + (
-                (GetItemHoverName(fluid_id) or fluid_id)
-                if fluid_id is not None and fluid_id != "加载中.."
-                else "空"
-            )
-            + "\n"
-            + "§a体积： §f"
-            + FormatFluidVolume(fluid_vol)
-            + "\n"
-            + "§6容器体积： §f"
-            + FormatFluidVolume(max_vol)
-        )
-
-    # def onRollOver(params):
-    #     prev_board = get_last_ui_board()
-    #     if prev_board is not None:
-    #         return
-    #     e = ctrl._root.AddElement("SkybluePanelLib.DataTextScreen", "fluid_hover_text")
-    #     e.SetPos(ctrl.GetRootPos())
-    #     e.SetLayer(100)
-    #     screen_vars["disp_fluid_databoard"] = e
-    #     current_ctrl[0] = e
-    #     _updateHook()
-
-    # def onRollOut(params):
-    #     prev_board = get_last_ui_board()
-    #     if prev_board is not None:
-    #         prev_board.Remove()
-    #         del screen_vars["disp_fluid_databoard"]
-    #     current_ctrl[0] = None
-
-    def onRelease(params):
-        prev_board = get_last_ui_board()
-        if prev_board is not None:
-            prev_board.Remove()
-            del screen_vars["disp_board"]
-            if screen_vars.get("disp_board_src") is ctrl:
-                screen_vars.pop("disp_board_src")
-                return
-        e = ctrl._root.AddElement("SkybluePanelLib.DataTextScreen", "fluid_hover_text")
-        e.SetPos(ctrl.GetRootPos())
-        e.SetLayer(100)
-        screen_vars["disp_board"] = e
-        screen_vars["disp_board_src"] = ctrl
-        current_ctrl[0] = e
-        _updateHook()
-
-    # btn.SetOnRollOverCallback(onRollOver)
-    # btn.SetOnRollOutCallback(onRollOut)
-    btn.SetCallback(onRelease)
-    return _updateHook
-
-
-def InitFluidsDisplay(ui, fluid_slots, index):
-    # type: (UBaseCtrl, list[FluidSlotSync], int) -> typing.Callable[[], None]
-    def get_data():
-        if len(fluid_slots) == 0:
-            fluid_id = "加载中.."
-            fluid_volume = 0
-            max_volume = 0
-        elif len(fluid_slots) <= index:
-            fluid_id = None
-            fluid_volume = -128
-            max_volume = -128
-        else:
-            fluid = fluid_slots[index]
-            fluid_id = fluid.fluid_id
-            fluid_volume = fluid.volume
-            max_volume = fluid.max_volume
-        return fluid_id, fluid_volume, max_volume
-
-    return InitFluidDisplay(ui, get_data)
-
-
 def UpdateImageTransformColor(
     img, raw_r, raw_g, raw_b, new_r, new_g, new_b, transform_pc
 ):
@@ -230,3 +104,130 @@ def UpdateImageTransformColor(
     g = raw_g + (new_g - raw_g) * transform_pc
     b = raw_b + (new_b - raw_b) * transform_pc
     img.SetSpriteColor((r / 255, g / 255, b / 255))
+
+
+class FluidDisplayer(object):
+    def __init__(self, ctrl):
+        # type: (UBaseCtrl) -> None
+        self.ctrl = ctrl
+        self.databoard = None
+        self.fluid_id = None
+        self.fluid_volume = None
+        self.max_volume = None
+        btn = ctrl["data_btn"].asButton()
+        screen_vars = ctrl._root._vars
+
+        # def onRollOver(params):
+        #     prev_board = get_last_ui_board()
+        #     if prev_board is not None:
+        #         return
+        #     e = ctrl._root.AddElement("SkybluePanelLib.DataTextScreen", "fluid_hover_text")
+        #     e.SetPos(ctrl.GetRootPos())
+        #     e.SetLayer(100)
+        #     screen_vars["disp_fluid_databoard"] = e
+        #     current_ctrl[0] = e
+        #     _updateHook()
+
+        # def onRollOut(params):
+        #     prev_board = get_last_ui_board()
+        #     if prev_board is not None:
+        #         prev_board.Remove()
+        #         del screen_vars["disp_fluid_databoard"]
+        #     current_ctrl[0] = None
+
+        def onRelease(params):
+            prev_board = ctrl._root._vars.get("disp_board")  # type: UBaseCtrl | None
+            if prev_board is not None:
+                prev_board.Remove()
+                del screen_vars["disp_board"]
+                if screen_vars.get("disp_board_src") is ctrl:
+                    screen_vars.pop("disp_board_src")
+                    return
+            e = ctrl._root.AddElement(
+                "SkybluePanelLib.DataTextScreen", "fluid_hover_text"
+            )
+            e.SetPos(ctrl.GetRootPos())
+            e.SetLayer(100)
+            screen_vars["disp_board"] = e
+            screen_vars["disp_board_src"] = ctrl
+            self._update_hover()
+
+        # btn.SetOnRollOverCallback(onRollOver)
+        # btn.SetOnRollOutCallback(onRollOut)
+        btn.SetCallback(onRelease)
+
+    def update(self, fluid_id, fluid_volume, max_volume):
+        # type: (str | None, float, float) -> None
+        self.fluid_id = fluid_id
+        self.fluid_volume = fluid_volume
+        self.max_volume = max_volume
+        fluid_img = self.ctrl["fluid/img"].asImage()
+        volume_disp = self.ctrl["text"].asLabel()
+        if fluid_id is None:
+            fluid_img.SetFullSize("y", UICtrlPosData("parent", relative_value=0))
+        else:
+            texture, color = fluid_texture.getBaseTexture(fluid_id)
+            texture_path = texture
+            fluid_img.SetSprite(texture_path)
+            if color is not None:
+                r, g, b = color
+                color = (float(r) / 255, float(g) / 255, float(b) / 255)
+                fluid_img.SetSpriteColor(color)
+            else:
+                fluid_img.SetSpriteColor((1, 1, 1))
+        if fluid_volume == INFINITY:
+            prgs = 1
+        elif max_volume == INFINITY:
+            prgs = 0
+        else:
+            prgs = float(fluid_volume) / max_volume
+        volume_disp.SetText(
+            "%s / %s"
+            % (
+                FormatFluidVolume(fluid_volume),
+                FormatFluidVolume(max_volume),
+            )
+        )
+        if fluid_id is not None and IsGas(fluid_id):
+            fluid_img.SetAnchorFrom("top_middle")
+            fluid_img.SetAnchorTo("top_middle")
+            fluid_img.SetFullSize(
+                "y", UICtrlPosData("parent", relative_value=min(2, prgs))
+            )
+        else:
+            fluid_img.SetAnchorFrom("bottom_middle")
+            fluid_img.SetAnchorTo("bottom_middle")
+            fluid_img.SetFullPos("y", UICtrlPosData("none", relative_value=0))
+            fluid_img.SetFullSize(
+                "y", UICtrlPosData("parent", relative_value=min(2, prgs))
+            )
+        self._update_hover()
+
+    def _update_hover(self):
+        # type: () -> None
+        databoard = self.ctrl._root._vars.get("disp_board")  # type: UBaseCtrl | None
+        databoard_src = self.ctrl._root._vars.get("disp_board_src")  # type: UBaseCtrl | None
+        if databoard is None or databoard_src is not self.ctrl:
+            return
+        (databoard / "image/label").asLabel().SetText(
+            "§d流体类型： §f"
+            + (
+                (GetItemHoverName(self.fluid_id) or self.fluid_id)
+                if self.fluid_id is not None
+                else ("未知" if self.max_volume is None else "空")
+            )
+            + "\n"
+            + "§a体积： §f"
+            + (
+                FormatFluidVolume(self.fluid_volume)
+                if self.fluid_volume is not None
+                else "未知"
+            )
+            + "\n"
+            + "§6容器体积： §f"
+            + (
+                FormatFluidVolume(self.max_volume)
+                if self.max_volume is not None
+                else "未知"
+            )
+        )

@@ -16,7 +16,7 @@ from ...common.events.machinery.electric_crafter import (
 )
 from ...common.define.id_enum.items import CRAFTING_TEMPLATE
 from ...common.define.id_enum.machinery import ELECTRIC_CRAFTER as MACHINE_ID
-from ...common.ui_sync.machinery.electric_crafter import ElectricCrafterUISync
+from ...common.machinery_def.electric_crafter import STORE_RF_MAX
 from .basic import GUIControl, UpgradeControl, RegisterMachine
 
 TEMPLATE_SLOT = 12
@@ -24,9 +24,11 @@ TEMPLATE_SLOT = 12
 
 @RegisterMachine
 class ElectricCrafter(GUIControl, UpgradeControl):
-    origin_process_ticks = 60
-    running_power = 35
     block_name = MACHINE_ID
+    origin_process_ticks = 60
+    dump_progress_to_block_entity_data = True
+    running_power = 35
+    store_rf_max = STORE_RF_MAX
     input_slots = tuple(range(9))
     output_slots = tuple(range(9, 12))
     upgrade_slot_start = TEMPLATE_SLOT + 1
@@ -38,7 +40,6 @@ class ElectricCrafter(GUIControl, UpgradeControl):
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        self.sync = ElectricCrafterUISync.NewServer(self).Activate()
         self.try_update_template()
 
     def OnTicking(self):
@@ -46,19 +47,12 @@ class ElectricCrafter(GUIControl, UpgradeControl):
             if self.ProcessOnce():
                 self.run_once()
                 self.detect_next()
-                self.CallSync()
             else:
                 break
 
     @SuperExecutorMeta.execute_super
     def OnClick(self, event, extra_datas=None):
         ExecLater(0.1, self.notify_crafting_update)
-
-    def OnSync(self):
-        self.sync.rf = self.store_rf
-        self.sync.rf_max = self.store_rf_max
-        self.sync.progress = self.GetProcessProgress()
-        self.sync.MarkedAsChanged()
 
     @SuperExecutorMeta.execute_super
     def OnUnload(self):
@@ -181,10 +175,10 @@ class ElectricCrafter(GUIControl, UpgradeControl):
         if self.rcp_items is not None:
             ElectricCrafterUpdateRecipe([
                 (i.item_ids[0], i.aux_value) if i else None for i in self.rcp_items
-            ]).sendMulti(self.sync.GetPlayersInSync())
+            ]).sendMulti(self.ui_sync.GetPlayersInSync())
         else:
             ElectricCrafterUpdateRecipe([None] * 9).sendMulti(
-                self.sync.GetPlayersInSync()
+                self.ui_sync.GetPlayersInSync()
             )
 
 

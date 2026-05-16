@@ -3,6 +3,8 @@ from ..define.id_enum import MIXER, DUST_BLOCK
 from ..mini_jei.core import RecipesCollection
 from ..mini_jei.machinery.mixer import MachineRecipe, MixerRecipe
 
+STORE_RF_MAX = 8800
+MAX_FLUID_VOLUME = 2000
 
 recipes = RecipesCollection(
     MIXER,

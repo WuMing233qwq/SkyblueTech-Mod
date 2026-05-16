@@ -1,6 +1,8 @@
 # coding=utf-8
 from skybluetech_scripts.tooldelta.define import Item
 from skybluetech_scripts.tooldelta.api.server import ItemExists
+from skybluetech_scripts.skybluetech.common.define.id_enum import Tank
+from skybluetech_scripts.skybluetech.common.machinery_def.tank import TANK_MAX_VOLUMES
 from ..basic import RegisterMachine
 from .base_tank import BasicTank, FluidContainer, RegisterTank
 
@@ -10,8 +12,8 @@ INFINITY = float("inf")
 @RegisterMachine
 @RegisterTank
 class CreativeTank(BasicTank):
-    block_name = "skybluetech:tank_creative"
-    max_fluid_volume = INFINITY
+    block_name = Tank.CREATIVE
+    max_fluid_volume = TANK_MAX_VOLUMES[Tank.CREATIVE]
 
     def __init__(self, dim, x, y, z, block_entity_data):
         BasicTank.__init__(self, dim, x, y, z, block_entity_data)

@@ -1,8 +1,11 @@
 # coding=utf-8
 from skybluetech_scripts.tooldelta.define import Item
+from skybluetech_scripts.tooldelta.api.client import (
+    GetBlockEntityData,
+    GetItemHoverName,
+)
 from skybluetech_scripts.tooldelta.events.client import OnKeyPressInGame
 from skybluetech_scripts.tooldelta.ui import RegistToolDeltaScreen, UBaseCtrl, Binder
-from skybluetech_scripts.tooldelta.api.client import GetItemHoverName
 from ....common.events.machinery.fluid_splitter import (
     FluidSplitterSettingsSetFluid,
     FluidSplitterSettingsSetLabel,
@@ -10,47 +13,44 @@ from ....common.events.machinery.fluid_splitter import (
     FluidSplitterSimpleAction,
 )
 from ....common.define.id_enum.fluids import all_fluids
-from ....common.ui_sync.machinery.fluid_splitter import FluidSplitterUISync
+from ....common.machinery_def.basic import FluidSlotClient
+from ....common.machinery_def.fluid_splitter import MAX_FLUID_VOLUME
 from ..misc.transmitter_settings_ui import rand_rgb_by_index, get_opposite_color
 from .define import MachinePanelUIProxy, MAIN_PATH
-from .utils import InitFluidsDisplay
+from .utils import FluidDisplayer
 
-SETTINGS_VIEW_NODE = MAIN_PATH / "settings_view"
-ADD_BTN_NODE = MAIN_PATH / "add_btn"
-FLUID_DISP_NODE = MAIN_PATH / "fluid_display"
+SETTINGS_VIEW_PATH = MAIN_PATH / "settings_view"
+ADD_BTN_PATH = MAIN_PATH / "add_btn"
+FLUID_DISP_PATH = MAIN_PATH / "fluid_display"
 
 
 @RegistToolDeltaScreen("FluidSplitterUI.main", is_proxy=True)
 class FluidSplitterUI(MachinePanelUIProxy):
     def OnCreate(self):
-        dim, x, y, z = self.pos
-        self.sync = FluidSplitterUISync.NewClient(dim, x, y, z)  # type: FluidSplitterUISync
-        self.sync.SetUpdateCallback(self.WhenUpdated)
-        self.settings_view = self.GetElement(SETTINGS_VIEW_NODE).asScrollView()
+        self.settings_view = self.GetElement(SETTINGS_VIEW_PATH).asScrollView()
         self.settings_grid = self.settings_view.GetContent().asGrid()
         self.add_btn = (
-            self.GetElement(ADD_BTN_NODE).asButton().SetCallback(self.onAddSetting)
+            self.GetElement(ADD_BTN_PATH).asButton().SetCallback(self.onAddSetting)
         )
         self.label_selector_window = None
         self.fluid_selector_window = None
         self.fluid_selector_window_elements = [None] * 24  # type: list[UBaseCtrl | None]
         self.current_selected_fluid_id = None
         self.selected_setting_index = -1
-        self.fluid_update_cb = InitFluidsDisplay(
-            self.GetElement(FLUID_DISP_NODE),
-            self.sync.fluids,
-            0,
-        )
+        self.fluid_displayer = FluidDisplayer(self.GetElement(FLUID_DISP_PATH))
 
     def OnDestroy(self):
         MachinePanelUIProxy.OnDestroy(self)
         self.closeLabelSelector()
         self.closeFluidSelector()
 
-    def WhenUpdated(self):
-        if not self.inited:
+    def OnTicking(self):
+        data = GetBlockEntityData(*self.pos[1:])
+        if data is None:
             return
-        self.fluid_update_cb()
+        data = data["exData"]
+        fluid = FluidSlotClient(data)
+        self.fluid_displayer.update(fluid.fluid_id, fluid.volume, MAX_FLUID_VOLUME)
 
     def onGridUpdated(self, lis):
         # type: (list[tuple[int, str]]) -> None
@@ -155,7 +155,7 @@ class FluidSplitterUI(MachinePanelUIProxy):
         # print params
         if params["ButtonState"] != 0:
             return
-        btn = self.GetElement(SETTINGS_VIEW_NODE / params["ButtonPath"])
+        btn = self.GetElement(SETTINGS_VIEW_PATH / params["ButtonPath"])
         btn_x, btn_y = btn.GetRootPos()
         idx = params["#collection_index"]
         self.selected_setting_index = idx
@@ -166,7 +166,7 @@ class FluidSplitterUI(MachinePanelUIProxy):
         # print params
         if params["ButtonState"] != 0:
             return
-        btn = self.GetElement(SETTINGS_VIEW_NODE / params["ButtonPath"])
+        btn = self.GetElement(SETTINGS_VIEW_PATH / params["ButtonPath"])
         btn_x, btn_y = btn.GetRootPos()
         idx = params["#collection_index"]
         self.selected_setting_index = idx

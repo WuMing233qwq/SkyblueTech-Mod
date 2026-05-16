@@ -1,7 +1,10 @@
 # coding=utf-8
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
 from ...common.define.id_enum.machinery import HYDROPONIC_BASE as MACHINE_ID
-from ...common.ui_sync.machinery.hydroponic_base import HydroponicBaseUISync
+from ...common.machinery_def.hydroponic_base import (
+    FLUID_0_MAX_VOLUME,
+    FLUID_1_MAX_VOLUME,
+)
 from .basic import (
     BaseMachine,
     ItemContainer,
@@ -24,27 +27,17 @@ class HydroponicBase(BaseMachine, ItemContainer, MultiFluidContainer, GUIControl
     output_slots = tuple(range(16))
     fluid_input_slots = {0, 1}
     fluid_io_mode = (0, 0, 0, 0, 0, 0)
-    fluid_slot_max_volumes = (2000, 2000)
+    fluid_slot_max_volumes = (FLUID_0_MAX_VOLUME, FLUID_1_MAX_VOLUME)
     fluid_io_fix_mode = -1
     running_power = POWER_COST
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        self.sync = HydroponicBaseUISync.NewServer(self).Activate()
-        self.CallSync()
+        pass
 
     @SuperExecutorMeta.execute_super
     def OnUnload(self):
         pass
-
-    def OnSync(self):
-        self.sync.fluid_1_type = self.fluids[0].fluid_id
-        self.sync.fluid_1_volume = self.fluids[0].volume
-        self.sync.fluid_1_max_volume = self.fluids[0].max_volume
-        self.sync.fluid_2_type = self.fluids[1].fluid_id
-        self.sync.fluid_2_volume = self.fluids[1].volume
-        self.sync.fluid_2_max_volume = self.fluids[1].max_volume
-        self.sync.MarkedAsChanged()
 
     def IsValidFluidInput(self, slot, fluid_id):
         # type: (int, str) -> bool
@@ -57,7 +50,6 @@ class HydroponicBase(BaseMachine, ItemContainer, MultiFluidContainer, GUIControl
         self.fluids[0].volume -= volume
         if self.fluids[0].volume <= 0:
             self.fluids[0].fluid_id = None
-        self.CallSync()
 
     def GetWaterVolume(self):
         # type: () -> float

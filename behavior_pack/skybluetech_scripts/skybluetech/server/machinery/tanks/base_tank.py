@@ -9,7 +9,6 @@ from skybluetech_scripts.tooldelta.events.server import BlockNeighborChangedServ
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
 from ....common.define.global_config import BUCKET_VOLUME
 from ....common.define.facing import DXYZ_FACING, FACING_EN
-from ....common.ui_sync.machinery.general_tank import GeneralTankUISync
 from ...transmitters.pipe.logic import isPipe
 from ..basic import BaseMachine, FluidContainer, ItemContainer, GUIControl
 
@@ -26,16 +25,9 @@ class BasicTank(BaseMachine, FluidContainer, ItemContainer, GUIControl):
     input_slots = (0,)
     output_slots = (1,)
 
+    @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        BaseMachine.__init__(self, dim, x, y, z, block_entity_data)
-        FluidContainer.__init__(self, dim, x, y, z, block_entity_data)
-        self.sync = GeneralTankUISync.NewServer(self).Activate()
-
-    def OnSync(self):
-        self.sync.fluid_id = self.fluid_id
-        self.sync.fluid_volume = self.fluid_volume
-        self.sync.max_volume = self.max_fluid_volume
-        self.sync.MarkedAsChanged()
+        pass
 
     @SuperExecutorMeta.execute_super
     def OnPlaced(self, _):
@@ -88,7 +80,6 @@ class BasicTank(BaseMachine, FluidContainer, ItemContainer, GUIControl):
                 item0.count -= 1
                 self.SetSlotItem(0, item0)
                 self.onReducedFluid(fluid_id, BUCKET_VOLUME)
-                self.CallSync()
             elif item0.id.endswith("_bucket"):
                 if item1 is not None and (
                     item1.id != "minecraft:bucket" or item1.StackFull()
@@ -111,7 +102,6 @@ class BasicTank(BaseMachine, FluidContainer, ItemContainer, GUIControl):
                 item1.count += 1
                 self.SetSlotItem(1, item1)
                 self.onAddedFluid(fluid_id, BUCKET_VOLUME)
-                self.CallSync()
 
 
 def RegisterTank(tank_class):

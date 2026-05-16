@@ -6,15 +6,14 @@ from ....common.events.machinery.rf_repeater_plant import (
     RFRepeaterPlantSettingsUpdate,
 )
 from ....common.machinery_def.rf_repeater_plant import reverse_mode
-from ....common.ui_sync.machinery.rf_repeater_plant import RFRepeaterPlantUISync
 from ..misc.rf_repeater_plant_build import RFRepeaterPlantBuildUI
 from .define import MachinePanelUI, SCREEN_BASE_PATH
 
-DATABOARD_TIP_TEXT_NODE = SCREEN_BASE_PATH / "databoard/tip_text"
-IO_MODE_CTRL_NODE = SCREEN_BASE_PATH / "io_mode_ctrl"
-BUILD_BTN_NODE = SCREEN_BASE_PATH / "build_btn"
-IO_CTRL_BTN_NODE = IO_MODE_CTRL_NODE / "io_ctrl_btn"
-IO_MODE_LABEL_NODE = IO_MODE_CTRL_NODE / "io_mode_label"
+DATABOARD_TIP_TEXT_PATH = SCREEN_BASE_PATH / "databoard/tip_text"
+IO_MODE_CTRL_PATH = SCREEN_BASE_PATH / "io_mode_ctrl"
+BUILD_BTN_PATH = SCREEN_BASE_PATH / "build_btn"
+IO_CTRL_BTN_PATH = IO_MODE_CTRL_PATH / "io_ctrl_btn"
+IO_MODE_LABEL_PATH = IO_MODE_CTRL_PATH / "io_mode_label"
 
 
 @RegistToolDeltaScreen("RFRepeaterPlantUI.main", key=RF_REPEATER_PLANT_UI)
@@ -23,28 +22,25 @@ class RFRepeaterPlantUI(MachinePanelUI):
     allow_esc_exit = True
 
     def OnCreate(self):
-        self.io_tips = self.GetElement(DATABOARD_TIP_TEXT_NODE).asLabel()
+        self.io_tips = self.GetElement(DATABOARD_TIP_TEXT_PATH).asLabel()
         self.build_btn = (
             self
-            .GetElement(BUILD_BTN_NODE)
+            .GetElement(BUILD_BTN_PATH)
             .asButton()
             .SetCallback(self.on_press_build_btn)
         )
         self.io_ctrl_btn = (
             self
-            .GetElement(IO_CTRL_BTN_NODE)
+            .GetElement(IO_CTRL_BTN_PATH)
             .asButton()
             .SetCallback(self.on_press_io_ctrl_btn)
         )
-        self.io_mode_label = self.GetElement(IO_MODE_LABEL_NODE).asLabel()
+        self.io_mode_label = self.GetElement(IO_MODE_LABEL_PATH).asLabel()
         self.onContentUpdate(
             RFRepeaterPlantSettingsUpdate.unmarshal(
                 self._init_params["st:init_content"]
             )
         )
-        self.sync = RFRepeaterPlantUISync.NewClient(
-            self.dim, self.x, self.y, self.z
-        ).Activate()
 
     @MachinePanelUI.Listen(RFRepeaterPlantSettingsUpdate)
     def onContentUpdate(self, event):

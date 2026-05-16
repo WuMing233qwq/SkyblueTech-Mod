@@ -1,33 +1,36 @@
 # coding=utf-8
-
+from skybluetech_scripts.tooldelta.api.client import GetBlockEntityData
 from skybluetech_scripts.tooldelta.ui import RegistToolDeltaScreen
-from ....common.ui_sync.machinery.pump import PumpUISync
+from skybluetech_scripts.tooldelta.utils.nbt import GetValueWithDefault as GetValue
+from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
+    K_STORE_RF,
+    K_FLUID_ID,
+    K_FLUID_VOLUME,
+)
+from ....common.machinery_def.pump import (
+    STORE_RF_MAX,
+    MAX_FLUID_VOLUME,
+)
 from .define import MachinePanelUIProxy, MAIN_PATH
-from .utils import UpdatePowerBar, InitFluidDisplay
+from .utils import UpdatePowerBar, FluidDisplayer
 
-POWER_NODE = MAIN_PATH / "power_bar"
-FLUID_NODE = MAIN_PATH / "fluid_display"
+POWER_PATH = MAIN_PATH / "power_bar"
+FLUID_PATH = MAIN_PATH / "fluid_display"
 
 
 @RegistToolDeltaScreen("PumpUI.main", is_proxy=True)
 class PumpUI(MachinePanelUIProxy):
     def OnCreate(self):
-        dim, x, y, z = self.pos
-        self.sync = PumpUISync.NewClient(dim, x, y, z)  # type: PumpUISync
-        self.power_bar = self.GetElement(POWER_NODE)
-        self.fluid_display = self.GetElement(FLUID_NODE)
-        self.fluid_updater = InitFluidDisplay(
-            self.fluid_display,
-            lambda: (
-                self.sync.fluid_id,
-                self.sync.fluid_volume,
-                self.sync.max_volume,
-            ),
-        )
-        self.sync.SetUpdateCallback(self.WhenUpdated)
+        self.power_bar = self.GetElement(POWER_PATH)
+        self.fluid_displayer = FluidDisplayer(self.GetElement(FLUID_PATH))
 
-    def WhenUpdated(self):
-        if not self.inited:
+    def OnTicking(self):
+        data = GetBlockEntityData(*self.pos[1:])
+        if data is None:
             return
-        UpdatePowerBar(self.power_bar, self.sync.storage_rf, self.sync.rf_max)
-        self.fluid_updater()
+        data = data["exData"]
+        store_rf = GetValue(data, K_STORE_RF, 0)
+        fluid_id = GetValue(data, K_FLUID_ID, None)
+        fluid_volume = GetValue(data, K_FLUID_VOLUME, 0)
+        UpdatePowerBar(self.power_bar, store_rf, STORE_RF_MAX)
+        self.fluid_displayer.update(fluid_id, fluid_volume, MAX_FLUID_VOLUME)

@@ -17,7 +17,6 @@ from ...common.machinery_def.assembler import *
 from ..tools.upgraders.register import UpdateObjectData
 from .utils.action_commit import SafeGetMachine
 from .utils.lore import GetLorePos, SetLoreAtPos
-from ...common.ui_sync.machinery.assembler import AssemblerUISync
 from .basic import GUIControl, UpgradeControl, RegisterMachine
 from .utils.transmitter_conn import TransmitterConn
 
@@ -32,12 +31,11 @@ TCON = TransmitterConn(wire=True)
 @RegisterMachine
 class Assembler(GUIControl, UpgradeControl):
     block_name = MACHINE_ID
-    store_rf_max = 100000
+    store_rf_max = RF_MAX
     energy_io_mode = (0, 0, 0, 0, 0, 0)
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        self.sync = AssemblerUISync.NewServer(self).Activate()
         self.power = 0
         self.delay = 20
         self.lis = []  # type: list[tuple[str, str, int]]
@@ -62,16 +60,11 @@ class Assembler(GUIControl, UpgradeControl):
         # type: (ServerBlockUseEvent, dict | None) -> None
         AssemblerUpgradersUpdate(self.lis).send(event.playerId)
 
-    def OnSync(self):
-        self.sync.storage_rf = self.store_rf
-        self.sync.rf_max = self.store_rf_max
-        self.sync.MarkedAsChanged()
-
     @SuperExecutorMeta.execute_super
     def OnSlotUpdate(self, slot_pos):
         # type: (int) -> None
         self.update_list()
-        AssemblerUpgradersUpdate(self.lis).sendMulti(self.sync.GetPlayersInSync())
+        AssemblerUpgradersUpdate(self.lis).sendMulti(self.ui_sync.GetPlayersInSync())
 
     @SuperExecutorMeta.execute_super
     def OnUnload(self):
@@ -125,7 +118,6 @@ class Assembler(GUIControl, UpgradeControl):
         self.SetSlotItem(1, None)
         self.SetSlotItem(0, slot0_item)
         self.update_list()
-        self.CallSync()
 
     def on_pull_upgrader(self, index):
         # type: (int) -> None
@@ -147,7 +139,6 @@ class Assembler(GUIControl, UpgradeControl):
         setUpgraders(slot0_item, upgraders)
         self.SetSlotItem(0, slot0_item)
         self.update_list()
-        self.CallSync()
 
     def can_add_new_upgrader(self, item, exist_upgraders, upgrader):
         # type: (Item, dict[str, Item], Item) -> bool

@@ -5,8 +5,7 @@ from skybluetech_scripts.tooldelta.extensions.recipe_obj import GetFurnaceRecipe
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
 from ...common.define import flags
 from ...common.define.id_enum.machinery import REDSTONE_FURNACE as MACHINE_ID
-from ...common.machinery_def.redstone_furnace import TICK_POWER
-from ...common.ui_sync.machinery.redstone_furnace import RedstoneFurnaceUISync
+from ...common.machinery_def.redstone_furnace import TICK_POWER, STORE_RF_MAX
 from .basic import (
     ItemContainer,
     GUIControl,
@@ -19,7 +18,8 @@ from .basic import (
 @RegisterMachine
 class RedstoneFurnace(GUIControl, UpgradeControl, WorkRenderer):
     block_name = MACHINE_ID
-    store_rf_max = 8800
+    store_rf_max = STORE_RF_MAX
+    dump_progress_to_block_entity_data = True
     origin_process_ticks = 20 * 8  # 8s
     running_power = TICK_POWER
     input_slots = (0,)
@@ -32,13 +32,11 @@ class RedstoneFurnace(GUIControl, UpgradeControl, WorkRenderer):
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        self.sync = RedstoneFurnaceUISync.NewServer(self).Activate()
         self.try_start_next()
 
     @SuperExecutorMeta.execute_super
     def OnTicking(self):
         while self.IsActive():
-            self.CallSync()
             if self.ProcessOnce():
                 self.run_once()
                 self.try_start_next()
@@ -80,12 +78,6 @@ class RedstoneFurnace(GUIControl, UpgradeControl, WorkRenderer):
         else:
             output_item = Item(expected_output)
         self.SetSlotItem(1, output_item)
-
-    def OnSync(self):
-        self.sync.storage_rf = self.store_rf
-        self.sync.rf_max = self.store_rf_max
-        self.sync.progress_relative = self.GetProcessProgress()
-        self.sync.MarkedAsChanged()
 
     def IsValidInput(self, slot, item):
         # type: (int, Item) -> bool

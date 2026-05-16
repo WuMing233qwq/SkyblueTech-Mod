@@ -1,22 +1,25 @@
 # coding=utf-8
-
+from skybluetech_scripts.tooldelta.api.client import GetBlockEntityData
 from skybluetech_scripts.tooldelta.ui import RegistToolDeltaScreen
-from ....common.ui_sync.machinery.charger import ChargerUISync
+from skybluetech_scripts.tooldelta.utils.nbt import GetValueWithDefault as GetValue
+from skybluetech_scripts.skybluetech.common.machinery_def.basic import K_STORE_RF
+from skybluetech_scripts.skybluetech.common.machinery_def.charger import STORE_RF_MAX
+
 from .define import MachinePanelUIProxy, MAIN_PATH
 from .utils import UpdatePowerBar
 
-POWER_NODE = MAIN_PATH / "power_bar"
+POWER_PATH = MAIN_PATH / "power_bar"
 
 
 @RegistToolDeltaScreen("ChargerUI.main", is_proxy=True)
 class ChargerUI(MachinePanelUIProxy):
     def OnCreate(self):
-        dim, x, y, z = self.pos
-        self.sync = ChargerUISync.NewClient(dim, x, y, z)  # type: ChargerUISync
-        self.sync.SetUpdateCallback(self.WhenUpdated)
-        self.power = self.GetElement(POWER_NODE)
+        self.power = self.GetElement(POWER_PATH)
 
-    def WhenUpdated(self):
-        if not self.inited:
+    def OnTicking(self):
+        data = GetBlockEntityData(*self.pos[1:])
+        if data is None:
             return
-        UpdatePowerBar(self.power, self.sync.storage_rf, self.sync.rf_max)
+        data = data["exData"]
+        store_rf = GetValue(data, K_STORE_RF, 0)
+        UpdatePowerBar(self.power, store_rf, STORE_RF_MAX)

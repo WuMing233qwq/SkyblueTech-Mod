@@ -9,6 +9,7 @@ K_GROW_STAGE = "st:grow_stage"
 K_STAGE_GROW_TICKS = "st:stage_grow_ticks"
 K_WATER_STORE = "st:water_store"
 K_CROP_BLOCK_ID = "st:crop_block_id"
+STORE_RF_MAX = 10000
 WORK_TICK_DELAY = 5
 POWER_COST = 4
 ONCE_WATER_COST = 5

@@ -4,6 +4,11 @@ from ..define.id_enum import Paddle
 
 PaddleEnum = WindGeneratorStatesUpdate
 
+K_MCW = "st:mcw"
+K_OUTPUT_POWER = "st:output_power"
+
+STORE_RF_MAX = 14400
+
 
 def item2paddle(item_id):
     # type: (str) -> int

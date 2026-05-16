@@ -9,6 +9,27 @@ from ...common.events.machinery.fermenter import (
 from ...common.define.id_enum.machinery import FERMENTER as MACHINE_ID
 from ...common.define.id_enum.multi_block_structure import Fermenter as FERMENTER_IDENUM
 from ...common.machinery_def.fermenter import (
+    K_TEMPERATURE,
+    K_EXPECTED_TEMPERTURE,
+    K_EXPECTED_WATER_MAX_VOLUME,
+    K_MUD_VOLUME,
+    K_WATER_VOLUME,
+    K_MUD_VITALITY,
+    K_RECIPE,
+    K_CELL_HUNGER,
+    K_INOCULATING_RECIPE,
+    K_INOCULATE_TIME,
+    K_OUTPUT_GAS_ID,
+    K_OUTPUT_GAS_VOLUME,
+    K_OUTPUT_GAS_MAX_VOLUME,
+    K_OUTPUT_FLUID_ID,
+    K_OUTPUT_FLUID_MAX_VOLUME,
+    K_OUTPUT_FLUID_VOLUME,
+    K_GAS_PRODUCE_SPEED,
+    K_FLUID_PRODUCE_SPEED,
+    K_TOTAL_VOLUME,
+    K_MUD_THICKNESS,
+    STORE_RF_MAX,
     STRUCTURE_PALETTE,
     POOL_MAX_VOLUME,
     TEMPERATURE_MIN,
@@ -20,7 +41,6 @@ from ...common.machinery_def.fermenter import (
     spec_recipes,
     FermenterRecipe,
 )
-from ...common.ui_sync.machinery.fermenter import FermenterUISync
 from .utils.action_commit import SafeGetMachine
 from .basic import (
     GUIControl,
@@ -37,17 +57,6 @@ from .interfaces import (
 )
 
 
-K_TEMPERATURE = "st:temp"
-K_EXPECTED_TEMPERTURE = "st:expected_temp"
-K_EXPECTED_WATER_MAX_VOLUME = "st:expected_max_volume"
-K_MUD_VOLUME = "st:mud_volume"
-K_WATER_VOLUME = "st:water_volume"
-K_MUD_VITALITY = "st:mud_vitality"
-K_RECIPE = "st:recipe"
-K_CELL_HUNGER = "st:bacteria_hunger"
-K_INOCULATING_RECIPE = "st:inoculate_recipe"
-K_INOCULATE_TIME = "st:inoculate_time"
-
 EnergyInputInterface.AddExtraMachineId(FERMENTER_IDENUM.IO_ENERGY)
 FluidInputInterface.AddExtraMachineId(FERMENTER_IDENUM.IO_FLUID1)
 FluidOutputInterface.AddExtraMachineId(FERMENTER_IDENUM.IO_FLUID2)
@@ -58,6 +67,7 @@ ItemInputInterface.AddExtraMachineId(FERMENTER_IDENUM.IO_ITEM)
 @RegisterMachine
 class Fermenter(GUIControl, MultiBlockStructure, UpgradeControl, WorkRenderer):
     block_name = MACHINE_ID
+    store_rf_max = STORE_RF_MAX
     origin_process_ticks = 1
     running_power = 5
     structure_palette = STRUCTURE_PALETTE
@@ -80,7 +90,6 @@ class Fermenter(GUIControl, MultiBlockStructure, UpgradeControl, WorkRenderer):
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
         self.t = 0
-        self.sync = FermenterUISync.NewServer(self).Activate()
         self._energy_in = None
         self._item_in = None
         self._water_in = None
@@ -128,40 +137,38 @@ class Fermenter(GUIControl, MultiBlockStructure, UpgradeControl, WorkRenderer):
         self.clean()
 
     def OnSync(self):
-        self.sync.store_rf = self.store_rf
-        self.sync.store_rf_max = self.store_rf_max
-        self.sync.mud_temperature = self.mud_temperature
-        self.sync.mud_thickness = self.getThickness()
-        self.sync.expected_temperature = self.expected_mud_temperature
-        self.sync.expected_water_max_volume = self.expected_water_max_volume
-        self.sync.recipe_id = self.recipe_id
-        self.sync.structure_status = self.GetStructureDestroyFlag()
-        self.sync.structure_lack_blocks = self.GetStructureLackedBlocks()
-        if self.sync.structure_status == 0:
-            self.sync.content_volume_pc = float(self.getVolume()) / POOL_MAX_VOLUME
-            self.sync.out_gas_id = self.getGasOutIO().fluid_id
-            self.sync.out_gas_volume = self.getGasOutIO().fluid_volume
-            self.sync.out_gas_max_volume = self.getGasOutIO().max_fluid_volume
-            self.sync.out_fluid_id = self.getFluidOutIO().fluid_id
-            self.sync.out_fluid_volume = self.getFluidOutIO().fluid_volume
-            self.sync.out_fluid_max_volume = self.getFluidOutIO().max_fluid_volume
+        self.bdata[K_MUD_THICKNESS] = self.getThickness()
+        if self.StructureFinished():
+            self.bdata[K_TOTAL_VOLUME] = float(self.getVolume()) / POOL_MAX_VOLUME
+            self.bdata[K_OUTPUT_GAS_ID] = self.getGasOutIO().fluid_id
+            self.bdata[K_OUTPUT_GAS_VOLUME] = self.getGasOutIO().fluid_volume
+            self.bdata[K_OUTPUT_GAS_MAX_VOLUME] = self.getGasOutIO().max_fluid_volume
+            self.bdata[K_OUTPUT_FLUID_ID] = self.getFluidOutIO().fluid_id
+            self.bdata[K_OUTPUT_FLUID_VOLUME] = self.getFluidOutIO().fluid_volume
+            self.bdata[K_OUTPUT_FLUID_MAX_VOLUME] = (
+                self.getFluidOutIO().max_fluid_volume
+            )
             if self.recipe_id > 0:
                 recipe = spec_recipes[self.recipe_id]
-                self.sync.gas_product_speed = self.getGasProduceRate(recipe) * (
+                self.bdata[K_GAS_PRODUCE_SPEED] = self.getGasProduceRate(recipe) * (
                     20.0 / self.work_ticks_delay
                 )
-                self.sync.fluid_product_speed = self.getFluidProduceRate(recipe) * (
+                self.bdata[K_FLUID_PRODUCE_SPEED] = self.getFluidProduceRate(recipe) * (
                     20.0 / self.work_ticks_delay
                 )
+            else:
+                self.bdata[K_GAS_PRODUCE_SPEED] = 0.0
+                self.bdata[K_FLUID_PRODUCE_SPEED] = 0.0
         else:
-            self.sync.content_volume_pc = 0.0
-            self.sync.out_gas_id = None
-            self.sync.out_gas_volume = 0.0
-            self.sync.out_gas_max_volume = 1.0
-            self.sync.out_fluid_id = None
-            self.sync.out_fluid_volume = 0.0
-            self.sync.out_fluid_max_volume = 1.0
-        self.sync.MarkedAsChanged()
+            self.bdata[K_TOTAL_VOLUME] = 0.0
+            self.bdata[K_OUTPUT_GAS_ID] = None
+            self.bdata[K_OUTPUT_GAS_VOLUME] = 0.0
+            self.bdata[K_OUTPUT_GAS_MAX_VOLUME] = 1.0
+            self.bdata[K_OUTPUT_FLUID_ID] = None
+            self.bdata[K_OUTPUT_FLUID_VOLUME] = 0.0
+            self.bdata[K_OUTPUT_FLUID_MAX_VOLUME] = 1.0
+            self.bdata[K_GAS_PRODUCE_SPEED] = 0.0
+            self.bdata[K_FLUID_PRODUCE_SPEED] = 0.0
 
     @SuperExecutorMeta.execute_super
     def OnSlotUpdate(self, slot_pos):

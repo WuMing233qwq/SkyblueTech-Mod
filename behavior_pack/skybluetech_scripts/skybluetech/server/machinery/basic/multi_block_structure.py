@@ -23,14 +23,20 @@ from skybluetech_scripts.tooldelta.extensions.singleblock_model_loader import (
     CreateBlankModel,
 )
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
-from ....common.define.flags import (
+from skybluetech_scripts.skybluetech.common.define.flags import (
     DEACTIVE_FLAG_STRUCTURE_BROKEN,
     DEACTIVE_FLAG_STRUCTURE_BLOCK_LACK,
 )
-from ....common.utils.structure_palette import StructureBlockPalette
-from ....common.events.misc.multi_block_structure_check import (
+from skybluetech_scripts.skybluetech.common.events.misc.multi_block_structure_check import (
     MultiBlockStructureCheckRequest,
     MultiBlockStructureCheckResponse,
+)
+from skybluetech_scripts.skybluetech.common.machinery_def.basic.multi_block_structure import (
+    K_DESTROY_FLAG,
+    K_STRUCTURE_LACKED_BLOCKS,
+)
+from skybluetech_scripts.skybluetech.common.utils.structure_palette import (
+    StructureBlockPalette,
 )
 from .base_machine import BaseMachine, GUIControl
 
@@ -322,7 +328,7 @@ class MultiBlockStructure(BaseMachine):
 
     def SetStructureDestroyed(self, flag):
         # type: (int) -> None
-        self._last_destroy_flag = flag
+        self.last_destroy_flag = flag
         self.area.functional_block_poses = {}
         self.SetDeactiveFlag(flag)
         self.OnStructureChanged(False)
@@ -330,26 +336,26 @@ class MultiBlockStructure(BaseMachine):
             self.CallSync()
 
     def UnsetStructureDestroyed(self):
-        if self._last_destroy_flag != FLAG_OK:
-            self.UnsetDeactiveFlag(self._last_destroy_flag)
-            self._last_destroy_flag = FLAG_OK
-            self._lacked_blocks = {}
+        if self.last_destroy_flag != FLAG_OK:
+            self.UnsetDeactiveFlag(self.last_destroy_flag)
+            self.last_destroy_flag = FLAG_OK
+            self.lacked_blocks = {}
             self.OnStructureChanged(True)
             if isinstance(self, GUIControl):
                 self.CallSync()
 
     def GetStructureDestroyFlag(self):
-        return self._last_destroy_flag
+        return self.last_destroy_flag
 
     def GetStructureLackedBlocks(self):
-        return self._lacked_blocks
+        return self.lacked_blocks
 
     def GetFunctionalBlockPoses(self):
         "返回功能性方块对于多方块结构核心位置的相对坐标。"
         return self.area.functional_block_poses
 
     def StructureFinished(self):
-        return self._last_destroy_flag == 0
+        return self.last_destroy_flag == 0
 
     # StructureUtils
 
@@ -420,6 +426,26 @@ class MultiBlockStructure(BaseMachine):
                 )
             )
         return machine
+
+    @property
+    def last_destroy_flag(self):
+        # type: () -> int
+        return self._last_destroy_flag
+
+    @last_destroy_flag.setter
+    def last_destroy_flag(self, value):
+        # type: (int) -> None
+        self.bdata[K_DESTROY_FLAG] = self._last_destroy_flag = value
+
+    @property
+    def lacked_blocks(self):
+        # type: () -> dict[str, int]
+        return self._lacked_blocks
+
+    @lacked_blocks.setter
+    def lacked_blocks(self, value):
+        # type: (dict[str, int]) -> None
+        self.bdata[K_STRUCTURE_LACKED_BLOCKS] = self._lacked_blocks = value
 
 
 def get_chunks_in_range(startx, startz, endx, endz):

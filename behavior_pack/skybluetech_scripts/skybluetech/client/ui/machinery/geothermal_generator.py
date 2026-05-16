@@ -1,33 +1,51 @@
 # coding=utf-8
-
+from skybluetech_scripts.tooldelta.api.client import GetBlockEntityData
 from skybluetech_scripts.tooldelta.ui import RegistToolDeltaScreen
-from ....common.ui_sync.machinery.geothermal_generator import GeoThermalGeneratorUISync
+from skybluetech_scripts.tooldelta.utils.nbt import GetValueWithDefault as GetValue
+from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
+    K_STORE_RF,
+    FluidSlotClient,
+)
+from ....common.machinery_def.geothermal_generator import (
+    K_BURN_TICKS_LEFT,
+    STORE_RF_MAX,
+    MAX_LAVA_VOLUME,
+    MAX_WATER_VOLUME,
+    ONCE_BURNING_TICKS,
+)
 from .define import MachinePanelUIProxy, MAIN_PATH
-from .utils import UpdatePowerBar, UpdateFlame, InitFluidsDisplay
+from .utils import UpdatePowerBar, UpdateFlame, FluidDisplayer
 
-POWER_NODE = MAIN_PATH / "power_bar"
-FLUID_LAVA_NODE = MAIN_PATH / "lava_display"
-FLUID_WATER_NODE = MAIN_PATH / "water_display"
-FLAME_NODE = MAIN_PATH / "flame"
+POWER_PATH = MAIN_PATH / "power_bar"
+FLUID_LAVA_PATH = MAIN_PATH / "lava_display"
+FLUID_WATER_PATH = MAIN_PATH / "water_display"
+FLAME_PATH = MAIN_PATH / "flame"
 
 
 @RegistToolDeltaScreen("GeoThermalGeneratorUI.main", is_proxy=True)
 class GeoThermalGeneratorUI(MachinePanelUIProxy):
     def OnCreate(self):
-        dim, x, y, z = self.pos
-        self.sync = GeoThermalGeneratorUISync.NewClient(dim, x, y, z)  # type: GeoThermalGeneratorUISync
-        self.power_bar = self.GetElement(POWER_NODE)
-        self.lava_display = self.GetElement(FLUID_LAVA_NODE)
-        self.water_display = self.GetElement(FLUID_WATER_NODE)
-        self.flame = self.GetElement(FLAME_NODE)
-        self.sync.SetUpdateCallback(self.WhenUpdated)
-        self.fluid_updater1 = InitFluidsDisplay(self.lava_display, self.sync.fluids, 0)
-        self.fluid_updater2 = InitFluidsDisplay(self.water_display, self.sync.fluids, 1)
+        self.power_bar = self.GetElement(POWER_PATH)
+        self.lava_display = self.GetElement(FLUID_LAVA_PATH)
+        self.water_display = self.GetElement(FLUID_WATER_PATH)
+        self.flame = self.GetElement(FLAME_PATH)
+        self.lava_displayer = FluidDisplayer(self.lava_display)
+        self.water_displayer = FluidDisplayer(self.water_display)
 
-    def WhenUpdated(self):
-        if not self.inited:
+    def OnTicking(self):
+        data = GetBlockEntityData(*self.pos[1:])
+        if data is None:
             return
-        UpdatePowerBar(self.power_bar, self.sync.storage_rf, self.sync.rf_max)
-        UpdateFlame(self.flame, self.sync.progress)
-        self.fluid_updater1()
-        self.fluid_updater2()
+        data = data["exData"]
+        lava_fluid = FluidSlotClient(data, 0)
+        water_fluid = FluidSlotClient(data, 1)
+        store_rf = GetValue(data, K_STORE_RF, 0)
+        progress = GetValue(data, K_BURN_TICKS_LEFT, 0) * 1.0 / ONCE_BURNING_TICKS
+        UpdatePowerBar(self.power_bar, store_rf, STORE_RF_MAX)
+        UpdateFlame(self.flame, progress)
+        self.lava_displayer.update(
+            lava_fluid.fluid_id, lava_fluid.volume, MAX_LAVA_VOLUME
+        )
+        self.water_displayer.update(
+            water_fluid.fluid_id, water_fluid.volume, MAX_WATER_VOLUME
+        )

@@ -8,7 +8,7 @@ from ..mini_jei.machinery.macerator import (
     gen_tagged_preset_recipe,
 )
 
-
+STORE_RF_MAX = 8800
 DEFAULT_TICK_DURATION = 160
 DEFAULT_POWER = 30
 

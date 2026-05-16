@@ -30,10 +30,10 @@ from ...machinery.utils.mod_block_event import (
 from ...user_config import key_mapping
 
 
-BG_NODE = "/bg"
-METER_LABEL_NODE = BG_NODE + "/meter_label"
-ESC_BTN_NODE = "/esc_btn"
-FINISH_BTN_NODE = "/finish_btn"
+BG_PATH = "/bg"
+METER_LABEL_PATH = BG_PATH + "/meter_label"
+ESC_BTN_PATH = "/esc_btn"
+FINISH_BTN_PATH = "/finish_btn"
 
 
 @RegistToolDeltaScreen("RFRepeaterPlantBuildUI.main")
@@ -45,13 +45,13 @@ class RFRepeaterPlantBuildUI(ToolDeltaScreen):
         self.active = False
 
     def OnCreate(self):
-        self.meter_label = self.GetElement(METER_LABEL_NODE).asLabel()
+        self.meter_label = self.GetElement(METER_LABEL_PATH).asLabel()
         self.esc_btn = (
-            self.GetElement(ESC_BTN_NODE).asButton().SetCallback(self.on_cancel_build)
+            self.GetElement(ESC_BTN_PATH).asButton().SetCallback(self.on_cancel_build)
         )
         self.finish_btn = (
             self
-            .GetElement(FINISH_BTN_NODE)
+            .GetElement(FINISH_BTN_PATH)
             .asButton()
             .SetCallback(self.on_finish_build)
         )

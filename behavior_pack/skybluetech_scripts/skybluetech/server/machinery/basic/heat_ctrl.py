@@ -1,10 +1,14 @@
 # coding=utf-8
 from .base_machine import BaseMachine
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
-from ....common.define.facing import FACING_DXYZ, OPPOSITE_FACING
-
-K_HEAT_VALUE = "heat_value"
-ENV_TEMPERATURE = 300.0
+from skybluetech_scripts.skybluetech.common.define.facing import (
+    FACING_DXYZ,
+    OPPOSITE_FACING,
+)
+from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
+    K_HEAT_VALUE,
+    ENV_TEMPERATURE,
+)
 
 
 class HeatCtrl(BaseMachine):

@@ -1,5 +1,6 @@
 # coding=utf-8
-#
+from skybluetech_scripts.skybluetech.common.define.id_enum import Tank
+from skybluetech_scripts.skybluetech.common.machinery_def.tank import TANK_MAX_VOLUMES
 from ..basic import RegisterMachine
 from .base_tank import BasicTank, RegisterTank
 
@@ -7,7 +8,5 @@ from .base_tank import BasicTank, RegisterTank
 @RegisterMachine
 @RegisterTank
 class InvarTank(BasicTank):
-    block_name = "skybluetech:tank_invar"
-    max_fluid_volume = 40000
-
-
+    block_name = Tank.INVAR
+    max_fluid_volume = TANK_MAX_VOLUMES[Tank.INVAR]

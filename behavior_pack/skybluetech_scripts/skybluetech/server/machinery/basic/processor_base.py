@@ -1,16 +1,22 @@
 # coding=utf-8
 from skybluetech_scripts.tooldelta.define import Item
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
-from ....common.mini_jei.core import CategoryType, RecipesCollection
-from ....common.mini_jei.machinery import MachineRecipeBase
-from ....common.define import flags as flags
+from skybluetech_scripts.skybluetech.common.define import flags as flags
+from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
+    K_PROGRESS,
+)
+from skybluetech_scripts.skybluetech.common.mini_jei.core import (
+    CategoryType,
+    RecipesCollection,
+)
+from skybluetech_scripts.skybluetech.common.mini_jei.machinery import MachineRecipeBase
 from .gui_ctrl import GUIControl
 from .multi_fluid_container import MultiFluidContainer
-from .item_container import ItemContainer
 from .work_renderer import WorkRenderer
+from .upgrade_control import UpgradeControl
 
 
-class ProcessorBase(GUIControl, ItemContainer, WorkRenderer):
+class ProcessorBase(GUIControl, UpgradeControl, WorkRenderer):
     """
     配方处理器基类。
     """
@@ -55,6 +61,10 @@ class ProcessorBase(GUIControl, ItemContainer, WorkRenderer):
             if slot_input.match_item_id(fluid_id):
                 return True
         return False
+
+    def update_gui(self):
+        if self.current_recipe is not None:
+            self.bdata[K_PROGRESS] = self.GetProcessProgress()
 
     def get_recipe(self):
         # type: () -> tuple[int, MachineRecipeBase | None]

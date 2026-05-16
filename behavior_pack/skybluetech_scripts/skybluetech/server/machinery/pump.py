@@ -7,30 +7,31 @@ from skybluetech_scripts.tooldelta.api.server.block import (
     SetLiquidBlock,
 )
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
-from ...common.define import flags as rf_flags
 from ...common.define.id_enum import PUMP as MACHINE_ID, Upgraders
 from ...common.define.global_config import BUCKET_VOLUME
-from ...common.ui_sync.machinery.pump import PumpUISync
 from .basic import (
     FluidContainer,
     GUIControl,
     UpgradeControl,
     RegisterMachine,
 )
-
-K_CACHED_VOLUME = "cached_volume"
-K_CACHED_FLUID_ID = "cached_fluid_id"
+from ...common.machinery_def.pump import (
+    STORE_RF_MAX,
+    MAX_FLUID_VOLUME,
+    K_CACHED_FLUID_ID,
+    K_CACHED_VOLUME,
+)
 
 
 @RegisterMachine
 class Pump(FluidContainer, GUIControl, UpgradeControl):
     block_name = MACHINE_ID
-    store_rf_max = 8800
+    store_rf_max = STORE_RF_MAX
     running_power = 20
     input_slots = (0,)
     output_slots = (1,)
     fluid_io_mode = (2, 1, 2, 2, 2, 2)
-    max_fluid_volume = 4000
+    max_fluid_volume = MAX_FLUID_VOLUME
     origin_process_ticks = 5
     upgrade_slot_start = 0
     allow_player_use_bucket_push = False
@@ -42,23 +43,12 @@ class Pump(FluidContainer, GUIControl, UpgradeControl):
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        self.sync = PumpUISync.NewServer(self).Activate()
-        self.CallSync()
         self.last_over_one_bucket = False
 
     @SuperExecutorMeta.execute_super
     def OnTicking(self):
         if self.ProcessOnce():
             self.work_once()
-            self.CallSync()
-
-    def OnSync(self):
-        self.sync.fluid_id = self.fluid_id
-        self.sync.fluid_volume = self.fluid_volume
-        self.sync.max_volume = self.max_fluid_volume
-        self.sync.storage_rf = self.store_rf
-        self.sync.rf_max = self.store_rf_max
-        self.sync.MarkedAsChanged()
 
     @SuperExecutorMeta.execute_super
     def OnUnload(self):

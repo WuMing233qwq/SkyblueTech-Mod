@@ -1,16 +1,20 @@
 # BatteryMatrixUI.battery_slot_nums
 # # coding=utf-8
 from skybluetech_scripts.tooldelta.define import Item
-from skybluetech_scripts.tooldelta.api.client import GetItemHoverName
+from skybluetech_scripts.tooldelta.api.client import (
+    GetBlockEntityData,
+    GetItemHoverName,
+)
 from skybluetech_scripts.tooldelta.events.client import (
     PlayerTryPutCustomContainerItemClientEvent,
 )
 from skybluetech_scripts.tooldelta.ui import RegistToolDeltaScreen, Binder
-from ....common.ui_sync.machinery.battery_matrix import BatteryMatrixUISync
-from ....common.events.misc.multi_block_structure_check import (
+from skybluetech_scripts.tooldelta.utils.nbt import GetValueWithDefault as GetValue
+from skybluetech_scripts.tooldelta.utils.py_comp import py2_long
+from skybluetech_scripts.skybluetech.common.events.misc.multi_block_structure_check import (
     MultiBlockStructureCheckRequest,
 )
-from ....common.events.machinery.battery_matrix import (
+from skybluetech_scripts.skybluetech.common.events.machinery.battery_matrix import (
     BatteryMatrixActionRequest,
     BatteryMatrixCheckCoreBatterysRequest,
     BatteryMatrixPopBatteryRequest,
@@ -18,97 +22,103 @@ from ....common.events.machinery.battery_matrix import (
     BatteryMatrixCoreStatusUpdate,
     BatteryMatrixStatesUpdate,
 )
+from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
+    K_STRUCTURE_LACKED_BLOCKS,
+    K_DESTROY_FLAG,
+)
+from skybluetech_scripts.skybluetech.common.machinery_def.battery_matrix import (
+    K_INPUT_POWER,
+    K_OUTPUT_POWER,
+    K_STORE_RF,
+    K_RF_MAX,
+)
 from .define import MachinePanelUIProxy, MAIN_PATH
 from .utils import UpdateGenericProgressL2R, FormatRF
 
-ENERGY_LABEL_NODE = MAIN_PATH / "battery_icon/energy_label"
-TOTAL_POWER_NODE = MAIN_PATH / "total_power"
-BATTERY_ICON_NODE = MAIN_PATH / "battery_icon"
-STORAGE_WINDOW_NODE = MAIN_PATH / "storage_window"
-PUSH_STORAGE_BTN_NODE = STORAGE_WINDOW_NODE / "push_storage_btn"
-STORAGE_CLOSE_BTN_NODE = STORAGE_WINDOW_NODE / "close_btn"
-OPEN_STORAGE_BTN_NODE = MAIN_PATH / "open_storage_btn"
-INPUT_SWITCH_NODE = MAIN_PATH / "input_switch"
-OUTPUT_SWITCH_NODE = MAIN_PATH / "output_switch"
-INPUT_POWER_LABEL_NODE = MAIN_PATH / "input_power"
-OUTPUT_POWER_LABEL_NODE = MAIN_PATH / "output_power"
-STRUCTURE_NOT_FINISHED_TIP_NODE = MAIN_PATH / "structure_not_finished_tip"
-STRUCTURE_DESC_LABEL_NODE = STRUCTURE_NOT_FINISHED_TIP_NODE / "desc_label"
-MULTIBLOCK_STRUCTURE_CHECK_BTN_NODE = MAIN_PATH / "multi_block_structure_check_btn"
+ENERGY_LABEL_PATH = MAIN_PATH / "battery_icon/energy_label"
+TOTAL_POWER_PATH = MAIN_PATH / "total_power"
+BATTERY_ICON_PATH = MAIN_PATH / "battery_icon"
+STORAGE_WINDOW_PATH = MAIN_PATH / "storage_window"
+PUSH_STORAGE_BTN_PATH = STORAGE_WINDOW_PATH / "push_storage_btn"
+STORAGE_CLOSE_BTN_PATH = STORAGE_WINDOW_PATH / "close_btn"
+OPEN_STORAGE_BTN_PATH = MAIN_PATH / "open_storage_btn"
+INPUT_SWITCH_PATH = MAIN_PATH / "input_switch"
+OUTPUT_SWITCH_PATH = MAIN_PATH / "output_switch"
+INPUT_POWER_LABEL_PATH = MAIN_PATH / "input_power"
+OUTPUT_POWER_LABEL_PATH = MAIN_PATH / "output_power"
+STRUCTURE_NOT_FINISHED_TIP_PATH = MAIN_PATH / "structure_not_finished_tip"
+STRUCTURE_DESC_LABEL_PATH = STRUCTURE_NOT_FINISHED_TIP_PATH / "desc_label"
+MULTIBLOCK_STRUCTURE_CHECK_BTN_PATH = MAIN_PATH / "multi_block_structure_check_btn"
 
 
 @RegistToolDeltaScreen("BatteryMatrixUI.main", is_proxy=True)
 class BatteryMatrixUI(MachinePanelUIProxy):
     def OnCreate(self):
-        self.energy_label = self.GetElement(ENERGY_LABEL_NODE).asLabel()
-        self.total_power = self.GetElement(TOTAL_POWER_NODE).asLabel()
-        self.battery_icon = self.GetElement(BATTERY_ICON_NODE)
-        self.storage_window = self.GetElement(STORAGE_WINDOW_NODE)
-        self.input_switch = self.GetElement(INPUT_SWITCH_NODE).asSwitch()
-        self.output_switch = self.GetElement(OUTPUT_SWITCH_NODE).asSwitch()
-        self.input_power_label = self.GetElement(INPUT_POWER_LABEL_NODE).asLabel()
-        self.output_power_label = self.GetElement(OUTPUT_POWER_LABEL_NODE).asLabel()
+        self.energy_label = self.GetElement(ENERGY_LABEL_PATH).asLabel()
+        self.total_power = self.GetElement(TOTAL_POWER_PATH).asLabel()
+        self.battery_icon = self.GetElement(BATTERY_ICON_PATH)
+        self.storage_window = self.GetElement(STORAGE_WINDOW_PATH)
+        self.input_switch = self.GetElement(INPUT_SWITCH_PATH).asSwitch()
+        self.output_switch = self.GetElement(OUTPUT_SWITCH_PATH).asSwitch()
+        self.input_power_label = self.GetElement(INPUT_POWER_LABEL_PATH).asLabel()
+        self.output_power_label = self.GetElement(OUTPUT_POWER_LABEL_PATH).asLabel()
         self.structure_not_finished_tip = self.GetElement(
-            STRUCTURE_NOT_FINISHED_TIP_NODE
+            STRUCTURE_NOT_FINISHED_TIP_PATH
         )
-        self.structure_desc_label = self.GetElement(STRUCTURE_DESC_LABEL_NODE).asLabel()
+        self.structure_desc_label = self.GetElement(STRUCTURE_DESC_LABEL_PATH).asLabel()
         self.open_storage_btn = (
             self
-            .GetElement(OPEN_STORAGE_BTN_NODE)
+            .GetElement(OPEN_STORAGE_BTN_PATH)
             .asButton()
             .SetCallback(self.onOpenStorageWindow)
         )
         self.push_storage_btn = (
             self
-            .GetElement(PUSH_STORAGE_BTN_NODE)
+            .GetElement(PUSH_STORAGE_BTN_PATH)
             .asButton()
             .SetCallback(self.onStoreBatteries)
         )
         self.close_storage_btn = (
             self
-            .GetElement(STORAGE_CLOSE_BTN_NODE)
+            .GetElement(STORAGE_CLOSE_BTN_PATH)
             .asButton()
             .SetCallback(self.onCloseStorageWindow)
         )
         self.multiblock_structute_check_btn = (
             self
-            .GetElement(MULTIBLOCK_STRUCTURE_CHECK_BTN_NODE)
+            .GetElement(MULTIBLOCK_STRUCTURE_CHECK_BTN_PATH)
             .asButton()
             .SetCallback(self.onCheckMultiBlockStructure)
         )
         self.storage_window.SetVisible(False)
-        self._last_structure_flag = None
+        self.last_destroy_flag = None
         self.battery_slots_data = []  # type: list[tuple[str, int, int]]
-        dim, x, y, z = self.pos
-        self.sync = BatteryMatrixUISync.NewClient(dim, x, y, z)  # type: BatteryMatrixUISync
-        self.sync.SetUpdateCallback(self.WhenUpdated)
 
-    def WhenUpdated(self):
-        if not self.inited:
+    def OnTicking(self):
+        data = GetBlockEntityData(*self.pos[1:])
+        if data is None:
             return
-        self.input_power_label.SetText("输入 %s/t" % FormatRF(self.sync.input_power))
-        self.output_power_label.SetText("输出 %s/t" % FormatRF(self.sync.output_power))
-        self.energy_label.SetText(
-            "{:.1f}%%".format(
-                float(self.sync.storage_rf * 100) / (self.sync.rf_max or 1)
-            )
-        )
-        self.total_power.SetText(
-            "%s / %s"
-            % (FormatRF(self.sync.storage_rf), FormatRF(self.sync.rf_max or 1))
-        )
-        UpdateGenericProgressL2R(
-            self.battery_icon, float(self.sync.storage_rf) / (self.sync.rf_max or 1)
-        )
-        if self.sync.structure_flag != self._last_structure_flag:
-            self.structure_not_finished_tip.SetVisible(self.sync.structure_flag != 0)
-            self._last_structure_flag = self.sync.structure_flag
-            if self.sync.structure_lacked_blocks:
+        data = data["exData"]
+        input_power = GetValue(data, K_INPUT_POWER, 0)
+        output_power = GetValue(data, K_OUTPUT_POWER, 0)
+        storage_rf = GetValue(data, K_STORE_RF, 0.0)
+        rf_max = GetValue(data, K_RF_MAX, 1.0)
+        destroy_flag = GetValue(data, K_DESTROY_FLAG, 0)
+        structure_lacked_blocks = GetValue(data, K_STRUCTURE_LACKED_BLOCKS, {})  # type: dict[str, int]
+        self.input_power_label.SetText("输入 %s/t" % FormatRF(input_power))
+        self.output_power_label.SetText("输出 %s/t" % FormatRF(output_power))
+        self.energy_label.SetText("{:.1f}%%".format(float(storage_rf * 100) / rf_max))
+        self.total_power.SetText("%s / %s" % (FormatRF(storage_rf), FormatRF(rf_max)))
+        UpdateGenericProgressL2R(self.battery_icon, float(storage_rf) / rf_max)
+        if destroy_flag != self.last_destroy_flag:
+            self.structure_not_finished_tip.SetVisible(destroy_flag != 0)
+            self.last_destroy_flag = destroy_flag
+            if structure_lacked_blocks:
                 self.structure_desc_label.SetText(
                     "缺失组件： "
                     + "， ".join(
                         GetItemHoverName(b) + "x" + str(n)
-                        for b, n in self.sync.structure_lacked_blocks.items()
+                        for b, n in structure_lacked_blocks.items()
                     )
                 )
             else:

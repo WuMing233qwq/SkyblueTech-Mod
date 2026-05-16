@@ -14,7 +14,7 @@ K_OUTPUT_POWER = "st:output_power"
 K_RECIPE_INDEX = "st:recipe_index"
 
 
-class GeneratorProcessor(BaseGenerator, UpgradeControl, ProcessorBase):
+class GeneratorProcessor(BaseGenerator, ProcessorBase):
     """
     按给定配方运行的发电机基类。
 

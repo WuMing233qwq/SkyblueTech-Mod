@@ -1,7 +1,7 @@
 # coding=utf-8
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
-from ....common.define import flags
-from ....common.define.facing import OPPOSITE_FACING
+from skybluetech_scripts.skybluetech.common.define import flags
+from skybluetech_scripts.skybluetech.common.define.facing import OPPOSITE_FACING
 from .base_machine import BaseMachine
 
 

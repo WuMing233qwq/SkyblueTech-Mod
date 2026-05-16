@@ -10,17 +10,17 @@ from ....common.ui_sync.machinery.hover_text_displayer import HoverTextDisplayer
 from .define import MachinePanelUI, MAIN_PATH
 from .utils import UpdatePowerBar
 
-EDIT_BOX_NODE = MAIN_PATH / "edit_box"
-TIP_LABEL_NODE = MAIN_PATH / "tip_label"
-POWER_BAR_NODE = MAIN_PATH / "power_bar"
-SETTING_PANEL_NODE = MAIN_PATH / "settings"
-SWITCH_DO_ENABLE_NODE = SETTING_PANEL_NODE / "switch1"
-SWITCH_DO_ATTACK_PLAYER_NODE = SETTING_PANEL_NODE / "switch2"
-SWITCH_DO_ATTACK_MONSTER_NODE = SETTING_PANEL_NODE / "switch3"
-RANGE_PREVIEW_BTN_NODE = SETTING_PANEL_NODE / "range_preview_btn"
-RANGE_DISPLAY_LABEL_NODE = SETTING_PANEL_NODE / "range_display"
-RANGE_ADD_BTN_NODE = SETTING_PANEL_NODE / "range_add_btn"
-RANGE_SUB_BTN_NODE = SETTING_PANEL_NODE / "range_sub_btn"
+EDIT_BOX_PATH = MAIN_PATH / "edit_box"
+TIP_LABEL_PATH = MAIN_PATH / "tip_label"
+POWER_BAR_PATH = MAIN_PATH / "power_bar"
+SETTING_PANEL_PATH = MAIN_PATH / "settings"
+SWITCH_DO_ENABLE_PATH = SETTING_PANEL_PATH / "switch1"
+SWITCH_DO_ATTACK_PLAYER_PATH = SETTING_PANEL_PATH / "switch2"
+SWITCH_DO_ATTACK_MONSTER_PATH = SETTING_PANEL_PATH / "switch3"
+RANGE_PREVIEW_BTN_PATH = SETTING_PANEL_PATH / "range_preview_btn"
+RANGE_DISPLAY_LABEL_PATH = SETTING_PANEL_PATH / "range_display"
+RANGE_ADD_BTN_PATH = SETTING_PANEL_PATH / "range_add_btn"
+RANGE_SUB_BTN_PATH = SETTING_PANEL_PATH / "range_sub_btn"
 
 
 @RegistToolDeltaScreen("TeslaPlantUI.main", is_proxy=True)
@@ -28,41 +28,41 @@ class TeslaPlantUI(MachinePanelUI):
     def OnCreate(self):
         self.sync = HoverTextDisplayerUISync.NewClient(self.dim, self.x, self.y, self.z)  # type: HoverTextDisplayerUISync
         self.sync.SetUpdateCallback(self.WhenUpdated)
-        self.tip_label = self.GetElement(TIP_LABEL_NODE).asLabel()
-        self.edit_box = self.GetElement(EDIT_BOX_NODE).asTextEditBox()
-        self.power_bar = self.GetElement(POWER_BAR_NODE)
-        self.range_display_label = self.GetElement(RANGE_DISPLAY_LABEL_NODE).asLabel()
+        self.tip_label = self.GetElement(TIP_LABEL_PATH).asLabel()
+        self.edit_box = self.GetElement(EDIT_BOX_PATH).asTextEditBox()
+        self.power_bar = self.GetElement(POWER_BAR_PATH)
+        self.range_display_label = self.GetElement(RANGE_DISPLAY_LABEL_PATH).asLabel()
         self.rane_preview_btn = (
             self
-            .GetElement(RANGE_PREVIEW_BTN_NODE)
+            .GetElement(RANGE_PREVIEW_BTN_PATH)
             .asButton()
             .SetCallback(self.on_preview_range)
         )
         self.range_add_btn = (
             self
-            .GetElement(RANGE_ADD_BTN_NODE)
+            .GetElement(RANGE_ADD_BTN_PATH)
             .asButton()
             .SetCallback(self.on_add_range)
         )
         self.range_sub_btn = (
             self
-            .GetElement(RANGE_SUB_BTN_NODE)
+            .GetElement(RANGE_SUB_BTN_PATH)
             .asButton()
             .SetCallback(self.on_sub_range)
         )
-        self.switch_do_enable = self.GetElement(SWITCH_DO_ENABLE_NODE).asSwitch()
+        self.switch_do_enable = self.GetElement(SWITCH_DO_ENABLE_PATH).asSwitch()
         self.switch_do_attack_player = self.GetElement(
-            SWITCH_DO_ATTACK_PLAYER_NODE
+            SWITCH_DO_ATTACK_PLAYER_PATH
         ).asSwitch()
         self.switch_do_attack_monster = self.GetElement(
-            SWITCH_DO_ATTACK_MONSTER_NODE
+            SWITCH_DO_ATTACK_MONSTER_PATH
         ).asSwitch()
         self.do_enable = False
         self.do_attack_player = False
         self.do_attack_monster = False
         self.working_range = 0
 
-    def WhenUpdated(self):
+    def OnTicking(self):
         if not self.inited:
             return
         UpdatePowerBar(self.power_bar, self.sync.storage_rf, self.sync.rf_max)

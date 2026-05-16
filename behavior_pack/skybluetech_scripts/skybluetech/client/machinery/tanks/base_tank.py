@@ -8,7 +8,7 @@ from skybluetech_scripts.tooldelta.events.client import (
 )
 from skybluetech_scripts.tooldelta.utils.nbt import GetValue
 from ....common.define.id_enum import Tank
-from ....common.machinery_def.fluid_container import (
+from ....common.machinery_def.basic.fluid_container import (
     K_FLUID_ID,
     K_FLUID_VOLUME,
     K_MAX_VOLUME,
@@ -53,7 +53,6 @@ def onModBlockEntityRemoveClientEvent(event):
     # type: (ModBlockEntityRemoveClientEvent) -> None
     if event.blockName not in Tank.all():
         return
-    print("Remove tank at", event.posX, event.posY, event.posZ)
     x = event.posX
     y = event.posY
     z = event.posZ

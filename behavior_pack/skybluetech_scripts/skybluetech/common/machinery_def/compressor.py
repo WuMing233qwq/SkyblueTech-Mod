@@ -8,6 +8,7 @@ from ..mini_jei.machinery.compressor import (
     gen_preset_tagged_recipe,
 )
 
+STORE_RF_MAX = 8800
 
 DEFAULT_TICK_DURATION = 20 * 8
 DEFAULT_POWER = 80

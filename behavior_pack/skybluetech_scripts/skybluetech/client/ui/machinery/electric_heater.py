@@ -1,52 +1,63 @@
 # coding=utf-8
-
 from skybluetech_scripts.tooldelta.api.client import GetBlockEntityData
 from skybluetech_scripts.tooldelta.ui import RegistToolDeltaScreen, Binder
-from skybluetech_scripts.tooldelta.utils.nbt import GetValueWithDefault
-from ....common.events.machinery.electric_heater import (
+from skybluetech_scripts.tooldelta.utils.nbt import GetValueWithDefault as GetValue
+from skybluetech_scripts.skybluetech.common.events.machinery.electric_heater import (
     ElectricHeaterSubmitModifiesEvent,
 )
-from ....common.machinery_def.electric_heater import K_SET_POWER, K_KELVIN_LIMIT
-from ....common.ui_sync.machinery.electric_heater import ElectricHeaterUISync
+from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
+    K_STORE_RF,
+    K_HEAT_VALUE,
+    ENV_TEMPERATURE,
+)
+from skybluetech_scripts.skybluetech.common.machinery_def.electric_heater import (
+    K_SET_POWER,
+    K_KELVIN_LIMIT,
+    STORE_RF_MAX,
+)
 from .define import MachinePanelUIProxy, MAIN_PATH
 from .utils import UpdatePowerBar
 
-POWER_NODE = MAIN_PATH / "power_bar"
-DATABAR_TEXT_NODE = MAIN_PATH / "databar/text"
-POWER_INPUT_NODE = MAIN_PATH / "power_input"
-KELVIN_LIMIT_INPUT_NODE = MAIN_PATH / "kelvin_limit_input"
-CONFIRM_BTN_NODE = MAIN_PATH / "confirm_btn"
+POWER_PATH = MAIN_PATH / "power_bar"
+DATABAR_TEXT_PATH = MAIN_PATH / "databar/text"
+POWER_INPUT_PATH = MAIN_PATH / "power_input"
+KELVIN_LIMIT_INPUT_PATH = MAIN_PATH / "kelvin_limit_input"
+CONFIRM_BTN_PATH = MAIN_PATH / "confirm_btn"
 
 
 @RegistToolDeltaScreen("ElectricHeaterUI.main", is_proxy=True)
 class ElectricHeaterUI(MachinePanelUIProxy):
     def OnCreate(self):
         dim, x, y, z = self.pos
-        self.sync = ElectricHeaterUISync.NewClient(dim, x, y, z)  # type: ElectricHeaterUISync
-        self.sync.SetUpdateCallback(self.WhenUpdated)
-        self.power_bar = self.GetElement(POWER_NODE)
-        self.databar_text = self.GetElement(DATABAR_TEXT_NODE).asLabel()
-        self.power_input = self.GetElement(POWER_INPUT_NODE).asTextEditBox()
+        self.power_bar = self.GetElement(POWER_PATH)
+        self.databar_text = self.GetElement(DATABAR_TEXT_PATH).asLabel()
+        self.power_input = self.GetElement(POWER_INPUT_PATH).asTextEditBox()
         self.kevin_limit_input = self.GetElement(
-            KELVIN_LIMIT_INPUT_NODE
+            KELVIN_LIMIT_INPUT_PATH
         ).asTextEditBox()
         self.confirm_btn = (
-            self.GetElement(CONFIRM_BTN_NODE).asButton().SetCallback(self.onSubmit)
+            self.GetElement(CONFIRM_BTN_PATH).asButton().SetCallback(self.onSubmit)
         )
         block_nbt = GetBlockEntityData(x, y, z)
         if block_nbt is not None:
             ex_data = block_nbt.get("exData")
             if ex_data is not None:
-                self.power_input.SetText(str(GetValueWithDefault(ex_data, K_SET_POWER, 0)))
-                self.kevin_limit_input.SetText(str(GetValueWithDefault(ex_data, K_KELVIN_LIMIT, 300)))
+                self.power_input.SetText(str(GetValue(ex_data, K_SET_POWER, 0)))
+                self.kevin_limit_input.SetText(
+                    str(GetValue(ex_data, K_KELVIN_LIMIT, 300))
+                )
 
-    def WhenUpdated(self):
-        if not self.inited:
+    def OnTicking(self):
+        data = GetBlockEntityData(*self.pos[1:])
+        if data is None:
             return
-        UpdatePowerBar(self.power_bar, self.sync.storage_rf, self.sync.rf_max)
+        data = data["exData"]
+        storage_rf = GetValue(data, K_STORE_RF, 0)
+        power = GetValue(data, K_SET_POWER, 0)
+        current_temperature = GetValue(data, K_HEAT_VALUE, 0) + ENV_TEMPERATURE
+        UpdatePowerBar(self.power_bar, storage_rf, STORE_RF_MAX)
         self.databar_text.SetText(
-            "设定功率： %d RF/t\n当前温度： %.1f°K"
-            % (self.sync.power, self.sync.current_temperature)
+            "设定功率： %d RF/t\n当前温度： %.1f°K" % (power, current_temperature)
         )
 
     def onSubmit(self, _):

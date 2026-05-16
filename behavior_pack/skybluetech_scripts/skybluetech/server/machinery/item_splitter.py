@@ -14,7 +14,6 @@ from ..transmitters.cable.logic import (
     logic_module as cable_logic,
     PushItemToGenericContainer,
 )
-from ...common.ui_sync.machinery.item_splitter import ItemSplitterUISync
 from .utils.action_commit import SafeGetMachine
 from .basic import GUIControl, UpgradeControl, RegisterMachine
 
@@ -33,7 +32,6 @@ class ItemSplitter(GUIControl, UpgradeControl):
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        self.sync = ItemSplitterUISync.NewServer(self).Activate()
         self._cached_recorded_settings = None
         self._sending_items = True
         self._ticking_t = 0
@@ -81,7 +79,6 @@ class ItemSplitter(GUIControl, UpgradeControl):
             self._sending_items = True
         else:
             UpgradeControl.OnSlotUpdate(self, slot)
-            
 
     def try_post_item_by_label(self, item):
         # type: (Item) -> Item | None
