@@ -339,13 +339,17 @@ machinery_logistics_toc = PageGroup(
                     0,
                     "物品分拣器",
                     machinery_logistics.item_splitter,
-                )
+                ),
+                TOCPageSection(
+                    id_enum.FLUID_SPLITTER,
+                    0,
+                    "分流器",
+                    machinery_logistics.fluid_splitter,
+                ),
             ],
         ),
     ],
 )
-# fluid_splitter
-# deepslate_lava_vibrator
 
 machinery_toc = PageGroup(
     "machinery_toc",

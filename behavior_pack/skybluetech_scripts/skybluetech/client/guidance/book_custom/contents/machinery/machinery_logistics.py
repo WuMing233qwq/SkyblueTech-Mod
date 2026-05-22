@@ -6,7 +6,16 @@ from ...define import (
     PageGroup,
 )
 
-fluid_splitter = PageGroup("fluid_splitter_description", [])
+fluid_splitter = PageGroup(
+    "fluid_splitter_description",
+    [
+        TextPage(
+            "分流器",
+            '分流器是根据给定设置对流体进行<text color="§2" t="分类">的机器。\n它可以将标记上了颜色序号的流体类型发送到<text color="§2" t="拥有相同颜色编号">的流体管道输入口中。 其与物品分拣器的大致操作方式相同。',
+        ),
+        MachineryWorkstationRecipePage(id_enum.FLUID_SPLITTER),
+    ],
+)
 
 item_splitter = PageGroup(
     "item_splitter_description",
