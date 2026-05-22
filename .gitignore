@@ -1,0 +1,16 @@
+.mcs
+.trae
+.*
+
+work.mcscfg
+studio.json
+editor.name
+description.txt
+TODO
+addon.zip
+pack_addon.py
+run_pack.cmd
+test*
+dev*
+
+*.cmd
