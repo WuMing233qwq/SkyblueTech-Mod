@@ -10,10 +10,13 @@
         "ingredients": [
             {
                 "item": "minecraft:sunflower"
+            },
+            {
+                "item": "minecraft:wheat_seeds"
             }
         ],
         "result": {
-            "count": 2,
+            "count": 1,
             "data": 0,
             "item": "skybluetech:sunflower_seeds"
         }
