@@ -13,7 +13,8 @@ from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
 from skybluetech_scripts.skybluetech.common.machinery_def.electric_crafter import (
     STORE_RF_MAX,
 )
-from .define import MachinePanelUIProxy, MAIN_PATH
+from ..machinery_extra_pages import CableSettingsPageIndirectional
+from .define_ex import MachinePanelUIProxyEx, MAIN_PATH
 from .utils import UpdateGenericProgressL2R, UpdatePowerBar
 
 PROGRESS_PATH = MAIN_PATH / "progress"
@@ -25,7 +26,9 @@ ITEM_RENDERED_REL_PATH = "item_cell_overlay_ref/item_renderer"
 
 
 @RegistToolDeltaScreen("ElectricCrafterUI.main", is_proxy=True)
-class ElectricCrafterUI(MachinePanelUIProxy):
+class ElectricCrafterUI(MachinePanelUIProxyEx):
+    available_extra_pages = (CableSettingsPageIndirectional,)
+
     def OnCreate(self):
         self.power = self.GetElement(POWER_PATH)
         self.progress = self.GetElement(PROGRESS_PATH)
@@ -41,7 +44,7 @@ class ElectricCrafterUI(MachinePanelUIProxy):
         UpdatePowerBar(self.power, store_rf, STORE_RF_MAX)
         UpdateGenericProgressL2R(self.progress, progress)
 
-    @MachinePanelUIProxy.Listen(ElectricCrafterUpdateRecipe)
+    @MachinePanelUIProxyEx.Listen(ElectricCrafterUpdateRecipe)
     def onUpdateRecipe(self, event):
         # type: (ElectricCrafterUpdateRecipe) -> None
         for i, item_and_aux in enumerate(event.slotitems):

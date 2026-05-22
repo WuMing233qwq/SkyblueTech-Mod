@@ -34,6 +34,7 @@ from .mini_miner import MiniMinerUI
 from .mixer import MixerUI
 from .oil_extractor import OilExtractorUI
 from .pump import PumpUI
+from .reacting_thermal_generator import ReactingThermalGeneratorUI
 from .redstone_furnace import RedstoneFurnaceUI
 from .redstone_generator import RedstoneGeneratorUI
 from .rf_repeater_plant import RFRepeaterPlantUI

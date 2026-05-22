@@ -3,7 +3,9 @@ from skybluetech_scripts.tooldelta.define import Item
 from skybluetech_scripts.tooldelta.api.client import GetBlockEntityData
 from skybluetech_scripts.tooldelta.ui import RegistToolDeltaScreen
 from skybluetech_scripts.tooldelta.utils.nbt import GetValueWithDefault as GetValue
-from ....common.events.machinery.freezer import FreezerModeChangedEvent
+from skybluetech_scripts.skybluetech.common.events.machinery.freezer import (
+    FreezerModeChangedEvent,
+)
 from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
     K_STORE_RF,
     K_PROGRESS,
@@ -15,10 +17,11 @@ from skybluetech_scripts.skybluetech.common.machinery_def.freezer import (
     MAX_FLUID_VOLUME,
     recipes,
 )
-from .define import MachinePanelUIProxy, MAIN_PATH
+from ..machinery_extra_pages import CableSettingsPage
+from ..recipe_checker import AsRecipeCheckerBtn
+from .define_ex import MachinePanelUIProxyEx, MAIN_PATH
 from .utils import UpdatePowerBar, UpdateGenericProgressL2R, FluidDisplayer
 
-from ..recipe_checker import AsRecipeCheckerBtn
 
 POWER_PATH = MAIN_PATH / "power_bar"
 PRGS_PATH = MAIN_PATH / "progress"
@@ -27,7 +30,9 @@ MODE_CHANGE_BTN_PATH = MAIN_PATH / "mode_change"
 
 
 @RegistToolDeltaScreen("FreezerUI.main", is_proxy=True)
-class FreezerUI(MachinePanelUIProxy):
+class FreezerUI(MachinePanelUIProxyEx):
+    available_extra_pages = (CableSettingsPage,)
+
     def OnCreate(self):
         self.power_bar = self.GetElement(POWER_PATH)
         self.progress = self.GetElement(PRGS_PATH)

@@ -15,7 +15,8 @@ from skybluetech_scripts.skybluetech.common.machinery_def.digger import (
     K_FRONT_BLOCK_ID,
     K_FRONT_BLOCK_AUX,
 )
-from .define import MachinePanelUIProxy, MAIN_PATH
+from ..machinery_extra_pages import CableSettingsPageIndirectional
+from .define_ex import MachinePanelUIProxyEx, MAIN_PATH
 from .utils import UpdatePowerBar, UpdateGenericProgressL2R
 
 POWER_PATH = MAIN_PATH / "power_bar"
@@ -25,7 +26,9 @@ WORK_STATUS_PATH = MAIN_PATH / "work_status"
 
 
 @RegistToolDeltaScreen("DiggerUI.main", is_proxy=True)
-class DiggerUI(MachinePanelUIProxy):
+class DiggerUI(MachinePanelUIProxyEx):
+    available_extra_pages = (CableSettingsPageIndirectional,)
+
     def OnCreate(self):
         self.power_bar = self.GetElement(POWER_PATH)
         self.progress = self.GetElement(PRGS_PATH)

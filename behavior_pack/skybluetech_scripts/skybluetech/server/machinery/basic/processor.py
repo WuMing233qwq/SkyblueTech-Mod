@@ -1,9 +1,15 @@
 # coding=utf-8
 from skybluetech_scripts.tooldelta.define import Item
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
-from ....common.mini_jei.core import CategoryType, RecipesCollection
-from ....common.mini_jei.machinery import MachineRecipeBase, MachineRecipe
-from ....common.define import flags as flags
+from skybluetech_scripts.skybluetech.common.mini_jei.core import (
+    CategoryType,
+    RecipesCollection,
+)
+from skybluetech_scripts.skybluetech.common.mini_jei.machinery import (
+    MachineRecipeBase,
+    MachineRecipe,
+)
+from skybluetech_scripts.skybluetech.common.define import flags as flags
 from .multi_fluid_container import MultiFluidContainer
 from .upgrade_control import UpgradeControl
 from .processor_base import ProcessorBase
@@ -18,6 +24,7 @@ class Processor(ProcessorBase):
         - 流体
     """
 
+    dump_progress_to_block_entity_data = True
     recipes = RecipesCollection("???")  # type: RecipesCollection[MachineRecipe]
     "机器配方, 改变配方表时记得重置工作进度"
     energy_mode = (0, 0, 0, 0, 0, 0)
@@ -178,7 +185,9 @@ class Processor(ProcessorBase):
             last_index = len(slot_pos_and_inputs) - 1
             for idx, (slot_pos, input) in enumerate(slot_pos_and_inputs):
                 self.fluids[slot_pos].volume -= input.count
-                self.onReducedFluid(slot_pos, input.id, input.count, idx == last_index)
+                self._on_reduced_fluid(
+                    slot_pos, input.id, input.count, idx == last_index
+                )
             slots_pos_and_outputs = list(
                 recipe.outputs.get(CategoryType.FLUID, {}).items()
             )

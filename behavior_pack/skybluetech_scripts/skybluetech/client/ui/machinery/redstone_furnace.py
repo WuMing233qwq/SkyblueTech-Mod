@@ -6,8 +6,11 @@ from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
     K_STORE_RF,
     K_PROGRESS,
 )
-from ....common.machinery_def.redstone_furnace import STORE_RF_MAX
-from .define import MachinePanelUIProxy, MAIN_PATH
+from skybluetech_scripts.skybluetech.common.machinery_def.redstone_furnace import (
+    STORE_RF_MAX,
+)
+from ..machinery_extra_pages import CableSettingsPage
+from .define_ex import MachinePanelUIProxyEx, MAIN_PATH
 from .utils import UpdatePowerBar, UpdateGenericProgressL2R, UpdateFlame
 
 POWER_PATH = MAIN_PATH / "power_bar"
@@ -16,7 +19,9 @@ FLAME_PATH = MAIN_PATH / "flame"
 
 
 @RegistToolDeltaScreen("RedstoneFurnaceUI.main", is_proxy=True)
-class RedstoneFurnaceUI(MachinePanelUIProxy):
+class RedstoneFurnaceUI(MachinePanelUIProxyEx):
+    available_extra_pages = (CableSettingsPage,)
+
     def OnCreate(self):
         dim, x, y, z = self.pos
         self.power_bar = self.GetElement(POWER_PATH)

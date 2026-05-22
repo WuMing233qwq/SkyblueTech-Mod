@@ -13,16 +13,22 @@ from skybluetech_scripts.tooldelta.api.server import (
     MayPlace,
     PlayerUseItemToPos,
 )
-from ....common.events.machinery.rf_repeater_plant import (
+from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
+from skybluetech_scripts.skybluetech.common.events.machinery.rf_repeater_plant import (
     RFRepeaterPlantSettingsUpdate,
 )
-from ....common.define.id_enum.machinery import RF_REPEATER_PLANT as MACHINE_ID
-from ....common.define.facing import DXYZ_FACING, FACING_EN
-from ....common.define.ui_keys import RF_REPEATER_PLANT_UI
-from ....common.machinery_def.rf_repeater_plant import MODE_INPUT, MODE_OUTPUT
-from ....common.utils.block_sync import BlockSync
+from skybluetech_scripts.skybluetech.common.define.id_enum.machinery import (
+    RF_REPEATER_PLANT as MACHINE_ID,
+)
+from skybluetech_scripts.skybluetech.common.define.facing import DXYZ_FACING, FACING_EN
+from skybluetech_scripts.skybluetech.common.define.ui_keys import RF_REPEATER_PLANT_UI
+from skybluetech_scripts.skybluetech.common.machinery_def.rf_repeater_plant import (
+    MODE_INPUT,
+    MODE_OUTPUT,
+)
+from skybluetech_scripts.skybluetech.common.utils.block_sync import BlockSync
 from ...transmitters.wire.logic import isWire
-from ..basic import BaseMachine, GUIControl, ItemContainer, RegisterMachine
+from ..basic import BaseMachine, GUIControl, RegisterMachine
 from ..pool import GetMachineStrict
 from .node import (
     NetworkData,
@@ -43,15 +49,14 @@ block_sync = BlockSync(MACHINE_ID, side=BlockSync.SIDE_SERVER)
 
 
 @RegisterMachine
-class RFRepeaterPlant(BaseMachine, GUIControl, ItemContainer):
+class RFRepeaterPlant(BaseMachine, GUIControl):
     bound_ui = RF_REPEATER_PLANT_UI
     block_name = MACHINE_ID
     store_rf_max = 120000
     energy_io_mode = (0, 0, 0, 0, 0, 0)
 
+    @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        BaseMachine.__init__(self, dim, x, y, z, block_entity_data)
-        ItemContainer.__init__(self, dim, x, y, z, block_entity_data)
         states = GetBlockStates(self.dim, (self.x, self.y, self.z))
         if states is None:
             raise ValueError("RFRepeaterPlant BlockState None")

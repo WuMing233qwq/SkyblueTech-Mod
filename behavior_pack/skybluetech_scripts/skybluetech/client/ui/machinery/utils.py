@@ -107,15 +107,19 @@ def UpdateImageTransformColor(
 
 
 class FluidDisplayer(object):
-    def __init__(self, ctrl):
-        # type: (UBaseCtrl) -> None
+    def __init__(self, ctrl, enable_interact=True):
+        # type: (UBaseCtrl, bool) -> None
         self.ctrl = ctrl
         self.databoard = None
         self.fluid_id = None
         self.fluid_volume = None
         self.max_volume = None
+        self.enable_interact = enable_interact
         btn = ctrl["data_btn"].asButton()
         screen_vars = ctrl._root._vars
+
+        if not enable_interact:
+            return
 
         # def onRollOver(params):
         #     prev_board = get_last_ui_board()
@@ -201,7 +205,8 @@ class FluidDisplayer(object):
             fluid_img.SetFullSize(
                 "y", UICtrlPosData("parent", relative_value=min(2, prgs))
             )
-        self._update_hover()
+        if self.enable_interact:
+            self._update_hover()
 
     def _update_hover(self):
         # type: () -> None

@@ -16,11 +16,13 @@ from skybluetech_scripts.tooldelta.ui import (
     UBaseCtrl,
     ToolDeltaScreen,
 )
-from ....common.events.machinery.rf_repeater_plant import (
+from skybluetech_scripts.skybluetech.common.events.machinery.rf_repeater_plant import (
     RFRepeaterPlantBuildRequest,
     RFRepeaterPlantBuildResponse,
 )
-from ....common.define.id_enum.machinery import RF_REPEATER_PLANT
+from skybluetech_scripts.skybluetech.common.define.id_enum.machinery import (
+    RF_REPEATER_PLANT,
+)
 from ...machinery.utils.mod_block_event import (
     ModBlockEntityLoadedClientEvent,
     ModBlockEntityRemoveClientEvent,

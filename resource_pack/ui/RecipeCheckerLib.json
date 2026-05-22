@@ -700,16 +700,6 @@
                 }
             },
             {
-                "collect_recipe_btn@SkybluePanelLib.collect_recipe_btn": {
-                    "anchor_from": "bottom_right",
-                    "anchor_to": "bottom_right",
-                    "offset": [
-                        -2,
-                        -2
-                    ]
-                }
-            },
-            {
                 "flame@SkybluePanelLib.Flame": {
                     "anchor_from": "left_middle",
                     "anchor_to": "left_middle",
@@ -1414,7 +1404,7 @@
                     "$bg_image": "textures/ui/magma_centrifuge_proc",
                     "$mask_image": "textures/ui/magma_centrifuge_proc_mask",
                     "offset": [
-                        24,
+                        23.5,
                         0
                     ],
                     "size": [
@@ -1729,6 +1719,105 @@
             },
             {
                 "progress@SkybluePanelLib.ProgressBar": {}
+            }
+        ]
+    },
+    "reacting_thermal_generator_recipes": {
+        "type": "panel",
+        "size": [
+            180.0,
+            40.0
+        ],
+        "layer": 1,
+        "controls": [
+            {
+                "bg": {
+                    "type": "image",
+                    "offset": [
+                        0.0,
+                        1.0
+                    ],
+                    "nineslice_size": [
+                        2.0,
+                        2.0,
+                        2.0,
+                        2.0
+                    ],
+                    "texture": "textures/ui/rect_panel_bg"
+                }
+            },
+            {
+                "slot0@SkybluePanelLib.item_displayer": {
+                    "offset": [
+                        -42,
+                        0
+                    ]
+                }
+            },
+            {
+                "fluid0@SkybluePanelLib.FluidDisplay": {
+                    "$text_visible": false,
+                    "anchor_from": "left_middle",
+                    "anchor_to": "left_middle",
+                    "offset": [
+                        6,
+                        0
+                    ],
+                    "size": [
+                        28,
+                        32
+                    ]
+                }
+            },
+            {
+                "fluid1@SkybluePanelLib.FluidDisplay": {
+                    "$text_visible": false,
+                    "anchor_from": "left_middle",
+                    "anchor_to": "left_middle",
+                    "offset": [
+                        62,
+                        0
+                    ],
+                    "size": [
+                        28,
+                        32
+                    ]
+                }
+            },
+            {
+                "output_power@SkybluePanelLib.output_power_displayer": {
+                    "offset": [
+                        -10,
+                        -6
+                    ],
+                    "size": [
+                        70,
+                        16
+                    ]
+                }
+            },
+            {
+                "tick_power": {
+                    "type": "label",
+                    "anchor_from": "right_middle",
+                    "anchor_to": "right_middle",
+                    "offset": [
+                        -8.0,
+                        6.0
+                    ],
+                    "size": [
+                        56.0,
+                        10.0
+                    ],
+                    "layer": 1,
+                    "color": [
+                        0,
+                        0.4,
+                        0
+                    ],
+                    "font_type": "unicode",
+                    "text": "999, 99 MRF/t"
+                }
             }
         ]
     },

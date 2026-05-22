@@ -47,7 +47,7 @@ into_machinery = PageGroup(
         ),
         TextPage(
             "",
-            '把金属锭丢到地上， 手持金属锤尝试挖掘金属锭掉落物下方的方块， 就可以将金属锭<link id="hammer" text="锤成">金属板； 日后你可以用<item id="{compressor}"><link id="compressor" text="压缩机">压缩机代替金属锤， 它支持把更多之类的锭压成板。\n\n将<item id="minecraft:redstone"><text color="§c" t="红石">放进高炉可以烧制成<item id="{redstoneflux_core}"><text color="§c" t="红石通量核心">来参与机器的合成。'.format(
+            '把金属锭丢到地上， 手持金属锤<text color="§d" t="尝试挖掘金属锭掉落物下方的方块">， 就可以将金属锭<link id="hammer" text="锤成">金属板； 日后你可以用<item id="{compressor}"><link id="compressor" text="压缩机">压缩机代替金属锤， 它支持把更多之类的锭压成板。\n\n将<item id="minecraft:redstone"><text color="§c" t="红石">放进高炉可以烧制成<item id="{redstoneflux_core}"><text color="§c" t="红石通量核心">来参与机器的合成。'.format(
                 compressor=id_enum.COMPRESSOR,
                 redstoneflux_core=id_enum.REDSTONEFLUX_CORE,
             ),
@@ -67,7 +67,7 @@ into_machinery = PageGroup(
         ),
         MachineryWorkstationRecipePage(
             id_enum.THERMAL_GENERATOR,
-            extra_text="把火力发电机和磨粉机紧邻放置， 火力发电机就能直接向磨粉机供电。\n\n在下一页可以查看磨粉机的合成方式！",
+            extra_text="把火力发电机和磨粉机紧邻放置， 火力发电机就能直接向磨粉机供电。\n在下一页可以查看磨粉机的合成方式！",
         ),
         MachineryWorkstationRecipePage(id_enum.MACERATOR),
     ],

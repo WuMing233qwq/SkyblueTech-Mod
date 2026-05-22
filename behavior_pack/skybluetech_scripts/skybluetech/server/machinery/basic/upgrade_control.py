@@ -2,8 +2,8 @@
 #
 from skybluetech_scripts.tooldelta.define.item import Item
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
-from ....common.define import flags
-from ....common.machinery_def.upgraders import (
+from skybluetech_scripts.skybluetech.common.define import flags
+from skybluetech_scripts.skybluetech.common.machinery_def.upgraders import (
     SPEED_NEGATIVE,
     SPEED_POSITIVE,
     POWER_NEGATIVE,
@@ -27,13 +27,12 @@ class UpgradeControl(ItemContainer, SPControl):
         upgrade_slots (int): 升级槽数量
         allow_upgrader_tags (set[str]): 可接受的机器升级卡标签。
 
-    需要调用 `__init__ (super)`
-
     覆写:
-        `IsValidInput`
-        `OnSlotUpdate`
-        `AddPower (super)`
-        `SetDeactiveFlag (super)`
+        - `__init__`
+        - `IsValidInput`
+        - `OnSlotUpdate`
+        - `AddPower`
+        - `SetDeactiveFlag`
     """
 
     upgrade_slot_start = 2  # type: int
@@ -98,6 +97,12 @@ class UpgradeControl(ItemContainer, SPControl):
 
     def GetAllUpgraders(self):
         # type: () -> dict[str, int]
+        """
+        获取所有升级卡。
+
+        Returns:
+            dict[str, int]: 升级卡字典, 键为升级卡 ID, 值为升级卡数量。
+        """
         res = {}  # type: dict[str, int]
         for i in range(
             self.upgrade_slot_start, self.upgrade_slot_start + self.upgrade_slots

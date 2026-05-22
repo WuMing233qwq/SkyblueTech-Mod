@@ -13,13 +13,13 @@ class BaseSpeedControl(BaseMachine):
     基本的速度控制机器基类。
 
     覆写:
-        `OnLoad (super)`
-        `Dump (super)`
-        `SetDeactiveFlag (super)`
+        - `SetDeactiveFlag`
     """
 
     origin_process_ticks = 20
+    "机器默认的单次处理所耗 ticks"
     dump_progress_to_block_entity_data = False
+    "是否在运行时将进度导出到方块实体, 供客户端UI 读取"
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):

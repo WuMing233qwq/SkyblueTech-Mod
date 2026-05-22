@@ -32,7 +32,10 @@ class ThermalGenerator(BaseGenerator, ItemContainer, GUIControl, WorkRenderer):
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
         self.is_burning = self.burn_seconds_left > 0
-        self.SetOutputPower(0)
+        if self.IsActive() and self.burn_seconds_left > 0:
+            self.SetOutputPower(TICK_POWER)
+        else:
+            self.SetOutputPower(0)
 
     @SuperExecutorMeta.execute_super
     def OnUnload(self):

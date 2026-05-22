@@ -8,8 +8,10 @@ from skybluetech_scripts.tooldelta.api.server import (
     DestroyEntity,
     SpawnDroppedItem,
 )
-from ....common.define.id_enum import ObjectUpgraders
-from ....common.machinery_def.redstone_furnace import TICK_POWER
+from skybluetech_scripts.skybluetech.common.define.id_enum import ObjectUpgraders
+from skybluetech_scripts.skybluetech.common.machinery_def.redstone_furnace import (
+    TICK_POWER,
+)
 from ...machinery.redstone_furnace import get_furnace_output_by_input
 from ...machinery.utils.charge import GetCharge, UpdateCharge
 from .register import RegisterDestroyBlockCallback

@@ -1,5 +1,5 @@
 # coding=utf-8
-from ....common.define.id_enum import machinery
+from skybluetech_scripts.skybluetech.common.define.id_enum import machinery
 from .define import CategoryType, MachineRecipe, Input, Output
 
 TAG_DUST_BLOCK = "dust_block"

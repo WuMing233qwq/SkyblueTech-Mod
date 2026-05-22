@@ -6,15 +6,16 @@ from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
     K_STORE_RF,
     FluidSlotClient,
 )
-from ....common.machinery_def.gas_burning_generator import (
+from skybluetech_scripts.skybluetech.common.machinery_def.gas_burning_generator import (
     recipes,
     STORE_RF_MAX,
     MAX_INPUT_GAS_VOLUME,
     MAX_OUTPUT_GAS_VOLUME,
 )
-from .define import MachinePanelUIProxy, MAIN_PATH
-from .utils import UpdatePowerBar, UpdateFlame, FluidDisplayer
+from ..machinery_extra_pages import PipeSettingsPageIndirectional
 from ..recipe_checker import AsRecipeCheckerBtn
+from .define_ex import MachinePanelUIProxyEx, MAIN_PATH
+from .utils import UpdatePowerBar, UpdateFlame, FluidDisplayer
 
 POWER_PATH = MAIN_PATH / "power_bar"
 GAS_INPUT_PATH = MAIN_PATH / "gas_input"
@@ -23,7 +24,9 @@ FLAME_PATH = MAIN_PATH / "flame"
 
 
 @RegistToolDeltaScreen("GasBurningGeneratorUI.main", is_proxy=True)
-class GasBurningGeneratorUI(MachinePanelUIProxy):
+class GasBurningGeneratorUI(MachinePanelUIProxyEx):
+    available_extra_pages = (PipeSettingsPageIndirectional,)
+
     def OnCreate(self):
         self.power_bar = self.GetElement(POWER_PATH)
         self.gas_input = self.GetElement(GAS_INPUT_PATH)

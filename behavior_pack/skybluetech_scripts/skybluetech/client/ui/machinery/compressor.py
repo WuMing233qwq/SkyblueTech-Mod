@@ -6,19 +6,23 @@ from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
     K_STORE_RF,
     K_PROGRESS,
 )
-from skybluetech_scripts.skybluetech.common.machinery_def.compressor import STORE_RF_MAX
-from .define import MachinePanelUIProxy, MAIN_PATH
-from .utils import UpdatePowerBar, UpdateGenericProgressL2R
-
+from skybluetech_scripts.skybluetech.common.machinery_def.compressor import (
+    STORE_RF_MAX,
+    recipes,
+)
+from ..machinery_extra_pages import CableSettingsPage
 from ..recipe_checker import AsRecipeCheckerBtn
-from ....common.machinery_def.compressor import recipes
+from .define_ex import MachinePanelUIProxyEx, MAIN_PATH
+from .utils import UpdatePowerBar, UpdateGenericProgressL2R
 
 POWER_PATH = MAIN_PATH / "power_bar"
 PRGS_PATH = MAIN_PATH / "progress"
 
 
 @RegistToolDeltaScreen("CompressorUI.main", is_proxy=True)
-class CompressorUI(MachinePanelUIProxy):
+class CompressorUI(MachinePanelUIProxyEx):
+    available_extra_pages = (CableSettingsPage,)
+
     def OnCreate(self):
         self.power_bar = self.GetElement(POWER_PATH)
         self.progress = self.GetElement(PRGS_PATH)

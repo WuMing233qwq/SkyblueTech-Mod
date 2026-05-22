@@ -289,11 +289,9 @@ class MultiBlockStructure(BaseMachine):
 
     派生自: `BaseMachine`
 
-    需要调用 `__init__`
-
     覆写:
-        `OnLoad`
-        `OnUnload`
+        - `__init__`
+        - `OnUnload`
 
     Class Attributes:
         structure_palette (StructureBlockPalette | None): 检测多方块结构完整性的结构调色板

@@ -155,12 +155,24 @@ class BaseMachine(object):
 
     def SetDeactiveFlag(self, flag):
         # type: (int) -> None
+        """
+        设置机器的停机状态。
+
+        Args:
+            flag (int): 标志位
+        """
         self.deactive_flags |= flag
         self.OnDeactiveFlagsChanged()
 
     def UnsetDeactiveFlag(self, flag, flush=True):
         # type: (int, bool) -> None
-        # type: (int) -> None
+        """
+        取消机器的停机状态。
+
+        Args:
+            flag (int): 标志位
+            flush (bool, optional): 是否刷新停机标志。 Defaults to True.
+        """
         if not self.HasDeactiveFlag(flag):
             return
         self.deactive_flags &= ~flag
@@ -175,12 +187,15 @@ class BaseMachine(object):
             flag (int): 标志位
 
         Returns:
-            bool
+            bool: 是否拥有该停机标志
         """
         return self.deactive_flags & flag != 0
 
     def FlushDeactiveFlags(self):
         # type: () -> None
+        """
+        刷新所有停机标志。
+        """
         pass
 
     def IsActive(self):

@@ -7,7 +7,7 @@ from skybluetech_scripts.tooldelta.api.client import (
 from skybluetech_scripts.tooldelta.ui import RegistToolDeltaScreen
 from skybluetech_scripts.tooldelta.utils.nbt import GetValueWithDefault as GetValue
 from skybluetech_scripts.skybluetech.common.machinery_def.basic import K_STORE_RF
-from ....common.machinery_def.hydroponic_bed import (
+from skybluetech_scripts.skybluetech.common.machinery_def.hydroponic_bed import (
     recipes,
     K_CROP_BLOCK_ID,
     K_GROW_STAGE,

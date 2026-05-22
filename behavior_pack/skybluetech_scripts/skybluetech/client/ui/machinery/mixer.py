@@ -7,13 +7,17 @@ from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
     K_PROGRESS,
     FluidSlotClient,
 )
-from ....common.machinery_def.mixer import (
+from skybluetech_scripts.skybluetech.common.machinery_def.mixer import (
     STORE_RF_MAX,
     MAX_FLUID_VOLUME,
     recipes,
 )
+from ..machinery_extra_pages import (
+    CableSettingsPage,
+    PipeSettingsPage,
+)
 from ..recipe_checker import AsRecipeCheckerBtn
-from .define import MachinePanelUIProxy, MAIN_PATH
+from .define_ex import MachinePanelUIProxyEx, MAIN_PATH
 from .utils import UpdatePowerBar, UpdateGenericProgressL2R, FluidDisplayer
 
 
@@ -23,7 +27,12 @@ FLUID_PATH = MAIN_PATH / "fluid_display"
 
 
 @RegistToolDeltaScreen("MixerUI.main", is_proxy=True)
-class MixerUI(MachinePanelUIProxy):
+class MixerUI(MachinePanelUIProxyEx):
+    available_extra_pages = (
+        CableSettingsPage,
+        PipeSettingsPage,
+    )
+
     def OnCreate(self):
         self.power_bar = self.GetElement(POWER_PATH)
         self.progress = self.GetElement(PRGS_PATH)

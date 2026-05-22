@@ -11,11 +11,12 @@ from skybluetech_scripts.skybluetech.common.machinery_def.fluid_condenser import
     STORE_RF_MAX,
     MAX_FLUID_VOLUME,
 )
-from ....common.machinery_def.fluid_condenser import recipes
-from .define import MachinePanelUIProxy, MAIN_PATH
+from skybluetech_scripts.skybluetech.common.machinery_def.fluid_condenser import recipes
+from ..machinery_extra_pages import CableSettingsPage, PipeSettingsPage
+from ..recipe_checker import AsRecipeCheckerBtn
+from .define_ex import MachinePanelUIProxyEx, MAIN_PATH
 from .utils import UpdatePowerBar, UpdateGenericProgressL2R, FluidDisplayer
 
-from ..recipe_checker import AsRecipeCheckerBtn
 
 POWER_PATH = MAIN_PATH / "power_bar"
 PRGS_PATH = MAIN_PATH / "progress"
@@ -23,7 +24,9 @@ FLUID_PATH = MAIN_PATH / "fluid_display"
 
 
 @RegistToolDeltaScreen("FluidCondenserUI.main", is_proxy=True)
-class FluidCondenserUI(MachinePanelUIProxy):
+class FluidCondenserUI(MachinePanelUIProxyEx):
+    available_extra_pages = (CableSettingsPage, PipeSettingsPage)
+
     def OnCreate(self):
         self.power_bar = self.GetElement(POWER_PATH)
         self.progress = self.GetElement(PRGS_PATH)

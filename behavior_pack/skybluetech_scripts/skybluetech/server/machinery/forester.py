@@ -36,7 +36,7 @@ ALL_NEIGHBOUR_BLOCKS_ENUM = [
 class Forester(GUIControl, ItemContainer, SPControl):
     block_name = MACHINE_ID
     store_rf_max = STORE_RF_MAX
-    running_power = 80
+    running_power = 20
     origin_process_ticks = 20 * 5
     input_slots = ()
     output_slots = tuple(range(24))

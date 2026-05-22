@@ -16,6 +16,10 @@
     },
     "wind_generator_ui": {
         "type": "panel",
+        "size": [
+            0.0,
+            0.0
+        ],
         "controls": [
             {
                 "flying_item_renderer@common.flying_item_renderer": {
@@ -53,22 +57,6 @@
                                         "inventory_selected_icon_button@common.inventory_selected_icon_button": {}
                                     },
                                     {
-                                        "machine_label": {
-                                            "type": "label",
-                                            "anchor_from": "top_middle",
-                                            "anchor_to": "top_middle",
-                                            "offset": [
-                                                0.0,
-                                                4.0
-                                            ],
-                                            "font_scale_factor": 1.4,
-                                            "font_type": "default",
-                                            "shadow": true,
-                                            "text": "风力发电机",
-                                            "text_alignment": "center"
-                                        }
-                                    },
-                                    {
                                         "gamepad_cursor_button@common.gamepad_cursor_button": {
                                             "visible": true
                                         }
@@ -80,6 +68,22 @@
                                         "main": {
                                             "type": "panel",
                                             "controls": [
+                                                {
+                                                    "machine_label": {
+                                                        "type": "label",
+                                                        "anchor_from": "top_middle",
+                                                        "anchor_to": "top_middle",
+                                                        "offset": [
+                                                            0.0,
+                                                            4.0
+                                                        ],
+                                                        "font_scale_factor": 1.4,
+                                                        "font_type": "default",
+                                                        "shadow": true,
+                                                        "text": "风力发电机",
+                                                        "text_alignment": "center"
+                                                    }
+                                                },
                                                 {
                                                     "gen_slot@netease_container.custom_grid_item": {
                                                         "$cell_overlay_ref|default": "WindGeneratorUI.paddle_slot_img",
@@ -153,6 +157,29 @@
                                                 0,
                                                 46
                                             ]
+                                        }
+                                    },
+                                    {
+                                        "left_sections@SkybluePanelLib.simple_panel_left_sections": {
+                                            "anchor_from": "top_left",
+                                            "anchor_to": "top_right",
+                                            "layer": 4,
+                                            "offset": [
+                                                -2,
+                                                0
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "ex_panel": {
+                                            "type": "panel",
+                                            "anchor_from": "top_middle",
+                                            "anchor_to": "top_middle",
+                                            "size": [
+                                                "default",
+                                                "56%+0px"
+                                            ],
+                                            "layer": 1
                                         }
                                     }
                                 ],

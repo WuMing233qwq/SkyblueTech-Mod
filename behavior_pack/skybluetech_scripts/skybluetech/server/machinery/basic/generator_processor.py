@@ -1,9 +1,15 @@
 # coding=utf-8
 from skybluetech_scripts.tooldelta.define import Item
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
-from ....common.mini_jei.core import CategoryType, RecipesCollection
-from ....common.mini_jei.machinery import MachineRecipeBase, GeneratorRecipe
-from ....common.define import flags
+from skybluetech_scripts.skybluetech.common.mini_jei.core import (
+    CategoryType,
+    RecipesCollection,
+)
+from skybluetech_scripts.skybluetech.common.mini_jei.machinery import (
+    MachineRecipeBase,
+    GeneratorRecipe,
+)
+from skybluetech_scripts.skybluetech.common.define import flags
 from .base_generator import BaseGenerator
 from .base_speed_control import BaseSpeedControl
 from .multi_fluid_container import MultiFluidContainer
@@ -23,6 +29,7 @@ class GeneratorProcessor(BaseGenerator, ProcessorBase):
         - 流体
     """
 
+    dump_progress_to_block_entity_data = True
     recipes = RecipesCollection("???")  # type: RecipesCollection[GeneratorRecipe]
     "机器配方, 改变配方表时记得重置工作进度"
     energy_io_mode = (1, 1, 1, 1, 1, 1)
@@ -31,6 +38,8 @@ class GeneratorProcessor(BaseGenerator, ProcessorBase):
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
         self.SetOutputPower(self.generator_output_power)
+        if self.recipe_index is not None:
+            self.origin_process_ticks = self.recipes[self.recipe_index].tick_duration
 
     @SuperExecutorMeta.execute_super
     def OnTicking(self):
@@ -105,7 +114,7 @@ class GeneratorProcessor(BaseGenerator, ProcessorBase):
 
     # ======
     def get_recipe(self):
-        if self.recipe_index:
+        if self.recipe_index is not None:
             return self.recipe_index, self.recipes[self.recipe_index]
         else:
             return ProcessorBase.get_recipe(self)
@@ -174,7 +183,9 @@ class GeneratorProcessor(BaseGenerator, ProcessorBase):
             last_index = len(slot_pos_and_inputs) - 1
             for idx, (slot_pos, input) in enumerate(slot_pos_and_inputs):
                 self.fluids[slot_pos].volume -= input.count
-                self.onReducedFluid(slot_pos, input.id, input.count, idx == last_index)
+                self._on_reduced_fluid(
+                    slot_pos, input.id, input.count, idx == last_index
+                )
         self.recipe_index = recipe_index
 
     def finish_recipe(self, recipe):
@@ -208,8 +219,8 @@ class GeneratorProcessor(BaseGenerator, ProcessorBase):
 
     @property
     def recipe_index(self):
-        # type: () -> int
-        return self.bdata[K_RECIPE_INDEX] or 0
+        # type: () -> int | None
+        return self.bdata[K_RECIPE_INDEX]
 
     @recipe_index.setter
     def recipe_index(self, value):

@@ -23,7 +23,9 @@ class GUIControl(object):
     """
     带有 GUI 的机器基类。
 
-    覆写: `__init__`, `OnClick`, `OnUnload`
+    覆写:
+        - `__init__`
+        - `OnUnload`
     """
 
     bound_ui = None  # type: str | None

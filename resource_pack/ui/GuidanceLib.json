@@ -1079,7 +1079,7 @@
                         -4
                     ],
                     "size": [
-                        "100%+-20px",
+                        "100%+-12px",
                         "100%+-26px"
                     ]
                 }
@@ -1210,7 +1210,7 @@
                     "anchor_to": "left_middle",
                     "size": [
                         "100%y+0px",
-                        "100%+-4px"
+                        "100%+-2px"
                     ],
                     "layer": 1,
                     "property_bag": {
@@ -1224,7 +1224,7 @@
                     "anchor_from": "left_middle",
                     "anchor_to": "left_middle",
                     "offset": [
-                        24.0,
+                        16.0,
                         0.0
                     ],
                     "size": [

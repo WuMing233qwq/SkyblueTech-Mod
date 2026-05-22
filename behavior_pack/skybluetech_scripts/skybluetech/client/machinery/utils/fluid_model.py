@@ -6,7 +6,7 @@ from skybluetech_scripts.tooldelta.api.client import (
     SetEntityShadowShow,
     RebuildRenderForOneActor,
 )
-from ....common.define.fluids.gas_enum import IsGas
+from skybluetech_scripts.skybluetech.common.define.fluids.gas_enum import IsGas
 from .client_molangs import Y_SCALE
 
 

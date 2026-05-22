@@ -91,7 +91,7 @@
                                 "anchor_from": "top_middle",
                                 "anchor_to": "top_middle",
                                 "offset": [
-                                    "-50%+-10px",
+                                    "-50%+-9px",
                                     0.0
                                 ],
                                 "collection_name": "recipe_left_sections",

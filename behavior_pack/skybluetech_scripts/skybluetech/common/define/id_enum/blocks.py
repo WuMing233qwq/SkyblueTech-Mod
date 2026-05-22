@@ -1,18 +1,19 @@
 # coding=utf-8
+from .utils import SimpleEnum
 
 
-class Cable:
+class Cable(SimpleEnum):
     STEEL = "skybluetech:item_transport_cable_steel"
     INVAR = "skybluetech:item_transport_cable_invar"
 
 
-class Pipe:
+class Pipe(SimpleEnum):
     BRONZE = "skybluetech:pipe_bronze"
     CUPRONICKEL = "skybluetech:pipe_cupronickel"
     ULTRAHEATINUM = "skybluetech:pipe_ultraheatinum"
 
 
-class Wire:
+class Wire(SimpleEnum):
     TIN = "skybluetech:wire_tin"
     TIN_INSULATED = "skybluetech:wire_insulated_tin"
     COPPER = "skybluetech:wire_copper"
@@ -25,7 +26,7 @@ class Wire:
     CREATIVE_INSULATED = "skybluetech:wire_insulated_creative"
 
 
-class Ore:
+class Ore(SimpleEnum):
     TIN = "skybluetech:tin_ore"
     LEAD = "skybluetech:lead_ore"
     NICKEL = "skybluetech:nickel_ore"
@@ -38,22 +39,12 @@ class Ore:
     SILVER_DEEPSLATE = "skybluetech:deepslate_silver_ore"
 
 
-class Tank:
+class Tank(SimpleEnum):
     BRONZE = "skybluetech:tank_bronze"
     INVAR = "skybluetech:tank_invar"
     STEEL = "skybluetech:tank_steel"
     PLATINUM = "skybluetech:tank_platinum"
     CREATIVE = "skybluetech:tank_creative"
-
-    @classmethod
-    def all(cls):
-        return {
-            cls.BRONZE,
-            cls.INVAR,
-            cls.STEEL,
-            cls.PLATINUM,
-            cls.CREATIVE,
-        }
 
 
 FAMICOM = "skybluetech:famicom"

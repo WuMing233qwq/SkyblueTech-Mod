@@ -1,7 +1,7 @@
 # coding=utf-8
 from skybluetech_scripts.tooldelta.ui.elem_comp import UButton
 from skybluetech_scripts.tooldelta.api.client import GetItemHoverName
-from ....common.mini_jei import (
+from skybluetech_scripts.skybluetech.common.mini_jei import (
     RecipesCollection,
     RecipeBase,
     CategoryType,

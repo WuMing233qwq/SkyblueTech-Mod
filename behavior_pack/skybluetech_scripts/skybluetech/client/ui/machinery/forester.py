@@ -6,14 +6,17 @@ from skybluetech_scripts.skybluetech.common.machinery_def.basic import K_STORE_R
 from skybluetech_scripts.skybluetech.common.machinery_def.forester import (
     STORE_RF_MAX,
 )
-from .define import MachinePanelUIProxy, MAIN_PATH
+from ..machinery_extra_pages import CableSettingsPageIndirectional
+from .define_ex import MachinePanelUIProxyEx, MAIN_PATH
 from .utils import UpdatePowerBar
 
 POWER_PATH = MAIN_PATH / "power_bar"
 
 
 @RegistToolDeltaScreen("ForesterUI.main", is_proxy=True)
-class ForesterUI(MachinePanelUIProxy):
+class ForesterUI(MachinePanelUIProxyEx):
+    available_extra_pages = (CableSettingsPageIndirectional,)
+
     def OnCreate(self):
         self.power_bar = self.GetElement(POWER_PATH)
 

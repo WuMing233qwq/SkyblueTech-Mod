@@ -7,8 +7,8 @@ from skybluetech_scripts.tooldelta.events.client import (
     ModBlockEntityRemoveClientEvent,
 )
 from skybluetech_scripts.tooldelta.utils.nbt import GetValue
-from ....common.define.id_enum import Tank
-from ....common.machinery_def.basic.fluid_container import (
+from skybluetech_scripts.skybluetech.common.define.id_enum import Tank
+from skybluetech_scripts.skybluetech.common.machinery_def.basic.fluid_container import (
     K_FLUID_ID,
     K_FLUID_VOLUME,
     K_MAX_VOLUME,

@@ -19,7 +19,7 @@ from skybluetech_scripts.tooldelta.extensions.recipe_obj import (
     GetCraftingRecipe,
 )
 from skybluetech_scripts.tooldelta.events.client import OnKeyPressInGame
-from ....common.events.misc.crafting_template_settings import (
+from skybluetech_scripts.skybluetech.common.events.misc.crafting_template_settings import (
     CraftingTemplateSettingsUpload,
     CraftingTemplateUpdateRecipe,
 )

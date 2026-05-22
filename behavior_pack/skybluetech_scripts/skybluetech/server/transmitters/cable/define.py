@@ -1,6 +1,6 @@
 # coding=utf-8
-
-from ....common.define.id_enum.blocks import Cable
+from skybluetech_scripts.skybluetech.common.define.id_enum.blocks import Cable
+from skybluetech_scripts.skybluetech.common.misc.transmitter import TransmitterType
 from ..base import BaseNetwork, BaseAccessPoint
 
 TRANSFER_SPEED_MAPPING = {
@@ -10,6 +10,8 @@ TRANSFER_SPEED_MAPPING = {
 
 
 class CableNetwork(BaseNetwork["CableAccessPoint"]):
+    network_type = TransmitterType.CABLE
+
     @classmethod
     def calc_transfer_speed(cls, block_name):
         # type: (str) -> int

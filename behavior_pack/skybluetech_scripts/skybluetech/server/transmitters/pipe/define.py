@@ -1,6 +1,7 @@
 # coding=utf-8
 from skybluetech_scripts.tooldelta.api.server import GetBlockEntityData
-from ....common.define.id_enum import Pipe, fluids
+from skybluetech_scripts.skybluetech.common.define.id_enum import Pipe, fluids
+from skybluetech_scripts.skybluetech.common.misc.transmitter import TransmitterType
 from ..base.define import BaseNetwork, BaseAccessPoint
 
 INT32 = 1 << 32
@@ -24,6 +25,8 @@ PIPE_CAN_TRANSMIT_FLUID_MAPPING = {
 
 
 class PipeNetwork(BaseNetwork["PipeAccessPoint"]):
+    network_type = TransmitterType.PIPE
+
     def __init__(self, dim, group_inputs, group_outputs, nodes, transmitter_id):
         super(PipeNetwork, self).__init__(
             dim, group_inputs, group_outputs, nodes, transmitter_id

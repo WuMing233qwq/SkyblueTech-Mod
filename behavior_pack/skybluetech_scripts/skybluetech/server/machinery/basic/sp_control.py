@@ -19,6 +19,9 @@ class SPControl(BaseSpeedControl, PowerControl):
         尝试处理一次配方, 会消耗能量, 如可处理返回 True, 制作中或能量不足返回 False
 
         值得注意的是, 我们可能要在 1tick 之内进行多次配方产出
+
+        Returns:
+            bool: 是否已处理完一次配方, 可以结束配方运行
         """
         if not self.PowerEnough():
             return False

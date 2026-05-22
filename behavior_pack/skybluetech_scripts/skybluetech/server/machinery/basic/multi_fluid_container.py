@@ -28,7 +28,8 @@ class MultiFluidContainer(object):
         allow_player_use_bucket_push (bool): 是否允许玩家直接使用桶装填流体
         allow_player_use_bucket_pull (bool): 是否允许玩家直接使用桶取出流体
 
-    需要调用 `__init__`
+    覆写:
+        - `__init__`
     """
 
     fluid_io_mode = (2, 2, 2, 2, 2, 2)  # type: tuple[int, int, int, int, int, int]
@@ -61,10 +62,10 @@ class MultiFluidContainer(object):
         new_vol = fluid.volume = orig_volume + fluid_volume
         ok = False
         if new_vol > orig_volume:
-            self.onAddedFluid(slot_pos, fluid_id, fluid_volume, is_final)
+            self._on_added_fluid(slot_pos, fluid_id, fluid_volume, is_final)
             ok = True
         elif new_vol < orig_volume:
-            self.onReducedFluid(slot_pos, fluid_id, fluid_volume, is_final)
+            self._on_reduced_fluid(slot_pos, fluid_id, fluid_volume, is_final)
             ok = True
         if fluid.volume > fluid.max_volume:
             overflow_vol = fluid.volume - fluid.max_volume
@@ -85,19 +86,21 @@ class MultiFluidContainer(object):
                 free_volume = fluid.max_volume - fluid.volume
                 if fluid_volume <= free_volume:
                     fluid.volume += fluid_volume
-                    self.onAddedFluid(slot, fluid_id, fluid_volume, slot == last_slot)
+                    self._on_added_fluid(
+                        slot, fluid_id, fluid_volume, slot == last_slot
+                    )
                     return True, 0
                 else:
                     fluid.volume = fluid.max_volume
                     fluid_volume -= free_volume
-                    self.onAddedFluid(slot, fluid_id, free_volume, slot == last_slot)
+                    self._on_added_fluid(slot, fluid_id, free_volume, slot == last_slot)
         return _orig != fluid_volume, fluid_volume
 
     def CanAddFluid(self, fluid_id):
         # type: (str) -> bool
         return any(self.fluids[s].canMerge(fluid_id) for s in self.fluid_input_slots)
 
-    def ifPlayerInteractWithBucket(self, player_id, test=False):
+    def on_player_interact_with_bucket(self, player_id, test=False):
         # type: (str, bool) -> bool
         if not self.allow_player_use_bucket_interact:
             return False
@@ -128,7 +131,7 @@ class MultiFluidContainer(object):
                             player_id, GetSelectedSlot(player_id), item.count - 1
                         )
                         GiveItem(player_id, Item(bucket_id, count=1))
-                        self.onReducedFluid(
+                        self._on_reduced_fluid(
                             slot, fluid_id, BUCKET_VOLUME, fluid is last_fluid
                         )
                         break
@@ -155,7 +158,9 @@ class MultiFluidContainer(object):
                         SpawnItemToPlayerCarried(
                             player_id, Item("minecraft:bucket", count=1)
                         )
-                        self.onAddedFluid(slot, fluid_id, BUCKET_VOLUME, i == last_idx)
+                        self._on_added_fluid(
+                            slot, fluid_id, BUCKET_VOLUME, i == last_idx
+                        )
             if isinstance(self, GUIControl):
                 self.CallSync()
             return True
@@ -177,21 +182,21 @@ class MultiFluidContainer(object):
         # type: (int, bool) -> None
         "子类覆写在流体槽位发生更新时执行的回调。"
 
-    def onAddedFluid(self, slot, fluid_id, fluid_volume, is_final):
+    def _on_added_fluid(self, slot, fluid_id, fluid_volume, is_final):
         # type: (int, str, float, bool) -> None
         self.OnAddedFluid(slot, fluid_id, fluid_volume, is_final)
-        self.onFluidSlotUpdate(slot, is_final)
+        self._on_fluid_slot_update(slot, is_final)
         if isinstance(self, GUIControl):
             self.CallSync()
 
-    def onReducedFluid(self, slot, fluid_id, fluid_volume, is_final):
+    def _on_reduced_fluid(self, slot, fluid_id, fluid_volume, is_final):
         # type: (int, str, float, bool) -> None
         self.OnReducedFluid(slot, fluid_id, fluid_volume, is_final)
-        self.onFluidSlotUpdate(slot, is_final)
+        self._on_fluid_slot_update(slot, is_final)
         if isinstance(self, GUIControl):
             self.CallSync()
 
-    def onFluidSlotUpdate(self, slot_pos, is_final):
+    def _on_fluid_slot_update(self, slot_pos, is_final):
         # type: (int, bool) -> None
         "子类覆写在流体槽位发生更新时执行的回调。"
         self.OnFluidSlotUpdate(slot_pos, is_final)

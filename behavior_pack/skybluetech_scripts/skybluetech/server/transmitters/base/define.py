@@ -1,8 +1,7 @@
 # coding=utf-8
-
-
 from skybluetech_scripts.tooldelta.api.server import GetBlockEntityData
 from skybluetech_scripts.tooldelta.extensions.typing import Generic, TypeVar
+from skybluetech_scripts.skybluetech.common.misc.transmitter import TransmitterType
 
 # TYPE_CHECKING
 if 0:
@@ -20,6 +19,10 @@ AP_MODE_OUTPUT = 0b10
 
 class BaseNetwork(Generic[_APT]):
     # 网络表示一条管网, 所有可以直接连通的管道方块共属于一个网络。
+
+    network_type = TransmitterType.UNKNOWN
+    "类属性, 传输管网类型"
+
     def __init__(self, dim, group_inputs, group_outputs, nodes, transmitter_id):
         # type: (int, set[_APT], set[_APT], set[tuple[int, int, int]], str) -> None
         self.dim = dim

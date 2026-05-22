@@ -10,6 +10,7 @@ from skybluetech_scripts.skybluetech.common.mini_jei.machinery import (
     metal_press,
     mixer,
     oil_extractor,
+    reacting_thermal_generator,
     redstone_generator,
 )
 from .define import MachineRecipeRenderer, GeneratorRecipeRenderer
@@ -104,6 +105,17 @@ oil_extractor.OilExtractorRecipe.SetRenderer(
         },
     )
 )
+reacting_thermal_generator.ReactingThermalGeneratorRecipe.SetRenderer(
+    type(
+        "ReactingThermalGeneratorRecipeRenderer",
+        (GeneratorRecipeRenderer,),
+        {
+            "render_ui_def_name": "RecipeCheckerLib.reacting_thermal_generator_recipes",
+            "recipe_icon_id": machinery.REACTING_THERMAL_GENERATOR,
+        },
+    )
+)
+
 redstone_generator.RedstoneGeneratorRecipe.SetRenderer(
     type(
         "RedstoneGeneratorRecipeRenderer",

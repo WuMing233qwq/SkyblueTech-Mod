@@ -97,7 +97,7 @@
                 "components": {
                     "minecraft:material_instances": {
                         "down": {
-                            "texture": "skybluetech:generator_frame_down"
+                            "texture": "skybluetech:generator_frame_bottom"
                         },
                         "east": {
                             "texture": "skybluetech:generator_frame_side"
@@ -123,7 +123,7 @@
                 "components": {
                     "minecraft:material_instances": {
                         "down": {
-                            "texture": "skybluetech:generator_frame_down"
+                            "texture": "skybluetech:generator_frame_bottom"
                         },
                         "east": {
                             "texture": "skybluetech:generator_frame_side"

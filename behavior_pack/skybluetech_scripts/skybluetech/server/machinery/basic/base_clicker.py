@@ -9,7 +9,8 @@ class BaseClicker(object):
     继承了此类的机器可获得更好的 OnClick() 方法,
     例如, 玩家手持方块点击机器时不再会同时放下方块。
 
-    需要 `__init__()`
+    覆写:
+        - `__init__()`
     """
 
     onclick_delay = 0.25
@@ -25,4 +26,11 @@ class BaseClicker(object):
 
     def OnClick(self, event, extra_datas=None):
         # type: (ServerBlockUseEvent, dict | None) -> None
+        """
+        子类覆写该方法。机器被玩家点击时调用。
+
+        参数:
+            event (ServerBlockUseEvent): 玩家点击事件
+            extra_datas (dict | None, optional): 额外数据。默认为 None。
+        """
         pass

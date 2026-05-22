@@ -4,15 +4,17 @@ from skybluetech_scripts.tooldelta.ui import RegistToolDeltaScreen
 from skybluetech_scripts.tooldelta.utils.nbt import GetValueWithDefault as GetValue
 from skybluetech_scripts.skybluetech.common.machinery_def.basic import K_STORE_RF
 from skybluetech_scripts.skybluetech.common.machinery_def.charger import STORE_RF_MAX
-
-from .define import MachinePanelUIProxy, MAIN_PATH
+from ..machinery_extra_pages import CableSettingsPage
+from .define_ex import MachinePanelUIProxyEx, MAIN_PATH
 from .utils import UpdatePowerBar
 
 POWER_PATH = MAIN_PATH / "power_bar"
 
 
 @RegistToolDeltaScreen("ChargerUI.main", is_proxy=True)
-class ChargerUI(MachinePanelUIProxy):
+class ChargerUI(MachinePanelUIProxyEx):
+    available_extra_pages = (CableSettingsPage,)
+
     def OnCreate(self):
         self.power = self.GetElement(POWER_PATH)
 

@@ -1,7 +1,7 @@
 # coding=utf-8
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
-from ....common.define import flags
-from ....common.define.id_enum import Upgraders
+from skybluetech_scripts.skybluetech.common.define import flags
+from skybluetech_scripts.skybluetech.common.define.id_enum import Upgraders
 from .base_power_provider import BasePowerProvider
 from .upgrade_control import UpgradeControl
 
@@ -14,6 +14,9 @@ class BaseGenerator(BasePowerProvider):
 
     派生自: `BaseMachine`
 
+    覆写:
+        - `__init__`
+        - `OnTicking`
     """
 
     @SuperExecutorMeta.execute_super
@@ -37,4 +40,10 @@ class BaseGenerator(BasePowerProvider):
 
     def SetOutputPower(self, power):
         # type: (int) -> None
+        """
+        设置发电机输出功率。
+
+        Args:
+            power (int): 新的输出功率值
+        """
         self.output_power = power

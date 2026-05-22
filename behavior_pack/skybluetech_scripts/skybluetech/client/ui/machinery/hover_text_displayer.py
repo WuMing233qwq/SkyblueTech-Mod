@@ -3,8 +3,10 @@ from skybluetech_scripts.tooldelta.api.client import GetBlockEntityData
 from skybluetech_scripts.tooldelta.ui import RegistToolDeltaScreen, Binder
 from skybluetech_scripts.tooldelta.utils.nbt import GetValueWithDefault as GetValue
 from skybluetech_scripts.tooldelta.utils.py_comp import py2_unicode
-from ....common.define.ui_keys import HOVER_TEXT_DISPLAYER_UI
-from ....common.events.machinery.hover_text_displayer import (
+from skybluetech_scripts.skybluetech.common.define.ui_keys import (
+    HOVER_TEXT_DISPLAYER_UI,
+)
+from skybluetech_scripts.skybluetech.common.events.machinery.hover_text_displayer import (
     HoverTextDisplayerContentUpdate,
     HoverTextDisplayerContentUpload,
 )
@@ -36,6 +38,8 @@ class HoverTextDisplayerUI(MachinePanelUI):
         )
 
     def OnTicking(self):
+        if not self.inited:
+            return
         data = GetBlockEntityData(self.x, self.y, self.z)
         if data is None:
             return

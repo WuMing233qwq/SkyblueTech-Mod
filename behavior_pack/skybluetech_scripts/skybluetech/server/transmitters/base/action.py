@@ -6,20 +6,24 @@ from skybluetech_scripts.tooldelta.events.server import (
 from skybluetech_scripts.tooldelta.api.server import (
     GetBlockName,
     GetBlockStates,
+    GetPlayerDimensionId,
     UpdateBlockStates,
     SetOnePopupNotice,
 )
-from skybluetech_scripts.tooldelta.api.common import ExecLater
 from skybluetech_scripts.tooldelta.events.service import ServerListenerService
-from ....common.events.misc.transmitter_settings import (
+from skybluetech_scripts.skybluetech.common.events.misc.transmitter_settings import (
+    TransmitterSwitchAccessMode,
     TransmitterSetLabel,
     TransmitterSetPriority,
 )
-from ....common.define.id_enum.items import (
+from skybluetech_scripts.skybluetech.common.define.id_enum.items import (
     TRANSMITTER_WRENCH,
     TRANSMITTER_SETTINGS_WRENCH,
 )
-from ....common.define.facing import NEIGHBOR_BLOCKS_ENUM, OPPOSITE_FACING
+from skybluetech_scripts.skybluetech.common.define.facing import (
+    NEIGHBOR_BLOCKS_ENUM,
+    OPPOSITE_FACING,
+)
 from ..base.define import AP_MODE_INPUT, AP_MODE_OUTPUT
 from ..constants import FACING_EN, FACING_ZHCN
 from .logic import (
@@ -63,82 +67,83 @@ class ActionModule(Generic[_NT, _APT], ServerListenerService):
         else:
             return None
 
+    def switch_access_mode(self, dim, x, y, z, face, player_id=None):
+        # type: (int, int, int, int, int, str | None) -> bool
+        if not self.enable_io_mode_settings:
+            return False
+        block_name = GetBlockName(dim, (x, y, z))
+        if block_name is None:
+            return False
+        block_orig_status = GetBlockStates(dim, (x, y, z))
+        dx, dy, dz = NEIGHBOR_BLOCKS_ENUM[face]
+        nextBlock = GetBlockName(dim, (x + dx, y + dy, z + dz))
+        if nextBlock is None or self.logic_module.transmitter_check_func(nextBlock):
+            if player_id is not None:
+                SetOnePopupNotice(
+                    player_id,
+                    "§6无法为已连接了另外一根管道的管道设置传输模式",
+                    "§7[§cx§7] §c错误",
+                )
+            return False
+        elif not self.logic_module.can_connect(nextBlock, block_name):
+            if player_id is not None:
+                SetOnePopupNotice(
+                    player_id,
+                    "§6无法为未连接的管道设置传输模式",
+                    "§7[§cx§7] §c错误",
+                )
+            return False
+        facing_en_key = "skybluetech:cable_io_" + FACING_EN[face]
+        newState = not block_orig_status.get(facing_en_key, False)
+        block_orig_status[facing_en_key] = newState
+        current_network = self.logic_module.GetNetworkByTransmitter(dim, x, y, z)
+        if current_network is None:
+            if player_id is not None:
+                SetOnePopupNotice(player_id, "§4管道数据异常", "§7[§cx§7] §c错误")
+            return False
+        if newState:
+            ap = self.logic_module.access_point_cls(dim, x, y, z, face, AP_MODE_OUTPUT)
+            ap.bound_network(current_network)
+            ok = self.logic_module.SetAccessPointIOMode(ap, AP_MODE_OUTPUT)
+        else:
+            ap = self.logic_module.access_point_cls(dim, x, y, z, face, AP_MODE_INPUT)
+            ap.bound_network(current_network)
+            ok = self.logic_module.SetAccessPointIOMode(ap, AP_MODE_INPUT)
+        if ok:
+            if player_id is not None:
+                SetOnePopupNotice(
+                    player_id,
+                    "§f已将管道的§6"
+                    + FACING_ZHCN[face]
+                    + "§f面设置为"
+                    + ("§a输入", "§c抽出")[newState],
+                )
+        else:
+            if player_id is not None:
+                SetOnePopupNotice(
+                    player_id,
+                    "§6无法将管道的§6"
+                    + FACING_ZHCN[face]
+                    + "§6面设置为"
+                    + ("§a输入", "§c抽出")[newState],
+                )
+        UpdateBlockStates(dim, (x, y, z), block_orig_status)
+        return True
+
     @ServerListenerService.Listen(ServerBlockUseEvent)
     def onPlayerUseWrench(self, event):
         # type: (ServerBlockUseEvent) -> None
         if not self.logic_module.transmitter_check_func(event.blockName):
             return
         if event.item.newItemName == TRANSMITTER_WRENCH:
-            if not self.enable_io_mode_settings:
-                return
-            blockX = event.x
-            blockY = event.y
-            blockZ = event.z
-            block_orig_status = GetBlockStates(
-                event.dimensionId, (blockX, blockY, blockZ)
-            )
-            facing = self.get_testing_facing(event.clickX, event.clickY, event.clickZ)
-            if facing is None:
+            face = self.get_testing_facing(event.clickX, event.clickY, event.clickZ)
+            if face is None:
                 SetOnePopupNotice(event.playerId, "无效扳手调节位置")
                 return
-            dx, dy, dz = NEIGHBOR_BLOCKS_ENUM[facing]
-            nextBlock = GetBlockName(
-                event.dimensionId, (blockX + dx, blockY + dy, blockZ + dz)
-            )
-            if nextBlock is None or self.logic_module.transmitter_check_func(nextBlock):
-                SetOnePopupNotice(
-                    event.playerId,
-                    "§6无法为已连接了另外一根管道的管道设置传输模式",
-                    "§7[§cx§7] §c错误",
-                )
-                return
-            elif not self.logic_module.can_connect(nextBlock, event.blockName):
-                SetOnePopupNotice(
-                    event.playerId,
-                    "§6无法为未连接的管道设置传输模式",
-                    "§7[§cx§7] §c错误",
-                )
-                return
-            facing_en_key = "skybluetech:cable_io_" + FACING_EN[facing]
-            newState = not block_orig_status.get(facing_en_key, False)
-            block_orig_status[facing_en_key] = newState
-            current_network = self.logic_module.GetNetworkByTransmitter(
-                event.dimensionId, blockX, blockY, blockZ
-            )
-            if current_network is None:
-                SetOnePopupNotice(event.playerId, "§4管道数据异常", "§7[§cx§7] §c错误")
-                return
-            if newState:
-                ap = self.logic_module.access_point_cls(
-                    event.dimensionId, blockX, blockY, blockZ, facing, AP_MODE_OUTPUT
-                )
-                ap.bound_network(current_network)
-                ok = self.logic_module.SetAccessPointIOMode(ap, AP_MODE_OUTPUT)
             else:
-                ap = self.logic_module.access_point_cls(
-                    event.dimensionId, blockX, blockY, blockZ, facing, AP_MODE_INPUT
+                self.switch_access_mode(
+                    event.dimensionId, event.x, event.y, event.z, face, event.playerId
                 )
-                ap.bound_network(current_network)
-                ok = self.logic_module.SetAccessPointIOMode(ap, AP_MODE_INPUT)
-            if ok:
-                SetOnePopupNotice(
-                    event.playerId,
-                    "§f已将管道的§6"
-                    + FACING_ZHCN[facing]
-                    + "§f面设置为"
-                    + ("§a输入", "§c抽出")[newState],
-                )
-            else:
-                SetOnePopupNotice(
-                    event.playerId,
-                    "§6无法将管道的§6"
-                    + FACING_ZHCN[facing]
-                    + "§6面设置为"
-                    + ("§a输入", "§c抽出")[newState],
-                )
-            UpdateBlockStates(
-                event.dimensionId, (blockX, blockY, blockZ), block_orig_status
-            )
         elif event.item.newItemName == TRANSMITTER_SETTINGS_WRENCH:
             if not self.enable_label_settings:
                 return
@@ -182,6 +187,20 @@ class ActionModule(Generic[_NT, _APT], ServerListenerService):
                 },
             ).send(event.playerId)
 
+    @ServerListenerService.Listen(TransmitterSwitchAccessMode)
+    def onSwitchAccessMode(self, event):
+        # type: (TransmitterSwitchAccessMode) -> None
+        if event.transmitter_type != self.logic_module.network_cls.network_type:
+            return
+        self.switch_access_mode(
+            GetPlayerDimensionId(event.pid),
+            event.x,
+            event.y,
+            event.z,
+            event.facing,
+            event.pid,
+        )
+
     @ServerListenerService.Listen(TransmitterSetLabel)
     def onSetLabel(self, event):
         # type: (TransmitterSetLabel) -> None
@@ -190,7 +209,7 @@ class ActionModule(Generic[_NT, _APT], ServerListenerService):
         if not isinstance(event.label, int) or event.label < 0 or event.label > 100000:
             return
         ap = self.logic_module.access_points_pool.get((
-            event.dim,
+            GetPlayerDimensionId(event.pid),
             event.x,
             event.y,
             event.z,
@@ -212,7 +231,7 @@ class ActionModule(Generic[_NT, _APT], ServerListenerService):
         ):
             return
         ap = self.logic_module.access_points_pool.get((
-            event.dim,
+            GetPlayerDimensionId(event.pid),
             event.x,
             event.y,
             event.z,

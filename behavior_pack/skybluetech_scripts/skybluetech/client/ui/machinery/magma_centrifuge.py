@@ -7,15 +7,16 @@ from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
     K_PROGRESS,
     FluidSlotClient,
 )
-from ....common.machinery_def.magma_centrifuge import (
+from skybluetech_scripts.skybluetech.common.machinery_def.magma_centrifuge import (
+    recipes,
     STORE_RF_MAX,
     FLUID_SLOT_MAX_VOLUMES,
 )
-from .define import MachinePanelUIProxy, MAIN_PATH
+from ..machinery_extra_pages import PipeSettingsPage
+from ..recipe_checker import AsRecipeCheckerBtn
+from .define_ex import MachinePanelUIProxyEx, MAIN_PATH
 from .utils import UpdatePowerBar, UpdateGenericProgressL2R, FluidDisplayer
 
-from ..recipe_checker import AsRecipeCheckerBtn
-from ....common.machinery_def.magma_centrifuge import recipes
 
 POWER_PATH = MAIN_PATH / "power_bar"
 PRGS_PATH = MAIN_PATH / "progress"
@@ -24,7 +25,9 @@ RIGHT_FLUID = MAIN_PATH / "right_fluid"
 
 
 @RegistToolDeltaScreen("MagmaCentrifugeUI.main", is_proxy=True)
-class MagmaCentrifugeUI(MachinePanelUIProxy):
+class MagmaCentrifugeUI(MachinePanelUIProxyEx):
+    available_extra_pages = (PipeSettingsPage,)
+
     def OnCreate(self):
         self.power_bar = self.GetElement(POWER_PATH)
         self.progress = self.GetElement(PRGS_PATH)

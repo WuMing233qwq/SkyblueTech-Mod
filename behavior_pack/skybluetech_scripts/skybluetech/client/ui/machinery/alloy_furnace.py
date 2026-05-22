@@ -10,10 +10,10 @@ from skybluetech_scripts.skybluetech.common.machinery_def.alloy_furnace import (
     recipes,
     RF_MAX,
 )
-from .define import MachinePanelUIProxy, MAIN_PATH
-from .utils import UpdatePowerBar, UpdateGenericProgressL2R, UpdateFlame
-
+from ..machinery_extra_pages import CableSettingsPage
 from ..recipe_checker import AsRecipeCheckerBtn
+from .define_ex import MachinePanelUIProxyEx, MAIN_PATH
+from .utils import UpdatePowerBar, UpdateGenericProgressL2R, UpdateFlame
 
 
 POWER_PATH = MAIN_PATH / "power_bar"
@@ -22,7 +22,9 @@ FLAME_PATH = MAIN_PATH / "flame"
 
 
 @RegistToolDeltaScreen("AlloyFurnaceUI.main", is_proxy=True)
-class AlloyFurnaceUI(MachinePanelUIProxy):
+class AlloyFurnaceUI(MachinePanelUIProxyEx):
+    available_extra_pages = (CableSettingsPage,)
+
     def OnCreate(self):
         self.power_bar = self.GetElement(POWER_PATH)
         self.progress = self.GetElement(PRGS_PATH)

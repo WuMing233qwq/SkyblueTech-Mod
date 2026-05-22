@@ -7,7 +7,10 @@ from skybluetech_scripts.tooldelta.api.server import (
     GetPos,
     GetPlayerItem,
 )
-from ....common.define.id_enum import SKYBLUE_BOOTS, ObjectUpgraders
+from skybluetech_scripts.skybluetech.common.define.id_enum import (
+    SKYBLUE_BOOTS,
+    ObjectUpgraders,
+)
 from .utils import GetUpgraders
 
 ID = "skybluetech:obj_upgrader_spec_nofarm"

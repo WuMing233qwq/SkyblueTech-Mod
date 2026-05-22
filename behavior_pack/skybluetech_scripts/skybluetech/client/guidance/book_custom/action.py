@@ -1,6 +1,6 @@
 # coding=utf-8
 from skybluetech_scripts.tooldelta.events.client import ClientItemTryUseEvent
-from ....common.define.id_enum import GUIDANCE
+from skybluetech_scripts.skybluetech.common.define.id_enum import GUIDANCE
 from ...ui.guidance.guidance_ui import GuidanceUI
 from .book_main import main_pages
 

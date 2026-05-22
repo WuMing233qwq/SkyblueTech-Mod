@@ -7,14 +7,17 @@ from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
     K_FLUID_VOLUME,
 )
 from skybluetech_scripts.skybluetech.common.machinery_def.tank import TANK_MAX_VOLUMES
-from .define import MachinePanelUIProxy, MAIN_PATH
+from ..machinery_extra_pages import PipeSettingsPageIndirectional
+from .define_ex import MachinePanelUIProxyEx, MAIN_PATH
 from .utils import FluidDisplayer
 
 FLUID_PATH = MAIN_PATH / "fluid_display"
 
 
 @RegistToolDeltaScreen("GeneralTankUI.main", is_proxy=True)
-class GeneralTankUI(MachinePanelUIProxy):
+class GeneralTankUI(MachinePanelUIProxyEx):
+    available_extra_pages = (PipeSettingsPageIndirectional,)
+
     def OnCreate(self):
         self.fluid_displayer = FluidDisplayer(self.GetElement(FLUID_PATH))
 

@@ -106,7 +106,7 @@ class FermenterUI(MachinePanelUIProxy):
         store_rf = GetValue(data, K_STORE_RF, 0)
         mud_temperature = GetValue(data, K_TEMPERATURE, 0.0)
         mud_thickness = GetValue(data, K_MUD_THICKNESS, 0.0)
-        total_volume = GetValue(data, K_TOTAL_VOLUME, 0.0)
+        total_volume_pc = GetValue(data, K_TOTAL_VOLUME, 0.0)
         expected_mud_temperature = GetValue(data, K_EXPECTED_TEMPERTURE, 0.0)
         expected_water_max_volume = GetValue(data, K_EXPECTED_WATER_MAX_VOLUME, 0.0)
         structure_destroy_flag = GetValue(data, K_DESTROY_FLAG, 0)
@@ -164,7 +164,7 @@ class FermenterUI(MachinePanelUIProxy):
             1 - expected_water_max_volume / POOL_MAX_VOLUME
         )
         self.pool_img.SetFullSize(
-            "y", UICtrlPosData("parent", relative_value=total_volume / POOL_MAX_VOLUME)
+            "y", UICtrlPosData("parent", relative_value=total_volume_pc)
         )
         sstatus = structure_destroy_flag
         if sstatus == FLAG_OK:

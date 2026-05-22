@@ -1,17 +1,14 @@
 # coding=utf-8
 from skybluetech_scripts.tooldelta.define import Item
 from skybluetech_scripts.tooldelta.ui import UBaseCtrl
-from skybluetech_scripts.tooldelta.api.client import (
-    GetItemFormattedHoverText,
-    GetItemHoverName,
-)
+from skybluetech_scripts.tooldelta.api.client import GetItemFormattedHoverText
 from skybluetech_scripts.tooldelta.extensions.allitems_getter import GetItemsByTag
-from ....common.mini_jei.core.define import CategoryType
+from skybluetech_scripts.skybluetech.common.mini_jei.core.define import CategoryType
 from .render_utils import ItemDisplayer, CreateDescBoard
 
 
 if 0:
-    from ....common.mini_jei.core import Input
+    from skybluetech_scripts.skybluetech.common.mini_jei.core import Input
 
 
 class FluidDisplayer(object):
@@ -28,7 +25,9 @@ class FluidDisplayer(object):
     def update(self):
         from ..machinery.utils import FluidDisplayer
 
-        FluidDisplayer(self.ctrl).update(self.fluid_id, self.volume, self.max_volume)
+        FluidDisplayer(self.ctrl, enable_interact=False).update(
+            self.fluid_id, self.volume, self.max_volume
+        )
 
     def onBtnReleased(self, params):
         from ..machinery.utils import FormatFluidVolume

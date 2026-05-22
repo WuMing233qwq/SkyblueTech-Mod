@@ -34,6 +34,22 @@ class MultiBlockStructureRenderPage(BasePage):
 
         cacher = {}
 
+        all_positions = [(0, 0, 0)]
+        for palette_index, block_id_or_ids in self.palette.palette_data.items():
+            poses = self.palette.posblock_data[palette_index]
+            for pos in poses:
+                all_positions.append(pos)
+
+        all_px = []
+        all_py = []
+        for x, y, z in all_positions:
+            px, py = xyz_to_xy(x, y, z)
+            all_px.append(px)
+            all_py.append(py)
+
+        env.offset_x = -min(all_px) + 20
+        env.offset_y = max(all_py) + 20
+
         def render_block(palette_index, block_id, x, y, z):
             # type: (int, str, int, int, int) -> UBaseCtrl
             env.render_counter += 1
@@ -42,7 +58,7 @@ class MultiBlockStructureRenderPage(BasePage):
                 "block_renderer%d" % env.render_counter,
             ).asButton()
             px, py = xyz_to_xy(x, y, z)
-            block_renderer.SetPos((px + 100, 100 - py))
+            block_renderer.SetPos((px + env.offset_x, env.offset_y - py))
             block_renderer.SetLayer(50 + x + y - z)  # TODO
             block_renderer["renderer"].asItemRenderer().SetUiItem(Item(block_id))
             block_renderer.SetCallback(
@@ -153,6 +169,8 @@ class local_env:
         self.tick_counter = 0
         self.carouselers = []  # type: list[block_carouseler]
         self.current_render_layer = None  # type: int | None
+        self.offset_x = 0.0  # type: float
+        self.offset_y = 0.0  # type: float
 
 
 class block_carouseler:

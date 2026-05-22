@@ -134,7 +134,7 @@ class BatteryMatrix(GUIControl, ItemContainer, MultiBlockStructure, WorkRenderer
     def TakeoutPower(self, rf):
         # type: (int) -> int
         if self.IsActive() and self.enable_output:
-            return self.provide_energy(rf)
+            return int(self.provide_energy(rf))
         else:
             return 0
 

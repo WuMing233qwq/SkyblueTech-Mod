@@ -5,21 +5,24 @@ from skybluetech_scripts.tooldelta.api.client import (
     GetItemHoverName,
     GetLocalPlayerHotbarAndInvItems,
 )
-from ....common.events.machinery.item_splitter import (
+from skybluetech_scripts.skybluetech.common.events.machinery.item_splitter import (
     ItemSplitterSettingsSetItem,
     ItemSplitterSettingsSetLabel,
     ItemSplitterSettingsListUpdate,
     ItemSplitterSimpleAction,
 )
+from ..machinery_extra_pages import CableSettingsPageIndirectional
 from ..misc.transmitter_settings_ui import rand_rgb_by_index, get_opposite_color
-from .define import MachinePanelUIProxy, MAIN_PATH
+from .define_ex import MachinePanelUIProxyEx, MAIN_PATH
 
 SETTINGS_VIEW_PATH = MAIN_PATH / "settings_view"
 ADD_BTN_PATH = MAIN_PATH / "add_btn"
 
 
 @RegistToolDeltaScreen("ItemSplitterUI.main", is_proxy=True)
-class ItemSplitterUI(MachinePanelUIProxy):
+class ItemSplitterUI(MachinePanelUIProxyEx):
+    available_extra_pages = (CableSettingsPageIndirectional,)
+
     def OnCreate(self):
         dim, x, y, z = self.pos
         self.settings_view = self.GetElement(SETTINGS_VIEW_PATH).asScrollView()
@@ -203,7 +206,7 @@ class ItemSplitterUI(MachinePanelUIProxy):
             idx,
         ).send()
 
-    @MachinePanelUIProxy.Listen(ItemSplitterSettingsListUpdate)
+    @MachinePanelUIProxyEx.Listen(ItemSplitterSettingsListUpdate)
     def onListUpdated(self, event):
         # type: (ItemSplitterSettingsListUpdate) -> None
         cur = len(event.lis)

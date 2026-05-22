@@ -10,6 +10,13 @@ from ...define import (
     PageGroup,
 )
 
+
+def jump_to_resin_collect(_):
+    from ..misc.resin_collector import resin_collect
+
+    resin_collect.FastJump()
+
+
 day_one = PageGroup(
     "day_one",
     [
@@ -19,10 +26,7 @@ day_one = PageGroup(
                 resin_collector=id_enum.RESIN_COLLECTOR, resin=id_enum.RESIN
             ),
             hyperlink_cbs={
-                "a": lambda _: CheckRecipes([
-                    id_enum.RESIN_COLLECTOR,
-                    id_enum.RESIN_SPOON,
-                ]),
+                "a": jump_to_resin_collect,
                 "b": lambda _: CheckUsage(id_enum.RESIN),
                 "test": lambda _: None,
             },

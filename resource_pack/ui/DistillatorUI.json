@@ -69,23 +69,13 @@
                             "bg@common.dialog_background_opaque": {
                                 "controls": [
                                     {
-                                        "inventory_selected_icon_button@common.inventory_selected_icon_button": {}
+                                        "upgraders@SkybluePanelLib.UpgradeSlots": {
+                                            "anchor_from": "top_right",
+                                            "anchor_to": "top_left"
+                                        }
                                     },
                                     {
-                                        "machine_label": {
-                                            "type": "label",
-                                            "anchor_from": "top_middle",
-                                            "anchor_to": "top_middle",
-                                            "offset": [
-                                                0.0,
-                                                4.0
-                                            ],
-                                            "font_scale_factor": 1.4,
-                                            "font_type": "default",
-                                            "shadow": true,
-                                            "text": "分馏塔控制器",
-                                            "text_alignment": "center"
-                                        }
+                                        "inventory_selected_icon_button@common.inventory_selected_icon_button": {}
                                     },
                                     {
                                         "gamepad_cursor_button@common.gamepad_cursor_button": {
@@ -108,18 +98,26 @@
                                             "type": "panel",
                                             "controls": [
                                                 {
+                                                    "machine_label": {
+                                                        "type": "label",
+                                                        "anchor_from": "top_middle",
+                                                        "anchor_to": "top_middle",
+                                                        "offset": [
+                                                            0.0,
+                                                            4.0
+                                                        ],
+                                                        "font_scale_factor": 1.4,
+                                                        "font_type": "default",
+                                                        "shadow": true,
+                                                        "text": "分馏塔控制器",
+                                                        "text_alignment": "center"
+                                                    }
+                                                },
+                                                {
                                                     "power_bar@SkybluePanelLib.PowerBar": {
                                                         "offset": [
                                                             "-50%+14px",
                                                             "0%+0px"
-                                                        ]
-                                                    }
-                                                },
-                                                {
-                                                    "upgrades@SkybluePanelLib.UpgradeSlots": {
-                                                        "offset": [
-                                                            145,
-                                                            -17
                                                         ]
                                                     }
                                                 },

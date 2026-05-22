@@ -44,27 +44,21 @@
                             "bg@common.dialog_background_opaque": {
                                 "controls": [
                                     {
+                                        "upgraders@SkybluePanelLib.UpgradeSlots": {
+                                            "$slot0": 1,
+                                            "$slot1": 2,
+                                            "$slot2": 3,
+                                            "$slot3": 4,
+                                            "anchor_from": "top_right",
+                                            "anchor_to": "top_left"
+                                        }
+                                    },
+                                    {
                                         "inventory_selected_icon_button@common.inventory_selected_icon_button": {}
                                     },
                                     {
                                         "gamepad_cursor_button@common.gamepad_cursor_button": {
                                             "visible": true
-                                        }
-                                    },
-                                    {
-                                        "machine_label": {
-                                            "type": "label",
-                                            "anchor_from": "top_middle",
-                                            "anchor_to": "top_middle",
-                                            "offset": [
-                                                0.0,
-                                                4.0
-                                            ],
-                                            "font_scale_factor": 1.4,
-                                            "font_type": "default",
-                                            "shadow": true,
-                                            "text": "熔岩炉",
-                                            "text_alignment": "center"
                                         }
                                     },
                                     {
@@ -74,6 +68,22 @@
                                         "main": {
                                             "type": "panel",
                                             "controls": [
+                                                {
+                                                    "machine_label": {
+                                                        "type": "label",
+                                                        "anchor_from": "top_middle",
+                                                        "anchor_to": "top_middle",
+                                                        "offset": [
+                                                            0.0,
+                                                            4.0
+                                                        ],
+                                                        "font_scale_factor": 1.4,
+                                                        "font_type": "default",
+                                                        "shadow": true,
+                                                        "text": "熔岩炉",
+                                                        "text_alignment": "center"
+                                                    }
+                                                },
                                                 {
                                                     "fluid_display@SkybluePanelLib.FluidDisplay": {
                                                         "$text_size": "small",
@@ -136,18 +146,6 @@
                                                     }
                                                 },
                                                 {
-                                                    "upgrades@SkybluePanelLib.UpgradeSlots": {
-                                                        "$slot0": 1,
-                                                        "$slot1": 2,
-                                                        "$slot2": 3,
-                                                        "$slot3": 4,
-                                                        "offset": [
-                                                            106,
-                                                            -57
-                                                        ]
-                                                    }
-                                                },
-                                                {
                                                     "recipe_check_btn@SkybluePanelLib.recipe_check_btn": {
                                                         "offset": [
                                                             71,
@@ -164,6 +162,29 @@
                                                 0,
                                                 46
                                             ]
+                                        }
+                                    },
+                                    {
+                                        "left_sections@SkybluePanelLib.simple_panel_left_sections": {
+                                            "anchor_from": "top_left",
+                                            "anchor_to": "top_right",
+                                            "layer": 4,
+                                            "offset": [
+                                                -2,
+                                                0
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "ex_panel": {
+                                            "type": "panel",
+                                            "anchor_from": "top_middle",
+                                            "anchor_to": "top_middle",
+                                            "size": [
+                                                "default",
+                                                "56%+0px"
+                                            ],
+                                            "layer": 1
                                         }
                                     }
                                 ],

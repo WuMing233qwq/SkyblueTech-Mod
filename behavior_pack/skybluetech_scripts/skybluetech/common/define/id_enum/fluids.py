@@ -13,6 +13,7 @@ METHANE_MUD = "skybluetech:methane_mud"
 RAW_OIL = "skybluetech:raw_oil"
 VEGETABLE_OIL = "skybluetech:vegetable_oil"
 LUBRICANT = "skybluetech:lubricant"
+SULFURIC_ACID = "skybluetech:sulfuric_acid"
 
 HYDROGEN = "skybluetech:hydrogen"
 METHANE = "skybluetech:methane"

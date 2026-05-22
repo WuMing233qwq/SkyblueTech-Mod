@@ -1264,6 +1264,161 @@
             }
         ]
     },
+    "simple_left_section": {
+        "type": "panel",
+        "size": [
+            28.0,
+            25.0
+        ],
+        "bindings": [
+            {
+                "binding_type": "collection",
+                "binding_collection_name": "$collection_name",
+                "binding_condition": "always_when_visible",
+                "binding_name": "#layer"
+            }
+        ],
+        "controls": [
+            {
+                "bg": {
+                    "type": "image",
+                    "anchor_from": "left_middle",
+                    "anchor_to": "left_middle",
+                    "size": [
+                        "100%+-2px",
+                        "100%+0px"
+                    ],
+                    "layer": 1,
+                    "nineslice_size": [
+                        3.0,
+                        3.0,
+                        3.0,
+                        3.0
+                    ],
+                    "texture": "textures/ui/left_section_not_selected",
+                    "bindings": [
+                        {
+                            "binding_name_override": "#texture",
+                            "binding_collection_name": "$collection_name",
+                            "binding_condition": "always_when_visible",
+                            "binding_type": "collection",
+                            "binding_name": "#SkybluePanelLib.simple_left_section_bg_texture"
+                        }
+                    ]
+                }
+            },
+            {
+                "icon_img": {
+                    "type": "image",
+                    "anchor_from": "left_middle",
+                    "anchor_to": "left_middle",
+                    "offset": [
+                        3.0,
+                        0.0
+                    ],
+                    "size": [
+                        "100%+-8px",
+                        "100%+-8px"
+                    ],
+                    "layer": 1,
+                    "bindings": [
+                        {
+                            "binding_name_override": "#texture",
+                            "binding_collection_name": "$collection_name",
+                            "binding_condition": "always_when_visible",
+                            "binding_type": "collection",
+                            "binding_name": "#SkybluePanelLib.simple_left_section_icon_texture"
+                        }
+                    ]
+                }
+            },
+            {
+                "select_btn@common.button": {
+                    "type": "button",
+                    "$control_alpha": 1.0,
+                    "$default_texture": "",
+                    "$hover_texture": "",
+                    "$is_new_nine_slice": false,
+                    "$label_color": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "$label_font_scale_factor": 1.0,
+                    "$label_font_size": "large",
+                    "$label_layer": 3,
+                    "$label_offset": [
+                        0,
+                        0
+                    ],
+                    "$nine_slice_buttom": 0,
+                    "$nine_slice_left": 0,
+                    "$nine_slice_right": 0,
+                    "$nine_slice_top": 0,
+                    "$nineslice_size": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "$pressed_button_name": "#SkybluePanelLib.simple_left_section_button_click",
+                    "$pressed_texture": "",
+                    "$texture_layer": 2,
+                    "layer": 2,
+                    "button_mappings": [
+                        {
+                            "to_button_id": "$pressed_button_name",
+                            "from_button_id": "button.menu_select",
+                            "mapping_type": "pressed"
+                        }
+                    ],
+                    "default_control": "default",
+                    "hover_control": "hover",
+                    "pressed_control": "pressed",
+                    "bindings": [
+                        {
+                            "binding_type": "collection_details",
+                            "binding_collection_name": "$collection_name",
+                            "binding_condition": "always_when_visible"
+                        }
+                    ],
+                    "controls": [
+                        {
+                            "default@netease_editor_template_namespace.default": {}
+                        },
+                        {
+                            "hover@netease_editor_template_namespace.hover": {}
+                        },
+                        {
+                            "pressed@netease_editor_template_namespace.pressed": {}
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "simple_panel_left_sections": {
+        "type": "grid",
+        "$collection_name": "simple_panel_left_sections",
+        "size": [
+            20.0,
+            "default"
+        ],
+        "layer": 1,
+        "collection_name": "simple_panel_left_sections",
+        "grid_dimension_binding": "#simple_panel_left_sections_gridsize",
+        "grid_dimensions": [
+            1,
+            1
+        ],
+        "grid_item_template": "SkybluePanelLib.simple_left_section",
+        "bindings": [
+            {
+                "binding_name": "#simple_panel_left_sections_gridsize",
+                "binding_condition": "always_when_visible"
+            }
+        ]
+    },
     "ui_block_stack_desc": {
         "type": "panel",
         "layer": 1,

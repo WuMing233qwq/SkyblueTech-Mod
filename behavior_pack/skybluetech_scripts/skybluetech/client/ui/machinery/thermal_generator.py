@@ -8,7 +8,8 @@ from skybluetech_scripts.skybluetech.common.machinery_def.thermal_generator impo
     K_BURN_SEC_LEFT,
     K_MAX_BURN_SEC,
 )
-from .define import MachinePanelUIProxy, MAIN_PATH
+from ..machinery_extra_pages import CableSettingsPage
+from .define_ex import MachinePanelUIProxyEx, MAIN_PATH
 from .utils import UpdatePowerBar, UpdateFlame
 
 POWER_PATH = MAIN_PATH / "power_bar"
@@ -16,7 +17,9 @@ FLAME_PATH = MAIN_PATH / "flame"
 
 
 @RegistToolDeltaScreen("ThermalGeneratorUI.main", is_proxy=True)
-class ThermalGeneratorUI(MachinePanelUIProxy):
+class ThermalGeneratorUI(MachinePanelUIProxyEx):
+    available_extra_pages = (CableSettingsPage,)
+
     def OnCreate(self):
         self.power_bar = self.GetElement(POWER_PATH)
         self.flame = self.GetElement(FLAME_PATH)

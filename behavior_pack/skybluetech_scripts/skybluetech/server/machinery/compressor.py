@@ -7,6 +7,7 @@ from .basic import RegisterMachine, Processor
 @RegisterMachine
 class Compressor(Processor):
     block_name = MACHINE_ID
+    dump_progress_to_block_entity_data = True
     store_rf_max = STORE_RF_MAX
     process_item = True
     recipes = Recipes

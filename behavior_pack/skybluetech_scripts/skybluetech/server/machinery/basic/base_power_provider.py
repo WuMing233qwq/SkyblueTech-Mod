@@ -26,7 +26,15 @@ class BasePowerProvider(BaseMachine):
 
     def GeneratePower(self, rf):
         # type: (int) -> tuple[bool, int]
-        "产出能量, 返回是否供能和能量溢出值。"
+        """
+        产出能量, 返回是否供能和能量溢出值。
+
+        Args:
+            rf (int): 能量
+
+        Returns:
+            tuple[bool, int]: 是否进行了供能, 能量溢出值
+        """
         ok, rf = self._output_nearby(rf)
         _ok, rf = self._generate_power(rf)
         return ok or _ok, rf

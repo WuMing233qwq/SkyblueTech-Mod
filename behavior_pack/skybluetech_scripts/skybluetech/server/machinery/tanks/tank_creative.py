@@ -25,9 +25,9 @@ class CreativeTank(BasicTank):
         else:
             return False, fluid_volume
 
-    def ifPlayerInteractWithBucket(self, player_id, test=False):
+    def on_player_interact_with_bucket(self, player_id, test=False):
         # type: (str, bool) -> bool
-        res = FluidContainer.ifPlayerInteractWithBucket(self, player_id, test)
+        res = FluidContainer.on_player_interact_with_bucket(self, player_id, test)
         if self.fluid_id is not None:
             self.fluid_volume = INFINITY
         self.CallSync()

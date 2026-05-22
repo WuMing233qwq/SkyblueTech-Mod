@@ -1,11 +1,13 @@
 # coding=utf-8
 from skybluetech_scripts.tooldelta.ui import RegistToolDeltaScreen, UBaseCtrl
-from ....common.define.ui_keys import RF_REPEATER_PLANT_UI
-from ....common.events.machinery.rf_repeater_plant import (
+from skybluetech_scripts.skybluetech.common.define.ui_keys import RF_REPEATER_PLANT_UI
+from skybluetech_scripts.skybluetech.common.events.machinery.rf_repeater_plant import (
     RFRepeaterPlantSettingUpload,
     RFRepeaterPlantSettingsUpdate,
 )
-from ....common.machinery_def.rf_repeater_plant import reverse_mode
+from skybluetech_scripts.skybluetech.common.machinery_def.rf_repeater_plant import (
+    reverse_mode,
+)
 from ..misc.rf_repeater_plant_build import RFRepeaterPlantBuildUI
 from .define import MachinePanelUI, SCREEN_BASE_PATH
 

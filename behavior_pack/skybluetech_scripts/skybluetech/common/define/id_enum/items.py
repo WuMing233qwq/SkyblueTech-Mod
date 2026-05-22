@@ -51,8 +51,9 @@ class Dusts:
     CUPRONICKEL = "skybluetech:cupronickel_dust"
 
     ANCIENT_DEBRIS = "skybluetech:ancient_debris_dust"
-    OBSIDIAN = "skybluetech:obsidian_dust"
     CARBON = "skybluetech:carbon_dust"
+    OBSIDIAN = "skybluetech:obsidian_dust"
+    SULFUR = "skybluetech:sulfur_dust"
 
 
 class Sticks:
@@ -125,6 +126,14 @@ class MetalTools:
     INVAR_MINING_HAMMER = "skybluetech:invar_mining_hammer"
 
 
+class SkyblueTools:
+    AXE = "skybluetech:skyblue_axe"
+    PICKAXE = "skybluetech:skyblue_pickaxe"
+    SHOVEL = "skybluetech:skyblue_shovel"
+    HOE = "skybluetech:skyblue_hoe"
+    SWORD = "skybluetech:skyblue_sword"
+
+
 class Pincer:
     # 新增物品后需在 machinery_workstation 中同步添加
     IRON = "skybluetech:pincer_iron"
@@ -134,6 +143,12 @@ class Pincer:
 class Paddle:
     IRON = "skybluetech:paddle_iron"
     STEEL = "skybluetech:paddle_steel"
+
+
+class FamicomCartidges:
+    YELLOW = "skybluetech:famicom_cartidge_1"
+    PURPLE = "skybluetech:famicom_cartidge_2"
+    BLUE = "skybluetech:famicom_cartidge_3"
 
 
 class Icons:
@@ -155,6 +170,7 @@ RESIN_SPOON = "skybluetech:resin_spoon"
 ROUGH_RUBBER = "skybluetech:rough_rubber"
 ROSIN = "skybluetech:rosin"
 SKYBLUE_CORE = "skybluetech:skyblue_core"
+SULFUR = "skybluetech:sulfur"
 SUNFLOWER_SEEDS = "skybluetech:sunflower_seeds"
 TRANSMITTER_WRENCH = "skybluetech:transmitter_wrench"
 TRANSMITTER_SETTINGS_WRENCH = "skybluetech:transmitter_settings_wrench"

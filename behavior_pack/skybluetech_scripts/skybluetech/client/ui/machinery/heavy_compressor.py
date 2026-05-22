@@ -6,8 +6,11 @@ from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
     K_STORE_RF,
     K_PROGRESS,
 )
-from ....common.machinery_def.heavy_compressor import STORE_RF_MAX
-from .define import MachinePanelUIProxy, MAIN_PATH
+from skybluetech_scripts.skybluetech.common.machinery_def.heavy_compressor import (
+    STORE_RF_MAX,
+)
+from ..machinery_extra_pages import CableSettingsPage
+from .define_ex import MachinePanelUIProxyEx, MAIN_PATH
 from .utils import UpdatePowerBar, UpdateGenericProgressL2R
 
 POWER_PATH = MAIN_PATH / "power_bar"
@@ -15,9 +18,8 @@ PRGS_PATH = MAIN_PATH / "progress"
 
 
 @RegistToolDeltaScreen("HeavyCompressorUI.main", is_proxy=True)
-class HeavyCompressorUI(MachinePanelUIProxy):
-    def __init__(self, screenName, screenNode):
-        MachinePanelUIProxy.__init__(self, screenName, screenNode)
+class HeavyCompressorUI(MachinePanelUIProxyEx):
+    available_extra_pages = (CableSettingsPage,)
 
     def OnCreate(self):
         self.power_bar = self.GetElement(POWER_PATH)

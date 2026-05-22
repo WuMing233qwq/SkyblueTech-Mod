@@ -5,9 +5,13 @@ from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
     K_STORE_RF,
     K_PROGRESS,
 )
-from ....common.machinery_def.redstone_generator import recipes, STORE_RF_MAX
+from skybluetech_scripts.skybluetech.common.machinery_def.redstone_generator import (
+    recipes,
+    STORE_RF_MAX,
+)
+from ..machinery_extra_pages import CableSettingsPage
 from ..recipe_checker import AsRecipeCheckerBtn
-from .define import MachinePanelUIProxy, MAIN_PATH
+from .define_ex import MachinePanelUIProxyEx, MAIN_PATH
 from .utils import UpdatePowerBar, UpdateFlame, UpdateGenericProgressL2R
 
 
@@ -17,7 +21,9 @@ PROGRESS_PATH = MAIN_PATH / "progress"
 
 
 @RegistToolDeltaScreen("RedstoneGeneratorUI.main", is_proxy=True)
-class RedstoneGeneratorUI(MachinePanelUIProxy):
+class RedstoneGeneratorUI(MachinePanelUIProxyEx):
+    available_extra_pages = (CableSettingsPage,)
+
     def OnCreate(self):
         self.power_bar = self.GetElement(POWER_PATH)
         self.flame = self.GetElement(FLAME_PATH)

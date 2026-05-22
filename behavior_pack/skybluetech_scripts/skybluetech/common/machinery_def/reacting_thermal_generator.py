@@ -1,0 +1,20 @@
+# coding=utf-8
+from ..define.id_enum import REACTING_THERMAL_GENERATOR, items, fluids
+from ..mini_jei.core import RecipesCollection
+from ..mini_jei.machinery.reacting_thermal_generator import (
+    GeneratorRecipe,  # noqa: F401
+    ReactingThermalGeneratorRecipe,
+)
+
+STORE_RF_MAX = 14400
+MAX_FLUID_VOLUMES = (1000, 1000)
+
+recipes = RecipesCollection(
+    REACTING_THERMAL_GENERATOR,
+    ReactingThermalGeneratorRecipe(
+        items.SULFUR, "minecraft:water", 250, fluids.SULFURIC_ACID, 250, 30, 800
+    ),
+    ReactingThermalGeneratorRecipe(
+        items.Dusts.SULFUR, "minecraft:water", 250, fluids.SULFURIC_ACID, 250, 45, 600
+    ),
+)  # type: RecipesCollection[GeneratorRecipe]

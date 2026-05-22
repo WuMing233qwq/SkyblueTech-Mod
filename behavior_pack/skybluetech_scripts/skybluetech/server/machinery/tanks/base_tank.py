@@ -7,8 +7,8 @@ from skybluetech_scripts.tooldelta.api.server import (
 )
 from skybluetech_scripts.tooldelta.events.server import BlockNeighborChangedServerEvent
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
-from ....common.define.global_config import BUCKET_VOLUME
-from ....common.define.facing import DXYZ_FACING, FACING_EN
+from skybluetech_scripts.skybluetech.common.define.global_config import BUCKET_VOLUME
+from skybluetech_scripts.skybluetech.common.define.facing import DXYZ_FACING, FACING_EN
 from ...transmitters.pipe.logic import isPipe
 from ..basic import BaseMachine, FluidContainer, ItemContainer, GUIControl
 
@@ -79,7 +79,7 @@ class BasicTank(BaseMachine, FluidContainer, ItemContainer, GUIControl):
                 self.SetSlotItem(1, Item(bucket_id))
                 item0.count -= 1
                 self.SetSlotItem(0, item0)
-                self.onReducedFluid(fluid_id, BUCKET_VOLUME)
+                self._on_reduced_fluid(fluid_id, BUCKET_VOLUME)
             elif item0.id.endswith("_bucket"):
                 if item1 is not None and (
                     item1.id != "minecraft:bucket" or item1.StackFull()
@@ -101,7 +101,7 @@ class BasicTank(BaseMachine, FluidContainer, ItemContainer, GUIControl):
                     # TODO: 如果其他模组的捅倒空不是 minecraft:bucket 则出问题
                 item1.count += 1
                 self.SetSlotItem(1, item1)
-                self.onAddedFluid(fluid_id, BUCKET_VOLUME)
+                self._on_added_fluid(fluid_id, BUCKET_VOLUME)
 
 
 def RegisterTank(tank_class):

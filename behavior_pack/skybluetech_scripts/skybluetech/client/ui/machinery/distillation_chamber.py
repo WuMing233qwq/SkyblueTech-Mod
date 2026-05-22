@@ -13,9 +13,10 @@ from skybluetech_scripts.skybluetech.common.machinery_def.distillation_chamber i
     OUTPUT_MAX_VOLUME,
     K_OUTPUT_RATE,
 )
-from .define import MachinePanelUIProxy, MAIN_PATH
-from .utils import FormatKelvin, FormatFluidVolume, FluidDisplayer
+from ..machinery_extra_pages import PipeSettingsPageIndirectional
 from ..recipe_checker import AsRecipeCheckerBtn
+from .define_ex import MachinePanelUIProxyEx, MAIN_PATH
+from .utils import FormatKelvin, FormatFluidVolume, FluidDisplayer
 
 
 TEMPERATURE_PATH = MAIN_PATH / "right_board/temp_disp"
@@ -25,7 +26,9 @@ UPPER_FLUID_PATH = MAIN_PATH / "upper_fluid"
 
 
 @RegistToolDeltaScreen("DistillationChamberUI.main", is_proxy=True)
-class DistillationChamberUI(MachinePanelUIProxy):
+class DistillationChamberUI(MachinePanelUIProxyEx):
+    available_extra_pages = (PipeSettingsPageIndirectional,)
+
     def OnCreate(self):
         self.upper_fluid = self.GetElement(UPPER_FLUID_PATH)
         self.lower_fluid = self.GetElement(LOWER_FLUID_PATH)

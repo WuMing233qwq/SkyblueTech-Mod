@@ -20,7 +20,7 @@ bedrock_lava_drill = PageGroup(
         ),
         TextPage(
             "",
-            '基岩熔岩钻需要先钻破顶层基岩才能把泵送管道送至深层熔岩层， 这意味着它在开始工作前至少需要安装一个<item id="{drill}"><style color="§c"><link id="drill" text="耐热钻头"><style color="R">到钻头槽位。\n\n钻头钻开顶层基岩层需要一定时间， <text color="§n" t="消耗一定量耐久">。 一旦其钻开了基岩层， 钻头的耐久就会被<text color="§2" t="停止消耗">， 基岩熔岩钻即开始泵出深层熔岩。'.format(
+            '基岩熔岩钻需要先钻破顶层基岩才能把泵送管道送至深层熔岩层， 这意味着它在开始工作前至少需要安装一个<item id="{drill}"><style color="§c"><link id="drill" text="耐热钻头"><style color="R">到钻头槽位。\n\n钻头钻开顶层基岩层需要一定时间， <text color="§n" t="消耗一定量耐久">。 一旦其钻开了基岩层， 钻头的耐久就会被<text color="§2" t="停止消耗">， 基岩熔岩钻即开始泵出深层熔岩。\n\n基岩熔岩钻目前<text color="§c" t="最多">只能拥有 1 个能量输入口和 1 个流体输出口。'.format(
                 drill=id_enum.DRILL_TOP_ULTRAHEATINUM
             ),
             hyperlink_cbs={
@@ -54,7 +54,7 @@ farming_station = PageGroup(
     [
         TextPage(
             "种植站",
-            '种植站可<text color="§2" t="自动收获并补种">其上方 5x5 范围内耕地上的作物。\n支持我的世界原版及棱花农夫乐事的作物。',
+            '种植站可<text color="§2" t="自动收获并补种">其上方 5x5 范围内耕地上的作物， 你需要把种植站放在耕地泥土方块的下方。\n支持我的世界原版及棱花农夫乐事的作物。',
         ),
         MachineryWorkstationRecipePage(id_enum.FARMING_STATION),
     ],

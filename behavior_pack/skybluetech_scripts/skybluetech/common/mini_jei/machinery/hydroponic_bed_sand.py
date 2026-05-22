@@ -1,6 +1,6 @@
 # coding=utf-8
 import random
-from ....common.define.id_enum import machinery
+from skybluetech_scripts.skybluetech.common.define.id_enum import machinery
 from .define import (
     CategoryType,
     RecipesCollection,

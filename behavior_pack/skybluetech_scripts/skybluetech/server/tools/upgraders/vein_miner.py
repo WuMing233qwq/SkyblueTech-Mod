@@ -5,7 +5,7 @@ from skybluetech_scripts.tooldelta.define import Item
 from skybluetech_scripts.tooldelta.events.server import ServerPlayerTryDestroyBlockEvent
 from skybluetech_scripts.tooldelta.api.server import GetBlockName
 from skybluetech_scripts.tooldelta.utils.nbt import GetValueWithDefault
-from ....common.define.id_enum import ObjectUpgraders
+from skybluetech_scripts.skybluetech.common.define.id_enum import ObjectUpgraders
 from ...machinery.utils.charge import GetCharge, GetPowerCost
 from .register import RegisterBlockDestroyCallback
 from .utils import GetUpgraderLevel

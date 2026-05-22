@@ -1,7 +1,8 @@
 # coding=utf-8
 from mod.server.extraServerApi import GetMinecraftEnum
 from skybluetech_scripts.tooldelta.api.server import Hurt, GetEntityTypeFamily
-from ....common.define.id_enum.blocks import Wire
+from skybluetech_scripts.skybluetech.common.define.id_enum.blocks import Wire
+from skybluetech_scripts.skybluetech.common.misc.transmitter import TransmitterType
 from ..base.define import BaseNetwork, BaseAccessPoint
 
 ShockHurt = GetMinecraftEnum().ActorDamageCause.Lightning
@@ -34,6 +35,8 @@ def rf_to_damage(rf):
 
 
 class WireNetwork(BaseNetwork["WireAccessPoint"]):
+    network_type = TransmitterType.WIRE
+
     def __init__(self, dim, group_inputs, group_outputs, nodes, transmitter_id):
         super(WireNetwork, self).__init__(
             dim, group_inputs, group_outputs, nodes, transmitter_id

@@ -4,7 +4,7 @@ from skybluetech_scripts.tooldelta.api.server import (
     UpdateBlockStates,
 )
 from skybluetech_scripts.tooldelta.events.server import BlockNeighborChangedServerEvent
-from ....common.define.facing import DXYZ_FACING, FACING_EN
+from skybluetech_scripts.skybluetech.common.define.facing import DXYZ_FACING, FACING_EN
 from ...transmitters.cable.logic import isCable
 from ...transmitters.pipe.logic import isPipe
 from ...transmitters.wire.logic import isWire

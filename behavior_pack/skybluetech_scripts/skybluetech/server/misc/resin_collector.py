@@ -140,7 +140,7 @@ def log_is_in_tree(dim, x, y, z):
     leaves_count = 0
     if GetBlockName(dim, (x, y - 1, z)) != "minecraft:oak_log":
         return -1
-    for _y in range(y, y + 8):
+    for _y in range(y, y + 20):
         block_id = GetBlockName(dim, (x, _y, z))
         if block_id == "minecraft:oak_log":
             upper_logs_count += 1

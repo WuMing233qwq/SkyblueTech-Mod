@@ -1,13 +1,16 @@
 # coding=utf-8
 from skybluetech_scripts.tooldelta.api.server import GetPlayerDimensionId
 from skybluetech_scripts.tooldelta.extensions.rate_limiter import PlayerRateLimiter
-from ....common.events.machinery.rf_repeater_plant import (
+from skybluetech_scripts.skybluetech.common.events.machinery.rf_repeater_plant import (
     RFRepeaterPlantBuildRequest,
     RFRepeaterPlantBuildResponse,
     RFRepeaterPlantBuildAddWire,
     RFRepeaterPlantSettingUpload,
 )
-from ....common.machinery_def.rf_repeater_plant import MODE_INPUT, MODE_OUTPUT
+from skybluetech_scripts.skybluetech.common.machinery_def.rf_repeater_plant import (
+    MODE_INPUT,
+    MODE_OUTPUT,
+)
 from ..pool import GetMachineStrict
 from .node import change_node_mode, build_connection
 from .utils import hypot

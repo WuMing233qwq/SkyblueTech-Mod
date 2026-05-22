@@ -7,7 +7,14 @@ from ...define import (
     PageGroup,
 )
 
-from . import advanced_tools, day_one, into_machinery, page_todo
+from . import (
+    better_life,
+    day_one,
+    into_machinery,
+    metal_and_tools,
+    page_todo,
+    mining_auto,
+)
 
 noob_tutorial_toc = PageGroup(
     "noob_tutorials",
@@ -25,7 +32,19 @@ noob_tutorial_toc = PageGroup(
                     id_enum.ALLOY_FURNACE,
                     0,
                     "合金和工具",
-                    advanced_tools.advanced_tools,
+                    metal_and_tools.metal_and_tools,
+                ),
+                TOCPageSection(
+                    id_enum.SkyblueTools.PICKAXE,
+                    0,
+                    "步入小康",
+                    better_life.better_life,
+                ),
+                TOCPageSection(
+                    id_enum.MINI_MINER,
+                    0,
+                    "采矿自由",
+                    mining_auto.mining_auto,
                 ),
                 TOCPageSection("minecraft:barrier", 0, "未完待续", page_todo.page_todo),
             ],

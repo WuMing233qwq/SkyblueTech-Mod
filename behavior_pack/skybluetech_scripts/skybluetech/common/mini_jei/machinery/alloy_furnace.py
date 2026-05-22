@@ -1,6 +1,6 @@
 # coding=utf-8
 from skybluetech_scripts.tooldelta.define import Item
-from ....common.define.id_enum import machinery
+from skybluetech_scripts.skybluetech.common.define.id_enum import machinery
 from ..core import MarshalInputs, MarshalOutputs, UnmarshalInputs, UnmarshalOutputs
 from .define import CategoryType, MachineRecipe, Input, Output
 

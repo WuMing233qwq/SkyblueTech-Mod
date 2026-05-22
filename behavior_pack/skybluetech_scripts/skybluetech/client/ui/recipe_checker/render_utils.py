@@ -6,11 +6,13 @@ from skybluetech_scripts.tooldelta.api.client.item import (
     GetItemFormattedHoverText,
     GetItemHoverName,
 )
-from ....common.mini_jei.core.define import CategoryType, RecipeBase
+from skybluetech_scripts.skybluetech.common.mini_jei.core.define import (
+    CategoryType,
+    RecipeBase,
+)
 
 
-DISP_BOARD_KEY = "disp_board"
-DISP_BOARD_SRC_KEY = "disp_board_src"
+DESC_BOARD_KEY = "jei_desc_board"
 
 
 class ItemDisplayer(object):
@@ -91,7 +93,10 @@ def CreateDescBoard(hang_ctrl, global_xy, category, item_id, display_item_id, te
     # databoard["image/label"].asLabel().SetText(text, sync_size=True)
     # databoard.SetLayer(100)
 
-    from ....common.mini_jei import GetRecipesByInput, GetRecipesByOutput
+    from skybluetech_scripts.skybluetech.common.mini_jei import (
+        GetRecipesByInput,
+        GetRecipesByOutput,
+    )
     from .favourite_items import (
         IsFavourite,
         AddFavourite,
@@ -103,10 +108,10 @@ def CreateDescBoard(hang_ctrl, global_xy, category, item_id, display_item_id, te
     if not isinstance(ui_node, RecipeCheckerUI):
         return None
 
-    if "desc_board" in ui_node._vars:
-        ui_node._vars.pop("desc_board").Remove()
+    if DESC_BOARD_KEY in ui_node._vars:
+        ui_node._vars.pop(DESC_BOARD_KEY).Remove()
 
-    desc_board = ui_node.AddElement("RecipeCheckerUI.item_desc_panel", "desc_board")
+    desc_board = ui_node.AddElement("RecipeCheckerUI.item_desc_panel", DESC_BOARD_KEY)
     check_src_btn = desc_board["check_src_btn"].asButton()
     check_usage_btn = desc_board["check_usage_btn"].asButton()
     close_btn = desc_board["close_btn"].asButton()
@@ -139,14 +144,14 @@ def CreateDescBoard(hang_ctrl, global_xy, category, item_id, display_item_id, te
 
     def on_check_src(_):
         ui_node.PushRecipes(item_src_recipes)
-        ui_node._vars.pop("desc_board").Remove()
+        ui_node._vars.pop(DESC_BOARD_KEY).Remove()
 
     def on_check_usage(_):
         ui_node.PushRecipes(item_usage_recipes)
-        ui_node._vars.pop("desc_board").Remove()
+        ui_node._vars.pop(DESC_BOARD_KEY).Remove()
 
     def on_close(_):
-        ui_node._vars.pop("desc_board").Remove()
+        ui_node._vars.pop(DESC_BOARD_KEY).Remove()
 
     def on_switch_favor(_):
         is_favourite = IsFavourite(category, item_id, display_item_id)
@@ -159,7 +164,7 @@ def CreateDescBoard(hang_ctrl, global_xy, category, item_id, display_item_id, te
             if not res:
                 print("[Warning] Failed to add favourite item.")
         fav_img.SetVisible(IsFavourite(category, item_id, display_item_id))
-        ui_node._vars.pop("desc_board").Remove()
+        ui_node._vars.pop(DESC_BOARD_KEY).Remove()
 
     check_src_btn.SetCallback(on_check_src)
     check_usage_btn.SetCallback(on_check_usage)
@@ -171,6 +176,6 @@ def CreateDescBoard(hang_ctrl, global_xy, category, item_id, display_item_id, te
     desc_board.SetPos(global_xy)
     desc_board.SetLayer(50)
     fav_img.SetVisible(IsFavourite(category, item_id, display_item_id))
-    ui_node._vars["desc_board"] = desc_board
+    ui_node._vars[DESC_BOARD_KEY] = desc_board
 
     return desc_board

@@ -3,12 +3,44 @@
 from skybluetech_scripts.tooldelta.events.basic import CustomC2SEvent
 
 
+class TransmitterSwitchAccessMode(CustomC2SEvent):
+    name = "st:TmSAM"
+
+    def __init__(self, x, y, z, transmitter_type, facing, pid=""):
+        # type: (int, int, int, int, int, str) -> None
+        self.x = x
+        self.y = y
+        self.z = z
+        self.transmitter_type = transmitter_type
+        self.facing = facing
+        self.pid = pid
+
+    def marshal(self):
+        return {
+            "x": self.x,
+            "y": self.y,
+            "z": self.z,
+            "t": self.transmitter_type,
+            "f": self.facing,
+        }
+
+    @classmethod
+    def unmarshal(cls, data):
+        return cls(
+            x=data["x"],
+            y=data["y"],
+            z=data["z"],
+            transmitter_type=data["t"],
+            facing=data["f"],
+            pid=data["__id__"],
+        )
+
+
 class TransmitterSetLabel(CustomC2SEvent):
     name = "st:TmSL"
 
-    def __init__(self, dim, x, y, z, facing, label, pid=""):
-        # type : (int, int, int, int, int) -> None
-        self.dim = dim
+    def __init__(self, x, y, z, facing, label, pid=""):
+        # type : (int, int, int, int, str) -> None
         self.x = x
         self.y = y
         self.z = z
@@ -18,7 +50,6 @@ class TransmitterSetLabel(CustomC2SEvent):
 
     def marshal(self):
         return {
-            "dim": self.dim,
             "x": self.x,
             "y": self.y,
             "z": self.z,
@@ -29,7 +60,6 @@ class TransmitterSetLabel(CustomC2SEvent):
     @classmethod
     def unmarshal(cls, data):
         return cls(
-            dim=data["dim"],
             x=data["x"],
             y=data["y"],
             z=data["z"],
@@ -42,19 +72,17 @@ class TransmitterSetLabel(CustomC2SEvent):
 class TransmitterSetPriority(CustomC2SEvent):
     name = "st:TmSP"
 
-    def __init__(self, dim, x, y, z, facing, priority, sid=""):
-        # type : (int, int, int, int, int) -> None
-        self.dim = dim
+    def __init__(self, x, y, z, facing, priority, pid=""):
+        # type : (int, int, int, int, str) -> None
         self.x = x
         self.y = y
         self.z = z
         self.facing = facing
         self.priority = priority
-        self.sid = sid
+        self.pid = pid
 
     def marshal(self):
         return {
-            "dim": self.dim,
             "x": self.x,
             "y": self.y,
             "z": self.z,
@@ -65,11 +93,10 @@ class TransmitterSetPriority(CustomC2SEvent):
     @classmethod
     def unmarshal(cls, data):
         return cls(
-            dim=data["dim"],
             x=data["x"],
             y=data["y"],
             z=data["z"],
             facing=data["f"],
             priority=data["p"],
-            sid=data["__id__"],
+            pid=data["__id__"],
         )

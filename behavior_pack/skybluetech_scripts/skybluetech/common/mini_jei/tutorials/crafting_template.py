@@ -1,5 +1,9 @@
-from ....common.define.id_enum.items import CRAFTING_TEMPLATE
-from ....common.define.id_enum.machinery import ELECTRIC_CRAFTER
+from skybluetech_scripts.skybluetech.common.define.id_enum.items import (
+    CRAFTING_TEMPLATE,
+)
+from skybluetech_scripts.skybluetech.common.define.id_enum.machinery import (
+    ELECTRIC_CRAFTER,
+)
 from ..core import CategoryType
 from ..common import RegisterDescription
 

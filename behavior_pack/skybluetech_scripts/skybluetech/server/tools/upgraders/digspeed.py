@@ -1,7 +1,7 @@
 # coding=utf-8
 from skybluetech_scripts.tooldelta.define import Item
 from skybluetech_scripts.tooldelta.utils import nbt
-from ....common.define.id_enum import ObjectUpgraders
+from skybluetech_scripts.skybluetech.common.define.id_enum import ObjectUpgraders
 from ..actions.register import orig_tier_speed
 from .register import RegisterUpdateCallback
 from .utils import GetUpgraderLevel

@@ -8,14 +8,13 @@ from skybluetech_scripts.tooldelta.api.server.player import (
     GetSelectedSlot,
     SetInventorySlotItemCount,
 )
-from ....common.define.global_config import BUCKET_VOLUME
-from ....common.machinery_def.basic.fluid_container import (
+from skybluetech_scripts.skybluetech.common.define.global_config import BUCKET_VOLUME
+from skybluetech_scripts.skybluetech.common.machinery_def.basic.fluid_container import (
     K_FLUID_ID,
     K_FLUID_VOLUME,
     K_MAX_VOLUME,
 )
 from .gui_ctrl import GUIControl
-from .utils import FixIOModeByCardinalFacing, FixIOModeByDirection
 
 
 class FluidContainer(object):
@@ -23,19 +22,18 @@ class FluidContainer(object):
     可存储单种流体的机器基类。
 
     类属性:
-        fluid_io_mode (tuple[int, int, int, int, int, int]): 流体输入输出模式, -1:兼容 0:输入 1:输出 其他:无
+        fluid_io_mode (tuple[int, int, int, int, int, int]): 流体容器六个面的输入输出模式, -1:兼容 0:输入 1:输出 其他:无
         max_fluid_volume (float): 最多可存储流体容量
-        fluid_io_fix_mode (int): 使用 1 时调用 FixIOModeByCardinalFacing; 使用 2 时调用 FixIOModeByDirection; 其他则不适用修复
         allow_player_use_bucket_interact (bool): 是否允许玩家直接使用桶交互
         allow_player_use_bucket_push (bool): 是否允许玩家直接使用桶装填流体
         allow_player_use_bucket_pull (bool): 是否允许玩家直接使用桶取出流体
 
-    需要调用 `__init__()`
+    覆写:
+        - `__init__`
     """
 
     fluid_io_mode = (2, 2, 2, 2, 2, 2)  # type: tuple[int, int, int, int, int, int]
     max_fluid_volume = 1000
-    # fluid_io_fix_mode = 1
     allow_player_use_bucket_interact = True
     allow_player_use_bucket_push = True
     allow_player_use_bucket_pull = True
@@ -70,7 +68,7 @@ class FluidContainer(object):
         if my_fluid_id is None:
             self.fluid_id = fluid_id
             self.fluid_volume = fluid_volume
-            self.onAddedFluid(fluid_id, fluid_volume)
+            self._on_added_fluid(fluid_id, fluid_volume)
             return True, max(0, fluid_volume - self.max_fluid_volume)
         elif fluid_id != my_fluid_id:
             return False, fluid_volume
@@ -81,8 +79,8 @@ class FluidContainer(object):
             )
             added_fluid_volume = new_volume - orig_volume
             if added_fluid_volume > 0:
-                self.onAddedFluid(fluid_id, new_volume - orig_volume)
-            # 我们不知道 onAddedFluid 时容器流体体积有没有被改变
+                self._on_added_fluid(fluid_id, new_volume - orig_volume)
+            # 我们不知道 _on_added_fluid 时容器流体体积有没有被改变
             # 所以不能使用 new_volume 代替 self.fluid_volume
             # self._reset_send_fluid_retries()
             return self.fluid_volume != orig_volume, max(
@@ -133,26 +131,7 @@ class FluidContainer(object):
         "容器内流体体积已经减少时调用。"
         pass
 
-    def onAddedFluid(self, fluid_id, fluid_volume):
-        # type: (str, float) -> None
-        self.OnAddedFluid(fluid_id, fluid_volume)
-        self.onFluidSlotUpdate()
-        if isinstance(self, GUIControl):
-            self.CallSync()
-
-    def onReducedFluid(self, fluid_id, fluid_volume):
-        # type: (str, float) -> None
-        self.OnReducedFluid(fluid_id, fluid_volume)
-        self.onFluidSlotUpdate()
-        if isinstance(self, GUIControl):
-            self.CallSync()
-
-    def onFluidSlotUpdate(self):
-        # type: () -> None
-        # self._reset_send_fluid_retries()
-        self.OnFluidSlotUpdate()
-
-    def ifPlayerInteractWithBucket(self, player_id, test=False):
+    def on_player_interact_with_bucket(self, player_id, test=False):
         # type: (str, bool) -> bool
         if not self.allow_player_use_bucket_interact:
             return False
@@ -180,7 +159,7 @@ class FluidContainer(object):
                             player_id, GetSelectedSlot(player_id), item.count - 1
                         )
                         GiveItem(player_id, Item(bucket_id, count=1))
-                        self.onReducedFluid(orig_fluid_id, BUCKET_VOLUME)
+                        self._on_reduced_fluid(orig_fluid_id, BUCKET_VOLUME)
             else:
                 if not self.allow_player_use_bucket_push:
                     return False
@@ -196,12 +175,31 @@ class FluidContainer(object):
                         SpawnItemToPlayerCarried(
                             player_id, Item("minecraft:bucket", count=1)
                         )
-                        self.onAddedFluid(fluid_id, BUCKET_VOLUME)
+                        self._on_added_fluid(fluid_id, BUCKET_VOLUME)
             if isinstance(self, GUIControl):
                 self.CallSync()
             return True
         else:
             return False
+
+    def _on_added_fluid(self, fluid_id, fluid_volume):
+        # type: (str, float) -> None
+        self.OnAddedFluid(fluid_id, fluid_volume)
+        self._on_fluid_slot_update()
+        if isinstance(self, GUIControl):
+            self.CallSync()
+
+    def _on_reduced_fluid(self, fluid_id, fluid_volume):
+        # type: (str, float) -> None
+        self.OnReducedFluid(fluid_id, fluid_volume)
+        self._on_fluid_slot_update()
+        if isinstance(self, GUIControl):
+            self.CallSync()
+
+    def _on_fluid_slot_update(self):
+        # type: () -> None
+        # self._reset_send_fluid_retries()
+        self.OnFluidSlotUpdate()
 
     @property
     def fluid_id(self):

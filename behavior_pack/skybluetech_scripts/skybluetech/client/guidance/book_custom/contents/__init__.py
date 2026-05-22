@@ -4,6 +4,7 @@ from . import (
     general,
     intros,
     machinery,
+    misc,
     noob_tutorials,
     mini_jei,
     transmitters,

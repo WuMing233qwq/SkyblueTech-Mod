@@ -102,7 +102,7 @@ class BatteryMatrixUI(MachinePanelUIProxy):
         input_power = GetValue(data, K_INPUT_POWER, 0)
         output_power = GetValue(data, K_OUTPUT_POWER, 0)
         storage_rf = GetValue(data, K_STORE_RF, 0.0)
-        rf_max = GetValue(data, K_RF_MAX, 1.0)
+        rf_max = GetValue(data, K_RF_MAX, 1.0) or 1.0
         destroy_flag = GetValue(data, K_DESTROY_FLAG, 0)
         structure_lacked_blocks = GetValue(data, K_STRUCTURE_LACKED_BLOCKS, {})  # type: dict[str, int]
         self.input_power_label.SetText("输入 %s/t" % FormatRF(input_power))

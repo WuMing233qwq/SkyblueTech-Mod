@@ -87,9 +87,9 @@ class MachinePanelUI(ToolDeltaScreen):
 
 
 class MachinePanelUIProxy(ToolDeltaScreen):
-    def __init__(self, screenName, screenNode):
+    def __init__(self, screen_name, screen_instance, params=None):
         global GPlayerId, GPos
-        ToolDeltaScreen.__init__(self, screenName, screenNode)
+        ToolDeltaScreen.__init__(self, screen_name, screen_instance, params)
         if GPos is None:
             raise RuntimeError("Player do not click machine but create UI")
         self.pid = GPlayerId

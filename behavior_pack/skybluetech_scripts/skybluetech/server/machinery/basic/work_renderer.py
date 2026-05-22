@@ -13,10 +13,10 @@ class WorkRenderer(BaseMachine):
     派生自: `BaseMachine`
 
     覆写:
-        `SetDeactiveFlag`
-        `UnsetDeactiveFlag (super)`
-        `ResetDeactiveFlags (super)`
-        `FlushDeactiveFlags (super)`
+        - `SetDeactiveFlag`
+        - `UnsetDeactiveFlag`
+        - `ResetDeactiveFlags`
+        - `FlushDeactiveFlags`
     """
 
     @SuperExecutorMeta.execute_super
@@ -55,7 +55,10 @@ class WorkRenderer(BaseMachine):
         self._update_work_status()
 
     def OnWorkStatusUpdated(self):
-        "子类方法覆写当状态改变时执行的操作。"
+        """
+        子类方法覆写当状态改变时执行的操作。
+        例如, 改变机器的外观, 播放音效等。
+        """
 
     def _update_work_status(self):
         # type: () -> None

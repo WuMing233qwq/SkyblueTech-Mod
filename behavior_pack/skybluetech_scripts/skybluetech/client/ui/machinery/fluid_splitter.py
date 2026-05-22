@@ -6,17 +6,20 @@ from skybluetech_scripts.tooldelta.api.client import (
 )
 from skybluetech_scripts.tooldelta.events.client import OnKeyPressInGame
 from skybluetech_scripts.tooldelta.ui import RegistToolDeltaScreen, UBaseCtrl, Binder
-from ....common.events.machinery.fluid_splitter import (
+from skybluetech_scripts.skybluetech.common.events.machinery.fluid_splitter import (
     FluidSplitterSettingsSetFluid,
     FluidSplitterSettingsSetLabel,
     FluidSplitterSettingsListUpdate,
     FluidSplitterSimpleAction,
 )
-from ....common.define.id_enum.fluids import all_fluids
-from ....common.machinery_def.basic import FluidSlotClient
-from ....common.machinery_def.fluid_splitter import MAX_FLUID_VOLUME
+from skybluetech_scripts.skybluetech.common.define.id_enum.fluids import all_fluids
+from skybluetech_scripts.skybluetech.common.machinery_def.basic import FluidSlotClient
+from skybluetech_scripts.skybluetech.common.machinery_def.fluid_splitter import (
+    MAX_FLUID_VOLUME,
+)
+from ..machinery_extra_pages import PipeSettingsPageIndirectional
 from ..misc.transmitter_settings_ui import rand_rgb_by_index, get_opposite_color
-from .define import MachinePanelUIProxy, MAIN_PATH
+from .define_ex import MachinePanelUIProxyEx, MAIN_PATH
 from .utils import FluidDisplayer
 
 SETTINGS_VIEW_PATH = MAIN_PATH / "settings_view"
@@ -25,7 +28,9 @@ FLUID_DISP_PATH = MAIN_PATH / "fluid_display"
 
 
 @RegistToolDeltaScreen("FluidSplitterUI.main", is_proxy=True)
-class FluidSplitterUI(MachinePanelUIProxy):
+class FluidSplitterUI(MachinePanelUIProxyEx):
+    available_extra_pages = (PipeSettingsPageIndirectional,)
+
     def OnCreate(self):
         self.settings_view = self.GetElement(SETTINGS_VIEW_PATH).asScrollView()
         self.settings_grid = self.settings_view.GetContent().asGrid()
@@ -40,7 +45,7 @@ class FluidSplitterUI(MachinePanelUIProxy):
         self.fluid_displayer = FluidDisplayer(self.GetElement(FLUID_DISP_PATH))
 
     def OnDestroy(self):
-        MachinePanelUIProxy.OnDestroy(self)
+        MachinePanelUIProxyEx.OnDestroy(self)
         self.closeLabelSelector()
         self.closeFluidSelector()
 
@@ -252,7 +257,7 @@ class FluidSplitterUI(MachinePanelUIProxy):
         ).send()
         self.closeFluidSelector()
 
-    @MachinePanelUIProxy.Listen(FluidSplitterSettingsListUpdate)
+    @MachinePanelUIProxyEx.Listen(FluidSplitterSettingsListUpdate)
     def onListUpdated(self, event):
         # type: (FluidSplitterSettingsListUpdate) -> None
         cur = len(event.lis)

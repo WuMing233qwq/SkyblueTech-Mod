@@ -1,5 +1,5 @@
 # coding=utf-8
-from ....common.define.id_enum import machinery
+from skybluetech_scripts.skybluetech.common.define.id_enum import machinery
 from ..core import CategoryType, Input, Output
 from .define import GeneratorRecipe
 

@@ -13,10 +13,11 @@ SUFFIX_LENGTH = len(".json")
 class ChestLootTableHandler(object):
     def __init__(self):
         self.mapping = {
-            "village_black_smith": self.handle_village_black_smith,
+            "village_blacksmith": self.handle_village_blacksmith,
+            "monster_room": self.handle_monster_room,
         }
 
-    def handle_village_black_smith(self, event):
+    def handle_village_blacksmith(self, event):
         # type: (OnContainerFillLoottableServerEvent) -> None
         if random.random() < 0.8:
             event.itemList.append(
@@ -24,14 +25,14 @@ class ChestLootTableHandler(object):
                     id_enum.Ingots.TIN,
                     random.randint(1, 6),
                     0,
-                )
+                ).marshal()
             )
         if random.random() < 0.75:
             event.itemList.append(
                 Item(
                     id_enum.METAL_HAMMER,
                     durability=random.randint(0, 90),
-                )
+                ).marshal()
             )
         if random.random() < 0.5:
             event.itemList.append(
@@ -39,7 +40,7 @@ class ChestLootTableHandler(object):
                     id_enum.Wrench.IRON,
                     random.randint(1, 6),
                     0,
-                )
+                ).marshal()
             )
         if random.random() < 0.5:
             event.itemList.append(
@@ -47,7 +48,7 @@ class ChestLootTableHandler(object):
                     id_enum.Pincer.IRON,
                     random.randint(1, 6),
                     0,
-                )
+                ).marshal()
             )
         if random.random() < 0.3:
             event.itemList.append(
@@ -55,7 +56,7 @@ class ChestLootTableHandler(object):
                     id_enum.Ingots.SILVER,
                     random.randint(1, 6),
                     0,
-                )
+                ).marshal()
             )
         if random.random() < 0.1:
             event.itemList.append(
@@ -63,8 +64,19 @@ class ChestLootTableHandler(object):
                     id_enum.Ingots.LEAD,
                     random.randint(1, 6),
                     0,
-                )
+                ).marshal()
             )
+
+    def handle_monster_room(self, event):
+        # type: (OnContainerFillLoottableServerEvent) -> None
+        if random.random() < 0.5:
+            items = [
+                id_enum.FamicomCartidges.YELLOW,
+                id_enum.FamicomCartidges.PURPLE,
+                id_enum.FamicomCartidges.BLUE,
+            ]
+            random.shuffle(items)
+            event.itemList.append(Item(items[0]).marshal())
 
 
 instance = ChestLootTableHandler()

@@ -22,7 +22,8 @@ class ItemContainer(object):
         input_slots (tuple[int, ...]): 可用输入槽位
         output_slots (tuple[int, ...]): 可用输出槽位
 
-    需要调用 `__init__()`
+    覆写:
+        - `__init__`
     """
 
     input_slots = ()  # type: tuple[int, ...]

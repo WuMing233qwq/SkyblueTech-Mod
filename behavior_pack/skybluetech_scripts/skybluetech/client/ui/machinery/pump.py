@@ -7,11 +7,12 @@ from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
     K_FLUID_ID,
     K_FLUID_VOLUME,
 )
-from ....common.machinery_def.pump import (
+from skybluetech_scripts.skybluetech.common.machinery_def.pump import (
     STORE_RF_MAX,
     MAX_FLUID_VOLUME,
 )
-from .define import MachinePanelUIProxy, MAIN_PATH
+from ..machinery_extra_pages import PipeSettingsPage
+from .define_ex import MachinePanelUIProxyEx, MAIN_PATH
 from .utils import UpdatePowerBar, FluidDisplayer
 
 POWER_PATH = MAIN_PATH / "power_bar"
@@ -19,7 +20,9 @@ FLUID_PATH = MAIN_PATH / "fluid_display"
 
 
 @RegistToolDeltaScreen("PumpUI.main", is_proxy=True)
-class PumpUI(MachinePanelUIProxy):
+class PumpUI(MachinePanelUIProxyEx):
+    available_extra_pages = (PipeSettingsPage,)
+
     def OnCreate(self):
         self.power_bar = self.GetElement(POWER_PATH)
         self.fluid_displayer = FluidDisplayer(self.GetElement(FLUID_PATH))

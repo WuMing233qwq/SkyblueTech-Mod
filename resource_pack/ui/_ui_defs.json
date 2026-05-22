@@ -37,6 +37,7 @@
         "ui/ItemSlot.json",
         "ui/ItemSplitterUI.json",
         "ui/MaceratorUI.json",
+        "ui/MachinePanelExPages.json",
         "ui/MachineryWorkstationUI.json",
         "ui/MagmaCentrifugeUI.json",
         "ui/MagmaFurnaceUI.json",
@@ -47,6 +48,7 @@
         "ui/ObjUpVeinMinerSettingsUI.json",
         "ui/OilExtractorUI.json",
         "ui/PumpUI.json",
+        "ui/ReactingThermalGeneratorUI.json",
         "ui/RecipeCheckerLib.json",
         "ui/RecipeCheckerUI.json",
         "ui/RedstoneFurnaceUI.json",
@@ -60,7 +62,6 @@
         "ui/SplitterUI.json",
         "ui/TeslaPlantUI.json",
         "ui/ThermalGeneratorUI.json",
-        "ui/ThermoelectricGeneratorUI.json",
         "ui/TransmitterSettingsUI.json",
         "ui/WindGeneratorUI.json"
     ]

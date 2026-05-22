@@ -3,7 +3,7 @@ from skybluetech_scripts.tooldelta.api.client import GetBlockEntityData
 from skybluetech_scripts.tooldelta.ui import RegistToolDeltaScreen
 from skybluetech_scripts.tooldelta.utils.nbt import GetValueWithDefault as GetValue
 from skybluetech_scripts.skybluetech.common.machinery_def.basic import K_STORE_RF
-from ....common.machinery_def.solar_panel import (
+from skybluetech_scripts.skybluetech.common.machinery_def.solar_panel import (
     K_LIGHT_LEVEL,
     K_OUTPUT_POWER,
     STORE_RF_MAX,

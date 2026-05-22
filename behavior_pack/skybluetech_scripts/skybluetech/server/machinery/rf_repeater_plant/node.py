@@ -7,9 +7,17 @@ from skybluetech_scripts.tooldelta.api.server import (
     GetExtraData,
     SetExtraData,
 )
-from ....common.define.facing import OPPOSITE_FACING, FACING_DXYZ
-from ....common.events.machinery.rf_repeater_plant import RFRepeaterPlantSettingsUpdate
-from ....common.machinery_def.rf_repeater_plant import MODE_INPUT, MODE_OUTPUT
+from skybluetech_scripts.skybluetech.common.define.facing import (
+    OPPOSITE_FACING,
+    FACING_DXYZ,
+)
+from skybluetech_scripts.skybluetech.common.events.machinery.rf_repeater_plant import (
+    RFRepeaterPlantSettingsUpdate,
+)
+from skybluetech_scripts.skybluetech.common.machinery_def.rf_repeater_plant import (
+    MODE_INPUT,
+    MODE_OUTPUT,
+)
 from ..pool import GetMachineStrict
 
 
@@ -255,7 +263,7 @@ def change_node_mode(dim, x, y, z, new_mode):
         s.total_output_active_count,
         s.total_input_count,
         s.total_input_active_count,
-    ).sendMulti(m.sync.GetPlayersInSync())
+    ).sendMulti(m.ui_sync.GetPlayersInSync())
     for face in (2, 3, 4, 5):
         dx, dy, dz = FACING_DXYZ[face]
         ap = logic_module.access_points_pool.get((

@@ -5,12 +5,12 @@ from skybluetech_scripts.tooldelta.utils.nbt import (
     GetValueWithDefault as GetValue,
     ValueOf,
 )
-from ....common.machinery_def.basic import (
+from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
     K_FLUID_ID,
     K_FLUID_VOLUME,
     K_STORE_RF,
 )
-from ....common.machinery_def.mini_miner import (
+from skybluetech_scripts.skybluetech.common.machinery_def.mini_miner import (
     WorkMode,
     K_DIGGING_POS,
     K_WORK_MODE,
@@ -18,8 +18,11 @@ from ....common.machinery_def.mini_miner import (
     MAX_FLUID_VOLUME,
     VOLUME_COST_ONCE,
 )
-
-from .define import MachinePanelUIProxy, MAIN_PATH
+from ..machinery_extra_pages import (
+    CableSettingsPageIndirectional,
+    PipeSettingsPageIndirectional,
+)
+from .define_ex import MachinePanelUIProxyEx, MAIN_PATH
 from .utils import UpdatePowerBar, FluidDisplayer
 
 POWER_PATH = MAIN_PATH / "power_bar"
@@ -28,7 +31,12 @@ INFO_LABEL_PATH = MAIN_PATH / "panel_bg/info_label"
 
 
 @RegistToolDeltaScreen("MiniMinerUI.main", is_proxy=True)
-class MiniMinerUI(MachinePanelUIProxy):
+class MiniMinerUI(MachinePanelUIProxyEx):
+    available_extra_pages = (
+        CableSettingsPageIndirectional,
+        PipeSettingsPageIndirectional,
+    )
+
     def OnCreate(self):
         self.info_label = self.GetElement(INFO_LABEL_PATH).asLabel()
         self.power_bar = self.GetElement(POWER_PATH)

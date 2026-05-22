@@ -17,7 +17,7 @@
         "description": {
             "base_block": "flowing_liquid",
             "category": "none",
-            "identifier": "skybluetech:molten_rosin"
+            "identifier": "skybluetech:flowing_molten_rosin"
         }
     }
 }

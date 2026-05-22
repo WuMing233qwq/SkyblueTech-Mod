@@ -6,14 +6,18 @@ from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
     K_STORE_RF,
     FluidSlotClient,
 )
-from ....common.machinery_def.geothermal_generator import (
+from skybluetech_scripts.skybluetech.common.machinery_def.geothermal_generator import (
     K_BURN_TICKS_LEFT,
     STORE_RF_MAX,
     MAX_LAVA_VOLUME,
     MAX_WATER_VOLUME,
     ONCE_BURNING_TICKS,
 )
-from .define import MachinePanelUIProxy, MAIN_PATH
+from ..machinery_extra_pages import (
+    CableSettingsPageIndirectional,
+    PipeSettingsPageIndirectional,
+)
+from .define_ex import MachinePanelUIProxyEx, MAIN_PATH
 from .utils import UpdatePowerBar, UpdateFlame, FluidDisplayer
 
 POWER_PATH = MAIN_PATH / "power_bar"
@@ -23,7 +27,12 @@ FLAME_PATH = MAIN_PATH / "flame"
 
 
 @RegistToolDeltaScreen("GeoThermalGeneratorUI.main", is_proxy=True)
-class GeoThermalGeneratorUI(MachinePanelUIProxy):
+class GeoThermalGeneratorUI(MachinePanelUIProxyEx):
+    available_extra_pages = (
+        CableSettingsPageIndirectional,
+        PipeSettingsPageIndirectional,
+    )
+
     def OnCreate(self):
         self.power_bar = self.GetElement(POWER_PATH)
         self.lava_display = self.GetElement(FLUID_LAVA_PATH)

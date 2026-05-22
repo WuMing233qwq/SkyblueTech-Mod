@@ -40,23 +40,13 @@
                             "bg@common.dialog_background_opaque": {
                                 "controls": [
                                     {
-                                        "inventory_selected_icon_button@common.inventory_selected_icon_button": {}
+                                        "upgraders@SkybluePanelLib.UpgradeSlots": {
+                                            "anchor_from": "top_right",
+                                            "anchor_to": "top_left"
+                                        }
                                     },
                                     {
-                                        "machine_label": {
-                                            "type": "label",
-                                            "anchor_from": "top_middle",
-                                            "anchor_to": "top_middle",
-                                            "offset": [
-                                                0.0,
-                                                4.0
-                                            ],
-                                            "font_scale_factor": 1.4,
-                                            "font_type": "default",
-                                            "shadow": true,
-                                            "text": "装配站",
-                                            "text_alignment": "center"
-                                        }
+                                        "inventory_selected_icon_button@common.inventory_selected_icon_button": {}
                                     },
                                     {
                                         "gamepad_cursor_button@common.gamepad_cursor_button": {
@@ -70,6 +60,22 @@
                                         "main": {
                                             "type": "panel",
                                             "controls": [
+                                                {
+                                                    "machine_label": {
+                                                        "type": "label",
+                                                        "anchor_from": "top_middle",
+                                                        "anchor_to": "top_middle",
+                                                        "offset": [
+                                                            0.0,
+                                                            4.0
+                                                        ],
+                                                        "font_scale_factor": 1.4,
+                                                        "font_type": "default",
+                                                        "shadow": true,
+                                                        "text": "装配站",
+                                                        "text_alignment": "center"
+                                                    }
+                                                },
                                                 {
                                                     "input_slot": {
                                                         "type": "stack_panel",
@@ -119,14 +125,6 @@
                                                         "offset": [
                                                             "-42%+0px",
                                                             "-20%+0px"
-                                                        ]
-                                                    }
-                                                },
-                                                {
-                                                    "upgrades@SkybluePanelLib.UpgradeSlots": {
-                                                        "offset": [
-                                                            106,
-                                                            -57
                                                         ]
                                                     }
                                                 },
@@ -277,6 +275,29 @@
                                                 0,
                                                 46
                                             ]
+                                        }
+                                    },
+                                    {
+                                        "left_sections@SkybluePanelLib.simple_panel_left_sections": {
+                                            "anchor_from": "top_left",
+                                            "anchor_to": "top_right",
+                                            "layer": 4,
+                                            "offset": [
+                                                -2,
+                                                0
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "ex_panel": {
+                                            "type": "panel",
+                                            "anchor_from": "top_middle",
+                                            "anchor_to": "top_middle",
+                                            "size": [
+                                                "default",
+                                                "56%+0px"
+                                            ],
+                                            "layer": 1
                                         }
                                     }
                                 ],

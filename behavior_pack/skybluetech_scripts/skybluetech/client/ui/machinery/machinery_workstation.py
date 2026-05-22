@@ -4,10 +4,10 @@ from skybluetech_scripts.tooldelta.api.client import GetBlockEntityData
 from skybluetech_scripts.tooldelta.extensions.rate_limiter import PlayerRateLimiter
 from skybluetech_scripts.tooldelta.ui import RegistToolDeltaScreen
 from skybluetech_scripts.tooldelta.utils.nbt import GetValueWithDefault as GetValue
-from ....common.events.machinery.machinery_workstation import (
+from skybluetech_scripts.skybluetech.common.events.machinery.machinery_workstation import (
     MachineryWorkstationDoCraft,
 )
-from ....common.machinery_def.machinery_workstation import (
+from skybluetech_scripts.skybluetech.common.machinery_def.machinery_workstation import (
     recipes,
     K_CRAFTING_PROGRESS,
     K_OUTPUT_ITEM_ID,

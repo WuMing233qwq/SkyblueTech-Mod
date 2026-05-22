@@ -16,7 +16,10 @@ from skybluetech_scripts.tooldelta.events.server import (
 )
 from skybluetech_scripts.tooldelta.events.service import ServerListenerService
 from skybluetech_scripts.tooldelta.extensions.typing import TypeVar, Generic
-from ....common.define.facing import NEIGHBOR_BLOCKS_ENUM, OPPOSITE_FACING
+from skybluetech_scripts.skybluetech.common.define.facing import (
+    NEIGHBOR_BLOCKS_ENUM,
+    OPPOSITE_FACING,
+)
 from ..constants import FACING_EN, DXYZ_FACING
 from ..base.define import (
     AP_MODE_INPUT,
@@ -136,10 +139,10 @@ class LogicModule(Generic[_NT, _APT], ServerListenerService):
                 output_networks[facing] = network
                 if p not in network.group_inputs:
                     input_networks[facing] = None
-        nnode = self.container_nodes_pool[(dim, (x, y, z))] = ContainerNode(
+        new_cnode = self.container_nodes_pool[(dim, (x, y, z))] = ContainerNode(
             input_networks, output_networks
         )
-        return nnode
+        return new_cnode
 
     def GetNetworkByTransmitter(
         self, dim, x, y, z, cacher=None, disable_cache=False, force_use_cached=False
@@ -310,7 +313,6 @@ class LogicModule(Generic[_NT, _APT], ServerListenerService):
                                     dim, cx, cy, cz, facing, AP_MODE_INPUT
                                 )
                             )
-
             input_nodes |= _i
             output_nodes |= _o
             nodes.add(current)
@@ -567,6 +569,7 @@ class LogicModule(Generic[_NT, _APT], ServerListenerService):
             self.clean_node(event.dimension, event.x, event.y, event.z)
 
     @ServerListenerService.Listen(ChunkLoadedServerEvent)
+    @Delay(1)  # 我也不知道为什么, 过早检测管道会导致区块边缘的一些容器方块检测为空气
     def onChunkLoaded(self, event):
         # type: (ChunkLoadedServerEvent) -> None
         for block_entity_posdata in event.blockEntities:

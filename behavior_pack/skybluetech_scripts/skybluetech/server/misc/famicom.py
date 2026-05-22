@@ -5,6 +5,7 @@ from skybluetech_scripts.tooldelta.api.server import (
     GetPos,
     GetBlockEntityData,
     SpawnDroppedItem,
+    SetCommand,
     UpdateBlockStates,
     SpawnItemToPlayerCarried,
 )
@@ -14,26 +15,32 @@ from skybluetech_scripts.tooldelta.events.server import (
     BlockRemoveServerEvent,
 )
 from skybluetech_scripts.tooldelta.events.notify import NotifyToClients
+from skybluetech_scripts.tooldelta.extensions.rate_limiter import PlayerRateLimiter
 from ...common.define.id_enum.blocks import FAMICOM
+from ...common.define.id_enum.items import FamicomCartidges
 from ...common.events.misc.famicom import FamicomPlaySoundEvent
 
 MUSIC_MAPPING = {
-    "skybluetech:famicom_cartidge_1": "music.skybluetech.famicom_1",
-    "skybluetech:famicom_cartidge_2": "music.skybluetech.famicom_2",
-    "skybluetech:famicom_cartidge_3": "music.skybluetech.famicom_3",
+    FamicomCartidges.YELLOW: "music.skybluetech.famicom_1",
+    FamicomCartidges.PURPLE: "music.skybluetech.famicom_2",
+    FamicomCartidges.BLUE: "music.skybluetech.famicom_3",
 }
 STATE_MAPPING = {
-    "skybluetech:famicom_cartidge_1": 1,
-    "skybluetech:famicom_cartidge_2": 2,
-    "skybluetech:famicom_cartidge_3": 3,
+    FamicomCartidges.YELLOW: 1,
+    FamicomCartidges.PURPLE: 2,
+    FamicomCartidges.BLUE: 3,
 }
 K_CARTIDGE_TYPE_STATE = "skybluetech:fc_rom_type"
+
+rate_limiter = PlayerRateLimiter(0.5)
 
 
 @ServerBlockUseEvent.Listen()
 def onBlockUse(event):
     # type: (ServerBlockUseEvent) -> None
     if event.blockName != FAMICOM:
+        return
+    if not rate_limiter.record(event.playerId):
         return
     bdata = GetBlockEntityData(event.dimensionId, (event.x, event.y, event.z))
     if bdata is None:
@@ -64,42 +71,44 @@ def onUseItemOn(event):
         bdata["st:cartidge"] = None
         return
     item = event.item
-    music_mapping = MUSIC_MAPPING.get(item.id)
-    if music_mapping is None:
+    music_name = MUSIC_MAPPING.get(item.id)
+    if music_name is None:
         return
-    inrange_players = [
-        i
-        for i in GetPlayersInDim(event.dimensionId)
-        if all(abs(b - a) <= 32 for a, b in zip(GetPos(i), (x, y, z)))
-    ]
     bdata["st:cartidge"] = item.id
     UpdateBlockStates(
         event.dimensionId,
         (x, y, z),
         {K_CARTIDGE_TYPE_STATE: STATE_MAPPING[item.id]},
     )
-    NotifyToClients(
-        inrange_players,
-        FamicomPlaySoundEvent(event.dimensionId, x, y, z, music_mapping),
-    )
+    # inrange_players = [
+    #     i
+    #     for i in GetPlayersInDim(event.dimensionId)
+    #     if all(abs(b - a) <= 32 for a, b in zip(GetPos(i), (x, y, z)))
+    # ]
+    # NotifyToClients(
+    #     inrange_players,
+    #     FamicomPlaySoundEvent(event.dimensionId, x, y, z, music_name),
+    # )
+    SetCommand("/playsound %s @a[r=30] %d %d %d" % (music_name, x, y, z))
     SpawnItemToPlayerCarried(event.entityId, Item("minecraft:air"))
 
 
 def removeCartidge(dim, x, y, z, cartidge):
     # type: (int, int, int, int, str) -> None
     SpawnDroppedItem(dim, (x + 0.5, y, z + 0.5), Item(cartidge))
-    music_mapping = MUSIC_MAPPING.get(cartidge)
-    if music_mapping is None:
+    music_name = MUSIC_MAPPING.get(cartidge)
+    if music_name is None:
         return
     UpdateBlockStates(dim, (x, y, z), {K_CARTIDGE_TYPE_STATE: 0})
-    inrange_players = [
-        i
-        for i in GetPlayersInDim(dim)
-        if all(abs(b - a) <= 32 for a, b in zip(GetPos(i), (x, y, z)))
-    ]
-    NotifyToClients(
-        inrange_players, FamicomPlaySoundEvent(dim, x, y, z, music_mapping, True)
-    )
+    # inrange_players = [
+    #     i
+    #     for i in GetPlayersInDim(dim)
+    #     if all(abs(b - a) <= 32 for a, b in zip(GetPos(i), (x, y, z)))
+    # ]
+    # NotifyToClients(
+    #     inrange_players, FamicomPlaySoundEvent(dim, x, y, z, music_name, True)
+    # )
+    SetCommand("/stopsound @a[r=30] %s" % music_name)
 
 
 @BlockRemoveServerEvent.Listen()

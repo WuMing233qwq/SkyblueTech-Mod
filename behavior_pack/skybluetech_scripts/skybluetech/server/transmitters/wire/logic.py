@@ -30,20 +30,6 @@ def isWire(blockName):
     return BlockHasTag(blockName, "skybluetech_wire")
 
 
-def bothCanConnect(origName, blockName):
-    # type: (str, str) -> bool
-    tags = GetBlockTags(blockName)
-    tags2 = GetBlockTags(origName)
-    if (
-        "redstoneflux_connectable" not in tags
-        or "redstoneflux_connectable" not in tags2
-    ):
-        return False
-    elif isWire(blockName) and isWire(blockName):
-        return origName == blockName
-    return True
-
-
 def isRFMachine(blockName):
     return BlockHasTag(blockName, "redstoneflux_accepter") or BlockHasTag(
         blockName, "redstoneflux_provider"

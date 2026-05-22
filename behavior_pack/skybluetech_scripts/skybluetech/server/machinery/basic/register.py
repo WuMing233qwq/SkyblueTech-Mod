@@ -89,7 +89,7 @@ def onClick(event):
     if (
         isinstance(m, (FluidContainer, MultiFluidContainer))
         and not IsSneaking(event.playerId)
-        and m.ifPlayerInteractWithBucket(event.playerId)
+        and m.on_player_interact_with_bucket(event.playerId)
     ):
         event.cancel()
         return
@@ -108,7 +108,7 @@ def onUseItem(event):
     if (
         isinstance(m, (FluidContainer, MultiFluidContainer))
         and not IsSneaking(event.entityId)
-        and m.ifPlayerInteractWithBucket(event.entityId, test=True)
+        and m.on_player_interact_with_bucket(event.entityId, test=True)
     ):
         event.cancel()
     if isinstance(m, BaseClicker) and not IsSneaking(event.entityId):
