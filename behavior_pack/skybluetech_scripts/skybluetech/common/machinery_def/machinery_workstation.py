@@ -287,6 +287,24 @@ recipes = RecipesCollection(
         MRecipe.LEVEL_IRON,
         8,
     ),
+    # fluid splitter
+    MRecipe(
+        {
+            0: Input(tag_enum.PlateTag.TIN, is_tag=True),
+            1: Input("minecraft:cauldron"),
+            2: Input(tag_enum.PlateTag.TIN, is_tag=True),
+            3: Input(id_enum.Pipe.CUPRONICKEL),
+            4: Input(id_enum.MACHINERY_FRAME),
+            5: Input(id_enum.Pipe.CUPRONICKEL),
+            6: Input("minecraft:iron_ingot"),
+            7: Input(id_enum.Tank.STEEL),
+            8: Input("minecraft:iron_ingot"),
+        },
+        id_enum.FLUID_SPLITTER,
+        MRecipe.LEVEL_IRON,
+        MRecipe.LEVEL_IRON,
+        8,
+    ),
     # forester
     MRecipe(
         {
