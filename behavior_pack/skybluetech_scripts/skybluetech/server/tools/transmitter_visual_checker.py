@@ -86,6 +86,6 @@ def onRecvRequest(event):
                     T.TYPE_WIRE,
                 ),
             )
-            for network in set(i for i in cnode.inputs.values() if i is not None)
-            | set(o for o in cnode.outputs.values() if o is not None)
+            for network in set(i for i in cnode.get_inputs().values() if i is not None)
+            | set(o for o in cnode.get_outputs().values() if o is not None)
         ]).send(event.player_id)

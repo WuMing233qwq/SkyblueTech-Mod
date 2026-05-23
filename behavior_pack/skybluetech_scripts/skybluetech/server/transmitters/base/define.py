@@ -218,6 +218,14 @@ class ContainerNode(Generic[_NT]):
     def update_init_status(self):
         self.inited = not self.uninited_faces
 
+    def get_inputs(self):
+        # type: () -> dict[int, _NT | None]
+        return self.inputs
+
+    def get_outputs(self):
+        # type: () -> dict[int, _NT | None]
+        return self.outputs
+
     def all_empty(self):
         return all(i is None for i in self.inputs.values()) and all(
             i is None for i in self.outputs.values()

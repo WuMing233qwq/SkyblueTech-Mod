@@ -39,9 +39,10 @@ def PostFluidIntoNetworks(dim, xyz, fluid_id, fluid_volume, networks):
         x, y, z = xyz
         networks = [
             i
-            for i in logic_module.GetContainerNode(
-                dim, x, y, z, enable_cache=True
-            ).outputs.values()
+            for i in logic_module
+            .GetContainerNode(dim, x, y, z, enable_cache=True)
+            .get_outputs()
+            .values()
             if i is not None
         ]
     for network in networks:

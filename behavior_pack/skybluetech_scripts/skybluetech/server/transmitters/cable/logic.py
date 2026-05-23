@@ -58,9 +58,10 @@ def PostItemIntoNetworks(dim, xyz, item, networks):
         x, y, z = xyz
         networks = set(
             i
-            for i in logic_module.GetContainerNode(
-                dim, x, y, z, enable_cache=True
-            ).outputs.values()
+            for i in logic_module
+            .GetContainerNode(dim, x, y, z, enable_cache=True)
+            .get_outputs()
+            .values()
             if i is not None
         )
     for network in networks:

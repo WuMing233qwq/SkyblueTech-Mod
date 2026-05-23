@@ -1,5 +1,6 @@
 # coding=utf-8
 from collections import deque
+from weakref import WeakValueDictionary, ref, proxy
 from skybluetech_scripts.tooldelta.api.server import (
     GetBlockName,
     GetBlockStates,
@@ -72,7 +73,7 @@ class LogicModule(Generic[_NT, _APT], ServerListenerService):
         self.networks_pool = set()  # type: set[_NT]
         self.container_nodes_pool = {}  # type: dict[tuple[int, tuple[int, int, int]], ContainerNode[_NT]]
         self.access_points_pool = {}  # type: dict[tuple[int, int, int, int, int], _APT] # (dim, x, y, z, access_facing)
-        self.nodes_pool = {}  # type: dict[int, dict[tuple[int, int, int], _NT]]
+        self.nodes_pool = {}  # type: dict[int, WeakValueDictionary[tuple[int, int, int], _NT]]
         self.enable_listeners()
         self._instances[self.__module__] = self
         self._tick_counter = 0
@@ -132,11 +133,11 @@ class LogicModule(Generic[_NT, _APT], ServerListenerService):
                 dim, x + dx, y + dy, z + dz, OPPOSITE_FACING[facing], -1
             )  # -1 表示输入输出模式未知
             if p in network.group_inputs:
-                input_networks[facing] = network
+                input_networks[facing] = proxy(network)
                 if p not in network.group_outputs:
                     output_networks[facing] = None
             if p in network.group_outputs:
-                output_networks[facing] = network
+                output_networks[facing] = proxy(network)
                 if p not in network.group_inputs:
                     input_networks[facing] = None
         new_cnode = self.container_nodes_pool[(dim, (x, y, z))] = ContainerNode(
@@ -347,7 +348,7 @@ class LogicModule(Generic[_NT, _APT], ServerListenerService):
         network = self.bfs_find_connections(dim, start, exists)
         if network is None:
             return None
-        dim_datas = self.nodes_pool.setdefault(dim, {})
+        dim_datas = self.nodes_pool.setdefault(dim, WeakValueDictionary())
         self.networks_pool.add(network)
         for node in network.nodes:
             dim_datas[node] = network
@@ -438,9 +439,11 @@ class LogicModule(Generic[_NT, _APT], ServerListenerService):
             print("[Error] can't delete network by transmitter", (x, y, z))
         tmp_set = set()
         for dx, dy, dz in DXYZ_FACING:
-            self.GetNetworkByTransmitter(
+            network = self.GetNetworkByTransmitter(
                 dim, x + dx, y + dy, z + dz, cacher=tmp_set, disable_cache=True
             )
+            if network is not None:
+                self.apply_network_to_pool(network)
 
     def clean_container_networks(self, dim, x, y, z, on_block_placed=False):
         # type: (int, int, int, int, bool) -> None

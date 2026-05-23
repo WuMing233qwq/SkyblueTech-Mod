@@ -20,10 +20,7 @@ from skybluetech_scripts.skybluetech.common.define.id_enum.items import (
     TRANSMITTER_WRENCH,
     TRANSMITTER_SETTINGS_WRENCH,
 )
-from skybluetech_scripts.skybluetech.common.define.facing import (
-    NEIGHBOR_BLOCKS_ENUM,
-    OPPOSITE_FACING,
-)
+from skybluetech_scripts.skybluetech.common.define.facing import NEIGHBOR_BLOCKS_ENUM
 from ..base.define import AP_MODE_INPUT, AP_MODE_OUTPUT
 from ..constants import FACING_EN, FACING_ZHCN
 from .logic import (
@@ -49,23 +46,45 @@ class ActionModule(Generic[_NT, _APT], ServerListenerService):
         self.enable_label_settings = enable_label_settings
         self.enable_listeners()
 
-    def get_testing_facing(self, clickX, clickY, clickZ):
-        # type: (float, float, float) -> int | None
-        THR = self.wrench_pick_threshold
-        if clickY > 0 and clickY < THR:
-            return 0  # down
-        elif clickY > 1 - THR and clickY < 1:
-            return 1
-        elif clickZ > 0 and clickZ < THR:
-            return 2  # north
-        elif clickZ > 1 - THR and clickZ < 1:
-            return 3  # south
-        elif clickX > 0 and clickX < THR:
-            return 4  # west
-        elif clickX > 1 - THR and clickX < 1:
-            return 5  # east
+    def get_pick_facing(self, clickX, clickY, clickZ, face):
+        # type: (float, float, float, int) -> int | None
+        THR = self.wrench_pick_threshold  # 侧面立方体长度, 同时也是中心立方体的最小坐标
+        CMAX = 1.0 - THR  # 中心立方体的最大坐标
+        # 点击某个面时, 4个垂直方向的延伸体在该面上有投影区域
+        # 判断点击坐标落在哪个投影里, 从而得知玩家想设置哪个方向
+        # face 0(down)/1(up) → 检查 X,Z 轴
+        # face 2(north)/3(south) → 检查 X,Y 轴
+        # face 4(west)/5(east) → 检查 Z,Y 轴
+        if face <= 1:
+            a1, a2 = clickX, clickZ
+            dirs1 = (4, 5)  # west, east
+            dirs2 = (2, 3)  # north, south
+        elif face <= 3:
+            a1, a2 = clickX, clickY
+            dirs1 = (4, 5)  # west, east
+            dirs2 = (0, 1)  # down, up
         else:
-            return None
+            a1, a2 = clickZ, clickY
+            dirs1 = (2, 3)  # north, south
+            dirs2 = (0, 1)  # down, up
+        r1 = r2 = None
+        p1 = p2 = 0.0
+        if a1 < THR:
+            r1, p1 = dirs1[0], THR - a1
+        elif a1 > CMAX:
+            r1, p1 = dirs1[1], a1 - CMAX
+        if a2 < THR:
+            r2, p2 = dirs2[0], THR - a2
+        elif a2 > CMAX:
+            r2, p2 = dirs2[1], a2 - CMAX
+        if r1 is None and r2 is None:
+            return None  # 中心区域
+        if r1 is None:
+            return r2
+        if r2 is None:
+            return r1
+        # 角落区域, 两个方向都有投影, 取深入程度更大的
+        return r1 if p1 >= p2 else r2
 
     def switch_access_mode(self, dim, x, y, z, face, player_id=None):
         # type: (int, int, int, int, int, str | None) -> bool
@@ -136,7 +155,9 @@ class ActionModule(Generic[_NT, _APT], ServerListenerService):
         if not self.logic_module.transmitter_check_func(event.blockName):
             return
         if event.item.newItemName == TRANSMITTER_WRENCH:
-            face = self.get_testing_facing(event.clickX, event.clickY, event.clickZ)
+            face = self.get_pick_facing(
+                event.clickX, event.clickY, event.clickZ, event.face
+            )
             if face is None:
                 SetOnePopupNotice(event.playerId, "无效扳手调节位置")
                 return
@@ -147,7 +168,9 @@ class ActionModule(Generic[_NT, _APT], ServerListenerService):
         elif event.item.newItemName == TRANSMITTER_SETTINGS_WRENCH:
             if not self.enable_label_settings:
                 return
-            facing = self.get_testing_facing(event.clickX, event.clickY, event.clickZ)
+            facing = self.get_pick_facing(
+                event.clickX, event.clickY, event.clickZ, event.face
+            )
             if facing is None:
                 SetOnePopupNotice(event.playerId, "无效扳手设置位置")
                 return
