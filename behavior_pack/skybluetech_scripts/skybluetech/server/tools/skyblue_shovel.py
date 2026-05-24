@@ -1,8 +1,6 @@
 # coding=utf-8
-#
+from skybluetech_scripts.skybluetech.common.define.id_enum import SkyblueTools
 from .actions.register import RegisterTool
 
-ITEM_ID = "skybluetech:skyblue_shovel"
 
-
-RegisterTool(ITEM_ID)
+RegisterTool(SkyblueTools.SHOVEL)
