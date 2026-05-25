@@ -1,0 +1,16 @@
+{
+    "description": "commands.skybluetech.inscribing_template_give.description",
+    "format_version": "0.0.1",
+    "name": "skybluetech:inscribing_template_give",
+    "permission_level": "game_directors",
+    "requires_cheats": true,
+    "args": [
+        {
+            "name": "templateItem",
+            "type": "item",
+            "default": {
+                "itemName": "skybluetech:upgrader_basic_speed"
+            }
+        }
+    ]
+}

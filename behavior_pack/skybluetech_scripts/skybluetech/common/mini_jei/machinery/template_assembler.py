@@ -1,0 +1,55 @@
+# coding=utf-8
+from ...define.id_enum import machinery
+from .define import CategoryType, RecipesCollection, MachineRecipe, Input, Output
+
+
+class TemplateAssemblerRecipesCollection(RecipesCollection):
+    def __init__(self, *recipes):
+        # type: (TemplateAssemblerRecipe) -> None
+        super(TemplateAssemblerRecipesCollection, self).__init__(
+            machinery.TEMPLATE_ASSEMBLER, *recipes
+        )
+        self.recipes_mapping = {recipe.output_item_id: recipe for recipe in recipes}
+
+
+class TemplateAssemblerRecipe(MachineRecipe):
+    recipe_icon_id = machinery.TEMPLATE_ASSEMBLER
+
+    def __init__(
+        self,
+        input_items,  # type: dict[int, Input]
+        output_item_id,  # type: str
+        power_cost,  # type: int
+        tick_duration,  # type: int
+    ):
+        MachineRecipe.__init__(
+            self,
+            {CategoryType.ITEM: input_items},
+            {CategoryType.ITEM: {0: Output(output_item_id)}},
+            power_cost,
+            tick_duration,
+        )
+        self.input_items = input_items
+        self.output_item_id = output_item_id
+
+    def Marshal(self):
+        return {
+            "input_items": {
+                slot: input.to_dict() for slot, input in self.input_items.items()
+            },
+            "output_item_id": self.output_item_id,
+            "power_cost": self.power_cost,
+            "tick_duration": self.tick_duration,
+        }
+
+    @classmethod
+    def Unmarshal(cls, data):
+        return cls(
+            input_items={
+                slot: Input.from_dict(input_dict)
+                for slot, input_dict in data["input_items"].items()
+            },
+            output_item_id=data["output_item_id"],
+            power_cost=data["power_cost"],
+            tick_duration=data["tick_duration"],
+        )

@@ -1,0 +1,10 @@
+{
+    "format_version": "1.10.0",
+    "minecraft:block": {
+        "components": {},
+        "description": {
+            "category": "skybluetech",
+            "identifier": "skybluetech:template_inscriber"
+        }
+    }
+}
