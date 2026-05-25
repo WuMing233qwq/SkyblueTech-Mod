@@ -3,6 +3,8 @@ from skybluetech_scripts.tooldelta.events.basic import CustomC2SEvent, CustomS2C
 
 
 class MultiBlockStructureCheckRequest(CustomC2SEvent):
+    name = "st:MBSCR"
+
     def __init__(self, x, y, z, player_id=""):
         self.x = x
         self.y = y
@@ -22,6 +24,8 @@ class MultiBlockStructureCheckRequest(CustomC2SEvent):
 
 
 class MultiBlockStructureCheckResponse(CustomS2CEvent):
+    name = "st:MBSCR"
+
     def __init__(self, x, y, z, palette, pos_block_data):
         # type: (int, int, int, dict[int, str | list[str]], dict[int, list[tuple[int, int, int]]]) -> None
         self.x = x
