@@ -92,3 +92,6 @@ class Pincer:
 
 class BatteryTag:
     COMMON = "skybluetech:battery"
+
+
+RUBBER = "common:rubber"
