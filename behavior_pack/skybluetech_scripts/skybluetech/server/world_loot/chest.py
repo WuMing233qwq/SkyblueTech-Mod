@@ -5,9 +5,12 @@ from skybluetech_scripts.tooldelta.events.server import (
     OnContainerFillLoottableServerEvent,
 )
 from skybluetech_scripts.skybluetech.common.define import id_enum
+from ..misc.inscribing_template import GenerateInscribingTemplateByItemId
 
 PREFIX_LENGTH = len("loot_tables/chests/")
 SUFFIX_LENGTH = len(".json")
+
+# loot_tables/chests/nether_bridge.json
 
 
 class ChestLootTableHandler(object):
@@ -15,6 +18,7 @@ class ChestLootTableHandler(object):
         self.mapping = {
             "village_blacksmith": self.handle_village_blacksmith,
             "monster_room": self.handle_monster_room,
+            "nether_bridge": self.handle_nether_bridge,
         }
 
     def handle_village_blacksmith(self, event):
@@ -77,6 +81,18 @@ class ChestLootTableHandler(object):
             ]
             random.shuffle(items)
             event.itemList.append(Item(items[0]).marshal())
+
+    def handle_nether_bridge(self, event):
+        # type: (OnContainerFillLoottableServerEvent) -> None
+        if random.random() < 0.4:
+            event.itemList.append(
+                GenerateInscribingTemplateByItemId(
+                    random.choice([
+                        id_enum.Upgraders.BASIC_SPEED_UPGRADER,
+                        id_enum.Upgraders.BASIC_ENERGY_UPGRADER,
+                    ]),
+                ).marshal()
+            )
 
 
 instance = ChestLootTableHandler()
