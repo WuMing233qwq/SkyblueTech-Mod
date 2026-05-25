@@ -61,6 +61,9 @@
         "skybluetech:circuit_base_plate": {
             "textures": "textures/items/circuit_base_plate"
         },
+        "skybluetech:coil_copper": {
+            "textures": "textures/items/coil_copper"
+        },
         "skybluetech:control_circuit_advanced": {
             "textures": "textures/items/control_circuit_advanced"
         },
@@ -144,6 +147,9 @@
         },
         "skybluetech:hydrogen_bucket": {
             "textures": "textures/items/buckets/hydrogen_bucket"
+        },
+        "skybluetech:inscribing_template": {
+            "textures": "textures/items/inscribing_template"
         },
         "skybluetech:invar_axe": {
             "textures": "textures/items/metal_tools/invar_axe"
@@ -468,6 +474,9 @@
         },
         "skybluetech:upgrader_generic_split": {
             "textures": "textures/items/upgraders/upgrader_generic_split"
+        },
+        "skybluetech:upgrader_plate_empty": {
+            "textures": "textures/items/upgraders/upgrader_plate_empty"
         },
         "skybluetech:upgrader_spec_magma_factory": {
             "textures": "textures/items/upgraders/upgrader_spec_magma_factory"
