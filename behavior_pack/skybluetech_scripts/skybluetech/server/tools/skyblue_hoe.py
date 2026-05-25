@@ -1,11 +1,6 @@
 # coding=utf-8
-#
+from skybluetech_scripts.skybluetech.common.define.id_enum import SkyblueTools
 from .actions.register import RegisterTool
 
 
-ITEM_ID = "skybluetech:skyblue_hoe"
-DIRTLIKE_BLOCK = {"minecraft:dirt", "minecraft:grass_block"}
-HOE_POWER_COST = 200
-
-
-RegisterTool(ITEM_ID)
+RegisterTool(SkyblueTools.HOE)

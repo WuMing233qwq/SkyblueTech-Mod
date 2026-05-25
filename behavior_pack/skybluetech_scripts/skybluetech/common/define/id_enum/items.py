@@ -1,37 +1,12 @@
-class Ingots:
-    TIN = "skybluetech:tin_ingot"
-    LEAD = "skybluetech:lead_ingot"
-    SILVER = "skybluetech:silver_ingot"
-    NICKEL = "skybluetech:nickel_ingot"
-    PLATINUM = "skybluetech:platinum_ingot"
+# coding=utf-8
+class Batteries:
+    JUNIOR = "skybluetech:battery_junior"
+    LEADACID = "skybluetech:battery_leadacid"
 
-    BRONZE = "skybluetech:bronze_ingot"
-    INVAR = "skybluetech:invar_ingot"
-    STEEL = "skybluetech:steel_ingot"
-    REFINED_IRON = "skybluetech:refined_iron_ingot"
-    LIGHT_SKYBLUE = "skybluetech:light_skyblue_ingot"
-    CUPRONICKEL = "skybluetech:cupronickel_ingot"
-    ULTRAHEATINUM = "skybluetech:ultraheatinum_ingot"
-    SUPERCONDUCT = "skybluetech:superconduct_ingot"
-
-
-class Plates:
-    IRON = "skybluetech:iron_plate"
-    GOLD = "skybluetech:gold_plate"
-    COPPER = "skybluetech:copper_plate"
-
-    TIN = "skybluetech:tin_plate"
-    LEAD = "skybluetech:lead_plate"
-    SILVER = "skybluetech:silver_plate"
-    NICKEL = "skybluetech:nickel_plate"
-    PLATINUM = "skybluetech:platinum_plate"
-
-    BRONZE = "skybluetech:bronze_plate"
-    INVAR = "skybluetech:invar_plate"
-    STEEL = "skybluetech:steel_plate"
-    CUPRONICKEL = "skybluetech:cupronickel_plate"
-    ULTRAHEATINUM = "skybluetech:ultraheatinum_plate"
-    SUPERCONDUCT = "skybluetech:superconduct_plate"
+class ControlCircuit:
+    BASIC = "skybluetech:control_circuit_basic"
+    ADVANCED = "skybluetech:control_circuit_advanced"
+    PROFESSIONAL = "skybluetech:control_circuit_professional"
 
 
 class Dusts:
@@ -56,58 +31,31 @@ class Dusts:
     SULFUR = "skybluetech:sulfur_dust"
 
 
-class Sticks:
-    COPPER = "skybluetech:copper_stick"
-    IRON = "skybluetech:iron_stick"
-    TIN = "skybluetech:tin_stick"
-    SILVER = "skybluetech:silver_stick"
-    PLATINUM = "skybluetech:platinum_stick"
-    STEEL = "skybluetech:steel_stick"
-    BRONZE = "skybluetech:bronze_stick"
-    INVAR = "skybluetech:invar_stick"
-    SUPERCONDUCT = "skybluetech:superconduct_stick"
+class FamicomCartidges:
+    YELLOW = "skybluetech:famicom_cartidge_1"
+    PURPLE = "skybluetech:famicom_cartidge_2"
+    BLUE = "skybluetech:famicom_cartidge_3"
 
 
-class RawOres:
-    TIN = "skybluetech:raw_tin"
-    LEAD = "skybluetech:raw_lead"
-    SILVER = "skybluetech:raw_silver"
-    NICKEL = "skybluetech:raw_nickel"
-    PLATINUM = "skybluetech:raw_platinum"
+class Icons:
+    SHEET = "skybluetech:sheet_item"
 
 
-class Batteries:
-    JUNIOR = "skybluetech:battery_junior"
-    LEADACID = "skybluetech:battery_leadacid"
+class Ingots:
+    TIN = "skybluetech:tin_ingot"
+    LEAD = "skybluetech:lead_ingot"
+    SILVER = "skybluetech:silver_ingot"
+    NICKEL = "skybluetech:nickel_ingot"
+    PLATINUM = "skybluetech:platinum_ingot"
 
-
-class Upgraders:
-    BASIC_SPEED_UPGRADER = "skybluetech:upgrader_basic_speed"
-    BASIC_ENERGY_UPGRADER = "skybluetech:upgrader_basic_energy"
-    GENERIC_EXPANSION_UPGRADER = "skybluetech:upgrader_generic_expansion"
-    GENERIC_AUTOSTOP = "skybluetech:upgrader_generic_autostop"
-    SPEC_MAGMA_FACTORY = "skybluetech:upgrader_spec_magma_factory"
-
-
-class ObjectUpgraders:
-    AUTO_BURNING = "skybluetech:obj_upgrader_autoburning"
-    DIGSPEED = "skybluetech:obj_upgrader_digspeed"
-    FORTUNE = "skybluetech:obj_upgrader_fortune"
-    VEINMINER = "skybluetech:obj_upgrader_veinminer"
-    SPEC_FARMING = "skybluetech:obj_upgrader_spec_farming"
-    SPEC_NOFARM = "skybluetech:obj_upgrader_spec_nofarm"
-
-
-class ControlCircuit:
-    BASIC = "skybluetech:control_circuit_basic"
-    ADVANCED = "skybluetech:control_circuit_advanced"
-    PROFESSIONAL = "skybluetech:control_circuit_professional"
-
-
-class Wrench:
-    # 新增物品后需在 machinery_workstation 中同步添加
-    IRON = "skybluetech:wrench_iron"
-    INVAR = "skybluetech:wrench_invar"
+    BRONZE = "skybluetech:bronze_ingot"
+    INVAR = "skybluetech:invar_ingot"
+    STEEL = "skybluetech:steel_ingot"
+    REFINED_IRON = "skybluetech:refined_iron_ingot"
+    LIGHT_SKYBLUE = "skybluetech:light_skyblue_ingot"
+    CUPRONICKEL = "skybluetech:cupronickel_ingot"
+    ULTRAHEATINUM = "skybluetech:ultraheatinum_ingot"
+    SUPERCONDUCT = "skybluetech:superconduct_ingot"
 
 
 class MetalTools:
@@ -126,12 +74,18 @@ class MetalTools:
     INVAR_MINING_HAMMER = "skybluetech:invar_mining_hammer"
 
 
-class SkyblueTools:
-    AXE = "skybluetech:skyblue_axe"
-    PICKAXE = "skybluetech:skyblue_pickaxe"
-    SHOVEL = "skybluetech:skyblue_shovel"
-    HOE = "skybluetech:skyblue_hoe"
-    SWORD = "skybluetech:skyblue_sword"
+class ObjectUpgraders:
+    AUTO_BURNING = "skybluetech:obj_upgrader_autoburning"
+    DIGSPEED = "skybluetech:obj_upgrader_digspeed"
+    FORTUNE = "skybluetech:obj_upgrader_fortune"
+    VEINMINER = "skybluetech:obj_upgrader_veinminer"
+    SPEC_FARMING = "skybluetech:obj_upgrader_spec_farming"
+    SPEC_NOFARM = "skybluetech:obj_upgrader_spec_nofarm"
+
+
+class Paddle:
+    IRON = "skybluetech:paddle_iron"
+    STEEL = "skybluetech:paddle_steel"
 
 
 class Pincer:
@@ -140,19 +94,66 @@ class Pincer:
     INVAR = "skybluetech:pincer_invar"
 
 
-class Paddle:
-    IRON = "skybluetech:paddle_iron"
-    STEEL = "skybluetech:paddle_steel"
+class Plates:
+    IRON = "skybluetech:iron_plate"
+    GOLD = "skybluetech:gold_plate"
+    COPPER = "skybluetech:copper_plate"
+
+    TIN = "skybluetech:tin_plate"
+    LEAD = "skybluetech:lead_plate"
+    SILVER = "skybluetech:silver_plate"
+    NICKEL = "skybluetech:nickel_plate"
+    PLATINUM = "skybluetech:platinum_plate"
+
+    BRONZE = "skybluetech:bronze_plate"
+    INVAR = "skybluetech:invar_plate"
+    STEEL = "skybluetech:steel_plate"
+    CUPRONICKEL = "skybluetech:cupronickel_plate"
+    ULTRAHEATINUM = "skybluetech:ultraheatinum_plate"
+    SUPERCONDUCT = "skybluetech:superconduct_plate"
 
 
-class FamicomCartidges:
-    YELLOW = "skybluetech:famicom_cartidge_1"
-    PURPLE = "skybluetech:famicom_cartidge_2"
-    BLUE = "skybluetech:famicom_cartidge_3"
+class RawOres:
+    TIN = "skybluetech:raw_tin"
+    LEAD = "skybluetech:raw_lead"
+    SILVER = "skybluetech:raw_silver"
+    NICKEL = "skybluetech:raw_nickel"
+    PLATINUM = "skybluetech:raw_platinum"
 
 
-class Icons:
-    SHEET = "skybluetech:sheet_item"
+class SkyblueTools:
+    AXE = "skybluetech:skyblue_axe"
+    PICKAXE = "skybluetech:skyblue_pickaxe"
+    SHOVEL = "skybluetech:skyblue_shovel"
+    HOE = "skybluetech:skyblue_hoe"
+    SWORD = "skybluetech:skyblue_sword"
+
+
+class Sticks:
+    COPPER = "skybluetech:copper_stick"
+    IRON = "skybluetech:iron_stick"
+    TIN = "skybluetech:tin_stick"
+    SILVER = "skybluetech:silver_stick"
+    PLATINUM = "skybluetech:platinum_stick"
+    STEEL = "skybluetech:steel_stick"
+    BRONZE = "skybluetech:bronze_stick"
+    INVAR = "skybluetech:invar_stick"
+    SUPERCONDUCT = "skybluetech:superconduct_stick"
+
+
+class Upgraders:
+    EMPTY = "skybluetech:upgrader_plate_empty"
+    BASIC_SPEED_UPGRADER = "skybluetech:upgrader_basic_speed"
+    BASIC_ENERGY_UPGRADER = "skybluetech:upgrader_basic_energy"
+    GENERIC_EXPANSION_UPGRADER = "skybluetech:upgrader_generic_expansion"
+    GENERIC_AUTOSTOP = "skybluetech:upgrader_generic_autostop"
+    SPEC_MAGMA_FACTORY = "skybluetech:upgrader_spec_magma_factory"
+
+
+class Wrench:
+    # 新增物品后需在 machinery_workstation 中同步添加
+    IRON = "skybluetech:wrench_iron"
+    INVAR = "skybluetech:wrench_invar"
 
 
 AIR_COMPRESS_UNIT = "skybluetech:air_compress_unit"
