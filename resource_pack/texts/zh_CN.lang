@@ -332,3 +332,4 @@ tile.skybluetech:ultraheatinum_block.name=耐热块
 item.skybluetech:invar_mining_hammer.name=殷钢矿锤
 item.skybluetech:bronze_mining_hammer.name=青铜矿锤
 tile.skybluetech:reacting_thermal_generator.name=热力反应发电机
+item.skybluetech:upgrader_plate_empty.name=升级基板

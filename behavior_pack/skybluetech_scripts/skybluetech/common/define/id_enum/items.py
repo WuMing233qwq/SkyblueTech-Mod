@@ -3,6 +3,7 @@ class Batteries:
     JUNIOR = "skybluetech:battery_junior"
     LEADACID = "skybluetech:battery_leadacid"
 
+
 class ControlCircuit:
     BASIC = "skybluetech:control_circuit_basic"
     ADVANCED = "skybluetech:control_circuit_advanced"
