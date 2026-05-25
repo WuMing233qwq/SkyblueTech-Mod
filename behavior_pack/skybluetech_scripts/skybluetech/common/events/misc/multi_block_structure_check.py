@@ -24,6 +24,8 @@ class MultiBlockStructureCheckRequest(CustomC2SEvent):
 
 
 class MultiBlockStructureCheckResponse(CustomS2CEvent):
+    name = "st:MBSCR"
+
     def __init__(self, x, y, z, palette, pos_block_data):
         # type: (int, int, int, dict[int, str | list[str]], dict[int, list[tuple[int, int, int]]]) -> None
         self.x = x
