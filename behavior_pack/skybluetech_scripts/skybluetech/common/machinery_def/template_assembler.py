@@ -6,7 +6,13 @@ from ..mini_jei.machinery.template_assembler import (
     Input,
 )
 
+
 STORE_RF_MAX = 16000
+TEMPLATE_SLOT_INDEX = 9
+K_TEMPLATE_ITEMS = "st:template_items"
+K_TEMPLATE_ITEM_ID = "id"
+K_TEMPLATE_ITEM_IS_TAG = "is_tag"
+K_TEMPLATE_ITEM_COUNT = "count"
 
 recipes = TemplateAssemblerRecipesCollection(
     TemplateAssemblerRecipe(
@@ -36,3 +42,23 @@ recipes = TemplateAssemblerRecipesCollection(
         tick_duration=120,
     ),
 )
+
+_cached_graphs = {}  # type: dict[tuple[int, ...], str]
+
+
+def _init_cached_graphs(world_seed):
+    # type: (int) -> None
+    if _cached_graphs:
+        return
+    from ..misc.inscribing_template import GetTemplateGraph
+
+    for template_item_id in recipes.recipes_mapping:
+        _cached_graphs[tuple(GetTemplateGraph(template_item_id, world_seed))] = (
+            template_item_id
+        )
+
+
+def GetResultByTemplateGraph(graph, world_seed):
+    # type: (list[int], int) -> str | None
+    _init_cached_graphs(world_seed)
+    return _cached_graphs.get(tuple(graph))

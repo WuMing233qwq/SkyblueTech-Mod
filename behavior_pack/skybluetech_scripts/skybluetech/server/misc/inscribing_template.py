@@ -70,7 +70,7 @@ def onGraphUpload(event):
         logger.error("Player upload graph failed: %s" % event.player_id)
         return
     ud = mainhand_item.userData or {}
-    ud[K_UD_TEMPLATE_GRAPH] = nbt.ByteArray(graph)
+    ud[K_UD_TEMPLATE_GRAPH] = [nbt.Int(i) for i in graph]
     mainhand_item.userData = ud
     if not ud.get(K_UD_MODIFIED, False):
         ud[K_UD_MODIFIED] = True

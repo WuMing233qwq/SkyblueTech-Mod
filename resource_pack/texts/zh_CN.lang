@@ -337,3 +337,5 @@ item.skybluetech:bronze_mining_hammer.name=青铜矿锤
 tile.skybluetech:reacting_thermal_generator.name=热力反应发电机
 item.skybluetech:coil_copper.name=铜线圈
 item.skybluetech:upgrader_plate_empty.name=升级基板
+item.skybluetech:inscribing_template.name=刻印模版
+tile.skybluetech:template_assembler.name=模版成型机

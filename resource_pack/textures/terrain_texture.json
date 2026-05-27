@@ -437,6 +437,9 @@
         "skybluetech:tank_steel": {
             "textures": "textures/models/tanks/tank_steel_texture"
         },
+        "skybluetech:template_assembler": {
+            "textures": "textures/models/template_assembler_texture"
+        },
         "skybluetech:thermal_generator_front": {
             "textures": "textures/machines/thermal_generator_front"
         },

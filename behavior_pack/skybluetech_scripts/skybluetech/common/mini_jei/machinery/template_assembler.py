@@ -25,7 +25,7 @@ class TemplateAssemblerRecipe(MachineRecipe):
         MachineRecipe.__init__(
             self,
             {CategoryType.ITEM: input_items},
-            {CategoryType.ITEM: {0: Output(output_item_id)}},
+            {CategoryType.ITEM: {11: Output(output_item_id)}},
             power_cost,
             tick_duration,
         )
