@@ -400,6 +400,9 @@
         "skybluetech:solar_panel_pane": {
             "textures": "textures/items/solar_panel_pane"
         },
+        "skybluetech:soldering_ingot": {
+            "textures": "textures/items/ingots/soldering_ingot"
+        },
         "skybluetech:steel_dust": {
             "textures": "textures/items/dusts/steel_dust"
         },

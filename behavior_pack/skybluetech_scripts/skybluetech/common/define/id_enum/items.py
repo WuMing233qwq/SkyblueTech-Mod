@@ -54,6 +54,7 @@ class Ingots:
     STEEL = "skybluetech:steel_ingot"
     REFINED_IRON = "skybluetech:refined_iron_ingot"
     LIGHT_SKYBLUE = "skybluetech:light_skyblue_ingot"
+    SOLDERING = "skybluetech:soldering_ingot"
     CUPRONICKEL = "skybluetech:cupronickel_ingot"
     ULTRAHEATINUM = "skybluetech:ultraheatinum_ingot"
     SUPERCONDUCT = "skybluetech:superconduct_ingot"
