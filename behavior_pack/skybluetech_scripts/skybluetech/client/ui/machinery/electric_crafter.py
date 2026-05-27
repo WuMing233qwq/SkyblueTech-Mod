@@ -24,6 +24,8 @@ GRID_PATH = MAIN_PATH / "crafting_grid"
 MASK_REL_PATH = "item_cell_overlay_ref/mask"
 ITEM_RENDERED_REL_PATH = "item_cell_overlay_ref/item_renderer"
 
+DEFAULT_GRAY_COLOR = 0x8F * 1.0 / 0xFF
+
 
 @RegistToolDeltaScreen("ElectricCrafterUI.main", is_proxy=True)
 class ElectricCrafterUI(MachinePanelUIProxyEx):
@@ -52,9 +54,11 @@ class ElectricCrafterUI(MachinePanelUIProxyEx):
             mask = slot[MASK_REL_PATH].asImage()
             ir = slot[ITEM_RENDERED_REL_PATH].asItemRenderer()
             if item_and_aux is None:
-                mask.SetSpriteColor((0.5, 0.5, 0.5))
+                gray = DEFAULT_GRAY_COLOR * 0.5
+                mask.SetSpriteColor((gray, gray, gray))
                 ir.SetVisible(False)
             else:
-                mask.SetSpriteColor((1, 1, 1))
+                gray = DEFAULT_GRAY_COLOR
+                mask.SetSpriteColor((gray, gray, gray))
                 ir.SetVisible(True)
                 ir.SetUiItem(Item(*item_and_aux))

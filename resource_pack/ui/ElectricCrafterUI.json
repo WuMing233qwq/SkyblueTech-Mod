@@ -253,20 +253,6 @@
         "layer": 1,
         "controls": [
             {
-                "bg": {
-                    "type": "image",
-                    "layer": 1,
-                    "keep_ratio": false,
-                    "nineslice_size": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "texture": "textures/ui/bg_frame_01"
-                }
-            },
-            {
                 "item_renderer": {
                     "type": "custom",
                     "renderer": "inventory_item_renderer",
@@ -288,12 +274,13 @@
                         "100%+-2px"
                     ],
                     "layer": 2,
+                    "alpha": 0.5,
                     "color": [
-                        1.0,
-                        1.0,
-                        1.0
+                        0.5450980392156862,
+                        0.5450980392156862,
+                        0.5450980392156862
                     ],
-                    "texture": "textures/ui/gray_alpha_mask"
+                    "texture": "textures/ui/white"
                 }
             }
         ]
