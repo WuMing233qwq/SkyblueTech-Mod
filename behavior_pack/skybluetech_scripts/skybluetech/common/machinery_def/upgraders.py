@@ -4,6 +4,7 @@ from ...common.define.id_enum.items import Upgraders
 # 速度提升倍率 (原 1.0, 累加)
 SPEED_POSITIVE = {
     Upgraders.BASIC_SPEED_UPGRADER: 0.5,
+    Upgraders.SPEC_MAGMA_FACTORY: 0.8,
 }
 # 速度衰减倍率 (原 1.0, 累加)
 SPEED_NEGATIVE = {
@@ -13,6 +14,7 @@ SPEED_NEGATIVE = {
 POWER_POSITIVE = {
     Upgraders.BASIC_SPEED_UPGRADER: 0.7,
     Upgraders.GENERIC_EXPANSION_UPGRADER: 0.4,
+    Upgraders.SPEC_MAGMA_FACTORY: 0.2,
 }
 # 能量消耗衰减倍率 (原 1.0, 累加)
 POWER_NEGATIVE = {
