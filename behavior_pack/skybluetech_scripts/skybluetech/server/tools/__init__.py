@@ -9,6 +9,7 @@ from . import (
     skyblue_hoe,
     skyblue_pickaxe,
     skyblue_shovel,
+    skyblue_sword,
     transmitter_visual_checker,
     upgraders,
 )
@@ -22,6 +23,7 @@ __all__ = [
     "simple_machine_checker",
     "skyblue_axe",
     "skyblue_hoe",
+    "skyblue_sword",
     "skyblue_pickaxe",
     "skyblue_shovel",
     "transmitter_visual_checker",
