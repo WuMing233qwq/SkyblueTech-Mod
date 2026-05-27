@@ -1,7 +1,13 @@
 {
     "format_version": "1.10",
     "minecraft:item": {
-        "components": {},
+        "components": {
+            "minecraft:tags": {
+                "tags": [
+                    "ingots/soldering"
+                ]
+            }
+        },
         "description": {
             "category": "skybluetech",
             "identifier": "skybluetech:soldering_ingot"
