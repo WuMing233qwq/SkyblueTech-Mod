@@ -4,6 +4,10 @@ class Batteries:
     LEADACID = "skybluetech:battery_leadacid"
 
 
+class Coils:
+    COPPER = "skybluetech:coil_copper"
+
+
 class ControlCircuit:
     BASIC = "skybluetech:control_circuit_basic"
     ADVANCED = "skybluetech:control_circuit_advanced"

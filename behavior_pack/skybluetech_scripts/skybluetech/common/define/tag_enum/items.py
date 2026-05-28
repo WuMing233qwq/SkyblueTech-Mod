@@ -11,6 +11,7 @@ class IngotTag:
     INVAR = "ingots/invar"
     STEEL = "ingots/steel"
     REFINED_IRON = "ingots/refined_iron"
+    SOLDERING = "ingots/soldering"
     CUPRONICKEL = "ingots/cupronickel"
     ULTRAHEATINUM = "ingots/ultraheatinum"
     SUPERCONDUCT = "ingots/superconduct"

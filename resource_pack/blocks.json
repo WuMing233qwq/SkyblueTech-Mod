@@ -780,6 +780,9 @@
         "client_entity": {},
         "sound": "glass"
     },
+    "skybluetech:template_assembler": {
+        "sound": "iron"
+    },
     "skybluetech:thermal_generator": {
         "sound": "iron",
         "textures": {
