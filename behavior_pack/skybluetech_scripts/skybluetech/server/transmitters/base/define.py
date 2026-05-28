@@ -31,6 +31,7 @@ class BaseNetwork(Generic[_APT]):
         self.transmitter_id = transmitter_id
         self.transfer_speed = self.calc_transfer_speed(transmitter_id)
         self.nodes = nodes
+        self.enabled = True
         self._nodes_to_discard = set(nodes)
         for _i in group_inputs | group_outputs:
             _i.bound_network(self)

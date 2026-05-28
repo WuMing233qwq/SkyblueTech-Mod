@@ -42,6 +42,9 @@ class WireNetwork(BaseNetwork["WireAccessPoint"]):
             dim, group_inputs, group_outputs, nodes, transmitter_id
         )
         self.entities_hit_wire = {}  # type: dict[str, tuple[int, int, int]]
+        self.power_through_avg = 0.0
+        self.power_through_sum = 0.0
+        self.run_ticks = 0
 
     @classmethod
     def calc_transfer_speed(cls, block_name):

@@ -612,4 +612,6 @@ class LogicModule(Generic[_NT, _APT], ServerListenerService):
         self._tick_counter += 1
         if self._tick_counter % 5 == 0:
             for network in self.networks_pool:
+                if not network.enabled:
+                    continue
                 self.on_network_tick(network)

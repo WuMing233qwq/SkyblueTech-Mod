@@ -101,6 +101,12 @@ def onNetworkTick(network):
         if tick_capacity <= 0:
             break
     network.trigger_shock(transfered_rf)
+    network.power_through_sum += transfered_rf
+    network.run_ticks += 1
+    if network.run_ticks >= 4:
+        network.run_ticks = 0
+        network.power_through_avg = network.power_through_sum / 4.0
+        network.power_through_sum = 0.0
 
 
 logic_module = LogicModule(
