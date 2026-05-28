@@ -121,6 +121,7 @@ class RawOres:
     SILVER = "skybluetech:raw_silver"
     NICKEL = "skybluetech:raw_nickel"
     PLATINUM = "skybluetech:raw_platinum"
+    URANIUM = "skybluetech:raw_uranium"
 
 
 class SkyblueTools:

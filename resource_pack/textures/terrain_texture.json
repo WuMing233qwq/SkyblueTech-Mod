@@ -120,6 +120,9 @@
         "skybluetech:deepslate_tin_ore": {
             "textures": "textures/blocks/ore/deepslate_tin_ore"
         },
+        "skybluetech:deepslate_uranium_ore": {
+            "textures": "textures/blocks/ore/deepslate_uranium_ore"
+        },
         "skybluetech:digger": {
             "textures": "textures/models/digger_model"
         },
@@ -457,6 +460,9 @@
         },
         "skybluetech:tin_ore": {
             "textures": "textures/blocks/ore/tin_ore"
+        },
+        "skybluetech:uranium_ore": {
+            "textures": "textures/blocks/ore/uranium_ore"
         },
         "skybluetech:ultraheatinum_block": {
             "textures": "textures/blocks/ingot_block/ultraheatinum_block"

@@ -334,6 +334,9 @@
         "skybluetech:raw_tin": {
             "textures": "textures/items/raw_ore/raw_tin"
         },
+        "skybluetech:raw_uranium": {
+            "textures": "textures/items/raw_ore/raw_uranium"
+        },
         "skybluetech:redstoneflux_core": {
             "textures": "textures/items/redstoneflux_core"
         },

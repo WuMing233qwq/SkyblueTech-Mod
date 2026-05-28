@@ -9,11 +9,13 @@
                 "skybluetech:silver_ore",
                 "skybluetech:nickel_ore",
                 "skybluetech:platinum_ore",
+                "skybluetech:uranium_ore",
                 "skybluetech:deepslate_tin_ore",
                 "skybluetech:deepslate_lead_ore",
                 "skybluetech:deepslate_silver_ore",
                 "skybluetech:deepslate_nickel_ore",
-                "skybluetech:deepslate_platinum_ore"
+                "skybluetech:deepslate_platinum_ore",
+                "skybluetech:deepslate_uranium_ore"
             ]
         },
         {
@@ -24,7 +26,8 @@
                 "skybluetech:raw_lead",
                 "skybluetech:raw_silver",
                 "skybluetech:raw_nickel",
-                "skybluetech:raw_platinum"
+                "skybluetech:raw_platinum",
+                "skybluetech:raw_uranium"
             ]
         },
         {
