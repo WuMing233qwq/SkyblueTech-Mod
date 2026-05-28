@@ -1913,5 +1913,155 @@
                 }
             }
         ]
+    },
+    "template_assembler_recipes": {
+        "type": "panel",
+        "$arrow_img_anchor": "top_left",
+        "$arrow_img_offset": [
+            90.0,
+            60.0
+        ],
+        "size": [
+            180.0,
+            80.0
+        ],
+        "layer": 1,
+        "controls": [
+            {
+                "bg": {
+                    "type": "image",
+                    "nineslice_size": [
+                        2.0,
+                        2.0,
+                        2.0,
+                        2.0
+                    ],
+                    "texture": "textures/ui/rect_panel_bg"
+                }
+            },
+            {
+                "slot0@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        10,
+                        10
+                    ]
+                }
+            },
+            {
+                "slot1@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "layer": 1,
+                    "offset": [
+                        30,
+                        10
+                    ]
+                }
+            },
+            {
+                "slot2@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        50,
+                        10
+                    ]
+                }
+            },
+            {
+                "slot3@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        10,
+                        30
+                    ]
+                }
+            },
+            {
+                "slot4@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        30,
+                        30
+                    ]
+                }
+            },
+            {
+                "slot5@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        50,
+                        30
+                    ]
+                }
+            },
+            {
+                "slot6@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        10,
+                        50
+                    ]
+                }
+            },
+            {
+                "slot7@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        30,
+                        50
+                    ]
+                }
+            },
+            {
+                "slot8@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        50,
+                        50
+                    ]
+                }
+            },
+            {
+                "slot11@SkybluePanelLib.item_displayer": {
+                    "offset": [
+                        28,
+                        20
+                    ]
+                }
+            },
+            {
+                "slot10@SkybluePanelLib.item_displayer": {
+                    "offset": [
+                        48,
+                        -20
+                    ]
+                }
+            },
+            {
+                "slot9@SkybluePanelLib.item_displayer": {
+                    "offset": [
+                        28,
+                        -20
+                    ]
+                }
+            },
+            {
+                "progress@CompressorUI.compressor_progress": {
+                    "offset": [
+                        0,
+                        0
+                    ]
+                }
+            }
+        ]
     }
 }

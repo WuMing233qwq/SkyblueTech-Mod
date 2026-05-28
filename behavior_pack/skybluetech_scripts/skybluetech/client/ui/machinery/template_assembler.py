@@ -13,6 +13,7 @@ from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
     K_STORE_RF,
 )
 from skybluetech_scripts.skybluetech.common.machinery_def.template_assembler import (
+    recipes,
     STORE_RF_MAX,
     K_TEMPLATE_ITEMS,
     K_TEMPLATE_ITEM_ID,
@@ -20,6 +21,7 @@ from skybluetech_scripts.skybluetech.common.machinery_def.template_assembler imp
     K_TEMPLATE_ITEM_COUNT,
 )
 from ..machinery_extra_pages import CableSettingsPageIndirectional
+from ..recipe_checker import AsRecipeCheckerBtn
 from .define_ex import MachinePanelUIProxyEx, MAIN_PATH
 from .utils import UpdateGenericProgressL2R, UpdatePowerBar
 
@@ -43,6 +45,10 @@ class TemplateAssemblerUI(MachinePanelUIProxyEx):
         self.template_items_required = [None] * 9  # type: list[int | None]
         self.template_items_count_required = [0] * 9  # type: list[int]
         self.update_item_required()
+        AsRecipeCheckerBtn(
+            self.GetElement(MAIN_PATH / "recipe_check_btn").asButton(),
+            recipes,
+        )
 
     def OnTicking(self):
         data = GetBlockEntityData(*self.pos[1:])
@@ -127,4 +133,8 @@ class TemplateAssemblerUI(MachinePanelUIProxyEx):
     )
     def get_grid_item_count(self, index):
         # type: (int) -> str
-        return str(self.template_items_count_required[index])
+        return (
+            str(self.template_items_count_required[index])
+            if self.template_items_count_required[index] > 0
+            else ""
+        )

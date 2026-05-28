@@ -12,6 +12,7 @@ from skybluetech_scripts.skybluetech.common.mini_jei.machinery import (
     oil_extractor,
     reacting_thermal_generator,
     redstone_generator,
+    template_assembler,
 )
 from .define import MachineRecipeRenderer, GeneratorRecipeRenderer
 
@@ -123,6 +124,16 @@ redstone_generator.RedstoneGeneratorRecipe.SetRenderer(
         {
             "render_ui_def_name": "RecipeCheckerLib.redstone_generator_recipes",
             "recipe_icon_id": machinery.REDSTONE_GENERATOR,
+        },
+    )
+)
+template_assembler.TemplateAssemblerRecipe.SetRenderer(
+    type(
+        "TemplateAssemblerRecipeRenderer",
+        (MachineRecipeRenderer,),
+        {
+            "render_ui_def_name": "RecipeCheckerLib.template_assembler_recipes",
+            "recipe_icon_id": machinery.TEMPLATE_ASSEMBLER,
         },
     )
 )

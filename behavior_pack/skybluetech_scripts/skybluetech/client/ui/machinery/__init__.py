@@ -40,5 +40,6 @@ from .redstone_generator import RedstoneGeneratorUI
 from .rf_repeater_plant import RFRepeaterPlantUI
 from .solar_panel import SolarPanelUI
 from .splitter import SplitterUI
+from .template_assembler import TemplateAssemblerUI
 from .thermal_generator import ThermalGeneratorUI
 from .wind_generator import WindGeneratorUI

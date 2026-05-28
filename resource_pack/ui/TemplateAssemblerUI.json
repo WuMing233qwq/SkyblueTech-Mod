@@ -1,4 +1,13 @@
 {
+    "inscribing_template_slot_img": {
+        "type": "image",
+        "size": [
+            18.0,
+            18.0
+        ],
+        "layer": 1,
+        "texture": "textures/ui/slot_inscribing_template"
+    },
     "item_slot_with_visual@netease_container.custom_grid_item": {
         "$cell_overlay_ref|default": "TemplateAssemblerUI.item_visual"
     },
@@ -9,6 +18,15 @@
             18.0
         ],
         "layer": 1,
+        "bindings": [
+            {
+                "binding_name_override": "#visible",
+                "binding_collection_name": "netease_container",
+                "binding_condition": "always",
+                "binding_type": "collection",
+                "binding_name": "#TemplateAssemblerUI.crafting_slot_item_visual_visible"
+            }
+        ],
         "controls": [
             {
                 "item_renderer": {
@@ -28,13 +46,6 @@
                             "binding_condition": "always_when_visible",
                             "binding_type": "collection",
                             "binding_name": "#TemplateAssemblerUI.crafting_slot_item_visual_id_aux"
-                        },
-                        {
-                            "binding_name_override": "#visible",
-                            "binding_collection_name": "netease_container",
-                            "binding_condition": "always",
-                            "binding_type": "collection",
-                            "binding_name": "#TemplateAssemblerUI.crafting_slot_item_visual_visible"
                         }
                     ]
                 }
@@ -50,15 +61,15 @@
                     ],
                     "layer": 1,
                     "font_scale_factor": 0.9999999999999997,
-                    "font_type": "unicode",
+                    "font_type": "default",
                     "shadow": true,
+                    "text": "#TemplateAssemblerUI.crafting_slot_item_visual_count",
                     "text_alignment": "center",
                     "bindings": [
                         {
-                            "binding_name_override": "#text",
+                            "binding_type": "collection",
                             "binding_collection_name": "netease_container",
                             "binding_condition": "always_when_visible",
-                            "binding_type": "collection",
                             "binding_name": "#TemplateAssemblerUI.crafting_slot_item_visual_count"
                         }
                     ]
@@ -188,6 +199,7 @@
                                                         "controls": [
                                                             {
                                                                 "slot@netease_container.custom_grid_item": {
+                                                                    "$cell_overlay_ref|default": "TemplateAssemblerUI.inscribing_template_slot_img",
                                                                     "collection_index": "$slot_index"
                                                                 }
                                                             }
