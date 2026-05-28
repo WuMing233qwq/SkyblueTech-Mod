@@ -338,6 +338,9 @@
         "skybluetech:nickel_ore": {
             "textures": "textures/blocks/ore/nickel_ore"
         },
+        "skybluetech:nether_sulfur_ore": {
+            "textures": "textures/blocks/ore/nether_sulfur_ore"
+        },
         "skybluetech:oil_extractor_front": {
             "textures": "textures/machines/oil_extractor_front"
         },

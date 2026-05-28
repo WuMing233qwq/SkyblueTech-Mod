@@ -639,6 +639,9 @@
     "skybluetech:nickel_ore": {
         "textures": "skybluetech:nickel_ore"
     },
+    "skybluetech:nether_sulfur_ore": {
+        "textures": "skybluetech:nether_sulfur_ore"
+    },
     "skybluetech:oil_extractor": {
         "sound": "iron",
         "textures": {
@@ -699,7 +702,8 @@
             "south": "skybluetech:generator_frame_side",
             "up": "skybluetech:generator_frame_top",
             "west": "skybluetech:generator_frame_side"
-        }
+        },
+        "sound": "iron"
     },
     "skybluetech:redstone_furnace": {
         "textures": {

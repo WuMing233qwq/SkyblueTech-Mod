@@ -1,0 +1,47 @@
+{
+    "format_version": "1.14.0",
+    "minecraft:feature_rules": {
+        "description": {
+            "identifier": "skybluetech:nether_sulfur_ore_feature",
+            "places_feature": "skybluetech:nether_sulfur_ore_spawn"
+        },
+        "conditions": {
+            "placement_pass": "underground_pass",
+            "minecraft:biome_filter": [
+                {
+                    "test": "has_biome_tag",
+                    "operator": "==",
+                    "value": "nether"
+                }
+            ]
+        },
+        "distribution": {
+            "iterations": 40,
+            "coordinate_eval_order": "yxz",
+            "x": {
+                "distribution": "uniform",
+                "extent": [
+                    0,
+                    16
+                ]
+            },
+            "y": {
+                "distribution": "triangle",
+                "extent": [
+                    40,
+                    160
+                ],
+                "spread": [
+                    60
+                ]
+            },
+            "z": {
+                "distribution": "uniform",
+                "extent": [
+                    0,
+                    16
+                ]
+            }
+        }
+    }
+}
