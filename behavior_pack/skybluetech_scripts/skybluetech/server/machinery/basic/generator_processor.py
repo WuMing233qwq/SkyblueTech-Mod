@@ -72,7 +72,9 @@ class GeneratorProcessor(BaseGenerator, ProcessorBase):
             ):
                 self.start_next()
                 return
-            elif slot_pos in self.input_slots:
+            elif slot_pos in self.input_slots and self.recipe_index is None:
+                # 只有在没开始运行配方时才重新检查配方
+                # 在配方开始运行后就不检查了
                 self.recheck_recipe()
 
     def IsValidInput(self, slot, item):
@@ -171,6 +173,7 @@ class GeneratorProcessor(BaseGenerator, ProcessorBase):
 
     def start_recipe(self, recipe_index, recipe):
         # type: (int, MachineRecipeBase) -> None
+        self.recipe_index = recipe_index
         if self.process_item:
             slotitems = self.GetInputSlotItems()
             for slot_pos, input in recipe.inputs.get(CategoryType.ITEM, {}).items():
@@ -186,7 +189,6 @@ class GeneratorProcessor(BaseGenerator, ProcessorBase):
                 self._on_reduced_fluid(
                     slot_pos, input.id, input.count, idx == last_index
                 )
-        self.recipe_index = recipe_index
 
     def finish_recipe(self, recipe):
         # type: (MachineRecipeBase) -> None
