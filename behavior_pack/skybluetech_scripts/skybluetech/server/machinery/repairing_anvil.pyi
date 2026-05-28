@@ -12,7 +12,6 @@ from .basic import (
     RegisterMachine,
 )
 
-
 @RegisterMachine
 class RepairingAnvil(GUIControl, MultiFluidContainer, UpgradeControl):
     block_name = MACHINE_ID
