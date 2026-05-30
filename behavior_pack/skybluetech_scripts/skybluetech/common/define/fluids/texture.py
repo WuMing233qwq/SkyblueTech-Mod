@@ -1,11 +1,7 @@
 from ..id_enum import fluids
 
-ROOT_TEXTURE = "textures/fluid"
-TEXTURE_BASIC_FLUID = "textures/fluid/basic_fluid"
-TEXTURE_WATER = "textures/fluid/water"
-TEXTURE_LAVA = "textures/fluid/lava"
 
-COLORS = {
+FLUID_COLORS_AND_TEXTURES = {
     fluids.DISTILLED_WATER: ((0, 229, 255), 3),
     fluids.HEAVY_LAVA: ((168, 36, 36), 0),
     fluids.HYDROGEN: ((220, 240, 255), 4),
@@ -28,38 +24,46 @@ COLORS = {
     fluids.Molten.TIN: ((233, 233, 233), 1),
 }
 
-IDX_MAP = {
-    v: k
-    for k, v in {
-        "gray_lava_flow": 0,
-        "gray_molten_metal_still": 1,
-        "gray_lava_still": 2,
-        "basic_water_static": 3,
-        "gas": 4,
-    }.items()
+TEXTURE_2_INDEX = {
+    "textures/fluid/gray_lava_flow": 0,
+    "textures/fluid/gray_molten_metal_still": 1,
+    "textures/fluid/gray_lava_still": 2,
+    "textures/fluid/basic_water_static": 3,
+    "textures/fluid/gas": 4,
 }
+INDEX_2_TEXTUREURE = {v: k for k, v in TEXTURE_2_INDEX.items()}
 
-BASIC_TEXTURES = {
-    "minecraft:water": TEXTURE_WATER,
-    "minecraft:flowing_water": TEXTURE_WATER,
-    "minecraft:lava": TEXTURE_LAVA,
-    "minecraft:flowing_lava": TEXTURE_LAVA,
+
+NONCOLOR_TEXTURES = {
+    "minecraft:water": "textures/fluid/water",
+    "minecraft:flowing_water": "textures/fluid/flowing_water",
+    "minecraft:lava": "textures/fluid/lava",
+    "minecraft:flowing_lava": "textures/fluid/flowing_lava",
     #
-    fluids.DEEPSLATE_LAVA: ROOT_TEXTURE + "/deepslate_lava_still",
-    fluids.METHANE_MUD: ROOT_TEXTURE + "/methane_mud",
+    fluids.DEEPSLATE_LAVA: "textures/fluid/deepslate_lava_still",
+    fluids.METHANE_MUD: "textures/fluid/methane_mud",
 }
 
-TYPE_BASIC_IMG = 0
-TYPE_SPECIAL_IMG = 1
-TYPE_ERROR = 2
 
-
-def getBaseTexture(fluid_id):
+def GetFluidTextureAndColor(fluid_id):
     # type: (str) -> tuple[str, tuple[int, int, int] | None]
-    if fluid_id in BASIC_TEXTURES:
-        return BASIC_TEXTURES.get(fluid_id, TEXTURE_BASIC_FLUID), None
-    elif fluid_id in COLORS:
-        color, texture_idx = COLORS[fluid_id]
-        return "textures/fluid/" + IDX_MAP[texture_idx], color
+    if fluid_id in NONCOLOR_TEXTURES:
+        return NONCOLOR_TEXTURES.get(fluid_id, "textures/fluid/basic_fluid"), None
+    elif fluid_id in FLUID_COLORS_AND_TEXTURES:
+        color, texture_idx = FLUID_COLORS_AND_TEXTURES[fluid_id]
+        return INDEX_2_TEXTUREURE[texture_idx], color
     else:
-        return TEXTURE_BASIC_FLUID, None
+        return "textures/fluid/basic_fluid", None
+
+
+def RegisterFluidTexture(fluid_id, texture_path, color=None):
+    # type: (str, str, tuple[int, int, int] | None) -> None
+    if color is None:
+        NONCOLOR_TEXTURES[fluid_id] = texture_path
+    else:
+        idx = TEXTURE_2_INDEX.get(texture_path, None)
+        if idx is None:
+            idx = len(TEXTURE_2_INDEX)
+            TEXTURE_2_INDEX[texture_path] = idx
+            INDEX_2_TEXTUREURE[idx] = texture_path
+        FLUID_COLORS_AND_TEXTURES[fluid_id] = (color, idx)
