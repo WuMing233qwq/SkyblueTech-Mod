@@ -23,6 +23,13 @@ class ChestLootTableHandler(object):
 
     def handle_village_blacksmith(self, event):
         # type: (OnContainerFillLoottableServerEvent) -> None
+        # 额外产出:
+        # - id_enum.Ingots.TIN(1-6)
+        # - id_enum.METAL_HAMMER(随机耐久)
+        # - id_enum.Wrench.IRON(1-6)
+        # - id_enum.Pincer.IRON(1-6)
+        # - id_enum.Ingots.SILVER(1-6)
+        # - id_enum.Ingots.LEAD(1-6)
         if random.random() < 0.8:
             event.itemList.append(
                 Item(
@@ -73,6 +80,10 @@ class ChestLootTableHandler(object):
 
     def handle_monster_room(self, event):
         # type: (OnContainerFillLoottableServerEvent) -> None
+        # 额外产出: 随机一个
+        # - id_enum.FamicomCartidges.YELLOW
+        # - id_enum.FamicomCartidges.PURPLE
+        # - id_enum.FamicomCartidges.BLUE
         if random.random() < 0.5:
             items = [
                 id_enum.FamicomCartidges.YELLOW,
@@ -84,6 +95,9 @@ class ChestLootTableHandler(object):
 
     def handle_nether_bridge(self, event):
         # type: (OnContainerFillLoottableServerEvent) -> None
+        # 额外产出: 随机一个刻印模板, 目标物品为
+        # - id_enum.Upgraders.BASIC_SPEED_UPGRADER
+        # - id_enum.Upgraders.BASIC_ENERGY_UPGRADER
         if random.random() < 0.4:
             event.itemList.append(
                 GenerateInscribingTemplateByItemId(
