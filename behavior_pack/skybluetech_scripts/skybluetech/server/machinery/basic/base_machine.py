@@ -2,6 +2,7 @@
 from skybluetech_scripts.tooldelta.events.server.block import (
     ServerPlaceBlockEntityEvent,
     BlockNeighborChangedServerEvent,
+    BlockStrengthChangedServerEvent,
     ServerEntityTryPlaceBlockEvent,
 )
 from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecutorMeta
@@ -65,6 +66,11 @@ class BaseMachine(object):
     #     # type: () -> bool
     #     "事件方法, 超类方法什么也不做。"
     #     return False
+
+    def OnBlockRedstoneStrengthChanged(self, event):
+        # type: (BlockStrengthChangedServerEvent) -> None
+        "事件方法, 方块红石信号强度变化时调用。"
+        pass
 
     def OnUnload(self):
         # type: () -> None

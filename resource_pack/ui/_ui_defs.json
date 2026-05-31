@@ -52,6 +52,7 @@
         "ui/ReactingThermalGeneratorUI.json",
         "ui/RecipeCheckerLib.json",
         "ui/RecipeCheckerUI.json",
+        "ui/RedstoneFluxBrakeUI.json",
         "ui/RedstoneFurnaceUI.json",
         "ui/RedstoneGeneratorUI.json",
         "ui/RFRepeaterPlantBuildUI.json",

@@ -146,6 +146,7 @@ tile.skybluetech:wire_insulated_superconduct.name=绝缘超导体线缆
 tile.skybluetech:wire_insulated_tin.name=绝缘锡线缆
 tile.skybluetech:creative_generator.name=§d创造模式发电机
 tile.skybluetech:creative_power_acceptor.name=§d虚空放电器
+tile.skybluetech:redstoneflux_brake.name=能源控制闸
 tile.skybluetech:deepslate_lava.name=深层岩浆
 tile.skybluetech:deepslate_lead_ore.name=深层铅矿石
 tile.skybluetech:deepslate_nickel_ore.name=深层镍矿石

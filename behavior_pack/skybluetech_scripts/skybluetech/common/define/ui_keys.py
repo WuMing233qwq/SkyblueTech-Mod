@@ -1,2 +1,3 @@
 HOVER_TEXT_DISPLAYER_UI = "HoverTextDisplayerUI"
 RF_REPEATER_PLANT_UI = "RFRepeaterPlantUI"
+REDSTONEFLUX_BRAKE_UI = "RedstoneFluxBrakeUI"

@@ -37,6 +37,7 @@ from .mixer import Mixer
 from .oil_extractor import OilExtractor
 from .pump import Pump
 from .reacting_thermal_generator import ReactingThermalGenerator
+from .redstoneflux_brake import RedstonefluxBrake
 from .redstone_furnace import RedstoneFurnace
 from .redstone_generator import RedstoneGenerator
 from .rf_repeater_plant import RFRepeaterPlant

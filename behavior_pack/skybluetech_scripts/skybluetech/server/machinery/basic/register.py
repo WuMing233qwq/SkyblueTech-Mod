@@ -4,6 +4,7 @@ from skybluetech_scripts.tooldelta.events.server import (
     ServerPlaceBlockEntityEvent,
     ServerBlockEntityTickEvent,
     BlockNeighborChangedServerEvent,
+    BlockStrengthChangedServerEvent,
     BlockRemoveServerEvent,
     ServerBlockUseEvent,
     ServerEntityTryPlaceBlockEvent,
@@ -72,6 +73,14 @@ def onNeighborChanged(event):
     m = pool.GetMachineStrict(event.dimensionId, event.posX, event.posY, event.posZ)
     if m:
         m.OnNeighborChanged(event)
+
+
+@BlockStrengthChangedServerEvent.Listen()
+def onBlockStrengthChanged(event):
+    # type: (BlockStrengthChangedServerEvent) -> None
+    m = pool.GetMachineStrict(event.dimensionId, event.posX, event.posY, event.posZ)
+    if m:
+        m.OnBlockRedstoneStrengthChanged(event)
 
 
 @ServerBlockEntityTickEvent.Listen()

@@ -1,0 +1,381 @@
+{
+    "main@common.base_screen": {
+        "$screen_content": "RedstoneFluxBrakeUI.redstone_flux_brake_ui"
+    },
+    "namespace": "RedstoneFluxBrakeUI",
+    "redstone_flux_brake_ui": {
+        "type": "panel",
+        "size": [
+            180.0,
+            200.0
+        ],
+        "layer": 1,
+        "controls": [
+            {
+                "bg@common.dialog_background_opaque": {}
+            },
+            {
+                "machine_label": {
+                    "type": "label",
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        0.0,
+                        4.0
+                    ],
+                    "layer": 2,
+                    "font_scale_factor": 1.4,
+                    "font_type": "default",
+                    "shadow": true,
+                    "text": "能源控制闸",
+                    "text_alignment": "center"
+                }
+            },
+            {
+                "close_btn@common.button": {
+                    "type": "button",
+                    "$control_alpha": 1.0,
+                    "$default_texture": "textures/ui/close_button_default",
+                    "$hover_texture": "textures/ui/close_button_default",
+                    "$is_new_nine_slice": false,
+                    "$label_color": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "$label_font_scale_factor": 1.0,
+                    "$label_font_size": "large",
+                    "$label_layer": 3,
+                    "$label_offset": [
+                        0,
+                        0
+                    ],
+                    "$label_text": "",
+                    "$nine_slice_buttom": 0,
+                    "$nine_slice_left": 0,
+                    "$nine_slice_right": 0,
+                    "$nine_slice_top": 0,
+                    "$nineslice_size": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "$pressed_button_name": "%netease_editor_template_namespace.click",
+                    "$pressed_texture": "textures/ui/close_button_default",
+                    "$texture_layer": 2,
+                    "anchor_from": "top_right",
+                    "anchor_to": "top_right",
+                    "offset": [
+                        -4.0,
+                        4.0
+                    ],
+                    "size": [
+                        18.0,
+                        18.0
+                    ],
+                    "layer": 21,
+                    "button_mappings": [],
+                    "default_control": "default",
+                    "hover_control": "hover",
+                    "is_handle_button_move_event": true,
+                    "pressed_control": "pressed",
+                    "bindings": [
+                        {
+                            "binding_type": "collection_details",
+                            "binding_collection_name": "",
+                            "binding_condition": "always_when_visible"
+                        }
+                    ],
+                    "controls": [
+                        {
+                            "default@netease_editor_template_namespace.default": {}
+                        },
+                        {
+                            "hover@netease_editor_template_namespace.hover": {}
+                        },
+                        {
+                            "pressed@netease_editor_template_namespace.pressed": {}
+                        },
+                        {
+                            "button_label@netease_editor_template_namespace.button_label": {}
+                        }
+                    ]
+                }
+            },
+            {
+                "power_board": {
+                    "type": "image",
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        0.0,
+                        22.0
+                    ],
+                    "size": [
+                        140.0,
+                        54.0
+                    ],
+                    "layer": 1,
+                    "nineslice_size": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "texture": "textures/ui/bg_panel_invert_darker",
+                    "controls": [
+                        {
+                            "tip1": {
+                                "type": "label",
+                                "anchor_from": "top_left",
+                                "anchor_to": "top_left",
+                                "offset": [
+                                    2.0,
+                                    2.0
+                                ],
+                                "font_type": "default",
+                                "shadow": true,
+                                "text": "邻接电网功率",
+                                "text_alignment": "center"
+                            }
+                        },
+                        {
+                            "label": {
+                                "type": "label",
+                                "size": [
+                                    "100%+-8px",
+                                    "default"
+                                ],
+                                "color": [
+                                    1.0,
+                                    0.3490196078431372,
+                                    0.3490196078431372
+                                ],
+                                "font_scale_factor": 1.4,
+                                "font_size": "large",
+                                "font_type": "MinecraftTen",
+                                "shadow": true,
+                                "text": "220.42 MRF/s",
+                                "text_alignment": "center"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "graphics": {
+                    "type": "panel",
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        0.0,
+                        76.0
+                    ],
+                    "size": [
+                        "100%+0px",
+                        70.0
+                    ],
+                    "layer": 1,
+                    "controls": [
+                        {
+                            "wire": {
+                                "type": "panel",
+                                "anchor_from": "top_middle",
+                                "anchor_to": "top_middle",
+                                "offset": [
+                                    0.0,
+                                    15.0
+                                ],
+                                "size": [
+                                    "100%+-6px",
+                                    10.0
+                                ],
+                                "layer": 1,
+                                "clips_children": true,
+                                "controls": [
+                                    {
+                                        "wire_bar": {
+                                            "type": "image",
+                                            "size": [
+                                                "100%+0px",
+                                                "100%+0px"
+                                            ],
+                                            "color": [
+                                                0.615686274509804,
+                                                0.615686274509804,
+                                                0.615686274509804
+                                            ],
+                                            "nineslice_size": [
+                                                1.0,
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "texture": "textures/ui/white"
+                                        }
+                                    },
+                                    {
+                                        "energy_scroll": {
+                                            "type": "image",
+                                            "anchor_from": "right_middle",
+                                            "anchor_to": "right_middle",
+                                            "size": [
+                                                "100%+20px",
+                                                "default"
+                                            ],
+                                            "layer": 1,
+                                            "texture": "textures/icon/energy_icon",
+                                            "tiled": "x"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "redstone_wire": {
+                                "type": "image",
+                                "anchor_from": "top_middle",
+                                "anchor_to": "top_middle",
+                                "offset": [
+                                    0.0,
+                                    29.0
+                                ],
+                                "size": [
+                                    40.0,
+                                    40.0
+                                ],
+                                "layer": 2,
+                                "color": [
+                                    0.2509803921568627,
+                                    0.0,
+                                    0.0
+                                ],
+                                "rotate_angle": 90.0,
+                                "texture": "textures/blocks/redstone_dust_line"
+                            }
+                        },
+                        {
+                            "conn_bar": {
+                                "type": "image",
+                                "anchor_from": "top_middle",
+                                "anchor_to": "top_middle",
+                                "size": [
+                                    10.0,
+                                    "100%+0px"
+                                ],
+                                "layer": 1,
+                                "color": [
+                                    0.615686274509804,
+                                    0.615686274509804,
+                                    0.615686274509804
+                                ],
+                                "nineslice_size": [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ],
+                                "texture": "textures/ui/white"
+                            }
+                        },
+                        {
+                            "node": {
+                                "type": "image",
+                                "anchor_from": "top_middle",
+                                "anchor_to": "top_middle",
+                                "offset": [
+                                    0.0,
+                                    10.0
+                                ],
+                                "size": [
+                                    20.0,
+                                    20.0
+                                ],
+                                "layer": 2,
+                                "texture": "textures/ui/dialog_background_opaque"
+                            }
+                        },
+                        {
+                            "target_img": {
+                                "type": "image",
+                                "anchor_from": "bottom_middle",
+                                "anchor_to": "top_middle",
+                                "offset": [
+                                    0.0,
+                                    -1.0
+                                ],
+                                "size": [
+                                    20.0,
+                                    20.0
+                                ],
+                                "layer": 1,
+                                "color": [
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ],
+                                "rotate_angle": 90.0,
+                                "texture": "textures/blocks/target_side"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "redstone_mode_switch@common_toggles.switch_toggle_collection": {
+                    "type": "panel",
+                    "$checked_locked_texture": "textures/ui/simple_switch_on",
+                    "$default_texture": "textures/ui/simple_switch_off",
+                    "$hover_texture": "textures/ui/simple_switch_on",
+                    "$pressed_no_hover_texture": "textures/ui/simple_switch_on",
+                    "$pressed_texture": "textures/ui/simple_switch_off",
+                    "$toggle_name": "#RedstoneFluxBrakeUI.redstone_mode_switch",
+                    "$toggle_state_binding_name": "#netease_editor_template_namespace.toggle_state",
+                    "$unchecked_locked_texture": "textures/ui/simple_switch_off",
+                    "anchor_from": "bottom_left",
+                    "anchor_to": "bottom_left",
+                    "offset": [
+                        58.0,
+                        0.0
+                    ],
+                    "size": [
+                        25.0,
+                        25.0
+                    ],
+                    "layer": 1,
+                    "bindings": [
+                        {
+                            "binding_type": "collection_details",
+                            "binding_collection_name": "",
+                            "binding_condition": "always_when_visible"
+                        }
+                    ]
+                }
+            },
+            {
+                "redstone_mode_tip": {
+                    "type": "label",
+                    "anchor_from": "bottom_left",
+                    "anchor_to": "bottom_left",
+                    "offset": [
+                        6.0,
+                        -8.0
+                    ],
+                    "size": [
+                        60.0,
+                        "default"
+                    ],
+                    "layer": 1,
+                    "color": [
+                        0.2588235294117647,
+                        0.2588235294117647,
+                        0.2588235294117647
+                    ],
+                    "font_type": "default",
+                    "text": "反相红石信号"
+                }
+            }
+        ]
+    }
+}

@@ -89,11 +89,8 @@
         "skybluetech:creative_generator": {
             "textures": "textures/machines/creative_generator"
         },
-        "skybluetech:creative_power_acceptor_side": {
-            "textures": "textures/machines/creative_power_acceptor_side"
-        },
-        "skybluetech:creative_power_acceptor_top": {
-            "textures": "textures/machines/creative_power_acceptor_top"
+        "skybluetech:creative_power_acceptor": {
+            "textures": "textures/machines/creative_power_acceptor"
         },
         "skybluetech:deepslate_lava_flow": {
             "quad": 2,
@@ -388,6 +385,12 @@
         },
         "skybluetech:rect_panel_bg": {
             "textures": "textures/ui/rect_panel_bg"
+        },
+        "skybluetech:redstoneflux_brake_top": {
+            "textures": "textures/machines/redstoneflux_brake_top"
+        },
+        "skybluetech:redstoneflux_brake_otherside": {
+            "textures": "textures/machines/redstoneflux_brake_otherside"
         },
         "skybluetech:redstone_furnace_front": {
             "textures": "textures/machines/redstone_furnace_front"

@@ -90,10 +90,14 @@
     },
     "skybluetech:creative_power_acceptor": {
         "client_entity": {},
+        "textures": "skybluetech:creative_power_acceptor"
+    },
+    "skybluetech:redstoneflux_brake": {
+        "client_entity": {},
         "textures": {
-            "down": "skybluetech:creative_power_acceptor_side",
-            "side": "skybluetech:creative_power_acceptor_side",
-            "up": "skybluetech:creative_power_acceptor_top"
+            "side": "skybluetech:redstoneflux_brake_otherside",
+            "up": "skybluetech:redstoneflux_brake_top",
+            "down": "skybluetech:redstoneflux_brake_otherside"
         }
     },
     "skybluetech:deepslate_lava": {

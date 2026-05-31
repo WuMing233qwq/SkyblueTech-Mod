@@ -1,0 +1,31 @@
+{
+    "format_version": "1.21.70",
+    "minecraft:block": {
+        "components": {
+            "netease:block_entity": {
+                "client_tick": false,
+                "movable": false,
+                "tick": true
+            },
+            "netease:listen_block_remove": {
+                "value": true
+            },
+            "netease:redstone": {
+                "type": "consumer"
+            },
+            "netease:custom_tips": {
+                "value": "\n§7可以通过红石信号控制邻接线缆电网的启停， 也可以查看电网的输电功率。"
+            },
+            "tag:piston_denier": {},
+            "tag:redstoneflux_accepter": {},
+            "tag:redstoneflux_appliance": {},
+            "tag:redstoneflux_connectable": {},
+            "tag:skybluetech_appliance": {},
+            "tag:skybluetech_machine": {}
+        },
+        "description": {
+            "category": "skybluetech",
+            "identifier": "skybluetech:redstoneflux_brake"
+        }
+    }
+}
