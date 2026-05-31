@@ -5,7 +5,6 @@ from skybluetech_scripts.skybluetech.common.define.fluids import (
     texture as fluid_texture,
 )
 from skybluetech_scripts.skybluetech.common.define.fluids.gas_enum import IsGas
-from skybluetech_scripts.skybluetech.common.machinery_def.basic import FluidSlotClient
 
 # TYPE_CHECKING
 if 0:
@@ -170,7 +169,7 @@ class FluidDisplayer(object):
         if fluid_id is None:
             fluid_img.SetFullSize("y", UICtrlPosData("parent", relative_value=0))
         else:
-            texture, color = fluid_texture.getBaseTexture(fluid_id)
+            texture, color = fluid_texture.GetFluidTextureAndColor(fluid_id)
             texture_path = texture
             fluid_img.SetSprite(texture_path)
             if color is not None:
