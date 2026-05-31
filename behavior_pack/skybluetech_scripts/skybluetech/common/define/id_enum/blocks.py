@@ -39,6 +39,7 @@ class Ore(SimpleEnum):
     PLATINUM_DEEPSLATE = "skybluetech:deepslate_platinum_ore"
     SILVER_DEEPSLATE = "skybluetech:deepslate_silver_ore"
     URANIUM_DEEPSLATE = "skybluetech:deepslate_uranium_ore"
+    NETHER_SULFUR = "skybluetech:nether_sulfur_ore"
 
 
 class Tank(SimpleEnum):
