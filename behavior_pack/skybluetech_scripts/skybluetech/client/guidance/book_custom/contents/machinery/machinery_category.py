@@ -207,6 +207,12 @@ machinery_generator_toc = PageGroup(
                     machinery_generator.geothermal_generator,
                 ),
                 TOCPageSection(
+                    id_enum.REACTING_THERMAL_GENERATOR,
+                    0,
+                    "热力反应发电机",
+                    machinery_generator.reacting_thermal_generator,
+                ),
+                TOCPageSection(
                     id_enum.REDSTONE_GENERATOR,
                     0,
                     "红石发电机",

@@ -16,6 +16,16 @@ creative_generator = PageGroup(
         ),
     ],
 )
+gas_burning_generator = PageGroup(
+    "gas_burning_generator_description",
+    [
+        TextPage(
+            "燃气发电机",
+            '燃气发电机可以燃烧<text color="§d" t="气体">用于发电。\n\n一些气体在经过燃烧后会产生<text color="§7" t="废气">， 需要进行处理， 否则将堆积在燃气发电机内使其无法继续燃烧。',
+        ),
+        MachineryWorkstationRecipePage(id_enum.GAS_BURNING_GENERATOR),
+    ],
+)
 
 geothermal_generator = PageGroup(
     "geothermal_generator_description",
@@ -26,6 +36,17 @@ geothermal_generator = PageGroup(
             % id_enum.Dusts.OBSIDIAN,
         ),
         MachineryWorkstationRecipePage(id_enum.GEO_THERMAL_GENERATOR),
+    ],
+)
+
+reacting_thermal_generator = PageGroup(
+    "reacting_thermal_generator_description",
+    [
+        TextPage(
+            "热力反应发电机",
+            '热力反应发电机可以通过输入物品和流体和流体进行<text color="§c" t="燃烧反应">并产生能量， 可在发电的同时低效产出化学产物。',
+        ),
+        MachineryWorkstationRecipePage(id_enum.REACTING_THERMAL_GENERATOR),
     ],
 )
 
@@ -83,16 +104,5 @@ wind_generator = PageGroup(
             },
         ),
         MachineryWorkstationRecipePage(id_enum.WIND_GENERATOR),
-    ],
-)
-
-gas_burning_generator = PageGroup(
-    "gas_burning_generator_description",
-    [
-        TextPage(
-            "燃气发电机",
-            '燃气发电机可以燃烧<text color="§d" t="气体">用于发电。\n\n一些气体在经过燃烧后会产生<text color="§7" t="废气">， 需要进行处理， 否则将堆积在燃气发电机内使其无法继续燃烧。',
-        ),
-        MachineryWorkstationRecipePage(id_enum.GAS_BURNING_GENERATOR),
     ],
 )
