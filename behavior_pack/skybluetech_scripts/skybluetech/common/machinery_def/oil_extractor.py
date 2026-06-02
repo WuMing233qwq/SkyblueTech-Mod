@@ -11,14 +11,14 @@ recipes = RecipesCollection(
     OIL_EXTRACTOR,
     OilExtractorRecipe(
         items.SUNFLOWER_SEEDS,
-        fluids.VEGETABLE_OIL,
+        fluids.Common.VEGETABLE_OIL,
         50,
         tick_duration=60,
         power_cost=40,
     ),
     OilExtractorRecipe(
         "minecraft:wheat_seeds",
-        fluids.VEGETABLE_OIL,
+        fluids.Common.VEGETABLE_OIL,
         5,
         tick_duration=50,
         power_cost=40,

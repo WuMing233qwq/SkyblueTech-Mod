@@ -11,12 +11,24 @@ OUTPUT_MAX_VOLUME = 1500
 recipes = RecipesCollection(
     DISTILLATION_CHAMBER,
     DistillationChamberRecipe(
-        "minecraft:water", 50, fluids.DISTILLED_WATER, 45, c2k(30), c2k(80), c2k(100)
+        "minecraft:water",
+        50,
+        fluids.Common.DISTILLED_WATER,
+        45,
+        c2k(30),
+        c2k(80),
+        c2k(100),
     ),
     DistillationChamberRecipe(
-        fluids.RAW_OIL, 5, fluids.LUBRICANT, 4, c2k(50), c2k(55), c2k(60)
+        fluids.Common.RAW_OIL, 5, fluids.Common.LUBRICANT, 4, c2k(50), c2k(55), c2k(60)
     ),
     DistillationChamberRecipe(
-        fluids.VEGETABLE_OIL, 5, fluids.LUBRICANT, 2, c2k(55), c2k(62), c2k(70)
+        fluids.Common.VEGETABLE_OIL,
+        5,
+        fluids.Common.LUBRICANT,
+        2,
+        c2k(55),
+        c2k(62),
+        c2k(70),
     ),
 )

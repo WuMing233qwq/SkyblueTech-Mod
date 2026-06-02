@@ -12,9 +12,15 @@ MAX_FLUID_VOLUMES = (1000, 1000)
 recipes = RecipesCollection(
     REACTING_THERMAL_GENERATOR,
     ReactingThermalGeneratorRecipe(
-        items.SULFUR, "minecraft:water", 250, fluids.SULFURIC_ACID, 250, 30, 800
+        items.SULFUR, "minecraft:water", 250, fluids.Acid.SULFURIC_ACID, 250, 30, 800
     ),
     ReactingThermalGeneratorRecipe(
-        items.Dusts.SULFUR, "minecraft:water", 250, fluids.SULFURIC_ACID, 250, 45, 600
+        items.Dusts.SULFUR,
+        "minecraft:water",
+        250,
+        fluids.Acid.SULFURIC_ACID,
+        250,
+        45,
+        600,
     ),
 )  # type: RecipesCollection[GeneratorRecipe]

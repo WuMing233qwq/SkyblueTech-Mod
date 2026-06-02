@@ -1,6 +1,6 @@
 # coding=utf-8
 from ..define.id_enum import METAL_PRESS, Ingots, Sticks
-from ..define.id_enum.fluids import LUBRICANT
+from ..define.id_enum import fluids
 from ..mini_jei.core import RecipesCollection
 from ..mini_jei.machinery.metal_press import MachineRecipe, MetalPressRecipe
 
@@ -10,7 +10,7 @@ MAX_FLUID_VOLUME = 1000
 recipes = RecipesCollection(
     METAL_PRESS,
     MetalPressRecipe(
-        LUBRICANT,
+        fluids.Common.LUBRICANT,
         10,
         "minecraft:copper_ingot",
         1,
@@ -20,7 +20,7 @@ recipes = RecipesCollection(
         power_cost=40,
     ),
     MetalPressRecipe(
-        LUBRICANT,
+        fluids.Common.LUBRICANT,
         10,
         "minecraft:iron_ingot",
         1,
@@ -30,7 +30,7 @@ recipes = RecipesCollection(
         power_cost=40,
     ),
     MetalPressRecipe(
-        LUBRICANT,
+        fluids.Common.LUBRICANT,
         10,
         Ingots.TIN,
         1,
@@ -40,7 +40,7 @@ recipes = RecipesCollection(
         power_cost=40,
     ),
     MetalPressRecipe(
-        LUBRICANT,
+        fluids.Common.LUBRICANT,
         10,
         Ingots.SILVER,
         1,
@@ -50,7 +50,7 @@ recipes = RecipesCollection(
         power_cost=40,
     ),
     MetalPressRecipe(
-        LUBRICANT,
+        fluids.Common.LUBRICANT,
         10,
         Ingots.PLATINUM,
         1,
@@ -60,7 +60,7 @@ recipes = RecipesCollection(
         power_cost=40,
     ),
     MetalPressRecipe(
-        LUBRICANT,
+        fluids.Common.LUBRICANT,
         10,
         Ingots.STEEL,
         1,
@@ -70,7 +70,7 @@ recipes = RecipesCollection(
         power_cost=50,
     ),
     MetalPressRecipe(
-        LUBRICANT,
+        fluids.Common.LUBRICANT,
         10,
         Ingots.BRONZE,
         1,
@@ -80,7 +80,7 @@ recipes = RecipesCollection(
         power_cost=50,
     ),
     MetalPressRecipe(
-        LUBRICANT,
+        fluids.Common.LUBRICANT,
         10,
         Ingots.INVAR,
         1,
@@ -90,7 +90,7 @@ recipes = RecipesCollection(
         power_cost=50,
     ),
     MetalPressRecipe(
-        LUBRICANT,
+        fluids.Common.LUBRICANT,
         10,
         Ingots.SUPERCONDUCT,
         1,

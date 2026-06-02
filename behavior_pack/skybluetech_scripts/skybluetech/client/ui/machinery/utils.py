@@ -4,7 +4,7 @@ from skybluetech_scripts.tooldelta.api.client.item import GetItemHoverName
 from skybluetech_scripts.skybluetech.common.define.fluids import (
     texture as fluid_texture,
 )
-from skybluetech_scripts.skybluetech.common.define.fluids.gas_enum import IsGas
+from skybluetech_scripts.skybluetech.common.define.id_enum.fluids import Gas
 
 # TYPE_CHECKING
 if 0:
@@ -191,7 +191,7 @@ class FluidDisplayer(object):
                 FormatFluidVolume(max_volume),
             )
         )
-        if fluid_id is not None and IsGas(fluid_id):
+        if fluid_id is not None and fluid_id in Gas.all():
             fluid_img.SetAnchorFrom("top_middle")
             fluid_img.SetAnchorTo("top_middle")
             fluid_img.SetFullSize(

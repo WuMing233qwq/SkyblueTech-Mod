@@ -6,7 +6,7 @@ from skybluetech_scripts.tooldelta.api.client import (
     SetEntityShadowShow,
     RebuildRenderForOneActor,
 )
-from skybluetech_scripts.skybluetech.common.define.fluids.gas_enum import IsGas
+from skybluetech_scripts.skybluetech.common.define.id_enum.fluids import Gas
 from .client_molangs import Y_SCALE
 
 
@@ -27,7 +27,7 @@ class FluidModel:
 
     def _try_rebuild(self):
         last_is_gas = self._last_is_gas
-        now_is_gas = IsGas(self.fluid_id)
+        now_is_gas = self.fluid_id in Gas.all()
         if last_is_gas is None or last_is_gas != now_is_gas:
             if last_is_gas is not None:
                 self.Destroy()

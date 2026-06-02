@@ -1,5 +1,5 @@
 # coding=utf-8
-from ..define.id_enum import GAS_BURNING_GENERATOR, METHANE
+from ..define.id_enum import GAS_BURNING_GENERATOR, fluids
 from ..mini_jei.core import RecipesCollection
 from ..mini_jei.machinery.gas_burning_generator import (
     GeneratorRecipe,
@@ -13,5 +13,5 @@ STORE_RF_MAX = 28800
 
 recipes = RecipesCollection(
     GAS_BURNING_GENERATOR,
-    GasBurningGeneratorRecipe(METHANE, 4, 160),
+    GasBurningGeneratorRecipe(fluids.CommonGas.METHANE, 4, 160),
 )  # type: RecipesCollection[GeneratorRecipe]

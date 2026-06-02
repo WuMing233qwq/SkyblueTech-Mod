@@ -6,7 +6,7 @@ from skybluetech_scripts.skybluetech.common.define import flags
 from skybluetech_scripts.skybluetech.common.define.id_enum.machinery import (
     BEDROCK_LAVA_DRILL_CONTROLLER as MACHINE_ID,
 )
-from skybluetech_scripts.skybluetech.common.define.id_enum.fluids import DEEPSLATE_LAVA
+from skybluetech_scripts.skybluetech.common.define.id_enum.fluids import DeepLava
 from skybluetech_scripts.skybluetech.common.machinery_def.bedrock_lava_drill import (
     STRUCTURE_PALETTE,
     STRUCTURE_REQUIRE_BLOCKS,
@@ -178,7 +178,7 @@ class BedrockLavaDrill(GUIControl, MultiBlockStructure, UpgradeControl):
         rest_vol = self.rest_volume
         vol = pump_deepslate_lava(self.x, self.z, min(space, self.pump_speed))
         self.rest_volume = rest_vol - vol
-        fluid_output.AddFluid(DEEPSLATE_LAVA, vol)
+        fluid_output.AddFluid(DeepLava.DEEPSLATE_LAVA, vol)
         if space - vol <= 0:
             self.SetDeactiveFlag(flags.DEACTIVE_FLAG_OUTPUT_FULL)
 

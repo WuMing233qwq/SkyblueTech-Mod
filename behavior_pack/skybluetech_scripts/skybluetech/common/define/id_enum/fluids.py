@@ -1,25 +1,60 @@
 # coding=utf-8
 from .utils import SimpleEnum
 
-DISTILLED_WATER = "skybluetech:distilled_water"
 
-DEEPSLATE_LAVA = "skybluetech:deepslate_lava"
-HEAVY_LAVA = "skybluetech:heavy_lava"
-MID_LAVA = "skybluetech:mid_lava"
-LIGHT_LAVA = "skybluetech:light_lava"
+class Acid(SimpleEnum):
+    "酸性流体"
 
-METHANE_MUD = "skybluetech:methane_mud"
+    SULFURIC_ACID = "skybluetech:sulfuric_acid"
 
-RAW_OIL = "skybluetech:raw_oil"
-VEGETABLE_OIL = "skybluetech:vegetable_oil"
-LUBRICANT = "skybluetech:lubricant"
-SULFURIC_ACID = "skybluetech:sulfuric_acid"
 
-HYDROGEN = "skybluetech:hydrogen"
-METHANE = "skybluetech:methane"
+class CommonGas(SimpleEnum):
+    "对流体管道无特殊要求的气体"
+
+    HYDROGEN = "skybluetech:hydrogen"
+    METHANE = "skybluetech:methane"
+
+
+class CommonOil(SimpleEnum):
+    "对流体管道无特殊要求的油类"
+
+    RAW_OIL = "skybluetech:raw_oil"
+    VEGETABLE_OIL = "skybluetech:vegetable_oil"
+    LUBRICANT = "skybluetech:lubricant"
+
+
+class Vanilla(SimpleEnum):
+    "Minecraft 的流体"
+
+    WATER = "minecraft:water"
+    LAVA = "minecraft:lava"
+
+
+class Common(CommonGas, CommonOil):
+    "对流体管道无特殊要求的流体"
+
+    WATER = Vanilla.WATER
+    DISTILLED_WATER = "skybluetech:distilled_water"
+
+    METHANE_MUD = "skybluetech:methane_mud"
+
+
+class Gas(CommonGas):
+    "气体"
+
+    pass
+
+
+class DeepLava(SimpleEnum):
+    DEEPSLATE_LAVA = "skybluetech:deepslate_lava"
+    HEAVY_LAVA = "skybluetech:heavy_lava"
+    MID_LAVA = "skybluetech:mid_lava"
+    LIGHT_LAVA = "skybluetech:light_lava"
 
 
 class Molten(SimpleEnum):
+    "熔融流体"
+
     EARTH = "skybluetech:molten_earth"
     IMPURITY = "skybluetech:molten_impurity"
     ROSIN = "skybluetech:molten_rosin"
@@ -34,30 +69,31 @@ class Molten(SimpleEnum):
     PLATINUM = "skybluetech:molten_platinum"
 
 
-class DeepLava(SimpleEnum):
-    DEEPSLATE = DEEPSLATE_LAVA
-    HEAVY = HEAVY_LAVA
-    MID = MID_LAVA
-    LIGHT = LIGHT_LAVA
+class HotFluid(Molten):
+    "需要白铜流体管道运输的流体"
+
+    LAVA = Vanilla.LAVA
 
 
-class HotFluid(DeepLava, Molten):
-    LAVA = "minecraft:lava"
+class ExtremeHotFluid(DeepLava, Molten):
+    "需要耐热流体管道运输的流体"
+
+    pass
 
 
 all_fluids = [
-    "minecraft:water",
-    "minecraft:lava",
-    DEEPSLATE_LAVA,
-    HEAVY_LAVA,
-    MID_LAVA,
-    LIGHT_LAVA,
-    RAW_OIL,
-    LUBRICANT,
-    METHANE,
-    METHANE_MUD,
-    DISTILLED_WATER,
-    VEGETABLE_OIL,
+    Vanilla.WATER,
+    Vanilla.LAVA,
+    DeepLava.DEEPSLATE_LAVA,
+    DeepLava.HEAVY_LAVA,
+    DeepLava.MID_LAVA,
+    DeepLava.LIGHT_LAVA,
+    Common.RAW_OIL,
+    Common.LUBRICANT,
+    Common.METHANE,
+    Common.METHANE_MUD,
+    Common.DISTILLED_WATER,
+    Common.VEGETABLE_OIL,
     Molten.EARTH,
     Molten.IMPURITY,
     Molten.COPPER,
