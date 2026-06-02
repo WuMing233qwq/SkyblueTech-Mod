@@ -4,11 +4,13 @@
             "group_name": "itemGroup.skybluetech.ores",
             "icon": "skybluetech:tin_ore",
             "list": [
+                "skybluetech:aluminum_ore",
                 "skybluetech:tin_ore",
                 "skybluetech:lead_ore",
                 "skybluetech:silver_ore",
                 "skybluetech:nickel_ore",
                 "skybluetech:platinum_ore",
+                "skybluetech:titanium_ore",
                 "skybluetech:uranium_ore",
                 "skybluetech:deepslate_tin_ore",
                 "skybluetech:deepslate_lead_ore",
@@ -23,11 +25,13 @@
             "group_name": "itemGroup.skybluetech.raw_ores",
             "icon": "skybluetech:raw_tin",
             "list": [
+                "skybluetech:raw_aluminum",
                 "skybluetech:raw_tin",
                 "skybluetech:raw_lead",
                 "skybluetech:raw_silver",
                 "skybluetech:raw_nickel",
                 "skybluetech:raw_platinum",
+                "skybluetech:raw_titanium",
                 "skybluetech:raw_uranium"
             ]
         },

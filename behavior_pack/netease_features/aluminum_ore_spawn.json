@@ -1,0 +1,17 @@
+{
+  "format_version": "1.13.0",
+  "minecraft:ore_feature": {
+    "description": {
+      "identifier": "skybluetech:aluminum_ore_spawn"
+    },
+    "count": 6,
+    "replace_rules": [
+      {
+        "places_block": "skybluetech:aluminum_ore",
+        "may_replace": [
+          "minecraft:stone"
+        ]
+      }
+    ]
+  }
+}

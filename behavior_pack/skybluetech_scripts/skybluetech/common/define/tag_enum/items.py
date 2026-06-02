@@ -2,11 +2,13 @@
 
 
 class IngotTag:
+    ALUMINUM = "ingots/aluminum"
     TIN = "ingots/tin"
     LEAD = "ingots/lead"
     NICKEL = "ingots/nickel"
     SILVER = "ingots/silver"
     PLATINUM = "ingots/platinum"
+    TITANIUM = "ingots/titanium"
     BRONZE = "ingots/bronze"
     INVAR = "ingots/invar"
     STEEL = "ingots/steel"
@@ -18,6 +20,7 @@ class IngotTag:
 
 
 class DustTag:
+    ALUMINUM = "dusts/aluminum"
     COPPER = "dusts/copper"
     IRON = "dusts/iron"
     GOLD = "dusts/gold"
@@ -27,6 +30,7 @@ class DustTag:
     NICKEL = "dusts/nickel"
     SILVER = "dusts/silver"
     PLATINUM = "dusts/platinum"
+    TITANIUM = "dusts/titanium"
     BRONZE = "dusts/bronze"
     INVAR = "dusts/invar"
     STEEL = "dusts/steel"
@@ -41,11 +45,13 @@ class DustTag:
 
 
 class RawTag:
+    ALUMINUM = "raws/aluminum"
     TIN = "raws/tin"
     LEAD = "raws/lead"
     NICKEL = "raws/nickel"
     SILVER = "raws/silver"
     PLATINUM = "raws/platinum"
+    TITANIUM = "raws/titanium"
 
 
 class PlateTag:

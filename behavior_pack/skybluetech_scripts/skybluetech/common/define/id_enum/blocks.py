@@ -27,11 +27,13 @@ class Wire(SimpleEnum):
 
 
 class Ore(SimpleEnum):
+    ALUMINUM = "skybluetech:aluminum_ore"
     TIN = "skybluetech:tin_ore"
     LEAD = "skybluetech:lead_ore"
     NICKEL = "skybluetech:nickel_ore"
     PLATINUM = "skybluetech:platinum_ore"
     SILVER = "skybluetech:silver_ore"
+    TITANIUM = "skybluetech:titanium_ore"
     URANIUM = "skybluetech:uranium_ore"
     TIN_DEEPSLATE = "skybluetech:deepslate_tin_ore"
     LEAD_DEEPSLATE = "skybluetech:deepslate_lead_ore"

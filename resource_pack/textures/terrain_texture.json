@@ -10,6 +10,9 @@
         "skybluetech:alloy_furnace_front_active": {
             "textures": "textures/machines/alloy_furnace_front_active"
         },
+        "skybluetech:aluminum_ore": {
+            "textures": "textures/blocks/ore/aluminum_ore"
+        },
         "skybluetech:assembler": {
             "textures": "textures/models/assembler_texture"
         },
@@ -466,6 +469,9 @@
         },
         "skybluetech:tin_ore": {
             "textures": "textures/blocks/ore/tin_ore"
+        },
+        "skybluetech:titanium_ore": {
+            "textures": "textures/blocks/ore/titanium_ore"
         },
         "skybluetech:uranium_ore": {
             "textures": "textures/blocks/ore/uranium_ore"

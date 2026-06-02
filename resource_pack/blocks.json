@@ -14,6 +14,9 @@
             "west": "skybluetech:frame"
         }
     },
+    "skybluetech:aluminum_ore": {
+        "textures": "skybluetech:aluminum_ore"
+    },
     "skybluetech:assembler": {
         "textures": {
             "down": "skybluetech:frame_bottom",
@@ -807,6 +810,9 @@
     },
     "skybluetech:tin_ore": {
         "textures": "skybluetech:tin_ore"
+    },
+    "skybluetech:titanium_ore": {
+        "textures": "skybluetech:titanium_ore"
     },
     "skybluetech:uranium_ore": {
         "textures": "skybluetech:uranium_ore"

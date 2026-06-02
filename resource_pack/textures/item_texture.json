@@ -4,6 +4,12 @@
         "skybluetech:air_compress_unit": {
             "textures": "textures/items/air_compress_unit"
         },
+        "skybluetech:aluminum_dust": {
+            "textures": "textures/items/dusts/aluminum_dust"
+        },
+        "skybluetech:aluminum_ingot": {
+            "textures": "textures/items/ingots/aluminum_ingot"
+        },
         "skybluetech:ancient_debris_dust": {
             "textures": "textures/items/dusts/ancient_debris_dust"
         },
@@ -316,6 +322,9 @@
         "skybluetech:platinum_stick": {
             "textures": "textures/items/sticks/platinum_stick"
         },
+        "skybluetech:raw_aluminum": {
+            "textures": "textures/items/raw_ore/raw_aluminum"
+        },
         "skybluetech:raw_lead": {
             "textures": "textures/items/raw_ore/raw_lead"
         },
@@ -333,6 +342,9 @@
         },
         "skybluetech:raw_tin": {
             "textures": "textures/items/raw_ore/raw_tin"
+        },
+        "skybluetech:raw_titanium": {
+            "textures": "textures/items/raw_ore/raw_titanium"
         },
         "skybluetech:raw_uranium": {
             "textures": "textures/items/raw_ore/raw_uranium"
@@ -442,8 +454,14 @@
         "skybluetech:tin_dust": {
             "textures": "textures/items/dusts/tin_dust"
         },
+        "skybluetech:titanium_dust": {
+            "textures": "textures/items/dusts/titanium_dust"
+        },
         "skybluetech:tin_ingot": {
             "textures": "textures/items/ingots/tin_ingot"
+        },
+        "skybluetech:titanium_ingot": {
+            "textures": "textures/items/ingots/titanium_ingot"
         },
         "skybluetech:tin_plate": {
             "textures": "textures/items/plates/tin_plate"

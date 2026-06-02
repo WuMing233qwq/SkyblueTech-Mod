@@ -15,6 +15,7 @@ class ControlCircuit:
 
 
 class Dusts:
+    ALUMINUM = "skybluetech:aluminum_dust"
     IRON = "skybluetech:iron_dust"
     GOLD = "skybluetech:gold_dust"
     COPPER = "skybluetech:copper_dust"
@@ -24,6 +25,7 @@ class Dusts:
     SILVER = "skybluetech:silver_dust"
     NICKEL = "skybluetech:nickel_dust"
     PLATINUM = "skybluetech:platinum_dust"
+    TITANIUM = "skybluetech:titanium_dust"
 
     BRONZE = "skybluetech:bronze_dust"
     INVAR = "skybluetech:invar_dust"
@@ -47,11 +49,13 @@ class Icons:
 
 
 class Ingots:
+    ALUMINUM = "skybluetech:aluminum_ingot"
     TIN = "skybluetech:tin_ingot"
     LEAD = "skybluetech:lead_ingot"
     SILVER = "skybluetech:silver_ingot"
     NICKEL = "skybluetech:nickel_ingot"
     PLATINUM = "skybluetech:platinum_ingot"
+    TITANIUM = "skybluetech:titanium_ingot"
 
     BRONZE = "skybluetech:bronze_ingot"
     INVAR = "skybluetech:invar_ingot"
@@ -120,11 +124,13 @@ class Plates:
 
 
 class RawOres:
+    ALUMINUM = "skybluetech:raw_aluminum"
     TIN = "skybluetech:raw_tin"
     LEAD = "skybluetech:raw_lead"
     SILVER = "skybluetech:raw_silver"
     NICKEL = "skybluetech:raw_nickel"
     PLATINUM = "skybluetech:raw_platinum"
+    TITANIUM = "skybluetech:raw_titanium"
     URANIUM = "skybluetech:raw_uranium"
 
 

@@ -1,0 +1,17 @@
+{
+  "format_version": "1.13.0",
+  "minecraft:ore_feature": {
+    "description": {
+      "identifier": "skybluetech:titanium_ore_spawn"
+    },
+    "count": 4,
+    "replace_rules": [
+      {
+        "places_block": "skybluetech:titanium_ore",
+        "may_replace": [
+          "minecraft:stone"
+        ]
+      }
+    ]
+  }
+}
