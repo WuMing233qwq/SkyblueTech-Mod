@@ -21,7 +21,12 @@ from ...machinery.utils.charge import (
     GetPowerCost,
     UpdateCharge,
 )
-from .register import item_pre_use_cbs, item_pre_use_on_block_cbs, tool_items
+from .register import (
+    item_pre_use_cbs,
+    item_pre_use_on_block_cbs,
+    tool_items,
+    useless_tool_items,
+)
 from .utils import MakeToolUseless
 
 # TYPE_CHECKING
@@ -73,15 +78,29 @@ def onServerItemUseOn(event):
 
 
 @ItemDurabilityChangedServerEvent.ListenWithUserData()
-@Delay(0)
 def onItemDurabilityChanged(event):
     # type: (ItemDurabilityChangedServerEvent) -> None
     event_item = event.item
-    if event_item.id not in tool_items:
+    tool_id = useless_tool_items.get(event_item.id, event_item.id)
+    if tool_id not in tool_items:
+        return
+    event.ModifyDurability(event_item.durability or 1)
+    onItemDurabilityChangedAfter(event)
+
+
+@Delay(0)
+def onItemDurabilityChangedAfter(event):
+    # type: (ItemDurabilityChangedServerEvent) -> None
+    event_item = event.item
+    tool_id = useless_tool_items.get(event_item.id, event_item.id)
+    if tool_id not in tool_items:
         return
     mPlayerId = event.entityId
     mainhand_item = GetPlayerMainhandItem(mPlayerId)
-    if mainhand_item is None or mainhand_item.id != event_item.id:
+    if mainhand_item is None:
+        return
+    mainhand_tool_id = useless_tool_items.get(mainhand_item.id, mainhand_item.id)
+    if mainhand_tool_id != tool_id:
         return
     ud = mainhand_item.userData
     if ud is None:

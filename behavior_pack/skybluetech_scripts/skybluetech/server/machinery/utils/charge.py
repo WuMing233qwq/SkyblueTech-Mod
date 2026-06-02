@@ -18,14 +18,15 @@ K_CHARGE_COST = "st:cost_rf"
 update_charge_callbacks = {}  # type: dict[str, typing.Callable[[Item, int], None]]
 
 
-def UpdateCharge(item, store_rf):
-    # type: (Item, int) -> None
+def UpdateCharge(item, store_rf, preserve_durability=False):
+    # type: (Item, int, bool) -> None
     """
     强制更新物品的充能值。
 
     Args:
         item (Item): 物品
         store_rf (int): 物品的充能值
+        preserve_durability (bool, optional): 是否不改变现有耐久值, 耐久值用于标识物品充能比例. Defaults to False.
     """
     ud = item.userData
     if ud is None:
@@ -36,8 +37,11 @@ def UpdateCharge(item, store_rf):
         nbt.GetValueWithDefault(ud, K_STORE_RF_MAX, 1),
     )
     SetLoreAtPos(ud, GetLorePos(ud, "charge"), lore)
+    cb = update_charge_callbacks.get(item.id)
+    if cb is not None:
+        cb(item, store_rf)
     max_durability = item.GetBasicInfo().maxDurability
-    if max_durability > 0:
+    if max_durability > 0 and not preserve_durability:
         if ud is None:
             ud = item.userData = {}
         store_rf_max = nbt.GetValueWithDefault(ud, K_STORE_RF_MAX, 1)
@@ -48,9 +52,6 @@ def UpdateCharge(item, store_rf):
         ud.setdefault("Damage", nbt.Int(0))["__value__"] = (
             max_durability - item.durability
         )
-    cb = update_charge_callbacks.get(item.id)
-    if cb is not None:
-        cb(item, store_rf)
 
 
 def UpdateChargeNBT(item_id, ud, store_rf):
@@ -75,7 +76,7 @@ def UpdateChargeNBT(item_id, ud, store_rf):
         ud["Damage"] = nbt.Int(
             max(
                 2,
-                int(1 - float(store_rf) / store_rf_max),
+                int(1 - float(store_rf) / store_rf_max) * max_durability,
             )
         )
 
@@ -202,8 +203,8 @@ def SetUpdateChargeCallback(item_id, callback):
     update_charge_callbacks[item_id] = callback
 
 
-def ChargeItem(rf, item, times=1.0):
-    # type: (int, Item, float) -> tuple[int, int, int]
+def ChargeItem(rf, item, times=1.0, preserve_durability=False):
+    # type: (int, Item, float, bool) -> tuple[int, int, int]
     """
     为物品充能, 返回溢出的能量, 充入的能量和物品当前能量
 
@@ -211,6 +212,7 @@ def ChargeItem(rf, item, times=1.0):
         rf (int): 输入的能量
         item (Item): 物品
         times (float, optional): 充能倍率. Defaults to 1.0.
+        preserve_durability (bool, optional): 是否不改变现有耐久值. Defaults to False.
 
     Returns:
         tuple[int, int, int]: 溢出的能量, 充入的能量, 物品当前能量
@@ -225,5 +227,5 @@ def ChargeItem(rf, item, times=1.0):
     power_in_overflow = rf - power_in
     charge_in = min(power_in, input_power)
     charge_in_overflow = power_in - charge_in
-    UpdateCharge(item, item_rf + charge_in)
+    UpdateCharge(item, item_rf + charge_in, preserve_durability=preserve_durability)
     return power_in_overflow + charge_in_overflow, charge_in, item_rf + charge_in
