@@ -8,6 +8,8 @@ K_MCW = "st:mcw"
 K_OUTPUT_POWER = "st:output_power"
 
 STORE_RF_MAX = 14400
+MAX_MCW_HEIGHT_MULTIPLIER = 0.5
+FINAL_OUTPUT_POWER_MULTIPLIER = 0.5
 
 
 def item2paddle(item_id):

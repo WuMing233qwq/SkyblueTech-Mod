@@ -28,8 +28,10 @@ from ...common.events.machinery.wind_generator import (
 from ...common.machinery_def.wind_generator import (
     get_paddle_output,
     item2paddle,
+    FINAL_OUTPUT_POWER_MULTIPLIER,
     K_MCW,
     K_OUTPUT_POWER,
+    MAX_MCW_HEIGHT_MULTIPLIER,
     STORE_RF_MAX,
 )
 from ...common.utils.block_sync import BlockSync
@@ -194,10 +196,12 @@ class WindGenerator(BaseGenerator, ItemContainer, GUIControl):
         if self.paddle_type == WindGeneratorStatesUpdate.PADDLE_EMPTY:
             self.max_mcw = 0
         else:
-            self.max_mcw = max(0, min(256, self.y - 40)) / 4
+            self.max_mcw = max(0, min(256, self.y - 40)) * MAX_MCW_HEIGHT_MULTIPLIER
         self.actual_mcw = int(self.max_mcw * self.get_actual_output_pc())
         self.power_output = int(
-            self.actual_mcw / 2 * get_paddle_output(self.paddle_type)
+            self.actual_mcw
+            * FINAL_OUTPUT_POWER_MULTIPLIER
+            * get_paddle_output(self.paddle_type)
         )
         if self.max_mcw > 0:
             self.rot_speed = float(self.actual_mcw) / 5120 + 0.01
