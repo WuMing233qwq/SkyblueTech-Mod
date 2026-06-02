@@ -6,11 +6,13 @@ work.mcscfg
 studio.json
 editor.name
 description.txt
-TODO
 addon.zip
 pack_addon.py
 run_pack.cmd
 test*
 dev*
+TODO
+AGENTS.md
+CLAUDE.md
 
 *.cmd
