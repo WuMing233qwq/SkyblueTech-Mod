@@ -2031,10 +2031,10 @@
                 }
             },
             {
-                "slot11@SkybluePanelLib.item_displayer": {
+                "slot9@SkybluePanelLib.item_displayer": {
                     "offset": [
                         28,
-                        20
+                        -20
                     ]
                 }
             },
@@ -2047,10 +2047,10 @@
                 }
             },
             {
-                "slot9@SkybluePanelLib.item_displayer": {
+                "slot11@SkybluePanelLib.item_displayer": {
                     "offset": [
                         28,
-                        -20
+                        20
                     ]
                 }
             },
@@ -2060,6 +2060,25 @@
                         0,
                         0
                     ]
+                }
+            },
+            {
+                "template_tip": {
+                    "type": "label",
+                    "anchor_from": "right_middle",
+                    "anchor_to": "right_middle",
+                    "offset": [
+                        -8.0,
+                        0.0
+                    ],
+                    "color": [
+                        0.2588235294117647,
+                        0.2588235294117647,
+                        0.2588235294117647
+                    ],
+                    "font_type": "default",
+                    "text": "需要刻印对应内容",
+                    "text_alignment": "center"
                 }
             }
         ]

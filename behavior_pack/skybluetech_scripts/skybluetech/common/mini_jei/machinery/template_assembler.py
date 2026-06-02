@@ -1,5 +1,5 @@
 # coding=utf-8
-from ...define.id_enum import machinery
+from ...define.id_enum import machinery, INSCRIBING_TEMPLATE
 from ...define.tag_enum import IngotTag
 from .define import CategoryType, RecipesCollection, MachineRecipe, Input, Output
 
@@ -24,6 +24,7 @@ class TemplateAssemblerRecipe(MachineRecipe):
         tick_duration,  # type: int
     ):
         input_items = input_items.copy()
+        input_items[9] = Input(INSCRIBING_TEMPLATE)
         input_items[10] = Input(IngotTag.SOLDERING, is_tag=True)
         MachineRecipe.__init__(
             self,
