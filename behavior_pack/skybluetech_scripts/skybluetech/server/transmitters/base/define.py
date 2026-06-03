@@ -72,13 +72,10 @@ class BaseNetwork(Generic[_APT]):
 
     def __eq__(self, other):
         # type: (object) -> bool
-        if not isinstance(other, self.__class__):
-            return False
-        return (
-            self.dim == other.dim
-            and self.group_outputs == other.group_outputs
-            and self.group_inputs == other.group_inputs
-        )
+        return self is other
+
+    def __hash__(self):
+        return id(self)
 
     def __repr__(self):
         return "BaseNetwork({}, {}, {})".format(
@@ -167,14 +164,15 @@ class BaseAccessPoint(Generic[_NT]):
         self._dump_settings()
 
     def __hash__(self):
-        return hash((self.x, self.y, self.z, self.access_facing))
+        return hash((self.dim, self.x, self.y, self.z, self.access_facing))
 
     def __eq__(self, other):
         # type: (object) -> bool
         if not isinstance(other, self.__class__):
             return False
         return (
-            self.x == other.x
+            self.dim == other.dim
+            and self.x == other.x
             and self.y == other.y
             and self.z == other.z
             and self.access_facing == other.access_facing

@@ -1,6 +1,6 @@
 # coding=utf-8
 from collections import deque
-from weakref import WeakValueDictionary, ref, proxy
+from weakref import WeakValueDictionary
 from skybluetech_scripts.tooldelta.api.server import (
     GetBlockName,
     GetBlockStates,
@@ -133,11 +133,11 @@ class LogicModule(Generic[_NT, _APT], ServerListenerService):
                 dim, x + dx, y + dy, z + dz, OPPOSITE_FACING[facing], -1
             )  # -1 表示输入输出模式未知
             if p in network.group_inputs:
-                input_networks[facing] = proxy(network)
+                input_networks[facing] = network
                 if p not in network.group_outputs:
                     output_networks[facing] = None
             if p in network.group_outputs:
-                output_networks[facing] = proxy(network)
+                output_networks[facing] = network
                 if p not in network.group_inputs:
                     input_networks[facing] = None
         new_cnode = self.container_nodes_pool[(dim, (x, y, z))] = ContainerNode(
@@ -153,7 +153,7 @@ class LogicModule(Generic[_NT, _APT], ServerListenerService):
             network = self.nodes_pool.get(dim, {}).get((x, y, z))
             if network is not None:
                 return network
-        elif force_use_cached:
+        if force_use_cached:
             return None
         return self.get_and_init_network(dim, (x, y, z), cacher)
 
@@ -177,7 +177,7 @@ class LogicModule(Generic[_NT, _APT], ServerListenerService):
             cnode.set_face(
                 OPPOSITE_FACING[access_point.access_facing], AP_MODE_OUTPUT, None
             )
-            network.group_outputs.remove(access_point)
+            network.group_outputs.discard(access_point)
             network.group_inputs.add(access_point)
             cnode.set_face(
                 OPPOSITE_FACING[access_point.access_facing], AP_MODE_INPUT, network
@@ -186,7 +186,7 @@ class LogicModule(Generic[_NT, _APT], ServerListenerService):
             cnode.set_face(
                 OPPOSITE_FACING[access_point.access_facing], AP_MODE_INPUT, None
             )
-            network.group_inputs.remove(access_point)
+            network.group_inputs.discard(access_point)
             network.group_outputs.add(access_point)
             cnode.set_face(
                 OPPOSITE_FACING[access_point.access_facing], AP_MODE_OUTPUT, network
@@ -254,6 +254,7 @@ class LogicModule(Generic[_NT, _APT], ServerListenerService):
         input_nodes = set()  # type: set[_APT]
         if walked is None:
             walked = set()
+        walked.add(start)
         nodes = set()  # type: set[PosData]
 
         first_transmitter_name = start_bname
@@ -262,15 +263,12 @@ class LogicModule(Generic[_NT, _APT], ServerListenerService):
         while queue:
             current = queue.popleft()
             cx, cy, cz = current
-            block_states = GetBlockStates(dim, current)
+            block_states = GetBlockStates(dim, current) or {}
 
             _i = set()  # type: set[_APT]
             _o = set()  # type: set[_APT]
             for facing, (dx, dy, dz) in enumerate(NEIGHBOR_BLOCKS_ENUM):
                 xyz = (cx + dx, cy + dy, cz + dz)
-                if xyz in walked:
-                    continue
-                walked.add(xyz)
                 block_name = GetBlockName(dim, xyz)
                 if block_name is None:
                     continue
@@ -278,6 +276,9 @@ class LogicModule(Generic[_NT, _APT], ServerListenerService):
                     if first_transmitter_name != block_name:
                         # 不同等级的管道无法并用
                         continue
+                    if xyz in walked:
+                        continue
+                    walked.add(xyz)
                     queue.append(xyz)
                     continue
                 elif self.transmittable_block_check_func(block_name):
@@ -302,7 +303,7 @@ class LogicModule(Generic[_NT, _APT], ServerListenerService):
                             _o.add(ap)
                     else:
                         dir_name = FACING_EN[facing]
-                        if block_states["skybluetech:cable_io_" + dir_name]:
+                        if block_states.get("skybluetech:cable_io_" + dir_name, False):
                             _o.add(
                                 self.access_point_cls(
                                     dim, cx, cy, cz, facing, AP_MODE_OUTPUT
@@ -415,10 +416,10 @@ class LogicModule(Generic[_NT, _APT], ServerListenerService):
             cnode.set_face(OPPOSITE_FACING[ap.access_facing], AP_MODE_INPUT, None)
             cnode.set_face(OPPOSITE_FACING[ap.access_facing], AP_MODE_OUTPUT, None)
             if cnode.all_empty():
-                del self.container_nodes_pool[(network.dim, ap.target_pos)]
+                self.container_nodes_pool.pop((network.dim, ap.target_pos), None)
         for node in network.nodes.copy():
             self.nodes_pool.get(network.dim, {}).pop(node, None)
-        self.networks_pool.remove(network)
+        self.networks_pool.discard(network)
 
     def clean_node(self, dim, x, y, z):
         """
@@ -611,7 +612,7 @@ class LogicModule(Generic[_NT, _APT], ServerListenerService):
     def onWorldTick(self, _):
         self._tick_counter += 1
         if self._tick_counter % 5 == 0:
-            for network in self.networks_pool:
+            for network in list(self.networks_pool):
                 if not network.enabled:
                     continue
                 self.on_network_tick(network)
