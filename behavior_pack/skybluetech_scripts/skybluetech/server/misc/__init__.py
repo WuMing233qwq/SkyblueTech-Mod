@@ -5,6 +5,7 @@ from . import (
     famicom,
     initial_supplies,
     inscribing_template,
+    object_upgraders,
     piston_denier,
     resin_collector,
 )

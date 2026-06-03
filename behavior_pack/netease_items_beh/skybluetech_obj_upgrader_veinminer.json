@@ -12,7 +12,7 @@
                 ]
             },
             "netease:customtips": {
-                "value": "\n§7允许工具对特定方块进行连锁采集。\n§3可用于：\n §b- 斧/镐/锹/锄"
+                "value": "\n§7允许工具对特定方块进行连锁采集。\n§f蹲下并使用§7该升级可调整其可连锁采集的方块列表。\n§3可用于：\n §b- 斧/镐/锹/锄"
             },
             "netease:initial_user_data": {
                 "st:level": {
@@ -51,6 +51,158 @@
                     {
                         "__type__": 8,
                         "__value__": "minecraft:copper_ore"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "minecraft:oak_log"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "minecraft:spruce_log"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "minecraft:birch_log"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "minecraft:jungle_log"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "minecraft:acacia_log"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "minecraft:dark_oak_log"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "minecraft:mangrove_log"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "minecraft:cherry_log"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "minecraft:pale_oak_log"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "minecraft:oak_wood"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "minecraft:spruce_wood"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "minecraft:birch_wood"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "minecraft:jungle_wood"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "minecraft:acacia_wood"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "minecraft:dark_oak_wood"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "minecraft:mangrove_wood"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "minecraft:cherry_wood"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "minecraft:pale_oak_wood"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "minecraft:crimson_stem"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "minecraft:warped_stem"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "minecraft:crimson_hyphae"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "minecraft:warped_hyphae"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "minecraft:bamboo_block"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "skybluetech:aluminum_ore"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "skybluetech:tin_ore"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "skybluetech:lead_ore"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "skybluetech:nickel_ore"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "skybluetech:platinum_ore"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "skybluetech:silver_ore"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "skybluetech:titanium_ore"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "skybluetech:uranium_ore"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "skybluetech:deepslate_tin_ore"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "skybluetech:deepslate_lead_ore"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "skybluetech:deepslate_nickel_ore"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "skybluetech:deepslate_platinum_ore"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "skybluetech:deepslate_silver_ore"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "skybluetech:deepslate_uranium_ore"
+                    },
+                    {
+                        "__type__": 8,
+                        "__value__": "skybluetech:nether_sulfur_ore"
                     }
                 ],
                 "st:max_chain": {
