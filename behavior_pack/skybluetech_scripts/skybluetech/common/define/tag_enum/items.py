@@ -14,17 +14,18 @@ class IngotTag:
     STEEL = "ingots/steel"
     REFINED_IRON = "ingots/refined_iron"
     SOLDERING = "ingots/soldering"
+    ALUMITE = "ingots/alumite"
     CUPRONICKEL = "ingots/cupronickel"
     ULTRAHEATINUM = "ingots/ultraheatinum"
     SUPERCONDUCT = "ingots/superconduct"
 
 
 class DustTag:
-    ALUMINUM = "dusts/aluminum"
     COPPER = "dusts/copper"
     IRON = "dusts/iron"
     GOLD = "dusts/gold"
 
+    ALUMINUM = "dusts/aluminum"
     TIN = "dusts/tin"
     LEAD = "dusts/lead"
     NICKEL = "dusts/nickel"
@@ -34,6 +35,7 @@ class DustTag:
     BRONZE = "dusts/bronze"
     INVAR = "dusts/invar"
     STEEL = "dusts/steel"
+    ALUMITE = "dusts/alumite"
     CUPRONICKEL = "dusts/cupronickel"
 
     CARBON = "dusts/carbon"
@@ -58,6 +60,7 @@ class PlateTag:
     COPPER = "plates/copper"
     IRON = "plates/iron"
     GOLD = "plates/gold"
+    ALUMITE = "plates/alumite"
 
     TIN = "plates/tin"
     LEAD = "plates/lead"

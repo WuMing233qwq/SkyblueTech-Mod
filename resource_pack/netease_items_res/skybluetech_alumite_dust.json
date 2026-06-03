@@ -1,0 +1,11 @@
+{
+    "format_version": "1.10",
+    "minecraft:item": {
+        "components": {
+            "minecraft:icon": "skybluetech:alumite_dust"
+        },
+        "description": {
+            "identifier": "skybluetech:alumite_dust"
+        }
+    }
+}

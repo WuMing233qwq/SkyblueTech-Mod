@@ -10,6 +10,15 @@
         "skybluetech:aluminum_ingot": {
             "textures": "textures/items/ingots/aluminum_ingot"
         },
+        "skybluetech:alumite_dust": {
+            "textures": "textures/items/dusts/alumite_dust"
+        },
+        "skybluetech:alumite_ingot": {
+            "textures": "textures/items/ingots/alumite_ingot"
+        },
+        "skybluetech:alumite_plate": {
+            "textures": "textures/items/plates/alumite_plate"
+        },
         "skybluetech:ancient_debris_dust": {
             "textures": "textures/items/dusts/ancient_debris_dust"
         },
