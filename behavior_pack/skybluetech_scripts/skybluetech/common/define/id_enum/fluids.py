@@ -75,7 +75,7 @@ class HotFluid(Molten):
     LAVA = Vanilla.LAVA
 
 
-class ExtremeHotFluid(DeepLava, Molten):
+class ExtremeHotFluid(HotFluid, DeepLava, Molten):
     "需要耐热流体管道运输的流体"
 
     pass
