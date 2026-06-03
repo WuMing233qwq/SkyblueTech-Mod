@@ -13,7 +13,6 @@ from skybluetech_scripts.skybluetech.common.events.misc.object_upgraders import 
     ObjUpVeinMinerSettingsUpload,
 )
 
-GRID_COLUMNS = 10
 K_UI_VEIN_BLOCKS = "vein_blocks"
 GRID_COLLECTION = "obj_up_vein_blocks_grid"
 STRING_TYPES = (str, py2_unicode)
@@ -66,7 +65,7 @@ class VeinMinerSettingsUI(ToolDeltaScreen):
         if self.current_section >= len(self.vein_blocks):
             self.current_section = len(self.vein_blocks) - 1
         ObjUpVeinMinerSettingsUpload(self.vein_blocks).send()
-        self.grid.SetDimensionAndCall(self.get_grid_size(), lambda: None)
+        self.grid.SetPropertyBag({"#maximum_grid_items": len(self.vein_blocks)})
 
     @Binder.binding(
         Binder.BF_ButtonClickUp,
@@ -77,22 +76,14 @@ class VeinMinerSettingsUI(ToolDeltaScreen):
         ObjUpVeinMinerSettingsAddBlockRequest().send()
         self.RemoveUI()
 
-    @Binder.binding(
-        Binder.BF_BindGridSize,
-        "#ObjUpVeinMinerSettingsUI.vein_blocks_grid_size",
-    )
-    def get_grid_size(self):
-        rows = (len(self.vein_blocks) + GRID_COLUMNS - 1) // GRID_COLUMNS
-        return (GRID_COLUMNS, max(1, rows))
-
     @Binder.binding_collection(
-        Binder.BF_BindBool,
+        Binder.BF_BindInt,
         GRID_COLLECTION,
-        "#ObjUpVeinMinerSettingsUI.vein_block_visible",
+        "#ObjUpVeinMinerSettingsUI.vein_block_count",
     )
-    def get_vein_block_visible(self, index):
-        # type: (int) -> bool
-        return index < len(self.vein_blocks)
+    def get_vein_block_count(self, _index):
+        # type: (int) -> int
+        return len(self.vein_blocks)
 
     @Binder.binding_collection(
         Binder.BF_BindBool,

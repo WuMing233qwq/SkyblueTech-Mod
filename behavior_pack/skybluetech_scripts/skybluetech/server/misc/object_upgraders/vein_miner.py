@@ -25,7 +25,7 @@ K_UD_VEIN_BLOCKS = "st:vein_blocks"
 K_UI_VEIN_BLOCKS = "vein_blocks"
 MAX_VEIN_BLOCKS = 256
 
-limiter = PlayerRateLimiter()
+limiter = PlayerRateLimiter(0.5)
 STRING_TYPES = (str, py2_unicode)
 add_block_pending = {}  # type: dict[str, int]
 add_block_token_seq = 0
