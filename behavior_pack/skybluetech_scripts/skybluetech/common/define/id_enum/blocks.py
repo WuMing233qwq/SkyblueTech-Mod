@@ -8,6 +8,7 @@ class Cable(SimpleEnum):
 
 
 class Pipe(SimpleEnum):
+    ACIDPROOF = "skybluetech:pipe_acidproof"
     BRONZE = "skybluetech:pipe_bronze"
     CUPRONICKEL = "skybluetech:pipe_cupronickel"
     ULTRAHEATINUM = "skybluetech:pipe_ultraheatinum"

@@ -8,19 +8,24 @@ INT32 = 1 << 32
 
 # TRANSFER_SPEED_MAPPING = (None, 100, 400, 1600, 6400, 14000)
 TRANSFER_SPEED_MAPPING = {
+    Pipe.ACIDPROOF: 100,
     Pipe.BRONZE: 100,
     Pipe.CUPRONICKEL: 60,
     Pipe.ULTRAHEATINUM: 100,
 }
 CAPACITY_MAPPING = {
+    Pipe.ACIDPROOF: 1000,
     Pipe.BRONZE: 1000,
     Pipe.CUPRONICKEL: 1000,
     Pipe.ULTRAHEATINUM: 1000,
 }
 PIPE_CAN_TRANSMIT_FLUID_MAPPING = {
-    Pipe.BRONZE: lambda f: f not in fluids.HotFluid.all(),
-    Pipe.CUPRONICKEL: lambda f: f not in fluids.DeepLava.all(),
-    Pipe.ULTRAHEATINUM: lambda _: True,
+    Pipe.ACIDPROOF: lambda f: f in fluids.Common.all() or f in fluids.Acid.all(),
+    Pipe.BRONZE: lambda f: f in fluids.Common.all(),
+    Pipe.CUPRONICKEL: lambda f: f in fluids.Common.all() or f in fluids.HotFluid.all(),
+    Pipe.ULTRAHEATINUM: lambda f: (
+        f in fluids.Common.all() or f in fluids.ExtremeHotFluid.all()
+    ),
 }
 
 

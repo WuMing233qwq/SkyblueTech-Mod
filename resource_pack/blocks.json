@@ -660,6 +660,9 @@
             "west": "skybluetech:frame"
         }
     },
+    "skybluetech:pipe_acidproof": {
+        "sound": "iron"
+    },
     "skybluetech:pipe_bronze": {
         "sound": "copper"
     },

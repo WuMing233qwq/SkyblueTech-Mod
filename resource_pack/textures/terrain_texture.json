@@ -347,6 +347,9 @@
         "skybluetech:oil_extractor_front_active": {
             "textures": "textures/machines/flipbook_textures/oil_extractor_front_active"
         },
+        "skybluetech:pipe_acidproof": {
+            "textures": "textures/transmitters/pipe_acidproof_texture"
+        },
         "skybluetech:pipe_bronze": {
             "textures": "textures/transmitters/pipe_bronze_texture"
         },
