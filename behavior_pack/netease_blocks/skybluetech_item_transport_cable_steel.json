@@ -30,6 +30,15 @@
                     "texture": "skybluetech:item_transport_cable_steel"
                 }
             },
+            "minecraft:liquid_detection": {
+                "detection_rules": [
+                    {
+                        "liquid_type": "water",
+                        "can_contain_liquid": true,
+                        "on_liquid_touches": "no_reaction"
+                    }
+                ]
+            },
             "netease:block_entity": {},
             "netease:custom_tips": {
                 "value": "\n§7可用于在容器间传输物品。\n§b传输速率： §a5 个/秒\n§d使用扳手可以切换管道的输入 / 提取模式。"

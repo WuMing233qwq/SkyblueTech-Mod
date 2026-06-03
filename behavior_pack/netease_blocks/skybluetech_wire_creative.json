@@ -31,6 +31,15 @@
                     }
                 }
             },
+            "minecraft:liquid_detection": {
+                "detection_rules": [
+                    {
+                        "liquid_type": "water",
+                        "can_contain_liquid": true,
+                        "on_liquid_touches": "no_reaction"
+                    }
+                ]
+            },
             "netease:on_entity_inside": {
                 "send_python_event": true
             },

@@ -31,6 +31,15 @@
                     }
                 }
             },
+            "minecraft:liquid_detection": {
+                "detection_rules": [
+                    {
+                        "liquid_type": "water",
+                        "can_contain_liquid": false,
+                        "on_liquid_touches": "popped"
+                    }
+                ]
+            },
             "minecraft:light_dampening": 0,
             "netease:block_entity": {},
             "netease:custom_tips": {

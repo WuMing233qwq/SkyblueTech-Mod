@@ -37,6 +37,15 @@
                     }
                 }
             },
+            "minecraft:liquid_detection": {
+                "detection_rules": [
+                    {
+                        "liquid_type": "water",
+                        "can_contain_liquid": true,
+                        "on_liquid_touches": "no_reaction"
+                    }
+                ]
+            },
             "netease:block_entity": {},
             "netease:custom_tips": {
                 "value": "\n§7可在机器或储罐间传输流体。\n§b传输速率： §a60 mB/t\n§6支持输送§c熔岩§6。\n§d使用扳手可以切换管道的输入 / 提取模式。"

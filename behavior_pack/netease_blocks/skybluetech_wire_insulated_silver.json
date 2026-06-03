@@ -33,6 +33,15 @@
                     }
                 }
             },
+            "minecraft:liquid_detection": {
+                "detection_rules": [
+                    {
+                        "liquid_type": "water",
+                        "can_contain_liquid": true,
+                        "on_liquid_touches": "no_reaction"
+                    }
+                ]
+            },
             "netease:block_entity": {},
             "netease:custom_tips": {
                 "value": "\n§7可在发电机与机器间传输能量。\n§b功率： §a4096 RF/t"
