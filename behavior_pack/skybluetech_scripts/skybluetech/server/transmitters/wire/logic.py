@@ -83,6 +83,7 @@ def onNetworkTick(network):
         rf_output = om.TakeoutPower(tick_capacity)
         if rf_output <= 0:
             continue
+        rf_taken = rf_output
         while inputs:
             input = inputs[0]
             im = GetMachineStrict(network.dim, *input.target_pos)
@@ -97,7 +98,7 @@ def onNetworkTick(network):
             elif rf_output == 0:
                 break
         om.GivebackPower(rf_output)
-        tick_capacity -= rf_output
+        tick_capacity -= rf_taken - rf_output
         if tick_capacity <= 0:
             break
     network.trigger_shock(transfered_rf)
