@@ -1,0 +1,26 @@
+{
+    "format_version": "1.20.10",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "skybluetech:pipe_acidproof_craft"
+        },
+        "key": {
+            "A": {
+                "item": "skybluetech:alumite_plate"
+            }
+        },
+        "pattern": [
+            " A ",
+            "A A",
+            " A "
+        ],
+        "result": {
+            "count": 2,
+            "data": 0,
+            "item": "skybluetech:pipe_acidproof"
+        },
+        "tags": [
+            "crafting_table"
+        ]
+    }
+}

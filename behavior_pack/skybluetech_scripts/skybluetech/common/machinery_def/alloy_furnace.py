@@ -80,6 +80,23 @@ recipes = RecipesCollection(
         },
         {4: Output(Ingots.SOLDERING, 3)},
     ),
+    # alumite
+    ingot_rcp(
+        {
+            0: Input(IngotTag.ALUMINUM, 3, is_tag=True),
+            1: Input(IngotTag.TITANIUM, 2, is_tag=True),
+            2: Input("minecraft:iron_ingot", is_tag=True),
+        },
+        {4: Output(Ingots.ALUMITE, 3)},
+    ),
+    dust_rcp(
+        {
+            0: Input(DustTag.ALUMINUM, 3, is_tag=True),
+            1: Input(DustTag.TITANIUM, 2, is_tag=True),
+            2: Input(DustTag.IRON, is_tag=True),
+        },
+        {4: Output(Ingots.ALUMITE, 3)},
+    ),
     # cupronickel
     dust_rcp(
         {
