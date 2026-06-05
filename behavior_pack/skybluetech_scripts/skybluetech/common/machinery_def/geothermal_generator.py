@@ -1,6 +1,7 @@
 # coding=utf-8
 
 K_BURN_TICKS_LEFT = "st:burn_ticks_left"
+K_OUTPUT_POWER = "st:output_power"
 
 
 STORE_RF_MAX = 28800
