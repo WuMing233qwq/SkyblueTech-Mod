@@ -85,7 +85,7 @@ recipes = RecipesCollection(
         {
             0: Input(IngotTag.ALUMINUM, 3, is_tag=True),
             1: Input(IngotTag.TITANIUM, 2, is_tag=True),
-            2: Input("minecraft:iron_ingot", is_tag=True),
+            2: Input("minecraft:iron_ingot", 1),
         },
         {4: Output(Ingots.ALUMITE, 3)},
     ),
