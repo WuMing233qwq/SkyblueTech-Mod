@@ -66,6 +66,8 @@ class WindGenerator(BaseGenerator, ItemContainer, GUIControl):
         self._cached_paddle_type = None
         if not self.is_base_block:
             self.energy_io_mode = (2, 2, 2, 2, 2, 2)
+        else:
+            self.update_power()
 
     def OnClick(self, event, extra_datas=None):
         # type: (ServerBlockUseEvent, dict | None) -> None

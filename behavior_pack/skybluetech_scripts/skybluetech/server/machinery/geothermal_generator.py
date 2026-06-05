@@ -8,6 +8,7 @@ from ...common.machinery_def.geothermal_generator import (
     WATER_ID,
     LAVA_ID,
     K_BURN_TICKS_LEFT,
+    K_OUTPUT_POWER,
     ONCE_BURNING_TICKS,
     ONCE_LAVA_REDUCE_VOLUME,
     ONCE_WATER_REDUCE_VOLUME,
@@ -41,7 +42,8 @@ class GeoThermalGenerator(
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        pass
+        if self.burn_ticks > 0:
+            self.SetOutputPower(self.bdata[K_OUTPUT_POWER] or ORIGIN_GENERATED_POWER)
 
     @SuperExecutorMeta.execute_super
     def OnTicking(self):
@@ -103,6 +105,11 @@ class GeoThermalGenerator(
                     self.SetDeactiveFlag(flags.DEACTIVE_FLAG_OUTPUT_FULL)
             return True
         return False
+
+    def SetOutputPower(self, power):
+        # type: (int) -> None
+        BaseGenerator.SetOutputPower(self, power)
+        self.bdata[K_OUTPUT_POWER] = power
 
     @property
     def burn_ticks(self):

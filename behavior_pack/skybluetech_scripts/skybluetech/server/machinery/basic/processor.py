@@ -33,6 +33,13 @@ class Processor(ProcessorBase):
         "skybluetech:upgraders/energy",
     }
 
+    @SuperExecutorMeta.execute_super
+    def __init__(self, dim, x, y, z, block_entity_data):
+        if self.current_recipe is not None:
+            self.SetProcessTicks(self.current_recipe.tick_duration)
+            self.SetPower(self.current_recipe.power_cost)
+            self.update_gui()
+
     def OnTicking(self):
         while self.IsActive():
             if self.current_recipe is None:

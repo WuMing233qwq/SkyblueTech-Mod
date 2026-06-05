@@ -31,6 +31,7 @@ class SolarPanel(BaseGenerator, ItemContainer, GUIControl):
         self.t = 0
         self._power_output = 0
         self._light_level = 0
+        self.update()
 
     @SuperExecutorMeta.execute_super
     def OnTicking(self):
