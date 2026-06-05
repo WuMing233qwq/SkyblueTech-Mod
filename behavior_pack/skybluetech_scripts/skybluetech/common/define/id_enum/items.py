@@ -87,6 +87,7 @@ class MetalTools:
 
 
 class ObjectUpgraders:
+    ATTACK = "skybluetech:obj_upgrader_attack"
     AUTO_BURNING = "skybluetech:obj_upgrader_autoburning"
     DIGSPEED = "skybluetech:obj_upgrader_digspeed"
     FORTUNE = "skybluetech:obj_upgrader_fortune"
@@ -163,6 +164,7 @@ class Upgraders:
     BASIC_ENERGY_UPGRADER = "skybluetech:upgrader_basic_energy"
     GENERIC_EXPANSION_UPGRADER = "skybluetech:upgrader_generic_expansion"
     GENERIC_AUTOSTOP = "skybluetech:upgrader_generic_autostop"
+    GENERIC_FILTER_DEFAULT = "skybluetech:upgrader_generic_split"
     SPEC_MAGMA_FACTORY = "skybluetech:upgrader_spec_magma_factory"
 
 

@@ -1,0 +1,944 @@
+{
+    "content": {
+        "type": "panel",
+        "controls": [
+            {
+                "bg": {
+                    "type": "image",
+                    "clip_direction": "left",
+                    "clip_ratio": 0.0,
+                    "nineslice_size": [
+                        2.0,
+                        2.0,
+                        2.0,
+                        2.0
+                    ],
+                    "texture": "textures/ui/panel_bg_rect_slim"
+                }
+            },
+            {
+                "title": {
+                    "type": "label",
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        0.0,
+                        4.0
+                    ],
+                    "layer": 1,
+                    "font_scale_factor": 1.5,
+                    "font_type": "default",
+                    "shadow": true,
+                    "text": "工业研究进度",
+                    "text_alignment": "center"
+                }
+            },
+            {
+                "researching_bg": {
+                    "type": "image",
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        2,
+                        20
+                    ],
+                    "size": [
+                        "95%+-1px",
+                        "100%+-25px"
+                    ],
+                    "layer": 1,
+                    "alpha": 0.25,
+                    "texture": "textures/ui/industrial_researching_bg",
+                    "tiled": true
+                }
+            },
+            {
+                "researchings_scroll_view@common.scrolling_panel": {
+                    "$background_nine_slice_buttom": 0,
+                    "$background_nine_slice_left": 0,
+                    "$background_nine_slice_right": 0,
+                    "$background_nine_slice_top": 0,
+                    "$background_nineslice_size": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "$box_nine_slice_buttom": 0,
+                    "$box_nine_slice_left": 0,
+                    "$box_nine_slice_right": 0,
+                    "$box_nine_slice_top": 0,
+                    "$box_nineslice_size": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "$is_background_nine_slice": false,
+                    "$is_box_nine_slice": false,
+                    "$is_track_nine_slice": false,
+                    "$scroll_background_image_control": "netease_editor_template_namespace.scroll_background_image",
+                    "$scroll_background_texture": "textures/ui/frame_empty_slim",
+                    "$scroll_box_mouse_image_control": "netease_editor_template_namespace.scroll_box_image",
+                    "$scroll_box_texture": "textures/ui/newTouchScrollBox",
+                    "$scroll_box_touch_image_control": "netease_editor_template_namespace.scroll_box_image",
+                    "$scroll_track_image_control": "netease_editor_template_namespace.scroll_track_image",
+                    "$scroll_track_texture": "textures/ui/ScrollRail",
+                    "$scrolling_content": "IndustrialResearchProgressUI.researchings_grid",
+                    "$show_background": true,
+                    "$track_nine_slice_buttom": 0,
+                    "$track_nine_slice_left": 0,
+                    "$track_nine_slice_right": 0,
+                    "$track_nine_slice_top": 0,
+                    "$track_nineslice_size": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "layer": 1,
+                    "offset": [
+                        2,
+                        20
+                    ],
+                    "size": [
+                        "95%+0px",
+                        "100%+-24px"
+                    ]
+                }
+            },
+            {
+                "close_btn@common.button": {
+                    "type": "button",
+                    "$control_alpha": 1.0,
+                    "$default_texture": "textures/ui/close_button_default",
+                    "$hover_texture": "textures/ui/close_button_default",
+                    "$is_new_nine_slice": false,
+                    "$label_color": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "$label_font_scale_factor": 1.0,
+                    "$label_font_size": "large",
+                    "$label_layer": 3,
+                    "$label_offset": [
+                        0,
+                        0
+                    ],
+                    "$label_text": "",
+                    "$nine_slice_buttom": 0,
+                    "$nine_slice_left": 0,
+                    "$nine_slice_right": 0,
+                    "$nine_slice_top": 0,
+                    "$nineslice_size": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "$pressed_button_name": "%netease_editor_template_namespace.click",
+                    "$pressed_texture": "textures/ui/close_button_default",
+                    "$texture_layer": 2,
+                    "anchor_from": "top_right",
+                    "anchor_to": "top_right",
+                    "offset": [
+                        -2.0,
+                        2.0
+                    ],
+                    "size": [
+                        18.0,
+                        18.0
+                    ],
+                    "layer": 21,
+                    "button_mappings": [],
+                    "default_control": "default",
+                    "hover_control": "hover",
+                    "is_handle_button_move_event": true,
+                    "pressed_control": "pressed",
+                    "bindings": [
+                        {
+                            "binding_type": "collection_details",
+                            "binding_collection_name": "",
+                            "binding_condition": "always_when_visible"
+                        }
+                    ],
+                    "controls": [
+                        {
+                            "default@netease_editor_template_namespace.default": {}
+                        },
+                        {
+                            "hover@netease_editor_template_namespace.hover": {}
+                        },
+                        {
+                            "pressed@netease_editor_template_namespace.pressed": {}
+                        },
+                        {
+                            "button_label@netease_editor_template_namespace.button_label": {}
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "main@common.base_screen": {
+        "$screen_content": "IndustrialResearchProgressUI.content"
+    },
+    "namespace": "IndustrialResearchProgressUI",
+    "requirements_window": {
+        "type": "input_panel",
+        "size": [
+            128.0,
+            120.0
+        ],
+        "draggable": "both",
+        "modal": true,
+        "controls": [
+            {
+                "bg": {
+                    "type": "image",
+                    "nineslice_size": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "texture": "textures/ui/rect_panel_bg",
+                    "controls": [
+                        {
+                            "title": {
+                                "type": "label",
+                                "anchor_from": "top_left",
+                                "anchor_to": "top_left",
+                                "offset": [
+                                    2.0,
+                                    2.0
+                                ],
+                                "layer": 2,
+                                "color": [
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ],
+                                "font_type": "default",
+                                "locked_color": [
+                                    0.2588235294117647,
+                                    0.2588235294117647,
+                                    0.2588235294117647
+                                ],
+                                "shadow": true,
+                                "text": "物品名 需要：",
+                                "text_alignment": "center"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "submit_btn@common.button": {
+                    "type": "button",
+                    "$control_alpha": 1.0,
+                    "$default_texture": "textures/ui/button_default",
+                    "$hover_texture": "textures/ui/button_hovered",
+                    "$is_new_nine_slice": false,
+                    "$label_color": [
+                        0.2588235294117647,
+                        0.2588235294117647,
+                        0.2588235294117647
+                    ],
+                    "$label_font_scale_factor": 0.9,
+                    "$label_font_size": "normal",
+                    "$label_layer": 3,
+                    "$label_offset": [
+                        0,
+                        0
+                    ],
+                    "$label_text": "研究",
+                    "$nine_slice_buttom": 0,
+                    "$nine_slice_left": 0,
+                    "$nine_slice_right": 0,
+                    "$nine_slice_top": 0,
+                    "$nineslice_size": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "$pressed_button_name": "#IndustrialResearchProgressUI.submit_btn",
+                    "$pressed_texture": "textures/ui/button_pressed",
+                    "$texture_layer": 2,
+                    "anchor_from": "bottom_left",
+                    "anchor_to": "bottom_left",
+                    "size": [
+                        "50%+0px",
+                        14.0
+                    ],
+                    "layer": 2,
+                    "button_mappings": [
+                        {
+                            "to_button_id": "$pressed_button_name",
+                            "from_button_id": "button.menu_select",
+                            "mapping_type": "pressed"
+                        }
+                    ],
+                    "default_control": "default",
+                    "hover_control": "hover",
+                    "is_handle_button_move_event": true,
+                    "pressed_control": "pressed",
+                    "bindings": [
+                        {
+                            "binding_type": "collection_details",
+                            "binding_collection_name": "",
+                            "binding_condition": "always_when_visible"
+                        }
+                    ],
+                    "controls": [
+                        {
+                            "default@netease_editor_template_namespace.default": {}
+                        },
+                        {
+                            "hover@netease_editor_template_namespace.hover": {}
+                        },
+                        {
+                            "pressed@netease_editor_template_namespace.pressed": {}
+                        },
+                        {
+                            "button_label@netease_editor_template_namespace.button_label": {}
+                        },
+                        {
+                            "disable_mask": {
+                                "type": "image",
+                                "layer": 20,
+                                "alpha": 0.55,
+                                "color": [
+                                    0.2588235294117647,
+                                    0.2588235294117647,
+                                    0.2588235294117647
+                                ],
+                                "nineslice_size": [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ],
+                                "texture": "textures/ui/button_default"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "take_btn@common.button": {
+                    "type": "button",
+                    "$control_alpha": 1.0,
+                    "$default_texture": "textures/ui/button_default",
+                    "$hover_texture": "textures/ui/button_hovered",
+                    "$is_new_nine_slice": false,
+                    "$label_color": [
+                        0.2588235294117647,
+                        0.2588235294117647,
+                        0.2588235294117647
+                    ],
+                    "$label_font_scale_factor": 0.9,
+                    "$label_font_size": "normal",
+                    "$label_layer": 3,
+                    "$label_offset": [
+                        0,
+                        0
+                    ],
+                    "$label_text": "刻印",
+                    "$nine_slice_buttom": 0,
+                    "$nine_slice_left": 0,
+                    "$nine_slice_right": 0,
+                    "$nine_slice_top": 0,
+                    "$nineslice_size": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "$pressed_button_name": "#IndustrialResearchProgressUI.inscribe_btn",
+                    "$pressed_texture": "textures/ui/button_pressed",
+                    "$texture_layer": 2,
+                    "anchor_from": "bottom_right",
+                    "anchor_to": "bottom_right",
+                    "size": [
+                        "50%+0px",
+                        14.0
+                    ],
+                    "layer": 2,
+                    "button_mappings": [
+                        {
+                            "to_button_id": "$pressed_button_name",
+                            "from_button_id": "button.menu_select",
+                            "mapping_type": "pressed"
+                        }
+                    ],
+                    "default_control": "default",
+                    "hover_control": "hover",
+                    "is_handle_button_move_event": true,
+                    "pressed_control": "pressed",
+                    "bindings": [
+                        {
+                            "binding_type": "collection_details",
+                            "binding_collection_name": "",
+                            "binding_condition": "always_when_visible"
+                        }
+                    ],
+                    "controls": [
+                        {
+                            "default@netease_editor_template_namespace.default": {}
+                        },
+                        {
+                            "hover@netease_editor_template_namespace.hover": {}
+                        },
+                        {
+                            "pressed@netease_editor_template_namespace.pressed": {}
+                        },
+                        {
+                            "button_label@netease_editor_template_namespace.button_label": {}
+                        },
+                        {
+                            "disable_mask": {
+                                "type": "image",
+                                "layer": 20,
+                                "alpha": 0.55,
+                                "color": [
+                                    0.2588235294117647,
+                                    0.2588235294117647,
+                                    0.2588235294117647
+                                ],
+                                "nineslice_size": [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ],
+                                "texture": "textures/ui/button_default"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "requirements_grid": {
+                    "type": "grid",
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        0.0,
+                        16.0
+                    ],
+                    "size": [
+                        120.0,
+                        "default"
+                    ],
+                    "layer": 1,
+                    "collection_name": "test_grid",
+                    "grid_dimensions": [
+                        2,
+                        2
+                    ],
+                    "grid_item_template": "IndustrialResearchProgressUI.single_requirement"
+                }
+            },
+            {
+                "close_btn@common.button": {
+                    "type": "button",
+                    "$control_alpha": 1.0,
+                    "$default_texture": "textures/ui/close_button_default",
+                    "$hover_texture": "textures/ui/close_button_default",
+                    "$is_new_nine_slice": false,
+                    "$label_color": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "$label_font_scale_factor": 1.0,
+                    "$label_font_size": "large",
+                    "$label_layer": 3,
+                    "$label_offset": [
+                        0,
+                        0
+                    ],
+                    "$label_text": "",
+                    "$nine_slice_buttom": 0,
+                    "$nine_slice_left": 0,
+                    "$nine_slice_right": 0,
+                    "$nine_slice_top": 0,
+                    "$nineslice_size": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "$pressed_button_name": "%netease_editor_template_namespace.click",
+                    "$pressed_texture": "textures/ui/close_button_default",
+                    "$texture_layer": 2,
+                    "anchor_from": "top_right",
+                    "anchor_to": "top_right",
+                    "size": [
+                        14.0,
+                        14.0
+                    ],
+                    "layer": 21,
+                    "button_mappings": [],
+                    "default_control": "default",
+                    "hover_control": "hover",
+                    "is_handle_button_move_event": true,
+                    "pressed_control": "pressed",
+                    "bindings": [
+                        {
+                            "binding_type": "collection_details",
+                            "binding_collection_name": "",
+                            "binding_condition": "always_when_visible"
+                        }
+                    ],
+                    "controls": [
+                        {
+                            "default@netease_editor_template_namespace.default": {}
+                        },
+                        {
+                            "hover@netease_editor_template_namespace.hover": {}
+                        },
+                        {
+                            "pressed@netease_editor_template_namespace.pressed": {}
+                        },
+                        {
+                            "button_label@netease_editor_template_namespace.button_label": {}
+                        }
+                    ]
+                }
+            },
+            {
+                "image": {
+                    "type": "image",
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "size": [
+                        "default",
+                        14.0
+                    ],
+                    "layer": 1,
+                    "color": [
+                        0.0,
+                        1.0,
+                        1.0
+                    ],
+                    "nineslice_size": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "texture": "textures/ui/rect_panel_bg"
+                }
+            }
+        ]
+    },
+    "researchings_grid": {
+        "type": "grid",
+        "anchor_from": "top_middle",
+        "anchor_to": "top_middle",
+        "size": [
+            "100%+0px",
+            "default"
+        ],
+        "layer": 1,
+        "collection_name": "industrial_researchings_grid",
+        "grid_dimensions": [
+            2,
+            2
+        ],
+        "grid_item_template": "IndustrialResearchProgressUI.single_researching",
+        "grid_rescaling_type": "horizontal",
+        "maximum_grid_items": 7,
+        "bindings": [
+            {
+                "binding_name_override": "#maximum_grid_items",
+                "binding_collection_name": "industrial_researchings_grid",
+                "binding_condition": "always_when_visible",
+                "binding_type": "collection",
+                "binding_name": "#IndustrialResearchProgressUI.researching_count"
+            }
+        ]
+    },
+    "single_requirement": {
+        "type": "panel",
+        "size": [
+            120.0,
+            14.0
+        ],
+        "layer": 1,
+        "controls": [
+            {
+                "item_renderer": {
+                    "type": "custom",
+                    "renderer": "inventory_item_renderer",
+                    "anchor_from": "left_middle",
+                    "anchor_to": "left_middle",
+                    "size": [
+                        "100%y+0px",
+                        "100%+0px"
+                    ],
+                    "layer": 1,
+                    "property_bag": {
+                        "#item_id_aux": 131072
+                    },
+                    "controls": [
+                        {
+                            "check_recipe_btn@common.button": {
+                                "type": "button",
+                                "$control_alpha": 1.0,
+                                "$default_texture": "",
+                                "$hover_texture": "",
+                                "$is_new_nine_slice": false,
+                                "$label_color": [
+                                    1,
+                                    1,
+                                    1
+                                ],
+                                "$label_font_scale_factor": 1.0,
+                                "$label_font_size": "large",
+                                "$label_layer": 3,
+                                "$label_offset": [
+                                    0,
+                                    0
+                                ],
+                                "$label_text": "",
+                                "$nine_slice_buttom": 0,
+                                "$nine_slice_left": 0,
+                                "$nine_slice_right": 0,
+                                "$nine_slice_top": 0,
+                                "$nineslice_size": [
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                ],
+                                "$pressed_button_name": "%netease_editor_template_namespace.click",
+                                "$pressed_texture": "",
+                                "$texture_layer": 2,
+                                "layer": 2,
+                                "button_mappings": [],
+                                "default_control": "default",
+                                "hover_control": "hover",
+                                "is_handle_button_move_event": true,
+                                "pressed_control": "pressed",
+                                "bindings": [
+                                    {
+                                        "binding_type": "collection_details",
+                                        "binding_collection_name": "",
+                                        "binding_condition": "always_when_visible"
+                                    }
+                                ],
+                                "controls": [
+                                    {
+                                        "default@netease_editor_template_namespace.default": {}
+                                    },
+                                    {
+                                        "hover@netease_editor_template_namespace.hover": {}
+                                    },
+                                    {
+                                        "pressed@netease_editor_template_namespace.pressed": {}
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "progress": {
+                    "type": "panel",
+                    "anchor_from": "left_middle",
+                    "anchor_to": "left_middle",
+                    "offset": [
+                        16.0,
+                        0.0
+                    ],
+                    "size": [
+                        71.0,
+                        4.0
+                    ],
+                    "layer": 1,
+                    "controls": [
+                        {
+                            "bg": {
+                                "type": "image",
+                                "anchor_from": "left_middle",
+                                "anchor_to": "left_middle",
+                                "size": [
+                                    "100%+0px",
+                                    "default"
+                                ],
+                                "layer": 1,
+                                "color": [
+                                    0.4,
+                                    0.4,
+                                    0.4
+                                ],
+                                "nineslice_size": [
+                                    3.0,
+                                    3.0,
+                                    3.0,
+                                    3.0
+                                ],
+                                "texture": "textures/ui/white"
+                            }
+                        },
+                        {
+                            "mask": {
+                                "type": "image",
+                                "anchor_from": "left_middle",
+                                "anchor_to": "left_middle",
+                                "size": [
+                                    "100%+0px",
+                                    "default"
+                                ],
+                                "layer": 1,
+                                "color": [
+                                    0.0,
+                                    1.0,
+                                    0.0
+                                ],
+                                "nineslice_size": [
+                                    3.0,
+                                    3.0,
+                                    3.0,
+                                    3.0
+                                ],
+                                "texture": "textures/ui/white"
+                            }
+                        },
+                        {
+                            "frame": {
+                                "type": "image",
+                                "layer": 1,
+                                "nineslice_size": [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ],
+                                "texture": "textures/ui/frame_empty_slim"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "progress_label": {
+                    "type": "label",
+                    "anchor_from": "right_middle",
+                    "anchor_to": "right_middle",
+                    "offset": [
+                        0.0,
+                        -1.0
+                    ],
+                    "layer": 1,
+                    "color": [
+                        0.2588235294117647,
+                        0.2588235294117647,
+                        0.2588235294117647
+                    ],
+                    "font_scale_factor": 1.5,
+                    "font_size": "small",
+                    "font_type": "default",
+                    "text": "100/100",
+                    "text_alignment": "center"
+                }
+            }
+        ]
+    },
+    "single_researching": {
+        "type": "panel",
+        "size": [
+            56.0,
+            64.0
+        ],
+        "controls": [
+            {
+                "bg": {
+                    "type": "image",
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        0.0,
+                        6.0
+                    ],
+                    "size": [
+                        24.0,
+                        24.0
+                    ],
+                    "nineslice_size": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "texture": "textures/ui/bg_frame_01"
+                }
+            },
+            {
+                "item_renderer": {
+                    "type": "custom",
+                    "renderer": "inventory_item_renderer",
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        0.0,
+                        7.0
+                    ],
+                    "size": [
+                        22.0,
+                        22.0
+                    ],
+                    "layer": 1,
+                    "property_bag": {
+                        "#item_id_aux": 131072
+                    },
+                    "bindings": [
+                        {
+                            "binding_name_override": "#item_id_aux",
+                            "binding_collection_name": "industrial_researchings_grid",
+                            "binding_condition": "always_when_visible",
+                            "binding_type": "collection",
+                            "binding_name": "#IndustrialResearchProgressUI.researching_item_id_aux"
+                        }
+                    ]
+                }
+            },
+            {
+                "ok_marker": {
+                    "type": "image",
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        6.0,
+                        18.0
+                    ],
+                    "size": [
+                        12.0,
+                        12.0
+                    ],
+                    "layer": 1,
+                    "color": [
+                        0.0,
+                        0.6549019607843137,
+                        0.0
+                    ],
+                    "texture": "textures/ui/marker_ok",
+                    "bindings": [
+                        {
+                            "binding_name_override": "#visible",
+                            "binding_collection_name": "industrial_researchings_grid",
+                            "binding_condition": "always",
+                            "binding_type": "collection",
+                            "binding_name": "#IndustrialResearchProgressUI.researching_ok_visible"
+                        }
+                    ]
+                }
+            },
+            {
+                "item_name_label": {
+                    "type": "label",
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        0.0,
+                        30.0
+                    ],
+                    "size": [
+                        44.0,
+                        "default"
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "font_type": "default",
+                    "shadow": true,
+                    "text": "#IndustrialResearchProgressUI.researching_item_name",
+                    "text_alignment": "center",
+                    "bindings": [
+                        {
+                            "binding_type": "collection",
+                            "binding_collection_name": "industrial_researchings_grid",
+                            "binding_condition": "always_when_visible",
+                            "binding_name": "#IndustrialResearchProgressUI.researching_item_name"
+                        }
+                    ]
+                }
+            },
+            {
+                "button@common.button": {
+                    "type": "button",
+                    "$control_alpha": 1.0,
+                    "$default_texture": "",
+                    "$hover_texture": "",
+                    "$is_new_nine_slice": false,
+                    "$label_color": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "$label_font_scale_factor": 1.0,
+                    "$label_font_size": "large",
+                    "$label_layer": 3,
+                    "$label_offset": [
+                        0,
+                        0
+                    ],
+                    "$label_text": "Button",
+                    "$nine_slice_buttom": 0,
+                    "$nine_slice_left": 0,
+                    "$nine_slice_right": 0,
+                    "$nine_slice_top": 0,
+                    "$nineslice_size": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "$pressed_button_name": "#IndustrialResearchProgressUI.researching_selected",
+                    "$pressed_texture": "",
+                    "$texture_layer": 2,
+                    "layer": 2,
+                    "button_mappings": [
+                        {
+                            "to_button_id": "#IndustrialResearchProgressUI.researching_selected",
+                            "from_button_id": "button.menu_select",
+                            "mapping_type": "pressed"
+                        }
+                    ],
+                    "default_control": "default",
+                    "hover_control": "hover",
+                    "is_handle_button_move_event": true,
+                    "pressed_control": "pressed",
+                    "bindings": [
+                        {
+                            "binding_type": "collection_details",
+                            "binding_collection_name": "industrial_researchings_grid",
+                            "binding_condition": "always_when_visible"
+                        }
+                    ],
+                    "controls": [
+                        {
+                            "default@netease_editor_template_namespace.default": {}
+                        },
+                        {
+                            "hover@netease_editor_template_namespace.hover": {}
+                        },
+                        {
+                            "pressed@netease_editor_template_namespace.pressed": {}
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

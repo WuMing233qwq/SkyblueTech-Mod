@@ -33,7 +33,11 @@
             },
             {
                 "selected_item_details_factory@common.selected_item_details_factory": {
-                    "layer": 4
+                    "layer": 4,
+                    "offset": [
+                        2,
+                        96.5
+                    ]
                 }
             },
             {
@@ -60,6 +64,86 @@
                                         "main": {
                                             "type": "panel",
                                             "controls": [
+                                                {
+                                                    "researching_btn@common.button": {
+                                                        "type": "button",
+                                                        "$control_alpha": 1.0,
+                                                        "$default_texture": "textures/ui/left_section",
+                                                        "$hover_texture": "textures/ui/left_section",
+                                                        "$is_new_nine_slice": false,
+                                                        "$label_color": [
+                                                            1,
+                                                            1,
+                                                            1
+                                                        ],
+                                                        "$label_font_scale_factor": 1.0,
+                                                        "$label_font_size": "large",
+                                                        "$label_layer": 3,
+                                                        "$label_offset": [
+                                                            0,
+                                                            0
+                                                        ],
+                                                        "$label_text": "Button",
+                                                        "$nine_slice_buttom": 0,
+                                                        "$nine_slice_left": 0,
+                                                        "$nine_slice_right": 0,
+                                                        "$nine_slice_top": 0,
+                                                        "$nineslice_size": [
+                                                            3.0,
+                                                            3.0,
+                                                            3.0,
+                                                            3.0
+                                                        ],
+                                                        "$pressed_button_name": "%netease_editor_template_namespace.click",
+                                                        "$pressed_texture": "textures/ui/left_section",
+                                                        "$texture_layer": 2,
+                                                        "anchor_from": "left_middle",
+                                                        "anchor_to": "right_middle",
+                                                        "offset": [
+                                                            4.0,
+                                                            0.0
+                                                        ],
+                                                        "size": [
+                                                            24.0,
+                                                            24.0
+                                                        ],
+                                                        "layer": 2,
+                                                        "button_mappings": [],
+                                                        "default_control": "default",
+                                                        "hover_control": "hover",
+                                                        "is_handle_button_move_event": true,
+                                                        "pressed_control": "pressed",
+                                                        "bindings": [
+                                                            {
+                                                                "binding_type": "collection_details",
+                                                                "binding_collection_name": "",
+                                                                "binding_condition": "always_when_visible"
+                                                            }
+                                                        ],
+                                                        "controls": [
+                                                            {
+                                                                "default@netease_editor_template_namespace.default": {}
+                                                            },
+                                                            {
+                                                                "hover@netease_editor_template_namespace.hover": {}
+                                                            },
+                                                            {
+                                                                "pressed@netease_editor_template_namespace.pressed": {}
+                                                            },
+                                                            {
+                                                                "image": {
+                                                                    "type": "image",
+                                                                    "size": [
+                                                                        "100%+-6px",
+                                                                        "100%+-6px"
+                                                                    ],
+                                                                    "layer": 3,
+                                                                    "texture": "textures/items/inscribing_template"
+                                                                }
+                                                            }
+                                                        ]
+                                                    }
+                                                },
                                                 {
                                                     "machine_label": {
                                                         "type": "label",

@@ -23,6 +23,7 @@ CRAFT_BTN_PATH = MAIN_PATH / "craft_btn"
 CRAFT_SPEED_BAR_PATH = MAIN_PATH / "craft_speed_bar"
 WARNING_BAR_PATH = MAIN_PATH / "warning_bar"
 PRGS_PATH = MAIN_PATH / "progress"
+RESEARCHING_BTN_PATH = MAIN_PATH / "researching_btn"
 OUTPUT_ITEM_PREVIEWER_PATH = (
     MAIN_PATH / "output_slot/slot/item_cell_overlay_ref/item_renderer"
 )
@@ -38,6 +39,12 @@ class MachineryWorkstationUI(MachinePanelUIProxy):
         self.warning_bar_display_time = 0
         self.craft_btn = (
             self.GetElement(CRAFT_BTN_PATH).asButton().SetCallback(self.onClickCraftBtn)
+        )
+        self.researching_btn = (
+            self
+            .GetElement(RESEARCHING_BTN_PATH)
+            .asButton()
+            .SetCallback(self.onClickResearchingBtn)
         )
         self.craft_speed_bar = self.GetElement(CRAFT_SPEED_BAR_PATH).asImage()
         self.warning_bar = self.GetElement(WARNING_BAR_PATH)
@@ -64,6 +71,13 @@ class MachineryWorkstationUI(MachinePanelUIProxy):
             return
         self.craft_strength = min(1.0, self.craft_strength + 0.3)
         MachineryWorkstationDoCraft(x, y, z, self.craft_strength).send()
+
+    def onClickResearchingBtn(self, _):
+        from skybluetech_scripts.skybluetech.client.ui.misc.industrial_researching_ui import (
+            IndustrialResearchProgressUI,
+        )
+
+        IndustrialResearchProgressUI.PushUI()
 
     def OnTicking(self):
         data = GetBlockEntityData(*self.pos[1:])

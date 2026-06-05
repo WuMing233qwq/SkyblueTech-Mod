@@ -59,7 +59,7 @@ def handle_abandoned_mineshaft(
     items = []
     item = _DropInscribingTemplate(
         playerId,
-        id_enum.ObjectUpgraders.VEINMINER,
+        id_enum.ObjectUpgraders.DIGSPEED,
         0.8,
     )
     if item:

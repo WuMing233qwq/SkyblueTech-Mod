@@ -10,6 +10,8 @@ class CategoryType:
     ITEM = "item"
     FLUID = "fluid"
     ENERGY = "energy"
+    EXP = "exp"
+    EXP_LV = "exp_lv"
 
 
 class _RecipeMeta(type):

@@ -41,6 +41,54 @@ recipes = TemplateAssemblerRecipesCollection(
         power_cost=60,
         tick_duration=120,
     ),
+    TemplateAssemblerRecipe(
+        {
+            0: Input(id_enum.Upgraders.EMPTY, 1),
+            1: Input("minecraft:sticky_piston", 5),
+            2: Input("minecraft:observer", 2),
+            3: Input(id_enum.ControlCircuit.ADVANCED, 1),
+            4: Input(tag_enum.PlateTag.STEEL, 5, is_tag=True),
+        },
+        id_enum.Upgraders.GENERIC_EXPANSION_UPGRADER,
+        power_cost=60,
+        tick_duration=160,
+    ),
+    TemplateAssemblerRecipe(
+        {
+            0: Input(id_enum.Upgraders.EMPTY, 1),
+            1: Input("minecraft:string", 8),
+            2: Input(tag_enum.StickTag.INVAR, 8),
+            3: Input("minecraft:paper", 1),
+            4: Input(tag_enum.PlateTag.STEEL, 4, is_tag=True),
+        },
+        id_enum.Upgraders.GENERIC_FILTER_DEFAULT,
+        power_cost=60,
+        tick_duration=120,
+    ),
+    TemplateAssemblerRecipe(
+        {
+            0: Input(id_enum.Upgraders.EMPTY, 1),
+            1: Input("minecraft:string", 8),
+            2: Input(tag_enum.StickTag.INVAR, 8),
+            3: Input("minecraft:paper", 1),
+            4: Input(tag_enum.PlateTag.STEEL, 4, is_tag=True),
+        },
+        id_enum.Upgraders.GENERIC_FILTER_DEFAULT,
+        power_cost=60,
+        tick_duration=120,
+    ),
+    TemplateAssemblerRecipe(
+        {
+            0: Input(id_enum.Upgraders.EMPTY, 1),
+            1: Input(id_enum.HEAT_PLATE, 4),
+            2: Input(tag_enum.StickTag.COPPER, 4),
+            3: Input("minecraft:paper", 1),
+            4: Input(tag_enum.PlateTag.STEEL, 4, is_tag=True),
+        },
+        id_enum.Upgraders.SPEC_MAGMA_FACTORY,
+        power_cost=60,
+        tick_duration=120,
+    ),
 )
 
 _cached_graphs = {}  # type: dict[tuple[int, ...], str]

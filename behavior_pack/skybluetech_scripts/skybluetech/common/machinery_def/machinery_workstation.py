@@ -517,6 +517,22 @@ recipes = RecipesCollection(
         MRecipe.LEVEL_IRON,
         8,
     ),
+    # mini miner
+    MRecipe(
+        {
+            1: Input(id_enum.ELECTRIC_MOTOR),
+            3: Input(tag_enum.PlateTag.INVAR, is_tag=True),
+            4: Input(id_enum.MACHINERY_FRAME),
+            5: Input(tag_enum.PlateTag.INVAR, is_tag=True),
+            6: Input(tag_enum.StickTag.INVAR, is_tag=True),
+            7: Input(id_enum.DRILL_TOP_STEEL),
+            8: Input(tag_enum.StickTag.INVAR, is_tag=True),
+        },
+        id_enum.MINI_MINER,
+        MRecipe.LEVEL_INVAR,
+        MRecipe.LEVEL_INVAR,
+        16,
+    ),
     # mixer
     MRecipe(
         {
@@ -575,7 +591,25 @@ recipes = RecipesCollection(
         MRecipe.LEVEL_IRON,
         8,
     ),
-    # redstone_generator
+    # reacting thermal generator
+    MRecipe(
+        {
+            0: Input(id_enum.Ingots.LIGHT_SKYBLUE),
+            1: Input(id_enum.REDSTONEFLUX_CORE),
+            2: Input(id_enum.Ingots.LIGHT_SKYBLUE),
+            3: Input(id_enum.Tank.BRONZE),
+            4: Input(id_enum.MACHINERY_FRAME),
+            5: Input(id_enum.Tank.STEEL),
+            6: Input(tag_enum.PlateTag.TIN, is_tag=True),
+            7: Input("minecraft:cauldron"),
+            8: Input(tag_enum.PlateTag.TIN, is_tag=True),
+        },
+        id_enum.REACTING_THERMAL_GENERATOR,
+        MRecipe.LEVEL_INVAR,
+        MRecipe.LEVEL_INVAR,
+        12,
+    ),
+    # redstone generator
     MRecipe(
         {
             1: Input(id_enum.REDSTONEFLUX_CORE),
@@ -589,6 +623,20 @@ recipes = RecipesCollection(
         id_enum.REDSTONE_GENERATOR,
         MRecipe.LEVEL_IRON,
         MRecipe.LEVEL_IRON,
+        8,
+    ),
+    # rf repeater plant
+    MRecipe(
+        {
+            1: Input(tag_enum.PlateTag.STEEL, is_tag=True),
+            3: Input(tag_enum.PlateTag.TIN, is_tag=True),
+            4: Input(tag_enum.StickTag.SUPERCONDUCT, is_tag=True),
+            5: Input(tag_enum.PlateTag.TIN, is_tag=True),
+            7: Input(id_enum.MACHINERY_BASE_LIGHT),
+        },
+        id_enum.RF_REPEATER_PLANT,
+        MRecipe.LEVEL_INVAR,
+        MRecipe.LEVEL_INVAR,
         8,
     ),
     # solar panel
@@ -631,36 +679,6 @@ recipes = RecipesCollection(
         id_enum.WIND_GENERATOR,
         MRecipe.LEVEL_IRON,
         MRecipe.LEVEL_IRON,
-        8,
-    ),
-    # mini miner
-    MRecipe(
-        {
-            1: Input(id_enum.ELECTRIC_MOTOR),
-            3: Input(tag_enum.PlateTag.INVAR, is_tag=True),
-            4: Input(id_enum.MACHINERY_FRAME),
-            5: Input(tag_enum.PlateTag.INVAR, is_tag=True),
-            6: Input(tag_enum.StickTag.INVAR, is_tag=True),
-            7: Input(id_enum.DRILL_TOP_STEEL),
-            8: Input(tag_enum.StickTag.INVAR, is_tag=True),
-        },
-        id_enum.MINI_MINER,
-        MRecipe.LEVEL_INVAR,
-        MRecipe.LEVEL_INVAR,
-        16,
-    ),
-    # rf repeater plant
-    MRecipe(
-        {
-            1: Input(tag_enum.PlateTag.STEEL, is_tag=True),
-            3: Input(tag_enum.PlateTag.TIN, is_tag=True),
-            4: Input(tag_enum.StickTag.SUPERCONDUCT, is_tag=True),
-            5: Input(tag_enum.PlateTag.TIN, is_tag=True),
-            7: Input(id_enum.MACHINERY_BASE_LIGHT),
-        },
-        id_enum.RF_REPEATER_PLANT,
-        MRecipe.LEVEL_INVAR,
-        MRecipe.LEVEL_INVAR,
         8,
     ),
 )
