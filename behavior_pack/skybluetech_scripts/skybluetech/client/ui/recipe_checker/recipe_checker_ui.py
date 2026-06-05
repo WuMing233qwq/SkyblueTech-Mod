@@ -155,6 +155,7 @@ class RecipeCheckerUI(ToolDeltaScreen):
         )
         self.current_page = 0
         self.total_pages_num = 0
+        self.recipes_per_page = 0
         if len(self.recipes_chain) > 0:
             self.category_prev_btn.SetVisible(self.category_index_start > 0)
             self.category_next_btn.SetVisible(
