@@ -138,10 +138,12 @@ def onNetworkTick(network):
                     continue
                 vol_takeout = min(out_capacity, fluid.volume)
                 fluid.volume -= vol_takeout
+                if fluid.volume <= 0:
+                    fluid.fluid_id = None
                 pipe_fluid_volume += vol_takeout
                 out_capacity -= vol_takeout
                 if pipe_fluid_id is None:
-                    pipe_fluid_id = fluid.fluid_id
+                    pipe_fluid_id = fluid_id
                 om._on_reduced_fluid(
                     slot, fluid_id, vol_takeout, is_final=True
                 )  # TODO: fix is_final
