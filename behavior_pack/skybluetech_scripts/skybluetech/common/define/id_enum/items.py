@@ -155,6 +155,7 @@ class Sticks:
     STEEL = "skybluetech:steel_stick"
     BRONZE = "skybluetech:bronze_stick"
     INVAR = "skybluetech:invar_stick"
+    CUPRONICKEL = "skybluetech:cupronickel_stick"
     SUPERCONDUCT = "skybluetech:superconduct_stick"
 
 

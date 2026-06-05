@@ -109,6 +109,9 @@
         "skybluetech:cupronickel_plate": {
             "textures": "textures/items/plates/cupronickel_plate"
         },
+        "skybluetech:cupronickel_stick": {
+            "textures": "textures/items/sticks/cupronickel_stick"
+        },
         "skybluetech:deactivation_redstone": {
             "textures": "textures/items/deactivation_redstone"
         },

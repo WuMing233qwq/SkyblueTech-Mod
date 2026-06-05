@@ -285,6 +285,7 @@ item.skybluetech:air_compress_unit.name=空气压缩单元
 item.skybluetech:cupronickel_ingot.name=白铜锭
 item.skybluetech:heat_plate.name=电阻发热盘
 item.skybluetech:cupronickel_plate.name=白铜板
+item.skybluetech:cupronickel_stick.name=白铜棒
 item.skybluetech:sulfur.name=硫块
 item.skybluetech:sulfur_dust.name=硫粉
 item.skybluetech:paddle_iron.name=铁扇叶

@@ -92,6 +92,16 @@ recipes = RecipesCollection(
     MetalPressRecipe(
         fluids.Common.LUBRICANT,
         10,
+        Ingots.CUPRONICKEL,
+        1,
+        Sticks.CUPRONICKEL,
+        2,
+        tick_duration=60,
+        power_cost=50,
+    ),
+    MetalPressRecipe(
+        fluids.Common.LUBRICANT,
+        10,
         Ingots.SUPERCONDUCT,
         1,
         Sticks.SUPERCONDUCT,
