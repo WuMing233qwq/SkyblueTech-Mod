@@ -22,6 +22,8 @@ class Dusts:
     ALUMITE = "skybluetech:alumite_dust"
     TIN = "skybluetech:tin_dust"
     LEAD = "skybluetech:lead_dust"
+    LEAD_OXIDE = "skybluetech:lead_oxide_dust"
+    LEAD_SULFATE = "skybluetech:lead_sulfate_dust"
     SILVER = "skybluetech:silver_dust"
     NICKEL = "skybluetech:nickel_dust"
     PLATINUM = "skybluetech:platinum_dust"

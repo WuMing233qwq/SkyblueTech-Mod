@@ -217,6 +217,12 @@
         "skybluetech:lead_ingot": {
             "textures": "textures/items/ingots/lead_ingot"
         },
+        "skybluetech:lead_oxide_dust": {
+            "textures": "textures/items/dusts/lead_oxide_dust"
+        },
+        "skybluetech:lead_sulfate_dust": {
+            "textures": "textures/items/dusts/lead_sulfate_dust"
+        },
         "skybluetech:lead_plate": {
             "textures": "textures/items/plates/lead_plate"
         },

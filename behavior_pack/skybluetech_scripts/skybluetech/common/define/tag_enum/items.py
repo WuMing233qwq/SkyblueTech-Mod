@@ -28,6 +28,8 @@ class DustTag:
     ALUMINUM = "dusts/aluminum"
     TIN = "dusts/tin"
     LEAD = "dusts/lead"
+    LEAD_OXIDE = "dusts/lead_oxide"
+    LEAD_SULFATE = "dusts/lead_sulfate"
     NICKEL = "dusts/nickel"
     SILVER = "dusts/silver"
     PLATINUM = "dusts/platinum"
