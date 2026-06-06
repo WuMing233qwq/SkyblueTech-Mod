@@ -1,6 +1,6 @@
 # coding=utf-8
 from ..define.id_enum import Plates, Ingots
-from ..mini_jei.tools.metal_hammer import (
+from ..mini_jei.misc.metal_hammer import (
     MetalHammerRecipe as MHRecipe,
     MetalHammerRecipesCollection,
     Input,

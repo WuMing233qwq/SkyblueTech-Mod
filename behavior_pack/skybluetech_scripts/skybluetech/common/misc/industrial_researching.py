@@ -7,6 +7,31 @@ all_researchings = RecipesCollection(
     "IndustrialResearching",
     IndustrialResearchingRecipe(
         [
+            Input("minecraft:redstone", 192),
+            Input("minecraft:quartz", 72),
+            Input("minecraft:lapis_lazuli", 40),
+            Input(id_enum.Coils.COPPER, 32),
+            Input(id_enum.ControlCircuit.ADVANCED, 24),
+            Input(id_enum.Wire.COPPER, 12),
+            Input(id_enum.SKYBLUE_CORE, 4),
+        ],
+        40,
+        id_enum.Upgraders.BASIC_SPEED_UPGRADER,
+    ),
+    IndustrialResearchingRecipe(
+        [
+            Input(id_enum.DEACTIVATION_REDSTONE, 48),
+            Input(id_enum.Wire.COPPER_INSULATED, 32),
+            Input(id_enum.REDSTONEFLUX_CORE, 12),
+            Input("minecraft:amethyst_shard", 9),
+            Input(id_enum.ControlCircuit.ADVANCED, 4),
+            Input(id_enum.HEAT_EXCHANGER, 2),
+        ],
+        24,
+        id_enum.Upgraders.BASIC_ENERGY_UPGRADER,
+    ),
+    IndustrialResearchingRecipe(
+        [
             Input("minecraft:string", 32),
             Input(id_enum.Sticks.INVAR, 16),
             Input("minecraft:redstone", 4),

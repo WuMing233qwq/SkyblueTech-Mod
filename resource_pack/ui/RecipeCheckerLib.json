@@ -1055,6 +1055,259 @@
             }
         ]
     },
+    "industrial_researching_recipes": {
+        "type": "panel",
+        "size": [
+            180.0,
+            80.0
+        ],
+        "layer": 1,
+        "controls": [
+            {
+                "bg": {
+                    "type": "image",
+                    "nineslice_size": [
+                        2.0,
+                        2.0,
+                        2.0,
+                        2.0
+                    ],
+                    "texture": "textures/ui/rect_panel_bg"
+                }
+            },
+            {
+                "arrow_img": {
+                    "type": "image",
+                    "size": [
+                        30.0,
+                        30.0
+                    ],
+                    "layer": 1,
+                    "texture": "textures/ui/arrow_img"
+                }
+            },
+            {
+                "slot0@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "left_middle",
+                    "anchor_to": "left_middle",
+                    "offset": [
+                        10,
+                        -20
+                    ]
+                }
+            },
+            {
+                "slot1@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "left_middle",
+                    "anchor_to": "left_middle",
+                    "offset": [
+                        30,
+                        -20
+                    ]
+                }
+            },
+            {
+                "slot2@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "left_middle",
+                    "anchor_to": "left_middle",
+                    "offset": [
+                        50,
+                        -20
+                    ]
+                }
+            },
+            {
+                "slot3@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "left_middle",
+                    "anchor_to": "left_middle",
+                    "offset": [
+                        10,
+                        0
+                    ]
+                }
+            },
+            {
+                "slot4@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "left_middle",
+                    "anchor_to": "left_middle",
+                    "offset": [
+                        30,
+                        0
+                    ]
+                }
+            },
+            {
+                "slot5@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "left_middle",
+                    "anchor_to": "left_middle",
+                    "offset": [
+                        50,
+                        0
+                    ]
+                }
+            },
+            {
+                "slot6@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "left_middle",
+                    "anchor_to": "left_middle",
+                    "offset": [
+                        10,
+                        20
+                    ]
+                }
+            },
+            {
+                "slot7@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "left_middle",
+                    "anchor_to": "left_middle",
+                    "offset": [
+                        30,
+                        20
+                    ]
+                }
+            },
+            {
+                "slot8@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "left_middle",
+                    "anchor_to": "left_middle",
+                    "offset": [
+                        50,
+                        20
+                    ]
+                }
+            },
+            {
+                "inscribing_template_slot@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "right_middle",
+                    "anchor_to": "right_middle",
+                    "offset": [
+                        -50,
+                        0
+                    ]
+                }
+            },
+            {
+                "inscribing_item_slot@SkybluePanelLib.item_displayer": {
+                    "anchor_from": "right_middle",
+                    "anchor_to": "right_middle",
+                    "offset": [
+                        -22,
+                        0
+                    ]
+                }
+            },
+            {
+                "researching_tip": {
+                    "type": "label",
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        36.0,
+                        19.0
+                    ],
+                    "layer": 1,
+                    "color": [
+                        0.2588235294117647,
+                        0.2588235294117647,
+                        0.2588235294117647
+                    ],
+                    "font_type": "default",
+                    "text": "模版研究"
+                }
+            },
+            {
+                "left_bracket": {
+                    "type": "label",
+                    "anchor_from": "right_middle",
+                    "anchor_to": "right_middle",
+                    "offset": [
+                        -43.0,
+                        0.0
+                    ],
+                    "color": [
+                        0.2588235294117647,
+                        0.2588235294117647,
+                        0.2588235294117647
+                    ],
+                    "font_size": "large",
+                    "font_type": "default",
+                    "text": "（",
+                    "text_alignment": "center"
+                }
+            },
+            {
+                "right_bracket": {
+                    "type": "label",
+                    "anchor_from": "right_middle",
+                    "anchor_to": "right_middle",
+                    "offset": [
+                        -15.0,
+                        0.0
+                    ],
+                    "color": [
+                        0.2588235294117647,
+                        0.2588235294117647,
+                        0.2588235294117647
+                    ],
+                    "font_size": "large",
+                    "font_type": "default",
+                    "text": "）",
+                    "text_alignment": "center"
+                }
+            },
+            {
+                "xp_orb_img": {
+                    "type": "image",
+                    "offset": [
+                        -8.0,
+                        22.0
+                    ],
+                    "size": [
+                        14.0,
+                        14.0
+                    ],
+                    "layer": 1,
+                    "color": [
+                        0.0,
+                        1.0,
+                        0.0
+                    ],
+                    "texture": "textures/ui/experience_orb",
+                    "uv": [
+                        16.0,
+                        16.0
+                    ],
+                    "uv_size": [
+                        16.0,
+                        16.0
+                    ]
+                }
+            },
+            {
+                "xp_cost_label": {
+                    "type": "label",
+                    "offset": [
+                        44.0,
+                        22.0
+                    ],
+                    "size": [
+                        80.0,
+                        10.0
+                    ],
+                    "layer": 1,
+                    "color": [
+                        0.0,
+                        1.0,
+                        0.0
+                    ],
+                    "font_scale_factor": 1.2,
+                    "font_type": "default",
+                    "shadow": true,
+                    "text": "花费经验 Lv 0"
+                }
+            }
+        ]
+    },
     "macerator_recipes": {
         "type": "panel",
         "size": [

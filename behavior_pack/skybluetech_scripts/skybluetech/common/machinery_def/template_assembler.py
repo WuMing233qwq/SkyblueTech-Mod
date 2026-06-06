@@ -57,7 +57,7 @@ recipes = TemplateAssemblerRecipesCollection(
         {
             0: Input(id_enum.Upgraders.EMPTY, 1),
             1: Input("minecraft:string", 8),
-            2: Input(tag_enum.StickTag.INVAR, 8),
+            2: Input(tag_enum.StickTag.INVAR, 8, is_tag=True),
             3: Input("minecraft:paper", 1),
             4: Input(tag_enum.PlateTag.STEEL, 4, is_tag=True),
         },
@@ -69,7 +69,7 @@ recipes = TemplateAssemblerRecipesCollection(
         {
             0: Input(id_enum.Upgraders.EMPTY, 1),
             1: Input("minecraft:string", 8),
-            2: Input(tag_enum.StickTag.INVAR, 8),
+            2: Input(tag_enum.StickTag.INVAR, 8, is_tag=True),
             3: Input("minecraft:paper", 1),
             4: Input(tag_enum.PlateTag.STEEL, 4, is_tag=True),
         },
@@ -81,7 +81,7 @@ recipes = TemplateAssemblerRecipesCollection(
         {
             0: Input(id_enum.Upgraders.EMPTY, 1),
             1: Input(id_enum.HEAT_PLATE, 4),
-            2: Input(tag_enum.StickTag.COPPER, 4),
+            2: Input(tag_enum.StickTag.COPPER, 4, is_tag=True),
             3: Input("minecraft:paper", 1),
             4: Input(tag_enum.PlateTag.STEEL, 4, is_tag=True),
         },

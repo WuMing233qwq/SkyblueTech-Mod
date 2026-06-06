@@ -2,7 +2,7 @@
 from skybluetech_scripts.tooldelta.define import Item
 from skybluetech_scripts.tooldelta.ui.elem_comp import UBaseCtrl
 from skybluetech_scripts.skybluetech.common.define.id_enum import METAL_HAMMER
-from skybluetech_scripts.skybluetech.common.mini_jei.tools.metal_hammer import (
+from skybluetech_scripts.skybluetech.common.mini_jei.misc.metal_hammer import (
     MetalHammerRecipe,
 )
 from ...ui.recipe_checker.render_utils import ItemDisplayer

@@ -16,7 +16,12 @@ class IndustrialResearchingRecipe(Recipe):
                 CategoryType.ITEM: {i: v for i, v in enumerate(require_items)},
                 CategoryType.EXP_LV: {0: Input(CategoryType.EXP_LV, require_exp_level)},
             },
-            {CategoryType.ITEM: {len(require_items): Output(result_item_id)}},
+            {
+                CategoryType.ITEM: {
+                    len(require_items): Output(result_item_id),
+                    len(require_items) + 1: Output(INSCRIBING_TEMPLATE),
+                }
+            },
         )
         self.require_items = require_items
         self.require_exp_level = require_exp_level
