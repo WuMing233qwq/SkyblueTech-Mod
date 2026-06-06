@@ -1,7 +1,13 @@
 {
     "format_version": "1.10",
     "minecraft:item": {
-        "components": {},
+        "components": {
+            "minecraft:tags": {
+                "tags": [
+                    "coil/copper"
+                ]
+            }
+        },
         "description": {
             "category": "skybluetech",
             "identifier": "skybluetech:coil_copper"
