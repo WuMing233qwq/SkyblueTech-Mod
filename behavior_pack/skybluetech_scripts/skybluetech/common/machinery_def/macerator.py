@@ -1,6 +1,6 @@
 # coding=utf-8
 from ..mini_jei.core import RecipesCollection
-from ..define.id_enum import MACERATOR, Dusts
+from ..define.id_enum import MACERATOR, Dusts, SULFUR
 from ..define.tag_enum.items import IngotTag, RawTag
 from ..mini_jei.machinery.macerator import (
     MachineRecipe,
@@ -28,6 +28,7 @@ recipes = RecipesCollection(
     preset("minecraft:coal", 1, "skybluetech:carbon_dust", 1),
     preset("minecraft:charcoal", 1, "skybluetech:carbon_dust", 1),
     preset("minecraft:ancient_debris", 1, "skybluetech:ancient_debris_dust", 1),
+    preset(SULFUR, 1, Dusts.SULFUR, 1),
     # Ingot 2 Dust
     preset("minecraft:copper_ingot", 1, Dusts.COPPER, 1),
     preset("minecraft:iron_ingot", 1, Dusts.IRON, 1),
