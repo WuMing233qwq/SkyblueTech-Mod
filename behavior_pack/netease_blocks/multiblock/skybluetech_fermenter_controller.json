@@ -36,7 +36,7 @@
         },
         "description": {
             "base_block": "netease_container",
-            "category": "skybluetech",
+            "category": "none",
             "identifier": "skybluetech:fermenter_controller",
             "traits": {
                 "minecraft:placement_direction": {

@@ -31,7 +31,7 @@
         },
         "description": {
             "base_block": "netease_container",
-            "category": "skybluetech",
+            "category": "none",
             "identifier": "skybluetech:fermenter_io_fluid1"
         }
     }

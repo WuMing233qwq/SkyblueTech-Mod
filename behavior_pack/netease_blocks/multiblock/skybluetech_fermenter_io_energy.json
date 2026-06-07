@@ -26,7 +26,7 @@
             "tag:redstoneflux_connectable": {}
         },
         "description": {
-            "category": "skybluetech",
+            "category": "none",
             "identifier": "skybluetech:fermenter_io_energy"
         }
     }
