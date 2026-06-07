@@ -258,7 +258,13 @@ class MiniJEIItemListUI(ToolDeltaScreen):
 
         CreateDescBoard(
             button._parent,
-            (x + 20, y),
+            (
+                x + 20,
+                min(
+                    y,
+                    self.grid_panel.GetSize()[1] - 40,
+                ),
+            ),
             CategoryType.ITEM,
             item_id,
             item_id,
