@@ -23,6 +23,23 @@ ingot_rcp = gen_preset_recipe(L_POWER, L_TICK_DURATION)
 recipes = RecipesCollection(
     ALLOY_FURNACE,
     # Alloy
+    # alumite
+    ingot_rcp(
+        {
+            0: Input(IngotTag.ALUMINUM, 3, is_tag=True),
+            1: Input(IngotTag.TITANIUM, 2, is_tag=True),
+            2: Input("minecraft:iron_ingot", 1),
+        },
+        {4: Output(Ingots.ALUMITE, 3)},
+    ),
+    dust_rcp(
+        {
+            0: Input(DustTag.ALUMINUM, 3, is_tag=True),
+            1: Input(DustTag.TITANIUM, 2, is_tag=True),
+            2: Input(DustTag.IRON, is_tag=True),
+        },
+        {4: Output(Ingots.ALUMITE, 3)},
+    ),
     # bronze
     dust_rcp(
         {0: Input(DustTag.COPPER, 3, True), 1: Input(DustTag.TIN, 1, True)},
@@ -32,6 +49,21 @@ recipes = RecipesCollection(
         {0: Input("minecraft:copper_ingot", 3), 1: Input(IngotTag.TIN, 1, True)},
         {4: Output(Ingots.BRONZE, 4)},
     ),
+    # cupronickel
+    dust_rcp(
+        {
+            0: Input(DustTag.COPPER, is_tag=True),
+            1: Input(DustTag.NICKEL, is_tag=True),
+        },
+        {4: Output(Ingots.CUPRONICKEL, 1)},
+    ),
+    ingot_rcp(
+        {
+            0: Input("minecraft:copper_ingot"),
+            1: Input(IngotTag.NICKEL, is_tag=True),
+        },
+        {4: Output(Ingots.CUPRONICKEL, 1)},
+    ),
     # invar
     dust_rcp(
         {0: Input(DustTag.IRON, 2, True), 1: Input(DustTag.NICKEL, 1, True)},
@@ -40,6 +72,21 @@ recipes = RecipesCollection(
     ingot_rcp(
         {0: Input("minecraft:iron_ingot", 2), 1: Input(IngotTag.NICKEL, 1, True)},
         {4: Output(Ingots.INVAR, 3)},
+    ),
+    # light skyblue
+    ingot_rcp(
+        {
+            0: Input(IngotTag.TIN, 2, is_tag=True),
+            2: Input(DustTag.LAPIS, is_tag=True),
+        },
+        {4: Output(Ingots.LIGHT_SKYBLUE, 2)},
+    ),
+    dust_rcp(
+        {
+            0: Input(DustTag.TIN, 2, is_tag=True),
+            2: Input(DustTag.LAPIS, is_tag=True),
+        },
+        {4: Output(Ingots.LIGHT_SKYBLUE, 1)},
     ),
     # steel
     dust_rcp(
@@ -79,38 +126,6 @@ recipes = RecipesCollection(
             2: Input(DustTag.LEAD, is_tag=True),
         },
         {4: Output(Ingots.SOLDERING, 3)},
-    ),
-    # alumite
-    ingot_rcp(
-        {
-            0: Input(IngotTag.ALUMINUM, 3, is_tag=True),
-            1: Input(IngotTag.TITANIUM, 2, is_tag=True),
-            2: Input("minecraft:iron_ingot", 1),
-        },
-        {4: Output(Ingots.ALUMITE, 3)},
-    ),
-    dust_rcp(
-        {
-            0: Input(DustTag.ALUMINUM, 3, is_tag=True),
-            1: Input(DustTag.TITANIUM, 2, is_tag=True),
-            2: Input(DustTag.IRON, is_tag=True),
-        },
-        {4: Output(Ingots.ALUMITE, 3)},
-    ),
-    # cupronickel
-    dust_rcp(
-        {
-            0: Input(DustTag.COPPER, is_tag=True),
-            1: Input(DustTag.NICKEL, is_tag=True),
-        },
-        {4: Output(Ingots.CUPRONICKEL, 1)},
-    ),
-    ingot_rcp(
-        {
-            0: Input("minecraft:copper_ingot"),
-            1: Input(IngotTag.NICKEL, is_tag=True),
-        },
-        {4: Output(Ingots.CUPRONICKEL, 1)},
     ),
     # superconduct
     ingot_rcp(
