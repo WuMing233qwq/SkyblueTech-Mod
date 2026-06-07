@@ -8,6 +8,7 @@ from skybluetech_scripts.tooldelta.ui import (
 )
 from skybluetech_scripts.tooldelta.define import Item
 from skybluetech_scripts.tooldelta.events.client import (
+    MouseWheelClientEvent,
     OnKeyPressInGame,
     ScreenSizeChangedClientEvent,
 )
@@ -194,33 +195,33 @@ class RecipeCheckerUI(ToolDeltaScreen):
             "%s§f %d/%d" % (rcp_title, self.current_page + 1, self.total_pages_num)
         )
 
-    def onClose(self, params):
+    def onClose(self, params=None):
         self.RemoveUI()
 
-    def onBack(self, params):
+    def onBack(self, params=None):
         self.recipes_chain.pop(-1)
         self.update_all()
 
-    def onPrevPage(self, params):
-        if self.total_pages_num == 0:
+    def onPrevPage(self, params=None):
+        if self.total_pages_num <= 1:
             return
         self.current_page = (self.current_page - 1) % self.total_pages_num
         self.update_current_recipe_page()
 
-    def onNextPage(self, params):
-        if self.total_pages_num == 0:
+    def onNextPage(self, params=None):
+        if self.total_pages_num <= 1:
             return
         self.current_page = (self.current_page + 1) % self.total_pages_num
         self.update_current_recipe_page()
 
-    def onCategoryPrev(self, params):
+    def onCategoryPrev(self, params=None):
         categories = len(self.recipes_chain[-1])
         self.category_index_start = (self.category_index_start - 1) % categories
         if self.category_index_start + 8 > categories:
             self.category_index_start = max(0, categories - 8)
         self.update_recipe_categories()
 
-    def onCategoryNext(self, params):
+    def onCategoryNext(self, params=None):
         categories = len(self.recipes_chain[-1])
         self.category_index_start = (self.category_index_start + 1) % categories
         if self.category_index_start + 8 > categories:
@@ -232,6 +233,14 @@ class RecipeCheckerUI(ToolDeltaScreen):
         # type: (OnKeyPressInGame) -> None
         if event.isDown and event.key == event.KeyBoardType.KEY_ESCAPE:
             self.RemoveUI()
+
+    @ToolDeltaScreen.Listen(MouseWheelClientEvent)
+    def onMouseWheel(self, event):
+        # type: (MouseWheelClientEvent) -> None
+        if event.direction == 1:
+            self.onPrevPage()
+        else:
+            self.onNextPage()
 
     @ToolDeltaScreen.Listen(ScreenSizeChangedClientEvent)
     def onScreenSizeChanged(self, _):

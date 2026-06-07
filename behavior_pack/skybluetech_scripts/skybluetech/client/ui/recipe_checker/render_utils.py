@@ -103,9 +103,10 @@ def CreateDescBoard(hang_ctrl, global_xy, category, item_id, display_item_id, te
         RemoveFavourite,
     )
     from .recipe_checker_ui import RecipeCheckerUI
+    from .minijei_items_page import MiniJEIItemListUI
 
     ui_node = hang_ctrl._root
-    if not isinstance(ui_node, RecipeCheckerUI):
+    if not isinstance(ui_node, (RecipeCheckerUI, MiniJEIItemListUI)):
         return None
 
     if DESC_BOARD_KEY in ui_node._vars:

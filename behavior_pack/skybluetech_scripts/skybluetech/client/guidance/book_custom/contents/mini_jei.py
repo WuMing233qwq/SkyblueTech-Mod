@@ -6,12 +6,23 @@ from ..define import (
 )
 
 
+def on_open_minijei(_):
+    from skybluetech_scripts.skybluetech.client.ui.recipe_checker.minijei_items_page import (
+        MiniJEIItemListUI,
+    )
+
+    MiniJEIItemListUI.PushUI()
+
+
 mini_jei_desc = PageGroup(
     "mini_jei_intro",
     [
         TextPage(
             "内置配方表",
-            '为了方便游戏内查询《蔚蓝科技》的相关配方， 模组内置了配方查看器， 称为 <text color="§2" t="“Mini JEI”">。 \n\n在机器的操作界面通常都会有一个<img path="textures/ui/searcher">按钮， 点击后可以看到这台机器可以参与制作的所有配方。',
+            '为了方便游戏内查询《蔚蓝科技》的相关配方， 模组内置了配方查看器， 称为 <text color="§2" t="“Mini JEI”">。 \n\n在机器的操作界面通常都会有一个<img path="textures/ui/searcher">按钮， 点击后可以看到这台机器可以参与制作的所有配方。\n\n<style color="§d"><link id="mini_jei" text="[点我打开 MiniJEI]">',
+            hyperlink_cbs={
+                "mini_jei": on_open_minijei,
+            },
         ),
         TextPage(
             "",
