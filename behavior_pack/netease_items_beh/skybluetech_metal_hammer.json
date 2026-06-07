@@ -3,7 +3,10 @@
     "minecraft:item": {
         "components": {
             "minecraft:max_damage": 96,
-            "minecraft:max_stack_size": 1
+            "minecraft:max_stack_size": 1,
+            "netease:customtips": {
+                "value": "\n§7将所需金属锭扔到地上， 手持§f金属锤§7长按/左键金属锭下方地面\n§7即可将金属锭压制为板。"
+            }
         },
         "description": {
             "category": "skybluetech",
