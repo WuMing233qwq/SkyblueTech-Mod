@@ -94,8 +94,6 @@ class RFRepeaterPlantBuildUI(ToolDeltaScreen):
         if self.nearest_machine_pos is None:
             return
         nx, ny, nz = self.nearest_machine_pos
-        while GetBlockNameAndAux((nx, ny, nz))[1] & 3 != 0:
-            ny -= 1
         RFRepeaterPlantBuildRequest(
             self.original_x, self.original_y, self.original_z, nx, ny, nz
         ).send()
@@ -205,7 +203,7 @@ def get_nearest_plant():
     if hypot(nx - x, ny - y, nz - z) > 4:
         return None
     _, aux = GetBlockNameAndAux((nx, ny, nz))
-    layer = (aux & 0b1100) >> 2
+    layer = aux & 0b11
     return (nx, ny - layer, nz)
 
 

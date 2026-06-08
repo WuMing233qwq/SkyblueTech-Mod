@@ -1,4 +1,5 @@
 # coding=utf-8
+from mod_log import logger
 from skybluetech_scripts.tooldelta.api.server import GetPlayerDimensionId
 from skybluetech_scripts.tooldelta.extensions.rate_limiter import PlayerRateLimiter
 from skybluetech_scripts.skybluetech.common.events.machinery.rf_repeater_plant import (
@@ -35,22 +36,42 @@ def onEstablishConn(event):
         RFRepeaterPlantBuildResponse(
             RFRepeaterPlantBuildResponse.STATUS_INVALID_START, sub_status_code=0
         ).send(event.player_id)
+        logger.warning(
+            "[SkyblueTech] RFRepeaterPlant: player built invalid end plant at {}: {}".format(
+                (event.to_x, event.to_y, event.to_z), start_m
+            )
+        )
         return
     elif not start_m.is_base_block:
         RFRepeaterPlantBuildResponse(
             RFRepeaterPlantBuildResponse.STATUS_INVALID_START, sub_status_code=1
         ).send(event.player_id)
+        logger.warning(
+            "[SkyblueTech] RFRepeaterPlant: player built invalid start plant layer at {}: {}".format(
+                (event.x, event.y, event.z), start_m.layer
+            )
+        )
         return
     end_m = GetMachineStrict(dim, event.to_x, event.to_y, event.to_z)
     if not isinstance(end_m, RFRepeaterPlant):
         RFRepeaterPlantBuildResponse(
             RFRepeaterPlantBuildResponse.STATUS_INVALID_END, sub_status_code=0
         ).send(event.player_id)
+        logger.warning(
+            "[SkyblueTech] RFRepeaterPlant: player built invalid end plant at {}: {}".format(
+                (event.to_x, event.to_y, event.to_z), end_m
+            )
+        )
         return
     elif not end_m.is_base_block:
         RFRepeaterPlantBuildResponse(
             RFRepeaterPlantBuildResponse.STATUS_INVALID_END, sub_status_code=1
         ).send(event.player_id)
+        logger.warning(
+            "[SkyblueTech] RFRepeaterPlant: player built invalid end plant layer at {}: {}".format(
+                (event.to_x, event.to_y, event.to_z), end_m.layer
+            )
+        )
         return
     start_pos = (event.x, event.y, event.z)
     end_pos = (event.to_x, event.to_y, event.to_z)
@@ -60,11 +81,25 @@ def onEstablishConn(event):
         RFRepeaterPlantBuildResponse(
             RFRepeaterPlantBuildResponse.STATUS_INTERNAL_ERROR, sub_status_code=0
         ).send(event.player_id)
+        logger.error(
+            "[SkyblueTech] RFRepeaterPlant: internal error at {}: start_nearby_nodes is None".format((
+                event.to_x,
+                event.to_y,
+                event.to_z,
+            ))
+        )
         return
     elif end_nearby_nodes is None:
         RFRepeaterPlantBuildResponse(
             RFRepeaterPlantBuildResponse.STATUS_INTERNAL_ERROR, sub_status_code=1
         ).send(event.player_id)
+        logger.error(
+            "[SkyblueTech] RFRepeaterPlant: internal error at {}: end_nearby_nodes is None".format((
+                event.to_x,
+                event.to_y,
+                event.to_z,
+            ))
+        )
         return
     elif start_pos in end_nearby_nodes or end_pos in start_nearby_nodes:
         RFRepeaterPlantBuildResponse(
@@ -94,6 +129,16 @@ def onEstablishConn(event):
             RFRepeaterPlantBuildResponse.STATUS_INTERNAL_ERROR2,
             sub_status_code=sub_stat_code,
         ).send(event.player_id)
+        logger.error(
+            "[SkyblueTech] RFRepeaterPlant: internal error at {}: build_connection failed: {}".format(
+                (
+                    event.to_x,
+                    event.to_y,
+                    event.to_z,
+                ),
+                sub_stat_code,
+            )
+        )
         return
     RFRepeaterPlantBuildResponse(RFRepeaterPlantBuildResponse.STATUS_SUCC).send(
         event.player_id
