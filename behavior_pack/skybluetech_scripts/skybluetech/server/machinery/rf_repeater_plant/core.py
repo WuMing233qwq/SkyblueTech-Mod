@@ -197,6 +197,8 @@ class RFRepeaterPlant(BaseMachine, GUIControl):
         # type: (NetworkData | None) -> None
         if from_network is not None:
             self.nodes_in_network = from_network.nodes
+            mode = from_network.nodes.get((self.x, self.y, self.z), self.mode)
+            self.sync_energy_io_mode(mode)
         else:
             my_node = get_node(self.dim, (self.x, self.y, self.z))
             self.nodes_in_network = {}
@@ -204,14 +206,25 @@ class RFRepeaterPlant(BaseMachine, GUIControl):
                 network = get_network(my_node.bound_network_uuid)
                 if network is not None:
                     self.nodes_in_network = network.nodes
-                self.energy_io_mode = (
-                    1,
-                    1,
-                    int(self.mode),
-                    int(self.mode),
-                    int(self.mode),
-                    int(self.mode),
-                )
+                    mode = network.nodes.get((self.x, self.y, self.z), self.mode)
+                    self.sync_energy_io_mode(mode)
+
+    def sync_energy_io_mode(self, mode=None):
+        # type: (int | None) -> None
+        if not self.is_base_block:
+            self.energy_io_mode = (2, 2, 2, 2, 2, 2)
+            return
+        if mode is None:
+            mode = self.mode
+        self.mode = int(mode)
+        self.energy_io_mode = (
+            1,
+            1,
+            int(mode),
+            int(mode),
+            int(mode),
+            int(mode),
+        )
 
     def recv_energy(self, rf):
         # type: (int) -> tuple[bool, int]

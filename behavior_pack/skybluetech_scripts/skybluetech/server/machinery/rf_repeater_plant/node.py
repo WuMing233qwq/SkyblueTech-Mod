@@ -250,6 +250,7 @@ def change_node_mode(dim, x, y, z, new_mode):
     save_nodes_data(nodes_data)
     s = sum_network_data(network_uuid)
     io_mode = m.bdata[NodeData.K_MODE]
+    m.sync_energy_io_mode(node.mode)
     RFRepeaterPlantSettingsUpdate(
         dim,
         x,
