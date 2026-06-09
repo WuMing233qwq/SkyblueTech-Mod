@@ -93,6 +93,8 @@ class ObjectUpgraders:
     AUTO_BURNING = "skybluetech:obj_upgrader_autoburning"
     DIGSPEED = "skybluetech:obj_upgrader_digspeed"
     FORTUNE = "skybluetech:obj_upgrader_fortune"
+    PLATE_COMMON = "skybluetech:obj_upgrader_plate_common"
+    PLATE_SPEC = "skybluetech:obj_upgrader_plate_spec"
     VEINMINER = "skybluetech:obj_upgrader_veinminer"
     SPEC_FARMING = "skybluetech:obj_upgrader_spec_farming"
     SPEC_NOFARM = "skybluetech:obj_upgrader_spec_nofarm"

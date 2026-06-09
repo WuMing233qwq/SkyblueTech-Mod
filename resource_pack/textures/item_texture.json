@@ -307,6 +307,12 @@
         "skybluetech:obj_upgrader_fortune": {
             "textures": "textures/items/object_upgraders/obj_upgrader_fortune"
         },
+        "skybluetech:obj_upgrader_plate_common": {
+            "textures": "textures/items/object_upgraders/obj_upgrader_plate_common"
+        },
+        "skybluetech:obj_upgrader_plate_spec": {
+            "textures": "textures/items/object_upgraders/obj_upgrader_plate_spec"
+        },
         "skybluetech:obj_upgrader_spec_farming": {
             "textures": "textures/items/object_upgraders/obj_upgrader_spec_farming"
         },
