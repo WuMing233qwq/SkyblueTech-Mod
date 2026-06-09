@@ -187,11 +187,9 @@ def onNetworkTick(network):
     cached_block_entity_datas = {}  # type: dict[tuple[int, int, int], dict]
     cached_block_names = {}  # type: dict[tuple[int, int, int], str]
     cached_input_slot_poses = {}  # type: dict[tuple[int, int, int], typing.Iterable[int]]
-    cached_input_slotitems = {}  # type: dict[tuple[int, int, int], dict[int, Item | None]]
-    input_slotitem_changed = {}  # type: dict[tuple[int, int, int], set[int]]
     cached_output_slot_poses = {}  # type: dict[tuple[int, int, int], typing.Iterable[int]]
-    cached_output_slotitems = {}  # type: dict[tuple[int, int, int], dict[int, Item | None]]
-    output_slotitem_changed = {}  # type: dict[tuple[int, int, int], set[int]]
+    cached_slotitems = {}  # type: dict[tuple[int, int, int], dict[int, Item | None]]
+    slotitem_changed = {}  # type: dict[tuple[int, int, int], set[int]]
     inputs = network.get_input_access_points()
     outputs = network.get_output_access_points()
 
@@ -227,14 +225,16 @@ def onNetworkTick(network):
 
         for output_slot in output_slotposes:
             output_item = _get_container_item(
-                network.dim, output_pos, output_slot, cached_output_slotitems
+                network.dim, output_pos, output_slot, cached_slotitems
             )
             if output_item is None:
                 continue
 
             count_to_send = min(tick_capacity, output_item.count)
-            count_cant_send = output_item.count - count_to_send
-            output_item.count = count_to_send
+            if count_to_send <= 0:
+                break
+            send_item = output_item.copy()
+            send_item.count = count_to_send
 
             for input_ap in inputs:
                 input_pos = input_ap.target_pos
@@ -257,42 +257,47 @@ def onNetworkTick(network):
                 )
                 for input_slot in input_slotposes:
                     if isinstance(m, ItemContainer):
-                        if not m.IsValidInput(input_slot, output_item):
+                        if not m.IsValidInput(input_slot, send_item):
                             continue
                     input_item = _get_container_item(
-                        network.dim, input_pos, input_slot, cached_input_slotitems
+                        network.dim, input_pos, input_slot, cached_slotitems
                     )
                     if input_item is None:
-                        cached_input_slotitems[input_pos][input_slot] = (
-                            output_item.copy()
+                        move_count = min(
+                            send_item.count, send_item.GetBasicInfo().maxStackSize
                         )
-                        output_item.count = 0
-                    elif (
-                        input_item.CanMerge(output_item) and not input_item.StackFull()
-                    ):
+                        input_item = send_item.copy()
+                        input_item.count = move_count
+                        cached_slotitems[input_pos][input_slot] = input_item
+                        send_item.count -= move_count
+                    elif input_item.CanMerge(send_item) and not input_item.StackFull():
                         # print "Slot", input_slot, input_item.marshal()
-                        input_item.MergeFrom(output_item)
-                        cached_input_slotitems[input_pos][input_slot] = input_item
+                        before_count = send_item.count
+                        input_item.MergeFrom(send_item)
+                        move_count = before_count - send_item.count
+                        if move_count <= 0:
+                            continue
+                        cached_slotitems[input_pos][input_slot] = input_item
                     else:
                         continue
 
-                    input_slotitem_changed.setdefault(input_pos, set()).add(input_slot)
-                    output_slotitem_changed.setdefault(output_pos, set()).add(
-                        output_slot
-                    )
+                    output_item.count -= move_count
+                    tick_capacity -= move_count
 
-                    tick_capacity -= count_to_send - output_item.count
-                    output_item.count += count_cant_send
+                    slotitem_changed.setdefault(input_pos, set()).add(input_slot)
+                    slotitem_changed.setdefault(output_pos, set()).add(output_slot)
 
                     if output_item.count <= 0:
                         # 输出槽物品已全部投递
-                        cached_output_slotitems[output_pos][output_slot] = None
+                        cached_slotitems[output_pos][output_slot] = None
                         break_flag2 = True
                         break
                     else:
-                        cached_output_slotitems[output_pos][output_slot] = output_item
+                        cached_slotitems[output_pos][output_slot] = output_item
                     if tick_capacity <= 0:
                         break_flag1 = break_flag2 = True
+                        break
+                    if send_item.count <= 0:
                         break
 
                 if break_flag2:
@@ -300,23 +305,15 @@ def onNetworkTick(network):
         if break_flag1:
             break
 
-    for pos, changed_slots in output_slotitem_changed.items():
+    for pos, changed_slots in slotitem_changed.items():
         for slot in changed_slots:
-            item = cached_output_slotitems[pos][slot]
+            item = cached_slotitems[pos][slot]
             if item is None:
                 SetContainerItem(network.dim, pos, slot, Item("minecraft:air"))
             else:
                 SetContainerItem(network.dim, pos, slot, item)
 
-    for pos, changed_slots in input_slotitem_changed.items():
-        for slot in changed_slots:
-            item = cached_input_slotitems[pos][slot]
-            if item is None:
-                SetContainerItem(network.dim, pos, slot, Item("minecraft:air"))
-            else:
-                SetContainerItem(network.dim, pos, slot, item)
-
-    # print input_slotitem_changed, output_slotitem_changed
+    # print slotitem_changed
 
 
 def _get_container_item(
