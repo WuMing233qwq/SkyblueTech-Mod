@@ -253,7 +253,7 @@
                                                 "100%+-4px"
                                             ],
                                             "layer": 1,
-                                            "texture": "textures/machines/rf_repeater_plant"
+                                            "texture": "textures/icon/rf_repeater_plant_icon"
                                         }
                                     }
                                 ]
