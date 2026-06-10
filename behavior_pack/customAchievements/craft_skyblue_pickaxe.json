@@ -1,0 +1,16 @@
+{
+    "node_ID": "skybluetech:craft_skyblue_pickaxe",
+    "parent_node": "skybluetech:craft_charger",
+    "title": "这是电钻吗？",
+    "unfinished_icon": "textures/items/skyblue_pickaxe",
+    "finished_icon": "textures/items/skyblue_pickaxe",
+    "goal_details": {
+        "item_dict": {
+            "newItemName": "skybluetech:skyblue_pickaxe"
+        },
+        "goal_type": "default_get"
+    },
+    "goal_number": 1,
+    "depend_parent": true,
+    "node_description": "合成一把蔚蓝充能镐， 可以以能量代替耐久消耗。\n\n§8§o总之——比一般的工具环保。 经验修补？那个不算！"
+}

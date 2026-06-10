@@ -1,0 +1,16 @@
+{
+    "node_ID": "skybluetech:get_redstoneflux_core",
+    "parent_node": "skybluetech:resin_collect",
+    "title": "能量结晶",
+    "unfinished_icon": "textures/items/redstoneflux_core",
+    "finished_icon": "textures/items/redstoneflux_core",
+    "goal_details": {
+        "item_dict": {
+            "newItemName": "skybluetech:redstoneflux_core"
+        },
+        "goal_type": "default_get"
+    },
+    "goal_number": 1,
+    "depend_parent": true,
+    "node_description": "将红石在高炉中烧制成红石通量核心， 用于各类能源相关机械的合成。\n\n§8§o我们的热力开始膨胀.."
+}

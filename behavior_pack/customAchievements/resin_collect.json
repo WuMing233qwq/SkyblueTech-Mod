@@ -1,0 +1,16 @@
+{
+    "node_ID": "skybluetech:resin_collect",
+    "title": "橡树之胶",
+    "parent_node": "skybluetech:intro",
+    "unfinished_icon": "textures/items/resin",
+    "finished_icon": "textures/items/resin",
+    "goal_details": {
+        "item_dict": {
+            "newItemName": "skybluetech:resin"
+        },
+        "goal_type": "default_get"
+    },
+    "goal_number": 3,
+    "node_description": "制作树脂采集斗并获取一些生树脂吧。\n\n§8§o树脂是工业所需橡胶的来源之一。",
+    "finish_tip": true
+}

@@ -1,0 +1,16 @@
+{
+    "node_ID": "skybluetech:craft_upgrader",
+    "parent_node": "skybluetech:craft_machinery_workstation",
+    "title": "还能变得更强吗？",
+    "unfinished_icon": "textures/items/upgraders/upgrader_basic_energy",
+    "finished_icon": "textures/items/upgraders/upgrader_basic_energy",
+    "goal_details": {
+        "item_dict": {
+            "newItemName": "skybluetech:upgrader_plate_empty"
+        },
+        "goal_type": "default_get"
+    },
+    "goal_number": 1,
+    "depend_parent": true,
+    "node_description": "合成一张升级基板， 它可以被进一步制造成可以插入机器的升级模块， 提升机器特定能力。\n\n§8§o这才叫“省电器”！"
+}

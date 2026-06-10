@@ -1,0 +1,16 @@
+{
+    "node_ID": "skybluetech:craft_battery_matrix_frame",
+    "parent_node": "skybluetech:craft_wire",
+    "title": "削峰填谷",
+    "unfinished_icon": "textures/machines/battery_matrix_controller_front",
+    "finished_icon": "textures/machines/battery_matrix_controller_front_active",
+    "goal_details": {
+        "item_dict": {
+            "newItemName": "skybluetech:battery_matrix_frame"
+        },
+        "goal_type": "default_get"
+    },
+    "goal_number": 1,
+    "depend_parent": true,
+    "node_description": "制造电池仓框架， 搭建一个电池仓， 存储多余能量以备不时之需。\n\n§8§o我们需要大力推进这种智慧储能模式， 推动绿电长效健康发展。"
+}

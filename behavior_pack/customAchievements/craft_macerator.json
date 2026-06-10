@@ -1,0 +1,16 @@
+{
+    "node_ID": "skybluetech:craft_macerator",
+    "parent_node": "skybluetech:craft_thermal_generator",
+    "title": "粉碎机..粉碎..粉碎机？",
+    "unfinished_icon": "textures/machines/macerator_front",
+    "finished_icon": "textures/machines/macerator_front",
+    "goal_details": {
+        "item_dict": {
+            "newItemName": "skybluetech:macerator"
+        },
+        "goal_type": "default_get"
+    },
+    "goal_number": 1,
+    "depend_parent": true,
+    "node_description": "用机件加工台制作一台粉碎机， 可用于制作矿粉， 亦或粉碎粗矿以提升产出利用率。\n\n§8§o（一段拗口的小品）..."
+}

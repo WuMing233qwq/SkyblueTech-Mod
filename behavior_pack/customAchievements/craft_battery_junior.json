@@ -1,0 +1,16 @@
+{
+    "node_ID": "skybluetech:craft_battery_junior",
+    "parent_node": "skybluetech:craft_charger",
+    "title": "随身充",
+    "unfinished_icon": "textures/items/batterys/battery_junior",
+    "finished_icon": "textures/items/batterys/battery_junior",
+    "goal_details": {
+        "item_dict": {
+            "newItemName": "skybluetech:battery_junior"
+        },
+        "goal_type": "default_get"
+    },
+    "goal_number": 1,
+    "depend_parent": true,
+    "node_description": "合成一个初级电池， 可以放入电池仓储能， 或随身携带以为充能装备供能。\n\n§8§o来自滨海电池厂的3C认证能量立方——大容量， 耐用， 自带转接头！"
+}

@@ -1,0 +1,16 @@
+{
+    "node_ID": "skybluetech:craft_rf_repeater_plant",
+    "parent_node": "skybluetech:craft_wire",
+    "title": "电通南北",
+    "unfinished_icon": "textures/icon/rf_repeater_plant_icon",
+    "finished_icon": "textures/icon/rf_repeater_plant_icon",
+    "goal_details": {
+        "item_dict": {
+            "newItemName": "skybluetech:rf_repeater_plant"
+        },
+        "goal_type": "default_get"
+    },
+    "goal_number": 1,
+    "depend_parent": true,
+    "node_description": "制造能源中继塔， 进行远距离输电。\n\n§8§o拉电线的咕咕嘎嘎~"
+}

@@ -1,0 +1,16 @@
+{
+    "node_ID": "skybluetech:craft_pipe",
+    "parent_node": "skybluetech:craft_alloy_furnace",
+    "title": "小顽皮爱洗澡",
+    "unfinished_icon": "textures/icon/pipe_bronze_icon",
+    "finished_icon": "textures/icon/pipe_bronze_icon",
+    "goal_details": {
+        "item_dict": {
+            "newItemName": "skybluetech:pipe_bronze"
+        },
+        "goal_type": "default_get"
+    },
+    "goal_number": 1,
+    "depend_parent": true,
+    "node_description": "合成青铜流体管道， 在机器间运输流体。 别忘了调整管道的输入输出模式！\n\n§8§o我的水去哪儿了？"
+}

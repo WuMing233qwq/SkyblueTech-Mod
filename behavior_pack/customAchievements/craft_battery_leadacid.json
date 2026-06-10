@@ -1,0 +1,16 @@
+{
+    "node_ID": "skybluetech:craft_battery_leadacid",
+    "parent_node": "skybluetech:craft_battery_matrix_frame",
+    "title": "大块头电池",
+    "unfinished_icon": "textures/items/batterys/battery_leadacid",
+    "finished_icon": "textures/items/batterys/battery_leadacid",
+    "goal_details": {
+        "item_dict": {
+            "newItemName": "skybluetech:battery_leadacid"
+        },
+        "goal_type": "default_get"
+    },
+    "goal_number": 1,
+    "depend_parent": true,
+    "node_description": "合成铅酸电池， 它虽然无法像初级电池那样为物品栏的充能道具充能， 但更适合电池仓使用。\n\n§8§o铅酸电池廉价、 高容且耐用， 是储能的不二之选。"
+}

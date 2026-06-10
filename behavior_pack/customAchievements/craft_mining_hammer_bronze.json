@@ -1,0 +1,16 @@
+{
+    "node_ID": "skybluetech:craft_mining_hammer",
+    "parent_node": "skybluetech:craft_alloy_furnace",
+    "title": "大力矿工",
+    "unfinished_icon": "textures/items/metal_tools/bronze_mining_hammer",
+    "finished_icon": "textures/items/metal_tools/bronze_mining_hammer",
+    "goal_details": {
+        "item_dict": {
+            "newItemName": "skybluetech:bronze_mining_hammer"
+        },
+        "goal_type": "default_get"
+    },
+    "goal_number": 1,
+    "depend_parent": true,
+    "node_description": "合成一个青铜矿锤， 能一次性挖掘 3x3 范围内的方块。\n\n§8§o别再用紧巴的鱼骨挖矿法了！"
+}

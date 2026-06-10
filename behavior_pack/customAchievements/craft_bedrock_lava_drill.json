@@ -1,0 +1,16 @@
+{
+    "node_ID": "skybluetech:craft_bedrock_lava_drill",
+    "parent_node": "skybluetech:craft_mini_miner",
+    "title": "可控火山",
+    "unfinished_icon": "textures/machines/bedrock_lava_drill_controller_front",
+    "finished_icon": "textures/machines/bedrock_lava_drill_controller_front",
+    "goal_details": {
+        "item_dict": {
+            "newItemName": "skybluetech:bedrock_lava_drill_controller"
+        },
+        "goal_type": "default_get"
+    },
+    "goal_number": 1,
+    "depend_parent": true,
+    "node_description": "制造一台基岩熔岩钻控制器， 搭建基岩熔岩钻多方块结构， 泵出富含矿物质的深层熔岩。\n\n§8§o自从地表辐射读数急剧提升后， 主域再也没有在地幔层附近建造过新的基岩熔岩钻， 随后域内金属期货价格急速抬升。"
+}

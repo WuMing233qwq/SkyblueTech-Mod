@@ -1,0 +1,16 @@
+{
+    "node_ID": "skybluetech:craft_item_splitter",
+    "parent_node": "skybluetech:craft_cable",
+    "title": "集成式快递分拣站",
+    "unfinished_icon": "textures/machines/item_splitter_side",
+    "finished_icon": "textures/machines/item_splitter_side",
+    "goal_details": {
+        "item_dict": {
+            "newItemName": "skybluetech:item_splitter"
+        },
+        "goal_type": "default_get"
+    },
+    "goal_number": 1,
+    "depend_parent": true,
+    "node_description": "制造一个物品分拣器， 用于分拣物品到特定容器。\n\n§8§o安装一台物品分拣器， 少雇十个史蒂夫！"
+}

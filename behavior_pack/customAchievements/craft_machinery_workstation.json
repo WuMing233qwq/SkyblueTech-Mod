@@ -1,0 +1,16 @@
+{
+    "node_ID": "skybluetech:craft_machinery_workstation",
+    "parent_node": "skybluetech:get_tin",
+    "title": "专业工作站！",
+    "unfinished_icon": "textures/icon/machinery_workstation_icon",
+    "finished_icon": "textures/icon/machinery_workstation_icon",
+    "goal_details": {
+        "item_dict": {
+            "newItemName": "skybluetech:machinery_workstation"
+        },
+        "goal_type": "default_get"
+    },
+    "goal_number": 1,
+    "depend_parent": true,
+    "node_description": "合成机件加工台， 用于日后制造各种机器。\n\n§8§o你懂机加工吗， 八级钳工？"
+}

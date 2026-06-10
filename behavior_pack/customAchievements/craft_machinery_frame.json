@@ -1,0 +1,16 @@
+{
+    "node_ID": "skybluetech:craft_machinery_frame",
+    "parent_node": "skybluetech:get_tin",
+    "title": "壳牌机器",
+    "unfinished_icon": "textures/machines/frame",
+    "finished_icon": "textures/machines/frame",
+    "goal_details": {
+        "item_dict": {
+            "newItemName": "skybluetech:machinery_frame"
+        },
+        "goal_type": "default_get"
+    },
+    "goal_number": 1,
+    "depend_parent": true,
+    "node_description": "合成一个机器框架， 用来构建日后你需要用到的机器。\n\n§8§o大部分单方块机器都使用这个胚子。"
+}

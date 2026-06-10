@@ -1,0 +1,16 @@
+{
+    "node_ID": "skybluetech:get_tin",
+    "parent_node": "skybluetech:resin_collect",
+    "title": "生生不锡",
+    "unfinished_icon": "textures/items/ingots/tin_ingot",
+    "finished_icon": "textures/items/ingots/tin_ingot",
+    "goal_details": {
+        "item_dict": {
+            "newItemName": "skybluetech:tin_ingot"
+        },
+        "goal_type": "default_get"
+    },
+    "goal_number": 3,
+    "depend_parent": true,
+    "node_description": "在浅层矿洞挖掘一些锡矿并熔炼成锡锭， 为工业发展做足准备。\n\n§8§o当然也不要忘了§7铜矿和铁矿§8。"
+}

@@ -1,0 +1,16 @@
+{
+    "node_ID": "skybluetech:craft_mini_miner",
+    "parent_node": "skybluetech:craft_alloy_furnace",
+    "title": "采石场",
+    "unfinished_icon": "textures/icon/mini_miner_icon",
+    "finished_icon": "textures/icon/mini_miner_icon",
+    "goal_details": {
+        "item_dict": {
+            "newItemName": "skybluetech:mini_miner"
+        },
+        "goal_type": "default_get"
+    },
+    "goal_number": 1,
+    "depend_parent": true,
+    "node_description": "制造一台迷你采矿机， 初步实现自动采矿。\n\n§8§o这还不是它的最终形态。"
+}

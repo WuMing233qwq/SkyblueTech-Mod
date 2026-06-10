@@ -1,0 +1,16 @@
+{
+    "node_ID": "skybluetech:craft_wire",
+    "parent_node": "skybluetech:resin_collect",
+    "title": "送电入户",
+    "unfinished_icon": "textures/icon/wire_icon",
+    "finished_icon": "textures/icon/wire_icon",
+    "goal_details": {
+        "item_dict": {
+            "newItemName": "skybluetech:wire_copper"
+        },
+        "goal_type": "default_get"
+    },
+    "goal_number": 1,
+    "depend_parent": true,
+    "node_description": "合成铜线缆， 连接发电机与多台机器。\n\n§8§o珍爱生命， 远离裸电线！"
+}

@@ -1,0 +1,16 @@
+{
+    "node_ID": "skybluetech:craft_fluid_splitter",
+    "parent_node": "skybluetech:craft_pipe",
+    "title": "拉闸分液",
+    "unfinished_icon": "textures/machines/fluid_splitter_side",
+    "finished_icon": "textures/machines/fluid_splitter_side",
+    "goal_details": {
+        "item_dict": {
+            "newItemName": "skybluetech:fluid_splitter"
+        },
+        "goal_type": "default_get"
+    },
+    "goal_number": 1,
+    "depend_parent": true,
+    "node_description": "制造一台分流器， 用于从单条管道中分离多种流体， 可用于流体离心机等机器。\n\n§8§o在蔚蓝空域， 三号平台的域内科研团队早已研发出仅依靠流体流速而无需耗电的分流器。"
+}

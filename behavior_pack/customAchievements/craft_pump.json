@@ -1,0 +1,16 @@
+{
+    "node_ID": "skybluetech:craft_pump",
+    "parent_node": "skybluetech:craft_pipe",
+    "title": "压水井",
+    "unfinished_icon": "textures/icon/pump_icon",
+    "finished_icon": "textures/icon/pump_icon",
+    "goal_details": {
+        "item_dict": {
+            "newItemName": "skybluetech:pump"
+        },
+        "goal_type": "default_get"
+    },
+    "goal_number": 1,
+    "depend_parent": true,
+    "node_description": "制造一台电动泵， 它可以抽取其下方的流体方块。\n\n§8§o在没有电的时候， 用手摇泵取水是孩子们的一大乐趣。"
+}

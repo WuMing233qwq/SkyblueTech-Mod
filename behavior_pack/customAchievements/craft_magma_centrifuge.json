@@ -1,0 +1,16 @@
+{
+    "node_ID": "skybluetech:craft_magma_centrifuge",
+    "parent_node": "skybluetech:craft_bedrock_lava_drill",
+    "title": "烫手山芋",
+    "unfinished_icon": "textures/machines/magma_centrifuge_front",
+    "finished_icon": "textures/machines/magma_centrifuge_front",
+    "goal_details": {
+        "item_dict": {
+            "newItemName": "skybluetech:magma_centrifuge"
+        },
+        "goal_type": "default_get"
+    },
+    "goal_number": 1,
+    "depend_parent": true,
+    "node_description": "制造一台基高热流体离心机以离心深层熔岩得到不同层次的熔岩， 随后进一步离心出矿物质。\n\n§8§o从地幔泵送而来的深层熔岩， 铝硅酸盐成分更少， 熔融矿物质的含量得到进一步提升。"
+}

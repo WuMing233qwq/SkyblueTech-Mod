@@ -1,0 +1,16 @@
+{
+    "node_ID": "skybluetech:craft_thermal_generator",
+    "parent_node": "skybluetech:craft_machinery_workstation",
+    "title": "火电厂",
+    "unfinished_icon": "textures/machines/thermal_generator_front",
+    "finished_icon": "textures/machines/thermal_generator_front",
+    "goal_details": {
+        "item_dict": {
+            "newItemName": "skybluetech:thermal_generator"
+        },
+        "goal_type": "default_get"
+    },
+    "goal_number": 1,
+    "depend_parent": true,
+    "node_description": "用机件加工台制造一个火力发电机， 提供最初始的电力来源。\n\n§8§o致富先发电。\n总算来电了！"
+}
