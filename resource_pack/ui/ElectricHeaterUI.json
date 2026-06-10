@@ -199,7 +199,7 @@
                                                         ],
                                                         "$text_background_default": "netease_editor_template_namespace.edit_box_background_default",
                                                         "$text_background_hover": "netease_editor_template_namespace.edit_box_background_hover",
-                                                        "$text_box_name": "#electric_heater.max_kelvin",
+                                                        "$text_box_name": "#electric_heater.kelvin_limit",
                                                         "$text_box_text_color": [
                                                             1,
                                                             1,

@@ -42,10 +42,16 @@ class ElectricHeaterUI(MachinePanelUIProxy):
         if block_nbt is not None:
             ex_data = block_nbt.get("exData")
             if ex_data is not None:
-                self.power_input.SetText(str(GetValue(ex_data, K_SET_POWER, 0)))
-                self.kevin_limit_input.SetText(
-                    str(GetValue(ex_data, K_KELVIN_LIMIT, 300))
-                )
+                current_power = GetValue(ex_data, K_SET_POWER, 0)
+                if current_power != 0:
+                    self.power_input.SetText(str(current_power))
+                else:
+                    self.power_input.SetText("")
+                current_kelvin_limit = GetValue(ex_data, K_KELVIN_LIMIT, 300)
+                if current_kelvin_limit != 300:
+                    self.kevin_limit_input.SetText(str(current_kelvin_limit))
+                else:
+                    self.kevin_limit_input.SetText("")
 
     def OnTicking(self):
         data = GetBlockEntityData(*self.pos[1:])
