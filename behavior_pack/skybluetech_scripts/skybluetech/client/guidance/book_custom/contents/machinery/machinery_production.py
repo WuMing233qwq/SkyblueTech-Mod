@@ -70,7 +70,7 @@ electric_heater = PageGroup(
     [
         TextPage(
             "电力加热仓",
-            '通电后可按照设置的温度向上前后左右五个铜盘面输出<text color="§c" t="热能">， 供一些需热机器使用。',
+            '通电后可按照设置的温度向上前后左右五个铜盘面输出<text color="§c" t="热能">， 供一些需热机器使用。\n\n适当调节输入功率和最大温度可以让其达到合适的产热温度。',
         ),
         MachineryWorkstationRecipePage(id_enum.ELECTRIC_HEATER),
     ],
