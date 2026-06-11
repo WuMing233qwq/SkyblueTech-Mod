@@ -133,6 +133,7 @@ def onNetworkTick(network):
                 if (
                     fluid_id is None
                     or (pipe_fluid_id is not None and fluid_id != pipe_fluid_id)
+                    or not pipe_can_transfer_fluid(network.transmitter_id, fluid_id)
                     or fluid.volume <= 0
                 ):
                     continue
