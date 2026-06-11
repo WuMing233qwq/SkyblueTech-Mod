@@ -73,11 +73,7 @@ class MachineryWorkstationUI(MachinePanelUIProxy):
         MachineryWorkstationDoCraft(x, y, z, self.craft_strength).send()
 
     def onClickResearchingBtn(self, _):
-        from skybluetech_scripts.skybluetech.client.ui.misc.industrial_researching_ui import (
-            IndustrialResearchProgressUI,
-        )
-
-        IndustrialResearchProgressUI.PushUI()
+        self.open_industrial_researching_ui()
 
     def OnTicking(self):
         data = GetBlockEntityData(*self.pos[1:])
@@ -111,3 +107,11 @@ class MachineryWorkstationUI(MachinePanelUIProxy):
             if self.warning_bar_shown:
                 self.warning_bar.SetVisible(False)
                 self.warning_bar_shown = False
+
+    def open_industrial_researching_ui(self):
+        from skybluetech_scripts.skybluetech.client.ui.misc.industrial_researching_ui import (
+            IndustrialResearchProgressUI,
+        )
+
+        self.RemoveUI()
+        IndustrialResearchProgressUI.PushUI()
