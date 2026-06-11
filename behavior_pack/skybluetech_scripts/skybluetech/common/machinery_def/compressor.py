@@ -1,9 +1,13 @@
 # coding=utf-8
+from ..define import id_enum
 from ..define.id_enum import COMPRESSOR, Plates
-from ..define.tag_enum.items import IngotTag
+from ..define.tag_enum.items import IngotTag, PlateTag
 from ..mini_jei.core import RecipesCollection
 from ..mini_jei.machinery.compressor import (
     MachineRecipe,
+    CompressorRecipe,
+    Input,
+    Output,
     gen_preset_recipe,
     gen_preset_tagged_recipe,
 )
@@ -36,4 +40,35 @@ recipes = RecipesCollection(
     preset_tagged(IngotTag.CUPRONICKEL, Plates.CUPRONICKEL),
     preset_tagged(IngotTag.ULTRAHEATINUM, Plates.ULTRAHEATINUM),
     preset_tagged(IngotTag.SUPERCONDUCT, Plates.SUPERCONDUCT),
+    # other
+    CompressorRecipe(
+        {
+            0: Input("minecraft:lapis_lazuli"),
+            1: Input(PlateTag.TIN, is_tag=True),
+            2: Input(PlateTag.SILVER, is_tag=True),
+        },
+        Output(id_enum.Upgraders.EMPTY),
+        DEFAULT_POWER,
+        DEFAULT_TICK_DURATION,
+    ),
+    CompressorRecipe(
+        {
+            0: Input("minecraft:redstone"),
+            1: Input(PlateTag.BRONZE, is_tag=True),
+            2: Input(PlateTag.GOLD, is_tag=True),
+        },
+        Output(id_enum.ObjectUpgraders.PLATE_COMMON),
+        DEFAULT_POWER,
+        DEFAULT_TICK_DURATION,
+    ),
+    CompressorRecipe(
+        {
+            0: Input("minecraft:emerald"),
+            1: Input(PlateTag.BRONZE, is_tag=True),
+            2: Input(id_enum.CIRCUIT_BASE_PLATE),
+        },
+        Output(id_enum.ObjectUpgraders.PLATE_SPEC),
+        DEFAULT_POWER,
+        DEFAULT_TICK_DURATION,
+    ),
 )  # type: RecipesCollection[MachineRecipe]

@@ -49,6 +49,10 @@
                                 "controls": [
                                     {
                                         "upgraders@SkybluePanelLib.UpgradeSlots": {
+                                            "$slot0": 4,
+                                            "$slot1": 5,
+                                            "$slot2": 6,
+                                            "$slot3": 7,
                                             "anchor_from": "top_right",
                                             "anchor_to": "top_left"
                                         }
@@ -85,7 +89,28 @@
                                                     }
                                                 },
                                                 {
-                                                    "input_slot": {
+                                                    "input_slot0": {
+                                                        "type": "stack_panel",
+                                                        "offset": [
+                                                            -35.0,
+                                                            -60.0
+                                                        ],
+                                                        "size": [
+                                                            "100%cm",
+                                                            "100%cm"
+                                                        ],
+                                                        "collection_name": "netease_container",
+                                                        "controls": [
+                                                            {
+                                                                "slot@netease_container.custom_grid_item": {
+                                                                    "collection_index": 0
+                                                                }
+                                                            }
+                                                        ]
+                                                    }
+                                                },
+                                                {
+                                                    "input_slot1": {
                                                         "type": "stack_panel",
                                                         "offset": [
                                                             -35.0,
@@ -99,7 +124,28 @@
                                                         "controls": [
                                                             {
                                                                 "slot@netease_container.custom_grid_item": {
-                                                                    "collection_index": 0
+                                                                    "collection_index": 1
+                                                                }
+                                                            }
+                                                        ]
+                                                    }
+                                                },
+                                                {
+                                                    "input_slot2": {
+                                                        "type": "stack_panel",
+                                                        "offset": [
+                                                            -35.0,
+                                                            -24.0
+                                                        ],
+                                                        "size": [
+                                                            "100%cm",
+                                                            "100%cm"
+                                                        ],
+                                                        "collection_name": "netease_container",
+                                                        "controls": [
+                                                            {
+                                                                "slot@netease_container.custom_grid_item": {
+                                                                    "collection_index": 2
                                                                 }
                                                             }
                                                         ]
@@ -120,7 +166,7 @@
                                                         "controls": [
                                                             {
                                                                 "slot@netease_container.custom_grid_item": {
-                                                                    "collection_index": 1
+                                                                    "collection_index": 3
                                                                 }
                                                             }
                                                         ]

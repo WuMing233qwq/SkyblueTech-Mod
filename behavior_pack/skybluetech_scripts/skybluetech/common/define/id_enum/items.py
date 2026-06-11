@@ -180,6 +180,7 @@ class Wrench:
 
 
 AIR_COMPRESS_UNIT = "skybluetech:air_compress_unit"
+CIRCUIT_BASE_PLATE = "skybluetech:circuit_base_plate"
 CRAFTING_TEMPLATE = "skybluetech:crafting_template"
 DEACTIVATION_REDSTONE = "skybluetech:deactivation_redstone"
 DRILL_TOP_STEEL = "skybluetech:drill_top_steel"

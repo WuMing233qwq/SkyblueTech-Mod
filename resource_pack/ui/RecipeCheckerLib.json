@@ -90,7 +90,7 @@
         "type": "panel",
         "size": [
             180.0,
-            40.0
+            80.0
         ],
         "layer": 1,
         "controls": [
@@ -110,12 +110,28 @@
                 "slot0@SkybluePanelLib.item_displayer": {
                     "offset": [
                         -30,
-                        0
+                        -20
                     ]
                 }
             },
             {
                 "slot1@SkybluePanelLib.item_displayer": {
+                    "offset": [
+                        -30,
+                        0
+                    ]
+                }
+            },
+            {
+                "slot2@SkybluePanelLib.item_displayer": {
+                    "offset": [
+                        -30,
+                        20
+                    ]
+                }
+            },
+            {
+                "slot3@SkybluePanelLib.item_displayer": {
                     "layer": 1,
                     "offset": [
                         30,
