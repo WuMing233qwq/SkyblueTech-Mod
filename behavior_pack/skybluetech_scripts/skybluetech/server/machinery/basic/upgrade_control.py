@@ -9,6 +9,10 @@ from skybluetech_scripts.skybluetech.common.machinery_def.upgraders import (
     POWER_NEGATIVE,
     POWER_POSITIVE,
 )
+from skybluetech_scripts.tooldelta.api.server.entity import SpawnDroppedItem
+from skybluetech_scripts.tooldelta.events.server.item import (
+    PlayerTryPutCustomContainerItemServerEvent,
+)
 from .base_machine import BaseMachine
 from .item_container import ItemContainer
 from .sp_control import SPControl
@@ -30,6 +34,7 @@ class UpgradeControl(ItemContainer, SPControl):
     覆写:
         - `__init__`
         - `IsValidInput`
+        - `OnCustomCotainerPutItem`
         - `OnSlotUpdate`
         - `AddPower`
         - `SetDeactiveFlag`
@@ -58,9 +63,26 @@ class UpgradeControl(ItemContainer, SPControl):
             slot >= self.upgrade_slot_start
             and slot < self.upgrade_slot_start + self.upgrade_slots
             and self.itemIsValidUpgrader(item)
-            and item.count == 1
             and not self.otherSlotHasSameUpgrader(slot, item.id)
         )
+
+    def OnCustomCotainerPutItem(self, event):
+        # type: (PlayerTryPutCustomContainerItemServerEvent) -> None
+        "超类方法, 处理玩家向升级槽放入物品的事件。"
+        if not self.InUpgradeSlot(event.collectionIndex):
+            return ItemContainer.OnCustomCotainerPutItem(self, event)
+        if not self.itemIsValidUpgrader(event.item):
+            event.cancel()
+            return
+        # 升级槽已有物品则禁止放入
+        existing = self.GetSlotItem(event.collectionIndex)
+        if existing is not None:
+            event.cancel()
+            return
+        # 不能在不同槽位放入相同的升级
+        if self.otherSlotHasSameUpgrader(event.collectionIndex, event.item.id):
+            event.cancel()
+            return
 
     def ReducePower(self, rf=None, bypass_upgraders=False):
         # type: (int | None, bool) -> None
@@ -93,6 +115,19 @@ class UpgradeControl(ItemContainer, SPControl):
             or slot >= self.upgrade_slot_start + self.upgrade_slots
         ):
             return
+        # 如果一次性放入多个升级，多余升级变成掉落物，只保留一个
+        item = self.GetSlotItem(slot)
+        if item is not None and item.count > 1:
+            extra_item = item.copy()
+            extra_item.count = item.count - 1
+            px, py, pz = self.xyz
+            SpawnDroppedItem(
+                self.dim,
+                (px + 0.5, py + 0.5, pz + 0.5),
+                extra_item,
+            )
+            item.count = 1
+            self.SetSlotItem(slot, item)
         self.UpdateUpgraders(self.GetAllUpgraders())
 
     def GetAllUpgraders(self):
