@@ -32,6 +32,9 @@ from .utils.mod_block_event import asModBlockLoadedListener, asModBlockRemovedLi
 PaddleEnum = WindGeneratorStatesUpdate
 
 block_sync = BlockSync(MACHINE_ID, side=BlockSync.SIDE_CLIENT)
+client_modelentity_pool = {}  # type: dict[tuple[int, int, int], str]
+client_modelentity_paddle_pool = {}  # type: dict[tuple[int, int, int], int]
+client_modelentity_rot_speed_pool = {}  # type: dict[tuple[int, int, int], float]
 
 
 def get_layer(x, y, z):
@@ -42,6 +45,7 @@ def get_layer(x, y, z):
 
 def update_wind_generator_render(entity_id, x, y, z, paddle_type):
     # type: (str, int, int, int, int | None) -> None
+    pos = (x, y, z)
     _, aux = GetBlockNameAndAux((x, y, z))
     facing = aux & 0b11
     layer = (aux & 0b1100) >> 2
@@ -53,13 +57,16 @@ def update_wind_generator_render(entity_id, x, y, z, paddle_type):
         return
 
     if paddle_type is not None:
-        texture = {
-            PaddleEnum.PADDLE_EMPTY: "textures/models/wind_generator_empty_texture",
-            PaddleEnum.PADDLE_IRON: "textures/models/wind_generator_ironpaddle_texture",
-            PaddleEnum.PADDLE_STEEL: "textures/models/wind_generator_steelpaddle_texture",
-        }.get(paddle_type, "textures/models/wind_generator_empty_texture")
-        AddTextureToOneActor(entity_id, "default", texture)
-        RebuildRenderForOneActor(entity_id)
+        last_paddle_type = client_modelentity_paddle_pool.get(pos)
+        if last_paddle_type != paddle_type:
+            client_modelentity_paddle_pool[pos] = paddle_type
+            texture = {
+                PaddleEnum.PADDLE_EMPTY: "textures/models/wind_generator_empty_texture",
+                PaddleEnum.PADDLE_IRON: "textures/models/wind_generator_ironpaddle_texture",
+                PaddleEnum.PADDLE_STEEL: "textures/models/wind_generator_steelpaddle_texture",
+            }.get(paddle_type, "textures/models/wind_generator_empty_texture")
+            AddTextureToOneActor(entity_id, "default", texture)
+            RebuildRenderForOneActor(entity_id)
 
     IS_BASE_BLOCK.set_to_entity(entity_id, 1)
     FACE.set_to_entity(entity_id, facing)
@@ -69,7 +76,14 @@ def update_wind_generator_render(entity_id, x, y, z, paddle_type):
     WIRE_CONNECT_WEST.set_to_entity(entity_id, float(is_conn_west))
 
 
-client_modelentity_pool = {}  # type: dict[tuple[int, int, int], str]
+def set_anim_speed(entity_id, x, y, z, rot_speed):
+    # type: (str, int, int, int, float) -> None
+    pos = (x, y, z)
+    last_rot_speed = client_modelentity_rot_speed_pool.get(pos)
+    if last_rot_speed is not None and abs(last_rot_speed - rot_speed) < 0.000001:
+        return
+    client_modelentity_rot_speed_pool[pos] = rot_speed
+    ANIM_SPEED.set_to_entity(entity_id, rot_speed)
 
 
 def create_model_entity(x, y, z):
@@ -81,12 +95,16 @@ def create_model_entity(x, y, z):
     if old is not None:
         destroy_model_entity(x, y, z)
     client_modelentity_pool[(x, y, z)] = res
+    client_modelentity_paddle_pool[(x, y, z)] = PaddleEnum.PADDLE_EMPTY
+    client_modelentity_rot_speed_pool[(x, y, z)] = 0.0
     SetEntityShadowShow(res, False)
     return res
 
 
 def destroy_model_entity(x, y, z):
     # type: (int, int, int) -> None
+    client_modelentity_paddle_pool.pop((x, y, z), None)
+    client_modelentity_rot_speed_pool.pop((x, y, z), None)
     entity_id = client_modelentity_pool.pop((x, y, z), None)
     if entity_id is not None:
         DestroyClientEntity(entity_id)
@@ -127,7 +145,7 @@ def onStateUpdated(event):
     entity_id = client_modelentity_pool.get((event.x, event.y, event.z))
     if entity_id is None:
         return
-    ANIM_SPEED.set_to_entity(entity_id, event.rot_speed)
+    set_anim_speed(entity_id, event.x, event.y, event.z, event.rot_speed)
     update_wind_generator_render(
         entity_id, event.x, event.y, event.z, event.paddle_type
     )

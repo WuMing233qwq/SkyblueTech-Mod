@@ -13,6 +13,12 @@
                 "default": "entity_alphatest"
             },
             "scripts": {
+                "initialize": [
+                    "variable.skybluetech_paddle_rot = 0.0;"
+                ],
+                "pre_animation": [
+                    "variable.skybluetech_paddle_rot = math.mod(variable.skybluetech_paddle_rot + query.mod.skybluetech_anim_speed * 360.0, 360.0);"
+                ],
                 "animate": [
                     "facing_ctrl",
                     "rot"

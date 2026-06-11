@@ -3,22 +3,13 @@
 	"animations": {
 		"animation.skybluetech.wind_generator_model.work": {
 			"loop": true,
-			"animation_length": 1,
-			"anim_time_update": "q.anim_time+q.mod.skybluetech_anim_speed",
 			"bones": {
 				"paddles": {
-					"rotation": {
-						"0.0": [
-							0,
-							0,
-							0
-						],
-						"1.0": [
-							0,
-							0,
-							360
-						]
-					}
+					"rotation": [
+						0,
+						0,
+						"variable.skybluetech_paddle_rot"
+					]
 				}
 			}
 		},
