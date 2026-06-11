@@ -28,7 +28,7 @@ from skybluetech_scripts.skybluetech.common.machinery_def.rf_repeater_plant impo
 )
 from skybluetech_scripts.skybluetech.common.utils.block_sync import BlockSync
 from ...transmitters.wire.logic import isWire
-from ..basic import BaseMachine, GUIControl, RegisterMachine
+from ..basic import BaseMachine, BaseClicker, GUIControl, RegisterMachine
 from ..pool import GetMachineStrict
 from .node import (
     NetworkData,
@@ -49,7 +49,7 @@ block_sync = BlockSync(MACHINE_ID, side=BlockSync.SIDE_SERVER)
 
 
 @RegisterMachine
-class RFRepeaterPlant(BaseMachine, GUIControl):
+class RFRepeaterPlant(BaseMachine, BaseClicker, GUIControl):
     bound_ui = RF_REPEATER_PLANT_UI
     block_name = MACHINE_ID
     store_rf_max = 120000
