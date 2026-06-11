@@ -86,7 +86,7 @@ recipes = RecipesCollection(
             0: Input(DustTag.TIN, 2, is_tag=True),
             2: Input(DustTag.LAPIS, is_tag=True),
         },
-        {4: Output(Ingots.LIGHT_SKYBLUE, 1)},
+        {4: Output(Ingots.LIGHT_SKYBLUE, 2)},
     ),
     # steel
     dust_rcp(
