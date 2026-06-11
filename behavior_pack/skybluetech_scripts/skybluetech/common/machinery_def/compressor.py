@@ -71,4 +71,14 @@ recipes = RecipesCollection(
         DEFAULT_POWER,
         DEFAULT_TICK_DURATION,
     ),
+    CompressorRecipe(
+        {
+            0: Input(id_enum.ControlCircuit.ADVANCED),
+            1: Input("minecraft:diamond"),
+            2: Input(PlateTag.TIN, is_tag=True),
+        },
+        Output(id_enum.INSCRIBING_TEMPLATE),
+        DEFAULT_POWER,
+        DEFAULT_TICK_DURATION,
+    ),
 )  # type: RecipesCollection[MachineRecipe]
