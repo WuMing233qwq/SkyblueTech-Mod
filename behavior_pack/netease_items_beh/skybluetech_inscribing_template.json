@@ -2,7 +2,17 @@
     "format_version": "1.10",
     "minecraft:item": {
         "components": {
-            "minecraft:max_stack_size": 1
+            "minecraft:max_stack_size": 1,
+            "netease:initial_user_data": {
+                "display": {
+                    "Lore": [
+                        {
+                            "__type__": 8,
+                            "__value__": "§r§c未刻印内容"
+                        }
+                    ]
+                }
+            }
         },
         "description": {
             "category": "skybluetech",

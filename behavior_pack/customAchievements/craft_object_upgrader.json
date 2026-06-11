@@ -1,0 +1,16 @@
+{
+    "node_ID": "skybluetech:craft_object_upgrader",
+    "parent_node": "skybluetech:craft_assembler",
+    "title": "变身卡",
+    "unfinished_icon": "textures/items/object_upgraders/obj_upgrader_attack",
+    "finished_icon": "textures/items/object_upgraders/obj_upgrader_attack",
+    "goal_details": {
+        "item_dict": {
+            "newItemName": "skybluetech:obj_upgrader_plate_common"
+        },
+        "goal_type": "default_get"
+    },
+    "goal_number": 1,
+    "depend_parent": true,
+    "node_description": "合成一张泛用强化基板， 可以进一步合成道具升级。\n\n§8§o你不愧是工具拼装大师。"
+}

@@ -1,0 +1,16 @@
+{
+    "node_ID": "skybluetech:craft_assembler",
+    "parent_node": "skybluetech:craft_machinery_workstation",
+    "title": "超级拼装",
+    "unfinished_icon": "textures/icon/assembler_icon",
+    "finished_icon": "textures/icon/assembler_icon",
+    "goal_details": {
+        "item_dict": {
+            "newItemName": "skybluetech:assembler"
+        },
+        "goal_type": "default_get"
+    },
+    "goal_number": 1,
+    "depend_parent": true,
+    "node_description": "制造一台装配站， 可以为充能工具焊接升级模块。\n\n§8§o技术宅改造世界！"
+}
