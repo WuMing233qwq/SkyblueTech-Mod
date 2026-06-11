@@ -651,6 +651,24 @@ recipes = RecipesCollection(
         MRecipe.LEVEL_IRON,
         8,
     ),
+    # template assembler
+    MRecipe(
+        {
+            0: Input("minecraft:redstone"),
+            1: Input("minecraft:piston"),
+            2: Input("minecraft:redstone"),
+            3: Input(tag_enum.PlateTag.TIN, is_tag=True),
+            4: Input(id_enum.COMPRESSOR),
+            5: Input(tag_enum.PlateTag.TIN, is_tag=True),
+            6: Input(tag_enum.IngotTag.STEEL, is_tag=True),
+            7: Input(id_enum.REDSTONEFLUX_CORE),
+            8: Input(tag_enum.IngotTag.STEEL, is_tag=True),
+        },
+        id_enum.TEMPLATE_ASSEMBLER,
+        MRecipe.LEVEL_INVAR,
+        MRecipe.LEVEL_INVAR,
+        16,
+    ),
     # thermal generator
     MRecipe(
         {

@@ -61,6 +61,25 @@ all_researchings = RecipesCollection(
         24,
         id_enum.Upgraders.GENERIC_EXPANSION_UPGRADER,
     ),
+    #
+    IndustrialResearchingRecipe(
+        [
+            Input("minecraft:quartz", 45),
+            Input("minecraft:prismarine_shard", 16),
+            Input(id_enum.Plates.INVAR, 8),
+        ],
+        24,
+        id_enum.ObjectUpgraders.ATTACK,
+    ),
+    IndustrialResearchingRecipe(
+        [
+            Input("minecraft:redstone", 48),
+            Input("minecraft:amethyst_shard", 32),
+            Input(id_enum.ELECTRIC_MOTOR, 4),
+        ],
+        24,
+        id_enum.ObjectUpgraders.DIGSPEED,
+    ),
     IndustrialResearchingRecipe(
         [
             Input("minecraft:furnace", 18),
@@ -100,5 +119,15 @@ all_researchings = RecipesCollection(
         ],
         8,
         id_enum.ObjectUpgraders.SPEC_FARMING,
+    ),
+    IndustrialResearchingRecipe(
+        [
+            Input("minecraft:redstone", 96),
+            Input(id_enum.DEACTIVATION_REDSTONE, 64),
+            Input(id_enum.Coils.COPPER, 16),
+            Input(id_enum.ControlCircuit.BASIC, 4),
+        ],
+        32,
+        id_enum.ObjectUpgraders.ENERGY,
     ),
 )
