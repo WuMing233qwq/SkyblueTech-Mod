@@ -13,7 +13,7 @@ from ..core import RecipeRenderer
 class IndustrialResearchingRecipeRenderer(RecipeRenderer):
     recipe_icon_id = INSCRIBING_TEMPLATE
     render_ui_def_name = "RecipeCheckerLib.industrial_researching_recipes"
-    minijei_title = "工业研究"
+    minijei_title = "机件加工台： 工业研究"
 
     def __init__(self, recipe):
         # type: (IndustrialResearchingRecipe) -> None

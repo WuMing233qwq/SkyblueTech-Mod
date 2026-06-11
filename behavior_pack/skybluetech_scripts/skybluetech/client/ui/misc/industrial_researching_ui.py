@@ -1,6 +1,5 @@
 # coding=utf-8
 from skybluetech_scripts.tooldelta.define import Item
-from skybluetech_scripts.tooldelta.ui import UBaseCtrl
 from skybluetech_scripts.tooldelta.events.client import OnKeyPressInGame
 from skybluetech_scripts.tooldelta.api.client import (
     GetItemHoverName,
@@ -14,9 +13,6 @@ from skybluetech_scripts.tooldelta.ui import (
     ToolDeltaScreen,
 )
 from skybluetech_scripts.tooldelta.utils.py_comp import py2_unicode
-from skybluetech_scripts.skybluetech.client.ui.machinery.utils import (
-    UpdateGenericProgressL2R,
-)
 from skybluetech_scripts.skybluetech.client.ui.recipe_checker import CheckRecipe
 from skybluetech_scripts.skybluetech.common.events.misc.industrial_researching import (
     IndustrialResearchingInscribeRequest,
@@ -39,14 +35,26 @@ RESEARCHINGS_SCROLL_PATH = SCREEN_BASE_PATH / "researchings_scroll_view"
 CLOSE_BTN_PATH = SCREEN_BASE_PATH / "close_btn"
 EXP_BOTTLE_ITEM_ID = "minecraft:experience_bottle"
 RESEARCHINGS_COLLECTION = "industrial_researchings_grid"
+REQUIREMENTS_COLLECTION = "industrial_research_requirements_grid"
 LABEL_NORMAL_COLOR = (0.2588, 0.2588, 0.2588)
 LABEL_MISSING_COLOR = (0xAF / 255.0, 0, 0)
 LABEL_OK_COLOR = (0.0, 0.5, 0.0)
+EMPTY_ITEM_ID_AUX = 131072
+ITEM_NAME_CACHE = {}  # type: dict[str, str]
 
 
 def _clean_item_name(item_id):
     # type: (str) -> str
-    return (GetItemHoverName(item_id) or item_id).replace("§r", "").replace("§f", "")
+    cached = ITEM_NAME_CACHE.get(item_id)
+    if cached is not None:
+        return cached
+    try:
+        item_name = GetItemHoverName(item_id) or item_id
+    except Exception:
+        item_name = item_id
+    item_name = item_name.replace("§r", "").replace("§f", "")
+    ITEM_NAME_CACHE[item_id] = item_name
+    return item_name
 
 
 def _short_item_name(item_id):
@@ -72,6 +80,8 @@ class IndustrialResearchProgressUI(ToolDeltaScreen):
         self.researched_items = {}  # type: dict[str, int]
         self.requirements_window = None
         self.current_recipe = None  # type: IndustrialResearchingRecipe | None
+        self.researching_items = []  # type: list[dict]
+        self.requirement_items = []  # type: list[dict]
         self.item_id_aux_cache = {}  # type: dict[str, int]
         self.can_submit_research = False
 
@@ -80,8 +90,11 @@ class IndustrialResearchProgressUI(ToolDeltaScreen):
         self.researched_items = {}
         self.requirements_window = None
         self.current_recipe = None
+        self.researching_items = []
+        self.requirement_items = []
         self.can_submit_research = False
         self.recipes = list(all_researchings)
+        self.update_researching_items()
         self.researchings_grid = (
             self
             .GetElement(RESEARCHINGS_SCROLL_PATH)
@@ -102,9 +115,27 @@ class IndustrialResearchProgressUI(ToolDeltaScreen):
 
     def render_researchings(self):
         # type: () -> None
+        self.update_researching_items()
         self.researchings_grid.SetPropertyBag({
-            "#maximum_grid_items": len(self.recipes)
+            "#maximum_grid_items": len(self.researching_items)
         })
+
+    def update_researching_items(self):
+        # type: () -> None
+        if len(self.researching_items) != len(self.recipes):
+            self.researching_items = [
+                {
+                    "recipe": recipe,
+                    "item_id": recipe.result_item_id,
+                    "item_id_aux": self.get_item_id_aux(recipe.result_item_id),
+                    "item_name": _clean_item_name(recipe.result_item_id),
+                    "researched": recipe.result_item_id in self.researched_items,
+                }
+                for recipe in self.recipes
+            ]
+            return
+        for item in self.researching_items:
+            item["researched"] = item["item_id"] in self.researched_items
 
     def open_requirements_window(self, recipe):
         # type: (IndustrialResearchingRecipe) -> None
@@ -126,97 +157,88 @@ class IndustrialResearchProgressUI(ToolDeltaScreen):
             "研究 " + _short_item_name(recipe.result_item_id) + " 需要："
         )
 
-        requirements = list(recipe.require_items)  # type: list[Input | None]
-        requirements.append(None)
-        columns = 1
         grid = window["requirements_grid"].asGrid()
-        # grid.SetPropertyBag({"#maximum_grid_items": len(requirements)})
+        self.update_requirement_items()
+        grid.SetPropertyBag({"#maximum_grid_items": len(self.requirement_items)})
         self.update_inscribe_button()
         self.update_submit_button()
 
-        def after():
-            researched = recipe.result_item_id in self.researched_items
-            item_counts = self.get_local_item_counts()
-            player_level = GetLocalPlayerLevelByExp()
-            can_submit = True
-            for index, input_item in enumerate(requirements):
-                ctrl = grid.GetGridItem(0, index)
-                if input_item is None:
-                    if researched:
-                        self.render_researched_requirement_item(
-                            ctrl,
-                            EXP_BOTTLE_ITEM_ID,
-                            False,
-                        )
-                        continue
-                    enough = player_level >= recipe.require_exp_level
-                    can_submit = can_submit and enough
-                    self.render_requirement_item(
-                        ctrl,
+    def update_requirement_items(self):
+        # type: () -> None
+        if self.current_recipe is None:
+            self.requirement_items = []
+            self.can_submit_research = False
+            return
+        recipe = self.current_recipe
+        researched = recipe.result_item_id in self.researched_items
+        item_counts = self.get_local_item_counts()
+        player_level = GetLocalPlayerLevelByExp()
+        can_submit = True
+        items = []
+        requirements = list(recipe.require_items)  # type: list[Input | None]
+        requirements.append(None)
+        for input_item in requirements:
+            if input_item is None:
+                if researched:
+                    items.append(self.create_requirement_item_data(
                         EXP_BOTTLE_ITEM_ID,
-                        player_level,
-                        recipe.require_exp_level,
-                        enough,
+                        "✔ 已完成",
+                        LABEL_OK_COLOR,
+                        1.0,
                         False,
-                    )
-                else:
-                    if researched:
-                        self.render_researched_requirement_item(
-                            ctrl,
-                            input_item.id,
-                            True,
-                        )
-                        continue
-                    own_count = self.count_matched_items(input_item, item_counts)
-                    enough = own_count >= input_item.count
-                    can_submit = can_submit and enough
-                    self.render_requirement_item(
-                        ctrl,
+                    ))
+                    continue
+                enough = player_level >= recipe.require_exp_level
+                can_submit = can_submit and enough
+                items.append(self.create_requirement_item_data(
+                    EXP_BOTTLE_ITEM_ID,
+                    "%d/%d" % (player_level, recipe.require_exp_level),
+                    LABEL_NORMAL_COLOR if enough else LABEL_MISSING_COLOR,
+                    _safe_percent(player_level, recipe.require_exp_level),
+                    False,
+                ))
+            else:
+                if researched:
+                    items.append(self.create_requirement_item_data(
                         input_item.id,
-                        own_count,
-                        input_item.count,
-                        enough,
+                        "✔ 已完成",
+                        LABEL_OK_COLOR,
+                        1.0,
                         True,
-                    )
-            self.can_submit_research = (
-                can_submit and recipe.result_item_id not in self.researched_items
-            )
-            self.update_submit_button()
+                    ))
+                    continue
+                own_count = self.count_matched_items(input_item, item_counts)
+                enough = own_count >= input_item.count
+                can_submit = can_submit and enough
+                items.append(self.create_requirement_item_data(
+                    input_item.id,
+                    "%d/%d" % (own_count, input_item.count),
+                    LABEL_NORMAL_COLOR if enough else LABEL_MISSING_COLOR,
+                    _safe_percent(own_count, input_item.count),
+                    True,
+                ))
+        self.requirement_items = items
+        self.can_submit_research = can_submit and not researched
 
-        grid.SetDimensionAndCall((columns, len(requirements)), after)
-
-    def render_researched_requirement_item(self, ctrl, item_id, check_recipe):
-        # type: (UBaseCtrl, str, bool) -> None
-        ctrl["item_renderer"].asItemRenderer().SetUiItem(Item(item_id))
-        label = ctrl["progress_label"].asLabel()
-        label.SetText("✔ 已完成")
-        label.SetColor(LABEL_OK_COLOR)
-        UpdateGenericProgressL2R(ctrl["progress"], 1.0)
-        self.update_requirement_check_btn(ctrl, item_id, check_recipe)
-
-    def render_requirement_item(
-        self, ctrl, item_id, own_count, need_count, enough, check_recipe
+    def create_requirement_item_data(
+        self, item_id, label, label_color, progress_percent, check_recipe
     ):
-        # type: (UBaseCtrl, str, float, float, bool, bool) -> None
-        ctrl["item_renderer"].asItemRenderer().SetUiItem(Item(item_id))
-        label = ctrl["progress_label"].asLabel()
-        label.SetText("%d/%d" % (own_count, need_count))
-        label.SetColor(LABEL_NORMAL_COLOR if enough else LABEL_MISSING_COLOR)
-        UpdateGenericProgressL2R(ctrl["progress"], _safe_percent(own_count, need_count))
-        self.update_requirement_check_btn(ctrl, item_id, check_recipe)
-
-    def update_requirement_check_btn(self, ctrl, item_id, check_recipe):
-        # type: (UBaseCtrl, str, bool) -> None
-        btn = ctrl["item_renderer/check_recipe_btn"]
-        btn.SetVisible(check_recipe)
-        if check_recipe:
-            btn.asButton().SetCallback(lambda _, item_id=item_id: CheckRecipe(item_id))
+        # type: (str, str, tuple[float, float, float], float, bool) -> dict
+        return {
+            "item_id": item_id,
+            "item_id_aux": self.get_item_id_aux(item_id),
+            "label": label,
+            "label_color": label_color,
+            "progress_clip": 1 - _safe_percent(progress_percent, 1.0),
+            "check_recipe": check_recipe,
+        }
 
     def close_requirements_window(self):
         if self.requirements_window is not None:
             self.requirements_window.Remove(warning=False)
             self.requirements_window = None
             self.current_recipe = None
+            self.requirement_items = []
             self.can_submit_research = False
 
     def is_current_recipe_researched(self):
@@ -249,6 +271,7 @@ class IndustrialResearchProgressUI(ToolDeltaScreen):
         if not self.is_current_recipe_researched():
             return
         IndustrialResearchingInscribeRequest(self.current_recipe.result_item_id).send()  # pyright: ignore[reportOptionalMemberAccess]
+        self.RemoveUI()
 
     @Binder.binding(
         Binder.BF_ButtonClickUp,
@@ -283,12 +306,30 @@ class IndustrialResearchProgressUI(ToolDeltaScreen):
                 count += item_count
         return count
 
+    def get_item_id_aux(self, item_id):
+        # type: (str) -> int
+        cached = self.item_id_aux_cache.get(item_id)
+        if cached is not None:
+            return cached
+        try:
+            item_id_aux = Item(item_id).GetBasicInfo().id_aux
+        except Exception:
+            item_id_aux = EMPTY_ITEM_ID_AUX
+        self.item_id_aux_cache[item_id] = item_id_aux
+        return item_id_aux
+
     @ToolDeltaScreen.Listen(IndustrialResearchingQueryResponse)
     def on_recv_query_response(self, event):
         # type: (IndustrialResearchingQueryResponse) -> None
         self.researched_items = event.researched_items or {}
         self.ready = True
         self.render_researchings()
+        if self.requirements_window is not None:
+            self.update_requirement_items()
+            self.requirements_window["requirements_grid"].SetPropertyBag({
+                "#maximum_grid_items": len(self.requirement_items)
+            })
+            self.update_submit_button()
         self.update_inscribe_button()
 
     @Binder.binding_collection(
@@ -298,7 +339,7 @@ class IndustrialResearchProgressUI(ToolDeltaScreen):
     )
     def get_researching_count(self, _index):
         # type: (int) -> int
-        return len(self.recipes)
+        return len(self.researching_items)
 
     @Binder.binding_collection(
         Binder.BF_BindInt,
@@ -307,15 +348,9 @@ class IndustrialResearchProgressUI(ToolDeltaScreen):
     )
     def get_researching_item_id_aux(self, index):
         # type: (int) -> int
-        if index >= len(self.recipes):
-            return 131072
-        item_id = self.recipes[index].result_item_id
-        cached = self.item_id_aux_cache.get(item_id)
-        if cached is not None:
-            return cached
-        item_id_aux = Item(item_id).GetBasicInfo().id_aux
-        self.item_id_aux_cache[item_id] = item_id_aux
-        return item_id_aux
+        if index >= len(self.researching_items):
+            return EMPTY_ITEM_ID_AUX
+        return self.researching_items[index]["item_id_aux"]
 
     @Binder.binding_collection(
         Binder.BF_BindString,
@@ -324,9 +359,9 @@ class IndustrialResearchProgressUI(ToolDeltaScreen):
     )
     def get_researching_item_name(self, index):
         # type: (int) -> str
-        if index >= len(self.recipes):
+        if index >= len(self.researching_items):
             return ""
-        return _clean_item_name(self.recipes[index].result_item_id)
+        return self.researching_items[index]["item_name"]
 
     @Binder.binding_collection(
         Binder.BF_BindBool,
@@ -335,9 +370,9 @@ class IndustrialResearchProgressUI(ToolDeltaScreen):
     )
     def get_researching_ok_visible(self, index):
         # type: (int) -> bool
-        if index >= len(self.recipes):
+        if index >= len(self.researching_items):
             return False
-        return self.recipes[index].result_item_id in self.researched_items
+        return self.researching_items[index]["researched"]
 
     @Binder.binding(
         Binder.BF_ButtonClickUp,
@@ -346,9 +381,86 @@ class IndustrialResearchProgressUI(ToolDeltaScreen):
     def on_researching_selected(self, params):
         # type: (dict) -> None
         index = params["#collection_index"]
-        if not self.ready or index >= len(self.recipes):
+        if not self.ready or index >= len(self.researching_items):
             return
-        self.open_requirements_window(self.recipes[index])
+        self.open_requirements_window(self.researching_items[index]["recipe"])
+
+    @Binder.binding_collection(
+        Binder.BF_BindInt,
+        REQUIREMENTS_COLLECTION,
+        "#IndustrialResearchProgressUI.requirement_count",
+    )
+    def get_requirement_count(self, _index):
+        # type: (int) -> int
+        return len(self.requirement_items)
+
+    @Binder.binding_collection(
+        Binder.BF_BindInt,
+        REQUIREMENTS_COLLECTION,
+        "#IndustrialResearchProgressUI.requirement_item_id_aux",
+    )
+    def get_requirement_item_id_aux(self, index):
+        # type: (int) -> int
+        if index >= len(self.requirement_items):
+            return EMPTY_ITEM_ID_AUX
+        return self.requirement_items[index]["item_id_aux"]
+
+    @Binder.binding_collection(
+        Binder.BF_BindString,
+        REQUIREMENTS_COLLECTION,
+        "#IndustrialResearchProgressUI.requirement_label",
+    )
+    def get_requirement_label(self, index):
+        # type: (int) -> str
+        if index >= len(self.requirement_items):
+            return ""
+        return self.requirement_items[index]["label"]
+
+    @Binder.binding_collection(
+        Binder.BF_BindColor,
+        REQUIREMENTS_COLLECTION,
+        "#IndustrialResearchProgressUI.requirement_label_color",
+    )
+    def get_requirement_label_color(self, index):
+        # type: (int) -> tuple[float, float, float]
+        if index >= len(self.requirement_items):
+            return LABEL_NORMAL_COLOR
+        return self.requirement_items[index]["label_color"]
+
+    @Binder.binding_collection(
+        Binder.BF_BindFloat,
+        REQUIREMENTS_COLLECTION,
+        "#IndustrialResearchProgressUI.requirement_progress_clip",
+    )
+    def get_requirement_progress_clip(self, index):
+        # type: (int) -> float
+        if index >= len(self.requirement_items):
+            return 1.0
+        return self.requirement_items[index]["progress_clip"]
+
+    @Binder.binding_collection(
+        Binder.BF_BindBool,
+        REQUIREMENTS_COLLECTION,
+        "#IndustrialResearchProgressUI.requirement_check_recipe_visible",
+    )
+    def get_requirement_check_recipe_visible(self, index):
+        # type: (int) -> bool
+        if index >= len(self.requirement_items):
+            return False
+        return self.requirement_items[index]["check_recipe"]
+
+    @Binder.binding(
+        Binder.BF_ButtonClickUp,
+        "#IndustrialResearchProgressUI.requirement_check_recipe",
+    )
+    def on_requirement_check_recipe(self, params):
+        # type: (dict) -> None
+        index = params["#collection_index"]
+        if index >= len(self.requirement_items):
+            return
+        if not self.requirement_items[index]["check_recipe"]:
+            return
+        CheckRecipe(self.requirement_items[index]["item_id"])
 
     @ToolDeltaScreen.Listen(OnKeyPressInGame)
     def onKeyPress(self, event):

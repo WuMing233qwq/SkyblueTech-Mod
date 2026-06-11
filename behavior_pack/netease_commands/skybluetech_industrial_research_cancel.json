@@ -1,0 +1,13 @@
+{
+    "description": "commands.skybluetech.industrial_research_cancel.description",
+    "format_version": "0.0.1",
+    "name": "skybluetech:industrial_research_cancel",
+    "permission_level": "game_directors",
+    "requires_cheats": true,
+    "args": [
+        {
+            "name": "itemId",
+            "type": "item"
+        }
+    ]
+}

@@ -6,6 +6,7 @@ from skybluetech_scripts.tooldelta.define import Item
 from skybluetech_scripts.tooldelta.api.server import (
     GetAllInventoryItems,
     GetExtraData,
+    GetPlayerMainhandItem,
     GetSeed,
     SetExtraData,
     SetOnePopupNotice,
@@ -30,9 +31,7 @@ from skybluetech_scripts.skybluetech.common.misc.inscribing_template import (
 
 
 ItemPosType = GetMinecraftEnum().ItemPosType
-VALID_RESEARCHING_ITEM_IDS = set(
-    recipe.result_item_id for recipe in all_researchings
-)
+VALID_RESEARCHING_ITEM_IDS = set(recipe.result_item_id for recipe in all_researchings)
 
 
 class IndustrialResearchingPlayerMgr(object):
@@ -69,6 +68,25 @@ class IndustrialResearchingPlayerMgr(object):
         """
         return researching_id in self.get_player_researchings(player_id)
 
+    def cancel_researching(self, player_id, researching_id):
+        # type: (str, str) -> bool
+        """
+        取消玩家对某种可研究物的研究记录。
+
+        Args:
+            player_id (str): 玩家 ID。
+            researching_id (str): 可研究物 ID。为 IndustrialResearchingRecipe 的 result_item_id。
+
+        Returns:
+            bool: 是否成功取消。
+        """
+        researchings = self.get_player_researchings(player_id)
+        if researching_id not in researchings:
+            return False
+        del researchings[researching_id]
+        self._save_player_researchings(player_id, researchings)
+        return True
+
     def get_player_researchings(self, player_id):
         # type: (str) -> dict[str, int]
         """
@@ -101,10 +119,14 @@ class IndustrialResearchingQueryHandler(ServerListenerService):
     @ServerListenerService.Listen(IndustrialResearchingQueryRequest)
     def on_query_researchings(self, event):
         # type: (IndustrialResearchingQueryRequest) -> None
-        researched_items = IndustrialResearchingPlayerMgr.instance().get_player_researchings(
-            event.player_id
+        researched_items = (
+            IndustrialResearchingPlayerMgr.instance().get_player_researchings(
+                event.player_id
+            )
         )
-        IndustrialResearchingQueryResponse(researched_items).send(event.player_id)
+        # BUG: 多发以避免数据包丢失
+        for _ in range(3):
+            IndustrialResearchingQueryResponse(researched_items).send(event.player_id)
 
     @ServerListenerService.Listen(IndustrialResearchingSubmitRequest)
     def on_submit_researching(self, event):
@@ -118,9 +140,10 @@ class IndustrialResearchingQueryHandler(ServerListenerService):
         mgr = IndustrialResearchingPlayerMgr.instance()
         if not mgr.has_researched(player_id, item_id):
             mgr.record_researching(player_id, item_id)
-        IndustrialResearchingQueryResponse(
-            mgr.get_player_researchings(player_id)
-        ).send(player_id)
+        researched_items = mgr.get_player_researchings(player_id)
+        # BUG: 多发以避免数据包丢失
+        for _ in range(3):
+            IndustrialResearchingQueryResponse(researched_items).send(player_id)
 
     @ServerListenerService.Listen(IndustrialResearchingInscribeRequest)
     def on_inscribe_template(self, event):
@@ -129,46 +152,46 @@ class IndustrialResearchingQueryHandler(ServerListenerService):
         item_id = event.item_id
         if item_id not in VALID_RESEARCHING_ITEM_IDS:
             logger.error("Industrial researching inscribe invalid item: %s" % item_id)
-            SetOnePopupNotice(player_id, "§c刻印失败")
+            SetOnePopupNotice(player_id, "§c刻印不成功")
             return
         if not IndustrialResearchingPlayerMgr.instance().has_researched(
             player_id, item_id
         ):
             SetOnePopupNotice(player_id, "§c尚未研究该物品，无法刻印")
             return
+        mainhand = GetPlayerMainhandItem(player_id)
+        if mainhand is None or mainhand.id != INSCRIBING_TEMPLATE:
+            SetOnePopupNotice(player_id, "§c主手物品不是刻印模版")
+            return
         try:
-            if self.inscribe_template(player_id, item_id):
+            if self.inscribe_template(
+                player_id, item_id, mainhand, ignore_not_empty=True
+            ):
                 SetOnePopupNotice(player_id, "§a刻印成功")
             else:
-                SetOnePopupNotice(player_id, "§6背包中没有单个空刻印模版")
+                SetOnePopupNotice(player_id, "§c刻印不成功")
         except Exception as err:
             logger.error(
                 "Industrial researching inscribe failed: %s %s %s"
                 % (player_id, item_id, err)
             )
-            SetOnePopupNotice(player_id, "§c刻印失败")
+            SetOnePopupNotice(player_id, "§c刻印不成功")
 
-    def inscribe_template(self, player_id, item_id):
-        # type: (str, str) -> bool
-        for slot, item in GetAllInventoryItems(player_id, get_userdata=True).items():
-            if not self.is_empty_inscribing_template(item):
-                continue
-            graph = GetTemplateGraph(item_id, GetSeed())
-            user_data = item.userData or {}
-            user_data[K_UD_TEMPLATE_GRAPH] = [nbt.Int(i) for i in graph]
-            user_data["display"] = {
-                "Lore": [
-                    nbt.String(
-                        "§r§d已刻录： " + Item(item_id).GetBasicInfo().itemName
-                    )
-                ]
-            }
-            item.userData = user_data
-            SetPlayerAllItems(player_id, {
-                (ItemPosType.INVENTORY, slot): item
-            })
-            return True
-        return False
+    def inscribe_template(self, player_id, item_id, mainhand, ignore_not_empty=False):
+        # type: (str, str, Item, bool) -> bool
+        if not ignore_not_empty and not self.is_empty_inscribing_template(mainhand):
+            return False
+        graph = GetTemplateGraph(item_id, GetSeed())
+        user_data = mainhand.userData or {}
+        user_data[K_UD_TEMPLATE_GRAPH] = [nbt.Int(i) for i in graph]
+        user_data["display"] = {
+            "Lore": [
+                nbt.String("§r§d已刻录： " + Item(item_id).GetBasicInfo().itemName)
+            ]
+        }
+        mainhand.userData = user_data
+        SetPlayerAllItems(player_id, {(ItemPosType.CARRIED, 0): mainhand})
+        return True
 
     def is_empty_inscribing_template(self, item):
         # type: (Item) -> bool
@@ -179,9 +202,7 @@ class IndustrialResearchingQueryHandler(ServerListenerService):
             return True
         graph = nbt.NBT2Py(graph_nbt)
         return (
-            isinstance(graph, list)
-            and len(graph) == 25
-            and all(i == 0 for i in graph)
+            isinstance(graph, list) and len(graph) == 25 and all(i == 0 for i in graph)
         )
 
 

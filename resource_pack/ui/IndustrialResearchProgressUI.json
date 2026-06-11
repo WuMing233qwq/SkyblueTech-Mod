@@ -460,12 +460,26 @@
                         "default"
                     ],
                     "layer": 1,
-                    "collection_name": "test_grid",
+                    "collection_name": "industrial_research_requirements_grid",
                     "grid_dimensions": [
-                        2,
+                        1,
                         2
                     ],
-                    "grid_item_template": "IndustrialResearchProgressUI.single_requirement"
+                    "grid_item_template": "IndustrialResearchProgressUI.single_requirement",
+                    "grid_rescaling_type": "horizontal",
+                    "maximum_grid_items": 1,
+                    "property_bag": {
+                        "#maximum_grid_items": 1
+                    },
+                    "bindings": [
+                        {
+                            "binding_name_override": "#maximum_grid_items",
+                            "binding_collection_name": "industrial_research_requirements_grid",
+                            "binding_condition": "always_when_visible",
+                            "binding_type": "collection",
+                            "binding_name": "#IndustrialResearchProgressUI.requirement_count"
+                        }
+                    ]
                 }
             },
             {
@@ -608,6 +622,20 @@
                     "property_bag": {
                         "#item_id_aux": 131072
                     },
+                    "bindings": [
+                        {
+                            "binding_type": "collection_details",
+                            "binding_collection_name": "industrial_research_requirements_grid",
+                            "binding_condition": "always_when_visible"
+                        },
+                        {
+                            "binding_name_override": "#item_id_aux",
+                            "binding_collection_name": "industrial_research_requirements_grid",
+                            "binding_condition": "always_when_visible",
+                            "binding_type": "collection",
+                            "binding_name": "#IndustrialResearchProgressUI.requirement_item_id_aux"
+                        }
+                    ],
                     "controls": [
                         {
                             "check_recipe_btn@common.button": {
@@ -639,11 +667,17 @@
                                     0,
                                     0
                                 ],
-                                "$pressed_button_name": "%netease_editor_template_namespace.click",
+                                "$pressed_button_name": "#IndustrialResearchProgressUI.requirement_check_recipe",
                                 "$pressed_texture": "",
                                 "$texture_layer": 2,
                                 "layer": 2,
-                                "button_mappings": [],
+                                "button_mappings": [
+                                    {
+                                        "to_button_id": "$pressed_button_name",
+                                        "from_button_id": "button.menu_select",
+                                        "mapping_type": "pressed"
+                                    }
+                                ],
                                 "default_control": "default",
                                 "hover_control": "hover",
                                 "is_handle_button_move_event": true,
@@ -651,8 +685,15 @@
                                 "bindings": [
                                     {
                                         "binding_type": "collection_details",
-                                        "binding_collection_name": "",
+                                        "binding_collection_name": "industrial_research_requirements_grid",
                                         "binding_condition": "always_when_visible"
+                                    },
+                                    {
+                                        "binding_name_override": "#visible",
+                                        "binding_collection_name": "industrial_research_requirements_grid",
+                                        "binding_condition": "always_when_visible",
+                                        "binding_type": "collection",
+                                        "binding_name": "#IndustrialResearchProgressUI.requirement_check_recipe_visible"
                                     }
                                 ],
                                 "controls": [
@@ -720,6 +761,7 @@
                                     "default"
                                 ],
                                 "layer": 1,
+                                "clip_direction": "left",
                                 "color": [
                                     0.0,
                                     1.0,
@@ -731,7 +773,21 @@
                                     3.0,
                                     3.0
                                 ],
-                                "texture": "textures/ui/white"
+                                "texture": "textures/ui/white",
+                                "bindings": [
+                                    {
+                                        "binding_type": "collection_details",
+                                        "binding_collection_name": "industrial_research_requirements_grid",
+                                        "binding_condition": "always_when_visible"
+                                    },
+                                    {
+                                        "binding_name_override": "#clip_ratio",
+                                        "binding_collection_name": "industrial_research_requirements_grid",
+                                        "binding_condition": "always_when_visible",
+                                        "binding_type": "collection",
+                                        "binding_name": "#IndustrialResearchProgressUI.requirement_progress_clip"
+                                    }
+                                ]
                             }
                         },
                         {
@@ -764,8 +820,28 @@
                     "font_scale_factor": 1.5,
                     "font_size": "small",
                     "font_type": "default",
-                    "text": "100/100",
-                    "text_alignment": "center"
+                    "text": "#IndustrialResearchProgressUI.requirement_label",
+                    "text_alignment": "center",
+                    "bindings": [
+                        {
+                            "binding_type": "collection_details",
+                            "binding_collection_name": "industrial_research_requirements_grid",
+                            "binding_condition": "always_when_visible"
+                        },
+                        {
+                            "binding_type": "collection",
+                            "binding_collection_name": "industrial_research_requirements_grid",
+                            "binding_condition": "always_when_visible",
+                            "binding_name": "#IndustrialResearchProgressUI.requirement_label"
+                        },
+                        {
+                            "binding_name_override": "#color",
+                            "binding_collection_name": "industrial_research_requirements_grid",
+                            "binding_condition": "always_when_visible",
+                            "binding_type": "collection",
+                            "binding_name": "#IndustrialResearchProgressUI.requirement_label_color"
+                        }
+                    ]
                 }
             }
         ]
