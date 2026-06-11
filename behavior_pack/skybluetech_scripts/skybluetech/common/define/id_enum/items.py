@@ -1,20 +1,23 @@
 # coding=utf-8
-class Batteries:
+from .utils import SimpleEnum
+
+
+class Batteries(SimpleEnum):
     JUNIOR = "skybluetech:battery_junior"
     LEADACID = "skybluetech:battery_leadacid"
 
 
-class Coils:
+class Coils(SimpleEnum):
     COPPER = "skybluetech:coil_copper"
 
 
-class ControlCircuit:
+class ControlCircuit(SimpleEnum):
     BASIC = "skybluetech:control_circuit_basic"
     ADVANCED = "skybluetech:control_circuit_advanced"
     PROFESSIONAL = "skybluetech:control_circuit_professional"
 
 
-class Dusts:
+class Dusts(SimpleEnum):
     IRON = "skybluetech:iron_dust"
     GOLD = "skybluetech:gold_dust"
     COPPER = "skybluetech:copper_dust"
@@ -41,17 +44,17 @@ class Dusts:
     SULFUR = "skybluetech:sulfur_dust"
 
 
-class FamicomCartidges:
+class FamicomCartidges(SimpleEnum):
     YELLOW = "skybluetech:famicom_cartidge_1"
     PURPLE = "skybluetech:famicom_cartidge_2"
     BLUE = "skybluetech:famicom_cartidge_3"
 
 
-class Icons:
+class Icons(SimpleEnum):
     SHEET = "skybluetech:sheet_item"
 
 
-class Ingots:
+class Ingots(SimpleEnum):
     ALUMINUM = "skybluetech:aluminum_ingot"
     ALUMITE = "skybluetech:alumite_ingot"
     TIN = "skybluetech:tin_ingot"
@@ -72,7 +75,7 @@ class Ingots:
     SUPERCONDUCT = "skybluetech:superconduct_ingot"
 
 
-class MetalTools:
+class MetalTools(SimpleEnum):
     BRONZE_AXE = "skybluetech:bronze_axe"
     BRONZE_PICKAXE = "skybluetech:bronze_pickaxe"
     BRONZE_SHOVEL = "skybluetech:bronze_shovel"
@@ -88,10 +91,11 @@ class MetalTools:
     INVAR_MINING_HAMMER = "skybluetech:invar_mining_hammer"
 
 
-class ObjectUpgraders:
+class ObjectUpgraders(SimpleEnum):
     ATTACK = "skybluetech:obj_upgrader_attack"
     AUTO_BURNING = "skybluetech:obj_upgrader_autoburning"
     DIGSPEED = "skybluetech:obj_upgrader_digspeed"
+    ENERGY = "skybluetech:obj_upgrader_energy"
     FORTUNE = "skybluetech:obj_upgrader_fortune"
     PLATE_COMMON = "skybluetech:obj_upgrader_plate_common"
     PLATE_SPEC = "skybluetech:obj_upgrader_plate_spec"
@@ -100,18 +104,18 @@ class ObjectUpgraders:
     SPEC_NOFARM = "skybluetech:obj_upgrader_spec_nofarm"
 
 
-class Paddle:
+class Paddle(SimpleEnum):
     IRON = "skybluetech:paddle_iron"
     STEEL = "skybluetech:paddle_steel"
 
 
-class Pincer:
+class Pincer(SimpleEnum):
     # 新增物品后需在 machinery_workstation 中同步添加
     IRON = "skybluetech:pincer_iron"
     INVAR = "skybluetech:pincer_invar"
 
 
-class Plates:
+class Plates(SimpleEnum):
     IRON = "skybluetech:iron_plate"
     GOLD = "skybluetech:gold_plate"
     COPPER = "skybluetech:copper_plate"
@@ -131,7 +135,7 @@ class Plates:
     SUPERCONDUCT = "skybluetech:superconduct_plate"
 
 
-class RawOres:
+class RawOres(SimpleEnum):
     ALUMINUM = "skybluetech:raw_aluminum"
     TIN = "skybluetech:raw_tin"
     LEAD = "skybluetech:raw_lead"
@@ -142,7 +146,7 @@ class RawOres:
     URANIUM = "skybluetech:raw_uranium"
 
 
-class SkyblueTools:
+class SkyblueTools(SimpleEnum):
     AXE = "skybluetech:skyblue_axe"
     PICKAXE = "skybluetech:skyblue_pickaxe"
     SHOVEL = "skybluetech:skyblue_shovel"
@@ -150,7 +154,7 @@ class SkyblueTools:
     SWORD = "skybluetech:skyblue_sword"
 
 
-class Sticks:
+class Sticks(SimpleEnum):
     COPPER = "skybluetech:copper_stick"
     IRON = "skybluetech:iron_stick"
     TIN = "skybluetech:tin_stick"
@@ -163,7 +167,7 @@ class Sticks:
     SUPERCONDUCT = "skybluetech:superconduct_stick"
 
 
-class Upgraders:
+class Upgraders(SimpleEnum):
     EMPTY = "skybluetech:upgrader_plate_empty"
     BASIC_SPEED_UPGRADER = "skybluetech:upgrader_basic_speed"
     BASIC_ENERGY_UPGRADER = "skybluetech:upgrader_basic_energy"
@@ -173,7 +177,7 @@ class Upgraders:
     SPEC_MAGMA_FACTORY = "skybluetech:upgrader_spec_magma_factory"
 
 
-class Wrench:
+class Wrench(SimpleEnum):
     # 新增物品后需在 machinery_workstation 中同步添加
     IRON = "skybluetech:wrench_iron"
     INVAR = "skybluetech:wrench_invar"
