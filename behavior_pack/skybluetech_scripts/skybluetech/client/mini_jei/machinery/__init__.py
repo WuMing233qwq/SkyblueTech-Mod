@@ -7,4 +7,5 @@ from . import (
     hydroponic_bed,
     hydroponic_bed_sand,
     machinery_workstation,
+    template_assembler,
 )

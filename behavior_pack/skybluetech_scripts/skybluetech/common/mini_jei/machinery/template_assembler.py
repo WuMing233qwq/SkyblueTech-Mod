@@ -24,7 +24,6 @@ class TemplateAssemblerRecipe(MachineRecipe):
         tick_duration,  # type: int
     ):
         input_items = input_items.copy()
-        input_items[9] = Input(INSCRIBING_TEMPLATE)
         input_items[10] = Input(IngotTag.SOLDERING, is_tag=True)
         MachineRecipe.__init__(
             self,
@@ -35,6 +34,18 @@ class TemplateAssemblerRecipe(MachineRecipe):
         )
         self.input_items = input_items
         self.output_item_id = output_item_id
+
+    def GetInputs(self):
+        inputs = self.inputs.copy()
+        input_items = inputs[CategoryType.ITEM] = self.inputs[CategoryType.ITEM].copy()
+        input_items[9] = Input(INSCRIBING_TEMPLATE)
+        return {
+            cat: [
+                ("tag:" + input.id if input.is_tag else input.id)
+                for input in slot2input.values()
+            ]
+            for cat, slot2input in inputs.items()
+        }
 
     def Marshal(self):
         return {

@@ -34,15 +34,16 @@ class TemplateAssembler(MultiFluidContainer, Processor):
     dump_progress_to_block_entity_data = True
     process_item = True
     recipes = TemplateAssemblerRecipesCollection()  # type: TemplateAssemblerRecipesCollection
-    input_slots = (0, 1, 2, 3, 4, 5, 6, 7, 8)
+    input_slots = (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
     output_slots = (11,)
     upgrade_slot_start = 12
     upgrade_slots = 4
 
     @SuperExecutorMeta.execute_super
     def __init__(self, dim, x, y, z, block_entity_data):
-        # self.set_mode(self.recipe_mode)
-        pass
+        self.update_template_slot()
+        self.sync_recipe()
+        self.recheck_recipe()
 
     @SuperExecutorMeta.execute_super
     def OnAddedFluid(self, slot, fluid_id, fluid_volume, is_final):

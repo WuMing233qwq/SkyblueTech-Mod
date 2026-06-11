@@ -127,13 +127,3 @@ redstone_generator.RedstoneGeneratorRecipe.SetRenderer(
         },
     )
 )
-template_assembler.TemplateAssemblerRecipe.SetRenderer(
-    type(
-        "TemplateAssemblerRecipeRenderer",
-        (MachineRecipeRenderer,),
-        {
-            "render_ui_def_name": "RecipeCheckerLib.template_assembler_recipes",
-            "recipe_icon_id": machinery.TEMPLATE_ASSEMBLER,
-        },
-    )
-)
