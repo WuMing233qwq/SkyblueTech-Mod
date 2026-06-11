@@ -622,7 +622,7 @@
                 }
             },
             {
-                "label": {
+                "title": {
                     "type": "label",
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
@@ -878,6 +878,26 @@
                             }
                         }
                     ]
+                }
+            },
+            {
+                "right_bottom_tip": {
+                    "type": "label",
+                    "anchor_from": "bottom_right",
+                    "anchor_to": "bottom_right",
+                    "offset": [
+                        -2.0,
+                        -2.0
+                    ],
+                    "color": [
+                        0.2588235294117647,
+                        0.2588235294117647,
+                        0.2588235294117647
+                    ],
+                    "font_scale_factor": 1.4,
+                    "font_size": "small",
+                    "font_type": "default",
+                    "text": "点击对应位置的方块可查看该位置有效方块"
                 }
             }
         ]
