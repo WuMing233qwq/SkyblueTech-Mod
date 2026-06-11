@@ -9,4 +9,5 @@ from . import (
     mini_jei,
     transmitters,
     update_log,
+    upgraders,
 )

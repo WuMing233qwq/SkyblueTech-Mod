@@ -43,6 +43,12 @@ main_pages = PageGroup(
                     contents.machinery.machinery_toc,
                 ),
                 MainTOCPageSection(
+                    id_enum.Upgraders.BASIC_SPEED_UPGRADER,
+                    0,
+                    "升级模块",
+                    contents.upgraders.upgraders_toc,
+                ),
+                MainTOCPageSection(
                     "minecraft:hopper",
                     0,
                     "物流",
