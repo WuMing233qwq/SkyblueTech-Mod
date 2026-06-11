@@ -38,12 +38,20 @@
             "netease:block_container": {
                 "container_size": 1,
                 "custom_description": "地热发电机",
-                "screen_name": "GeoThermalGeneratorUI.main"
+                "screen_name": "GeoThermalGeneratorUI.main",
+                "hopper": {
+                    "input": false,
+                    "output": true,
+                    "output_slot": [
+                        1
+                    ]
+                }
             },
             "tag:piston_denier": {},
             "tag:redstoneflux_provider": {},
             "tag:redstoneflux_generator": {},
             "tag:redstoneflux_connectable": {},
+            "tag:skybluetech_container": {},
             "tag:skybluetech_generator": {},
             "tag:skybluetech_machine": {},
             "tag:skybluetech_fluid_container": {}
