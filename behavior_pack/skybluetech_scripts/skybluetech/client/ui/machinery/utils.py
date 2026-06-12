@@ -1,10 +1,17 @@
 from skybluetech_scripts.tooldelta.define import UICtrlPosData
 from skybluetech_scripts.tooldelta.ui.elem_comp import UBaseCtrl, UImage
 from skybluetech_scripts.tooldelta.api.client.item import GetItemHoverName
+from skybluetech_scripts.tooldelta.utils.nbt import (
+    GetValueWithDefault as GetValue,
+    NBT2Py,
+)
 from skybluetech_scripts.skybluetech.common.define.fluids import (
     texture as fluid_texture,
 )
 from skybluetech_scripts.skybluetech.common.define.id_enum.fluids import Gas
+from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
+    K_STRUCTURE_LACKED_BLOCKS,
+)
 
 # TYPE_CHECKING
 if 0:
@@ -93,6 +100,14 @@ def UpdateGenericProgressT2B(ui, percent):  # -> Any:
 def UpdateGenericProgressB2T(ui, percent):
     # type: (UBaseCtrl, float) -> None
     ui["mask"].asImage().SetSpriteClipRatio("fromBottomToTop", 1 - percent)
+
+
+def GetStructureLackedBlocks(data):
+    # type: (dict) -> dict[str, int]
+    lacked_blocks = NBT2Py(data.get(K_STRUCTURE_LACKED_BLOCKS, {}))
+    if isinstance(lacked_blocks, dict) and lacked_blocks:
+        return {str(k): int(v) for k, v in lacked_blocks.items()}
+    return {}
 
 
 def UpdateImageTransformColor(

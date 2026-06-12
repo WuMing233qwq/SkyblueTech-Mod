@@ -9,10 +9,12 @@ from skybluetech_scripts.tooldelta.utils.nbt import GetValueWithDefault as GetVa
 from skybluetech_scripts.skybluetech.common.events.misc.multi_block_structure_check import (
     MultiBlockStructureCheckRequest,
 )
+from skybluetech_scripts.skybluetech.common.define.flags import (
+    DEACTIVE_FLAG_STRUCTURE_BLOCK_LACK,
+)
 from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
     K_STORE_RF,
     K_DESTROY_FLAG,
-    K_STRUCTURE_LACKED_BLOCKS,
 )
 from skybluetech_scripts.skybluetech.common.machinery_def.bedrock_lava_drill import (
     STORE_RF_MAX,
@@ -23,7 +25,7 @@ from skybluetech_scripts.skybluetech.common.machinery_def.bedrock_lava_drill imp
     K_MAX_FLUID_VOLUME,
 )
 from .define import MachinePanelUIProxy, MAIN_PATH
-from .utils import UpdatePowerBar, FluidDisplayer
+from .utils import UpdatePowerBar, FluidDisplayer, GetStructureLackedBlocks
 
 POWER_PATH = MAIN_PATH / "power_bar"
 FLUID_PATH = MAIN_PATH / "fluid_display"
@@ -55,6 +57,7 @@ class BedrockLavaDrillUI(MachinePanelUIProxy):
             self.fluid_display,
         )
         self.last_destroy_flag = None
+        self.last_structure_lacked_blocks = None
 
     def OnTicking(self):
         data = GetBlockEntityData(*self.pos[1:])
@@ -68,15 +71,22 @@ class BedrockLavaDrillUI(MachinePanelUIProxy):
         drill_progress = GetValue(data, K_DRILL_PROGRESS, 0.0)
         lava_storage_left = GetValue(data, K_VOLUME_LEFT_PERCENT, 0.0)
         destroy_flag = GetValue(data, K_DESTROY_FLAG, 0)
-        structure_lacked_blocks = GetValue(data, K_STRUCTURE_LACKED_BLOCKS, {})
+        structure_lacked_blocks = GetStructureLackedBlocks(data)
         UpdatePowerBar(self.power_bar, store_rf, STORE_RF_MAX)
         self.fluid_displayer.update(fluid_id, fluid_volume, max_volume)
         self.drill_progress.SetFullSize("x", UICtrlPosData("parent", drill_progress))
         self.storage_left.SetFullSize("x", UICtrlPosData("parent", lava_storage_left))
-        if destroy_flag != self.last_destroy_flag:
+        if (
+            destroy_flag != self.last_destroy_flag
+            or structure_lacked_blocks != self.last_structure_lacked_blocks
+        ):
             self.structure_not_finished_tip.SetVisible(destroy_flag != 0)
             self.last_destroy_flag = destroy_flag
-            if structure_lacked_blocks:
+            self.last_structure_lacked_blocks = dict(structure_lacked_blocks)
+            if (
+                destroy_flag == DEACTIVE_FLAG_STRUCTURE_BLOCK_LACK
+                and structure_lacked_blocks
+            ):
                 self.structure_desc_label.SetText(
                     "缺失组件： "
                     + "， ".join(

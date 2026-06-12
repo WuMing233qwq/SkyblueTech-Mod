@@ -52,6 +52,9 @@ if 0:
 DEBUG = False
 
 FLAG_OK = 0
+STRUCTURE_DEACTIVE_FLAGS = (
+    DEACTIVE_FLAG_STRUCTURE_BROKEN | DEACTIVE_FLAG_STRUCTURE_BLOCK_LACK
+)
 block_removed_listen_pool = set()  # type: set[str]
 server_inited = False
 
@@ -251,7 +254,7 @@ class DetectArea(object):
                 self._update_functional_blocks(current_palette, co_x, co_y, co_z)
                 return FLAG_OK
             else:
-                self.bound._lacked_blocks = lacked_blocks
+                self.bound.lacked_blocks = lacked_blocks
                 return DEACTIVE_FLAG_STRUCTURE_BLOCK_LACK
         return DEACTIVE_FLAG_STRUCTURE_BROKEN
 
@@ -326,16 +329,25 @@ class MultiBlockStructure(BaseMachine):
 
     def SetStructureDestroyed(self, flag):
         # type: (int) -> None
+        if self.deactive_flags & STRUCTURE_DEACTIVE_FLAGS:
+            self.deactive_flags &= ~STRUCTURE_DEACTIVE_FLAGS
         self.last_destroy_flag = flag
         self.area.functional_block_poses = {}
+        if flag != DEACTIVE_FLAG_STRUCTURE_BLOCK_LACK:
+            self.lacked_blocks = {}
         self.SetDeactiveFlag(flag)
         self.OnStructureChanged(False)
         if isinstance(self, GUIControl):
             self.CallSync()
 
     def UnsetStructureDestroyed(self):
-        if self.last_destroy_flag != FLAG_OK:
-            self.UnsetDeactiveFlag(self.last_destroy_flag)
+        if (
+            self.last_destroy_flag != FLAG_OK
+            or self.deactive_flags & STRUCTURE_DEACTIVE_FLAGS
+        ):
+            if self.deactive_flags & STRUCTURE_DEACTIVE_FLAGS:
+                self.deactive_flags &= ~STRUCTURE_DEACTIVE_FLAGS
+                self.OnDeactiveFlagsChanged()
             self.last_destroy_flag = FLAG_OK
             self.lacked_blocks = {}
             self.OnStructureChanged(True)
@@ -443,6 +455,7 @@ class MultiBlockStructure(BaseMachine):
     @lacked_blocks.setter
     def lacked_blocks(self, value):
         # type: (dict[str, int]) -> None
+        value = value or {}
         self.bdata[K_STRUCTURE_LACKED_BLOCKS] = self._lacked_blocks = value
 
 

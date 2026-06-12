@@ -14,6 +14,9 @@ from skybluetech_scripts.tooldelta.utils.py_comp import py2_long
 from skybluetech_scripts.skybluetech.common.events.misc.multi_block_structure_check import (
     MultiBlockStructureCheckRequest,
 )
+from skybluetech_scripts.skybluetech.common.define.flags import (
+    DEACTIVE_FLAG_STRUCTURE_BLOCK_LACK,
+)
 from skybluetech_scripts.skybluetech.common.events.machinery.battery_matrix import (
     BatteryMatrixActionRequest,
     BatteryMatrixCheckCoreBatterysRequest,
@@ -23,7 +26,6 @@ from skybluetech_scripts.skybluetech.common.events.machinery.battery_matrix impo
     BatteryMatrixStatesUpdate,
 )
 from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
-    K_STRUCTURE_LACKED_BLOCKS,
     K_DESTROY_FLAG,
 )
 from skybluetech_scripts.skybluetech.common.machinery_def.battery_matrix import (
@@ -33,7 +35,7 @@ from skybluetech_scripts.skybluetech.common.machinery_def.battery_matrix import 
     K_RF_MAX,
 )
 from .define import MachinePanelUIProxy, MAIN_PATH
-from .utils import UpdateGenericProgressL2R, FormatRF
+from .utils import UpdateGenericProgressL2R, FormatRF, GetStructureLackedBlocks
 
 ENERGY_LABEL_PATH = MAIN_PATH / "battery_icon/energy_label"
 TOTAL_POWER_PATH = MAIN_PATH / "total_power"
@@ -92,6 +94,7 @@ class BatteryMatrixUI(MachinePanelUIProxy):
         )
         self.storage_window.SetVisible(False)
         self.last_destroy_flag = None
+        self.last_structure_lacked_blocks = None
         self.battery_slots_data = []  # type: list[tuple[str, int, int]]
 
     def OnTicking(self):
@@ -104,16 +107,23 @@ class BatteryMatrixUI(MachinePanelUIProxy):
         storage_rf = GetValue(data, K_STORE_RF, 0.0)
         rf_max = GetValue(data, K_RF_MAX, 1.0) or 1.0
         destroy_flag = GetValue(data, K_DESTROY_FLAG, 0)
-        structure_lacked_blocks = GetValue(data, K_STRUCTURE_LACKED_BLOCKS, {})  # type: dict[str, int]
+        structure_lacked_blocks = GetStructureLackedBlocks(data)
         self.input_power_label.SetText("输入 %s/t" % FormatRF(input_power))
         self.output_power_label.SetText("输出 %s/t" % FormatRF(output_power))
         self.energy_label.SetText("{:.1f}%%".format(float(storage_rf * 100) / rf_max))
         self.total_power.SetText("%s / %s" % (FormatRF(storage_rf), FormatRF(rf_max)))
         UpdateGenericProgressL2R(self.battery_icon, float(storage_rf) / rf_max)
-        if destroy_flag != self.last_destroy_flag:
+        if (
+            destroy_flag != self.last_destroy_flag
+            or structure_lacked_blocks != self.last_structure_lacked_blocks
+        ):
             self.structure_not_finished_tip.SetVisible(destroy_flag != 0)
             self.last_destroy_flag = destroy_flag
-            if structure_lacked_blocks:
+            self.last_structure_lacked_blocks = dict(structure_lacked_blocks)
+            if (
+                destroy_flag == DEACTIVE_FLAG_STRUCTURE_BLOCK_LACK
+                and structure_lacked_blocks
+            ):
                 self.structure_desc_label.SetText(
                     "缺失组件： "
                     + "， ".join(

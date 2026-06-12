@@ -20,7 +20,6 @@ from skybluetech_scripts.skybluetech.common.define.flags import (
 from skybluetech_scripts.skybluetech.common.machinery_def.basic import (
     K_STORE_RF,
     K_DESTROY_FLAG,
-    K_STRUCTURE_LACKED_BLOCKS,
 )
 from skybluetech_scripts.skybluetech.common.machinery_def.fermenter import (
     spec_recipes,
@@ -55,7 +54,12 @@ from skybluetech_scripts.skybluetech.common.machinery_def.fermenter import (
     FermenterRecipe,
 )
 from .define import MachinePanelUIProxy, MAIN_PATH
-from .utils import UpdatePowerBar, UpdateImageTransformColor, FluidDisplayer
+from .utils import (
+    UpdatePowerBar,
+    UpdateImageTransformColor,
+    FluidDisplayer,
+    GetStructureLackedBlocks,
+)
 
 FLAG_OK = 0
 
@@ -110,7 +114,7 @@ class FermenterUI(MachinePanelUIProxy):
         expected_mud_temperature = GetValue(data, K_EXPECTED_TEMPERTURE, 0.0)
         expected_water_max_volume = GetValue(data, K_EXPECTED_WATER_MAX_VOLUME, 0.0)
         structure_destroy_flag = GetValue(data, K_DESTROY_FLAG, 0)
-        structure_lacked_blocks = GetValue(data, K_STRUCTURE_LACKED_BLOCKS, {})
+        structure_lacked_blocks = GetStructureLackedBlocks(data)
         recipe_id = GetValue(data, K_RECIPE, 0)
         gas_id = GetValue(data, K_OUTPUT_GAS_ID, None)
         gas_volume = GetValue(data, K_OUTPUT_GAS_VOLUME, 0.0)
