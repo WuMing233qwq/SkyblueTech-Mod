@@ -57,6 +57,9 @@ class FluidSplitter(GUIControl, MultiFluidContainer, UpgradeControl):
             fluid = self.fluids[slot]
             fluid_id = fluid.fluid_id
             fluid_volume = fluid.volume
+            if fluid_id is None or fluid_volume <= 0:
+                fluid.volume = 0.0
+                continue
             if fluid_id is not None and fluid_volume > 0:
                 rest_volume = self.try_post_fluid_by_label(fluid_id, fluid_volume)
                 ok = ok or rest_volume != fluid_volume
@@ -81,6 +84,8 @@ class FluidSplitter(GUIControl, MultiFluidContainer, UpgradeControl):
 
     def try_post_fluid_by_label(self, fluid_id, fluid_volume):
         # type: (str, float) -> float
+        if fluid_id is None or fluid_volume is None or fluid_volume <= 0:
+            return fluid_volume
         matched_label = self.get_label_by_fluid(fluid_id)
         networks = (
             i

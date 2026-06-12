@@ -57,10 +57,16 @@ class PipeNetwork(BaseNetwork["PipeAccessPoint"]):
         if b is not None:
             self.fluid_id = b["fluid_id"]
             self.fluid_volume = b["fluid_volume"] or 0.0
+            if self.fluid_id is None or self.fluid_volume <= 0:
+                self.fluid_id = None
+                self.fluid_volume = 0.0
 
     def save_network_data(self):
         b = GetBlockEntityData(self.dim, self.get_data_store_node())
         if b is not None:
+            if self.fluid_id is None or self.fluid_volume <= 0:
+                self.fluid_id = None
+                self.fluid_volume = 0.0
             b["fluid_id"] = self.fluid_id
             b["fluid_volume"] = self.fluid_volume
 

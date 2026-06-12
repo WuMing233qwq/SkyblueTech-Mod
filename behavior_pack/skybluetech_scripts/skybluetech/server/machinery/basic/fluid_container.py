@@ -51,6 +51,9 @@ class FluidContainer(object):
         self.bdata[K_MAX_VOLUME] = self.max_fluid_volume  # TODO: 改到 OnPlaced
         self._cached_fluid_id = self.bdata[K_FLUID_ID]
         self._cached_fluid_volume = self.bdata[K_FLUID_VOLUME] or 0.0
+        if self._cached_fluid_id is None or self._cached_fluid_volume <= 0:
+            self._cached_fluid_id = self.bdata[K_FLUID_ID] = None
+            self._cached_fluid_volume = self.bdata[K_FLUID_VOLUME] = 0.0
 
     def AddFluid(self, fluid_id, fluid_volume):
         # type: (str, float) -> tuple[bool, float]
@@ -64,22 +67,30 @@ class FluidContainer(object):
         Returns:
             tuple[bool, float]: 是否添加成功, 添加的流体容量
         """
+        if fluid_id is None or fluid_volume is None or fluid_volume <= 0:
+            return False, fluid_volume
         my_fluid_id = self.fluid_id
         if my_fluid_id is None:
+            added_fluid_volume = min(self.max_fluid_volume, fluid_volume)
+            if added_fluid_volume <= 0:
+                return False, fluid_volume
             self.fluid_id = fluid_id
-            self.fluid_volume = fluid_volume
-            self._on_added_fluid(fluid_id, fluid_volume)
-            return True, max(0, fluid_volume - self.max_fluid_volume)
+            self.fluid_volume = added_fluid_volume
+            self._on_added_fluid(fluid_id, added_fluid_volume)
+            return True, max(0, fluid_volume - added_fluid_volume)
         elif fluid_id != my_fluid_id:
             return False, fluid_volume
         else:
             orig_volume = self.fluid_volume
-            new_volume = self.fluid_volume = min(
-                self.max_fluid_volume, orig_volume + fluid_volume
-            )
-            added_fluid_volume = new_volume - orig_volume
+            free_volume = self.max_fluid_volume - orig_volume
+            if free_volume <= 0:
+                if orig_volume > self.max_fluid_volume:
+                    self.fluid_volume = self.max_fluid_volume
+                return False, fluid_volume
+            added_fluid_volume = min(free_volume, fluid_volume)
+            self.fluid_volume = orig_volume + added_fluid_volume
             if added_fluid_volume > 0:
-                self._on_added_fluid(fluid_id, new_volume - orig_volume)
+                self._on_added_fluid(fluid_id, added_fluid_volume)
             # 我们不知道 _on_added_fluid 时容器流体体积有没有被改变
             # 所以不能使用 new_volume 代替 self.fluid_volume
             # self._reset_send_fluid_retries()
@@ -113,6 +124,8 @@ class FluidContainer(object):
         Returns:
             bool
         """
+        if fluid_id is None:
+            return False
         return self.fluid_id is None or (
             fluid_id == self.fluid_id and self.fluid_volume < self.max_fluid_volume
         )
@@ -153,7 +166,7 @@ class FluidContainer(object):
                     if ItemExists(bucket_id):
                         orig_fluid_id = self.fluid_id
                         self.fluid_volume -= BUCKET_VOLUME
-                        if self.fluid_volume == 0:
+                        if self.fluid_volume <= 0:
                             self.fluid_id = None
                         SetInventorySlotItemCount(
                             player_id, GetSelectedSlot(player_id), item.count - 1
@@ -210,6 +223,8 @@ class FluidContainer(object):
     def fluid_id(self, value):
         # type: (str | None) -> None
         self._cached_fluid_id = self.bdata[K_FLUID_ID] = value
+        if value is None:
+            self._cached_fluid_volume = self.bdata[K_FLUID_VOLUME] = 0.0
 
     @property
     def fluid_volume(self):
@@ -219,4 +234,8 @@ class FluidContainer(object):
     @fluid_volume.setter
     def fluid_volume(self, value):
         # type: (float) -> None
+        if value is None or value <= 0:
+            value = 0.0
+            if self._cached_fluid_id is not None:
+                self.fluid_id = None
         self._cached_fluid_volume = self.bdata[K_FLUID_VOLUME] = value

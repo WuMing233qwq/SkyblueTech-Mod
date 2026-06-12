@@ -56,6 +56,9 @@ class Pump(FluidContainer, GUIControl, UpgradeControl):
 
     def work_once(self):
         if self.cached_volume >= BUCKET_VOLUME * 0.2:
+            if self.cached_fluid_id is None:
+                self.cached_volume = 0.0
+                return
             if self.fluid_id is None:
                 self.fluid_id = self.cached_fluid_id
             self.fluid_volume += BUCKET_VOLUME * 0.2
@@ -94,6 +97,9 @@ class Pump(FluidContainer, GUIControl, UpgradeControl):
     @cached_volume.setter
     def cached_volume(self, value):
         # type: (float) -> None
+        if value <= 0:
+            value = 0.0
+            self.cached_fluid_id = None
         self.bdata[K_CACHED_VOLUME] = value
 
     @property

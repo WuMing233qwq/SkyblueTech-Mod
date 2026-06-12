@@ -55,35 +55,37 @@ class MultiFluidContainer(object):
 
     def OutputFluid(self, fluid_id, fluid_volume, slot_pos, is_final):
         # type: (str, float, int, bool) -> tuple[bool, float]
+        if fluid_id is None or fluid_volume is None or fluid_volume <= 0:
+            return False, fluid_volume
         fluid = self.fluids[slot_pos]
+        if fluid.fluid_id is not None and fluid.fluid_id != fluid_id:
+            return False, fluid_volume
+        orig_volume = fluid.volume
+        added_volume = min(fluid_volume, fluid.max_volume - orig_volume)
+        if added_volume <= 0:
+            return False, fluid_volume
         if fluid.fluid_id is None:
             fluid.fluid_id = fluid_id
-        orig_volume = fluid.volume
-        new_vol = fluid.volume = orig_volume + fluid_volume
-        ok = False
-        if new_vol > orig_volume:
-            self._on_added_fluid(slot_pos, fluid_id, fluid_volume, is_final)
-            ok = True
-        elif new_vol < orig_volume:
-            self._on_reduced_fluid(slot_pos, fluid_id, fluid_volume, is_final)
-            ok = True
-        if fluid.volume > fluid.max_volume:
-            overflow_vol = fluid.volume - fluid.max_volume
-            fluid.volume = fluid.max_volume
-        else:
-            overflow_vol = 0
-        return ok, overflow_vol
+        fluid.volume = orig_volume + added_volume
+        self._on_added_fluid(slot_pos, fluid_id, added_volume, is_final)
+        return True, max(0, fluid_volume - added_volume)
 
     def AddFluid(self, fluid_id, fluid_volume):
         # type: (str, float) -> tuple[bool, float]
+        if fluid_id is None or fluid_volume is None or fluid_volume <= 0:
+            return False, fluid_volume
         _orig = fluid_volume
         input_slots = [(i, self.fluids[i]) for i in self.fluid_input_slots]
+        if not input_slots:
+            return False, fluid_volume
         last_slot = input_slots[-1][0]
         for slot, fluid in input_slots:
             if fluid.canMerge(fluid_id) and self.IsValidFluidInput(slot, fluid_id):
                 if fluid.fluid_id is None or fluid.volume == 0:
                     fluid.fluid_id = fluid_id
                 free_volume = fluid.max_volume - fluid.volume
+                if free_volume <= 0:
+                    continue
                 if fluid_volume <= free_volume:
                     fluid.volume += fluid_volume
                     self._on_added_fluid(

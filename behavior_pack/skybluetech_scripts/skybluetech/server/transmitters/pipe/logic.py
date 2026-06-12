@@ -34,6 +34,8 @@ def PostFluidIntoNetworks(dim, xyz, fluid_id, fluid_volume, networks):
     Returns:
         tuple[bool, float]: 是否输送出流体, 剩余体积
     """
+    if fluid_id is None or fluid_volume is None or fluid_volume <= 0:
+        return False, fluid_volume
     ok = False
     if networks is None:
         x, y, z = xyz
@@ -70,6 +72,8 @@ def PostFluidIntoNetworks(dim, xyz, fluid_id, fluid_volume, networks):
 def PushFluidToFluidContainer(ap, fluid_id, fluid_volume):
     # type: (PipeAccessPoint, str, float) -> tuple[bool, float]
     "向容器内装流体, 返回是否添加成功和剩余流体体积"
+    if fluid_id is None or fluid_volume is None or fluid_volume <= 0:
+        return False, fluid_volume
     cxyz = ap.target_pos
     m = GetMachineStrict(ap.dim, *cxyz)
     if not isinstance(m, (FluidContainer, MultiFluidContainer)):
@@ -91,6 +95,9 @@ def onNetworkTick(network):
     pipe_fluid_id = network.fluid_id
     pipe_fluid_volume = network.fluid_volume
     capacity = network.capacity
+    if pipe_fluid_id is None or pipe_fluid_volume <= 0:
+        pipe_fluid_id = None
+        pipe_fluid_volume = 0.0
     if pipe_fluid_id is not None and pipe_fluid_volume > 0:
         volume_output = min(transfer_speed, pipe_fluid_volume)
         pipe_fluid_volume -= volume_output
@@ -101,14 +108,21 @@ def onNetworkTick(network):
             if volume_output <= 0:
                 break
         pipe_fluid_volume += volume_output
-    out_capacity = min(transfer_speed, capacity - pipe_fluid_volume)
+    out_capacity = max(0, min(transfer_speed, capacity - pipe_fluid_volume))
     for output in network.get_output_access_points():
+        if out_capacity <= 0:
+            break
         om = GetMachineStrict(output.dim, *output.target_pos)
         if isinstance(om, FluidContainer):
             om_fluid_id = om.fluid_id
             om_fluid_vol = om.fluid_volume
+            if om_fluid_id is not None and om_fluid_vol <= 0:
+                om.fluid_volume = 0.0
+                om_fluid_id = None
+                om_fluid_vol = 0.0
             if (
                 om_fluid_id is None
+                or om_fluid_vol <= 0
                 or (pipe_fluid_id is not None and om_fluid_id != pipe_fluid_id)
                 or not pipe_can_transfer_fluid(network.transmitter_id, om_fluid_id)
             ):
@@ -130,6 +144,9 @@ def onNetworkTick(network):
             for slot in om.fluid_output_slots:
                 fluid = om.fluids[slot]
                 fluid_id = fluid.fluid_id
+                if fluid_id is not None and fluid.volume <= 0:
+                    fluid.volume = 0.0
+                    fluid_id = None
                 if (
                     fluid_id is None
                     or (pipe_fluid_id is not None and fluid_id != pipe_fluid_id)

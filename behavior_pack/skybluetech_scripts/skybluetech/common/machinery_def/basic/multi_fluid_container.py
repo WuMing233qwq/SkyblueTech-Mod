@@ -19,6 +19,9 @@ class FluidSlotServer(object):
         self.k_vol = _K_FLUID_VOLUME + str(index)
         self._cached_fluid_id = block_entity_data[self.k_id]
         self._cached_volume = block_entity_data[self.k_vol] or 0.0
+        if self._cached_fluid_id is None or self._cached_volume <= 0:
+            self._cached_fluid_id = self.bdata[self.k_id] = None
+            self._cached_volume = self.bdata[self.k_vol] = 0.0
 
     @property
     def fluid_id(self):
@@ -29,6 +32,8 @@ class FluidSlotServer(object):
     def fluid_id(self, value):
         # type: (str | None) -> None
         self._cached_fluid_id = self.bdata[self.k_id] = value
+        if value is None:
+            self._cached_volume = self.bdata[self.k_vol] = 0.0
 
     @property
     def volume(self):
@@ -38,6 +43,10 @@ class FluidSlotServer(object):
     @volume.setter
     def volume(self, value):
         # type: (float) -> None
+        if value is None or value <= 0:
+            value = 0.0
+            if self._cached_fluid_id is not None:
+                self.fluid_id = None
         self._cached_volume = self.bdata[self.k_vol] = value
 
     def isFull(self):
@@ -45,6 +54,8 @@ class FluidSlotServer(object):
 
     def canMerge(self, fluid_id):
         # type： (str | None) -> bool
+        if fluid_id is None:
+            return False
         if self.isFull():
             return False
         fid = self.fluid_id
