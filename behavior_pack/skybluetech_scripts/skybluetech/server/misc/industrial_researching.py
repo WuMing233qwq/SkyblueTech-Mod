@@ -29,9 +29,15 @@ from skybluetech_scripts.skybluetech.common.misc.inscribing_template import (
     K_UD_TEMPLATE_GRAPH,
 )
 
+if 0:
+    from skybluetech_scripts.skybluetech.common.mini_jei.misc.industrial_researching import (
+        IndustrialResearchingRecipe,  # noqa: F401
+    )
+
 
 ItemPosType = GetMinecraftEnum().ItemPosType
-VALID_RESEARCHING_ITEM_IDS = set(recipe.result_item_id for recipe in all_researchings)
+RESEARCHING_BY_ITEM_ID = {recipe.result_item_id: recipe for recipe in all_researchings}
+VALID_RESEARCHING_ITEM_IDS = set(RESEARCHING_BY_ITEM_ID)
 
 
 class IndustrialResearchingPlayerMgr(object):
@@ -133,17 +139,49 @@ class IndustrialResearchingQueryHandler(ServerListenerService):
         # type: (IndustrialResearchingSubmitRequest) -> None
         player_id = event.player_id
         item_id = event.item_id
-        if item_id not in VALID_RESEARCHING_ITEM_IDS:
+        recipe = RESEARCHING_BY_ITEM_ID.get(item_id)
+        if recipe is None:
             logger.error("Industrial researching submit invalid item: %s" % item_id)
             SetOnePopupNotice(player_id, "§c研究失败")
             return
         mgr = IndustrialResearchingPlayerMgr.instance()
-        if not mgr.has_researched(player_id, item_id):
+        if mgr.has_researched(player_id, item_id):
+            SetOnePopupNotice(player_id, "§e已经研究过该物品")
+        elif self.consume_researching_items(player_id, recipe):
             mgr.record_researching(player_id, item_id)
+            SetOnePopupNotice(player_id, "§a研究成功")
+        else:
+            SetOnePopupNotice(player_id, "§c研究材料不足")
+            return
         researched_items = mgr.get_player_researchings(player_id)
         # BUG: 多发以避免数据包丢失
         for _ in range(3):
             IndustrialResearchingQueryResponse(researched_items).send(player_id)
+
+    def consume_researching_items(self, player_id, recipe):
+        # type: (str, IndustrialResearchingRecipe) -> bool
+        inventory_items = {
+            slot: item.copy()
+            for slot, item in GetAllInventoryItems(player_id, get_userdata=True).items()
+        }
+        new_items = {}  # type: dict[tuple[int, int], Item]
+        for input_item in recipe.require_items:
+            left_count = input_item.count
+            for slot, item in inventory_items.items():
+                if left_count <= 0:
+                    break
+                if not input_item.match_item_id(item.id):
+                    continue
+                cost_count = min(item.count, left_count)
+                item.count -= cost_count
+                left_count -= cost_count
+                new_items[(ItemPosType.INVENTORY, slot)] = (
+                    item if item.count > 0 else Item("minecraft:air", count=0)
+                )
+            if left_count > 0:
+                return False
+        SetPlayerAllItems(player_id, new_items)
+        return True
 
     @ServerListenerService.Listen(IndustrialResearchingInscribeRequest)
     def on_inscribe_template(self, event):
