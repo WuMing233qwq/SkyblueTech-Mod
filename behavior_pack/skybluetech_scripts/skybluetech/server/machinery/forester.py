@@ -12,6 +12,7 @@ from skybluetech_scripts.tooldelta.extensions.super_executor import SuperExecuto
 from ...common.define.id_enum.machinery import FORESTER as MACHINE_ID
 from ...common.machinery_def.forester import getSaplingId, isLog, isLeave, STORE_RF_MAX
 from .basic import (
+    BaseSpeedControl,
     ItemContainer,
     GUIControl,
     SPControl,
@@ -36,7 +37,7 @@ ALL_NEIGHBOUR_BLOCKS_ENUM = [
 class Forester(GUIControl, ItemContainer, SPControl):
     block_name = MACHINE_ID
     store_rf_max = STORE_RF_MAX
-    running_power = 20
+    running_power = 80
     origin_process_ticks = 20 * 5
     input_slots = ()
     output_slots = tuple(range(24))
@@ -48,7 +49,7 @@ class Forester(GUIControl, ItemContainer, SPControl):
     def OnTicking(self):
         # 1t 内如果处理多次任务会导致卡顿
         # 直接忽略 1t 内任务的多次处理
-        if self.ProcessOnce():
+        if BaseSpeedControl.ProcessOnce(self):
             self.run_once()
 
     def IsValidInput(self, slot, item):
